@@ -3,18 +3,18 @@
 A pipeline view of a technology from research through scaling to adoption.
 Vertical 01: **quantum computing.**
 
-Three stages, left to right:
+Four stages, plus data-visualization up top:
 
-1. **Innovation** — research and invention. Live from **OpenAlex**, which gives
-   each work its authors' institution country codes, so actor attribution is a
-   real lookup, not a keyword guess. Falls back to arXiv if OpenAlex is down.
-2. **Production / scaling** — hardware milestones and fab capacity (curated).
+1. **Innovation** — research (OpenAlex, with arXiv fallback) and patents (EPO).
+2. **Production / scaling** — hardware milestones (curated).
 3. **Adoption** — commercial and government use (curated).
+4. **Investment** — public research funding (NSF; US/EU only, see caveat).
 
-Above the pipeline, an **actor-share trend chart** shows how each country's
-share of quantum preprints moves over time — built by accumulating one data
-point per daily run. Each stage leads with a dated **analyst note**, the
-"so what" for a reader with ten minutes, above the raw feed.
+Above the pipeline: a **country-comparison bar chart** as the hero, an
+**actor-share trend chart** built from accumulated daily snapshots, and an
+**institution leaderboard** table. The design is a research instrument, not a
+dashboard template — Hoover Red and Garamond kept as identity, everything else
+a cool analytical system with monospace data type.
 
 Every entry is tagged by actor (US / China / Europe / Other) and labeled `live`
 or `seeded` so the board never implies a curated milestone is a live feed.
@@ -38,6 +38,18 @@ npm run fetch-data
 
 Without the key the fetch still runs, but it falls back to arXiv, which has no
 country data — so the actor filter and trend chart go quiet.
+
+## Patents and funding keys (optional)
+
+- **Patents (EPO OPS)** — free tier, needs OAuth credentials. Register at
+  `https://developers.epo.org`, then set `EPO_KEY` and `EPO_SECRET` as repo
+  secrets. Without them the patent source is skipped (build still succeeds).
+- **Funding (NSF)** — public, no key needed. Works out of the box. There is no
+  equivalent public machine-readable feed for China's NSFC, so the investment
+  view is US/EU-weighted by construction; the UI says so.
+
+Every external source fails soft — a missing key or a down endpoint drops that
+one source without breaking the build.
 
 ## Stack
 

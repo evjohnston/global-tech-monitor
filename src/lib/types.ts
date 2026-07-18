@@ -1,5 +1,7 @@
-// The three pipeline stages. Order matters — it's the flow of the monitor.
-export type Stage = "innovation" | "scaling" | "adoption";
+// The pipeline stages. Order matters — it's the flow of the monitor.
+// Investment sits first conceptually (money precedes research) but we render
+// it last as a distinct lens, since its data source and cadence differ.
+export type Stage = "innovation" | "scaling" | "adoption" | "investment";
 
 // Geopolitical actor. "other" is the honest catch-all, not a failure state.
 export type Actor = "us" | "cn" | "eu" | "other";
@@ -14,7 +16,8 @@ export type SourceKind =
   | "arxiv" // research preprint (innovation)
   | "patent" // patent filing (innovation)
   | "milestone" // hardware / scaling announcement (scaling)
-  | "deployment"; // commercial or govt adoption (adoption)
+  | "deployment" // commercial or govt adoption (adoption)
+  | "grant"; // research funding award (investment)
 
 export interface Entry {
   id: string; // stable, dedupe key
@@ -29,6 +32,10 @@ export interface Entry {
   // How the actor was decided, so misclassification is auditable rather
   // than silent. Empty for hand-curated entries where actor is known.
   actorEvidence?: string;
+  // Optional signal fields. citations powers the "high-impact" weighting
+  // (ASPI uses top-10% most-cited); amountUsd powers the funding view.
+  citations?: number;
+  amountUsd?: number;
 }
 
 // One dated observation of actor share, appended each nightly run. This is
@@ -62,7 +69,7 @@ export const STAGES: { id: Stage; label: string; blurb: string }[] = [
   {
     id: "innovation",
     label: "Innovation",
-    blurb: "Research and invention. What is being discovered.",
+    blurb: "Research and invention. Papers and patents. What is being discovered.",
   },
   {
     id: "scaling",
@@ -73,6 +80,11 @@ export const STAGES: { id: Stage; label: string; blurb: string }[] = [
     id: "adoption",
     label: "Adoption",
     blurb: "Use and procurement. Who is actually running it.",
+  },
+  {
+    id: "investment",
+    label: "Investment",
+    blurb: "Public research funding. Where governments are placing money.",
   },
 ];
 

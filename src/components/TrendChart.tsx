@@ -1,10 +1,10 @@
 import type { Actor, TrendPoint } from "../lib/types.ts";
 
 const ACTOR_COLOR: Record<Actor, string> = {
-  us: "var(--slate-deep)",
-  cn: "var(--hoover-red)",
-  eu: "var(--warm-gray)",
-  other: "var(--silver)",
+  us: "var(--us)",
+  cn: "var(--cn)",
+  eu: "var(--eu)",
+  other: "var(--other)",
 };
 const ACTOR_LABEL: Record<Actor, string> = {
   us: "US", cn: "China", eu: "Europe", other: "Other",
@@ -45,7 +45,7 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
   const gridVals = [0, 25, 50, 75, 100];
 
   return (
-    <figure className="trend">
+    <figure style={{ margin: 0 }}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Actor share of quantum preprints over time" width="100%">
         {gridVals.map((v) => (
           <g key={v}>

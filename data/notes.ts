@@ -34,4 +34,12 @@ export const NOTES: StageNote[] = [
     body:
       "DARPA's benchmarking program and EuroHPC's co-located systems show that the buyers are states and supercomputing centers, not commercial customers solving real problems. That is the honest state of adoption in 2026. The policy question is whether public procurement sustains the vendors long enough for a commercial market to appear.",
   },
+  {
+    stage: "investment",
+    date: "2026-07-18",
+    author: "E. Johnston",
+    headline: "US funding is visible, Chinese funding is not",
+    body:
+      "NSF awards give a clean read on US public spending on quantum, but there is no comparable public feed for China's NSFC or the provincial programs that carry much of the weight. Treat this stage as a floor on Western investment rather than a balanced comparison. The gap is a data-access problem, not evidence that Beijing is spending less.",
+  },
 ];
