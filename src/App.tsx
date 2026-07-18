@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Actor, DataFile, Entry, Stage } from "./lib/types.ts";
+import type { Actor, DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
 import { ACTORS, STAGES } from "./lib/types.ts";
 import { inferActor } from "./lib/inferActor.ts";
 import { StageColumn } from "./components/StageColumn.tsx";
+import { TrendChart } from "./components/TrendChart.tsx";
 
 type LiveMode = "loading" | "static" | "refreshed" | "fallback";
 
@@ -67,6 +68,8 @@ export default function App() {
           technology: prev?.technology ?? "quantum-computing",
           generatedAt: new Date().toISOString(),
           entries: [...byId.values()],
+          trend: prev?.trend ?? [],
+          notes: prev?.notes ?? [],
         };
       });
       setMode("refreshed");
@@ -90,6 +93,16 @@ export default function App() {
   const total = (data?.entries ?? []).filter(
     (e) => actor === "all" || e.actor === actor
   ).length;
+
+  // Most recent note per stage — the quick-read layer.
+  const latestNote = useMemo(() => {
+    const by: Partial<Record<Stage, StageNote>> = {};
+    for (const n of data?.notes ?? []) {
+      const cur = by[n.stage];
+      if (!cur || n.date > cur.date) by[n.stage] = n;
+    }
+    return by;
+  }, [data]);
 
   const statusText =
     mode === "loading" ? "loading data…"
@@ -154,9 +167,14 @@ export default function App() {
           </button>
         </div>
 
+        <section className="trend-section">
+          <div className="section-label">Research output by actor · over time</div>
+          <TrendChart trend={data?.trend ?? []} />
+        </section>
+
         <main className="pipeline">
           {STAGES.map((s) => (
-            <StageColumn key={s.id} stage={s.id} entries={filtered[s.id]} />
+            <StageColumn key={s.id} stage={s.id} entries={filtered[s.id]} note={latestNote[s.id]} />
           ))}
         </main>
 

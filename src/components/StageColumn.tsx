@@ -1,6 +1,7 @@
-import type { Entry, Stage } from "../lib/types.ts";
+import type { Entry, Stage, StageNote } from "../lib/types.ts";
 import { STAGES } from "../lib/types.ts";
 import { Card } from "./Card.tsx";
+import { NoteCard } from "./NoteCard.tsx";
 
 const STAGE_COLOR: Record<Stage, string> = {
   innovation: "var(--stage-innovation)",
@@ -14,7 +15,7 @@ const STAGE_NUM: Record<Stage, string> = {
   adoption: "Stage 03",
 };
 
-export function StageColumn({ stage, entries }: { stage: Stage; entries: Entry[] }) {
+export function StageColumn({ stage, entries, note }: { stage: Stage; entries: Entry[]; note?: StageNote }) {
   const meta = STAGES.find((s) => s.id === stage)!;
   return (
     <section className="stage" style={{ ["--stage-color" as string]: STAGE_COLOR[stage] }}>
@@ -29,6 +30,7 @@ export function StageColumn({ stage, entries }: { stage: Stage; entries: Entry[]
         </div>
         <p className="stage-blurb">{meta.blurb}</p>
       </header>
+      {note && <NoteCard note={note} />}
       <div className="stage-body">
         {entries.length === 0 ? (
           <div className="state-msg">no entries for this filter</div>

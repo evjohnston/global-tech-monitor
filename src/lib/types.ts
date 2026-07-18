@@ -31,11 +31,31 @@ export interface Entry {
   actorEvidence?: string;
 }
 
+// One dated observation of actor share, appended each nightly run. This is
+// how trend-over-time works: we stop overwriting and start accumulating.
+export interface TrendPoint {
+  date: string; // ISO date of the fetch run
+  counts: Record<Actor, number>; // innovation-stage works by actor that run
+}
+
+// A dated analyst note attached to a pipeline stage — the "so what" layer.
+// Written by a human, held in data/notes.ts. This is what a 10-minute reader
+// gets before the raw feed.
+export interface StageNote {
+  stage: Stage;
+  date: string; // ISO date the note was written
+  author: string;
+  headline: string; // one line, the takeaway
+  body: string; // 2-4 sentences of interpretation
+}
+
 // The shape of the committed data file the app reads at load.
 export interface DataFile {
   technology: string; // "quantum-computing"
   generatedAt: string; // ISO timestamp of the last fetch run
   entries: Entry[];
+  trend: TrendPoint[]; // accumulated actor-share history
+  notes: StageNote[]; // analyst interpretation per stage
 }
 
 export const STAGES: { id: Stage; label: string; blurb: string }[] = [
