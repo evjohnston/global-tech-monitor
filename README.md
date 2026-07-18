@@ -1,4 +1,4 @@
-# Global Tech Monitor
+# Global Tech Monitor Test
 
 A pipeline view of a technology from research through scaling to adoption.
 Vertical 01: **quantum computing.**
