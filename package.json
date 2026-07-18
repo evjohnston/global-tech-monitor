@@ -1,0 +1,28 @@
+{
+  "name": "global-tech-monitor",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Global Tech Monitor — a pipeline view of a technology from research through scaling to adoption. Vertical 01: quantum computing.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "fetch-data": "tsx scripts/fetch-data.ts",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "fast-xml-parser": "^4.5.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.3"
+  }
+}
