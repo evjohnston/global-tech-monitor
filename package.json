@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "fetch-data": "tsx scripts/fetch-data.ts",
     "backfill-trend": "tsx scripts/backfill-trend.ts",
+    "backfill-entries": "tsx scripts/backfill-entries.ts",
+    "gen-continent-map": "tsx scripts/gen-continent-map.ts",
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
@@ -28,6 +30,7 @@
     "fast-xml-parser": "^4.5.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
-    "vite": "^6.0.3"
+    "vite": "^6.0.3",
+    "world-countries": "^5.1.0"
   }
 }

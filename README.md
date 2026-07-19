@@ -11,18 +11,18 @@ Four stages, plus data-visualization up top:
 4. **Investment** — public research funding (NSF; US/EU only, see caveat).
 
 Above the pipeline: KPI cards with real period-over-period deltas, a
-country breakdown, a real interactive world map, a stage breakdown, an
-institution leaderboard, a recent-entries table, a funding-by-country
-breakdown, an innovation-by-source read (paper / arXiv / patent — a proxy
-for attribution quality, not just volume), a provenance-mix chart
-(live/seeded/auto across everything tracked), and a country-share trend
-chart with a linear-projection tail. Every one of those is interactive —
-hover for the underlying number, click to filter or jump (the map included:
-click any country to filter the whole page, or expand it to a full-page,
-zoomable view). The design is a tightened instrument, not a dashboard
-template: one border radius, borders instead of shadows, Hoover Red spent
-on exactly one accent, country colors used only to encode real data. Rules
-are in `CLAUDE.md`'s design-system section — read that before changing
+country-by-innovation-stage breakdown, an innovation-over-time line, a real
+interactive world map with a time scrubber, a stage breakdown (pie chart),
+an institution leaderboard, a recent-entries table, a funding-by-country
+breakdown, and a country-share forecast chart projected to year end on the
+real linear trend. Every one of those is interactive — hover for the
+underlying number, click to filter or jump (the map included: click any
+country to filter the whole page, or expand it to a full-page, zoomable
+view). The design is a tightened instrument, not a dashboard template: one
+border radius, borders instead of shadows, Hoover Red spent on exactly one
+accent, and country colors that encode real data — each country is colored
+by continent (six tones), not by an "us vs. everyone else" scheme. Rules are
+in `CLAUDE.md`'s design-system section — read that before changing
 `src/styles/index.css`.
 
 Every entry logs its real country (ISO code, shown as a full name in the

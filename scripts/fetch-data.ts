@@ -157,7 +157,14 @@ async function main() {
     console.error("news skipped:", (err as Error).message);
   }
 
+  // Entries accumulate across runs, the same way trend[] does — each night's
+  // OpenAlex pull is only a rolling 30-day window, so without this, anything
+  // older than 30 days (and every one-time backfill-entries.ts result) would
+  // vanish the moment the next nightly run overwrote data.json. Seeding the
+  // map from the previous file first, then layering this run's fetches on
+  // top by id, means entries only grow or get refreshed, never disappear.
   const byId = new Map<string, Entry>();
+  for (const e of prev?.entries ?? []) byId.set(e.id, e);
   for (const e of [...SEED, ...live, ...patents, ...funding, ...news]) byId.set(e.id, e);
 
   // Append today's trend point, keeping prior history. One point per date.

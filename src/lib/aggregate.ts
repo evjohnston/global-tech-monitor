@@ -162,7 +162,13 @@ export function projectCountryShares(trend: TrendPoint[], countries: string[], s
     const total = Object.values(p.counts).reduce((s, v) => s + v, 0) || 1;
     for (const c of countries) shareSeries[c].push(((p.counts[c] ?? 0) / total) * 100);
   }
-  function fit(ys: number[]): (x: number) => number {
+  // Least-squares slope only — the fitted line's value AT the last historical
+  // index can differ from the actual last recorded share (real data isn't
+  // perfectly linear), which used to make the dashed line visibly jump at
+  // the point it starts. Anchoring on the real last value and extending by
+  // the estimated slope keeps the projection continuous with what's measured
+  // while still reflecting the real trend direction/magnitude.
+  function slopeOf(ys: number[]): number {
     const xs = ys.map((_, i) => i);
     const xbar = xs.reduce((s, x) => s + x, 0) / n;
     const ybar = ys.reduce((s, y) => s + y, 0) / n;
@@ -172,13 +178,13 @@ export function projectCountryShares(trend: TrendPoint[], countries: string[], s
       num += (xs[i] - xbar) * (ys[i] - ybar);
       den += (xs[i] - xbar) ** 2;
     }
-    const slope = den === 0 ? 0 : num / den;
-    const intercept = ybar - slope * xbar;
-    return (x: number) => intercept + slope * x;
+    return den === 0 ? 0 : num / den;
   }
   return countries.map((c) => {
-    const f = fit(shareSeries[c]);
-    const points = Array.from({ length: steps }, (_, i) => Math.max(0, Math.min(100, f(n - 1 + i + 1))));
+    const ys = shareSeries[c];
+    const slope = slopeOf(ys);
+    const last = ys[ys.length - 1];
+    const points = Array.from({ length: steps }, (_, i) => Math.max(0, Math.min(100, last + slope * (i + 1))));
     return { country: c, points };
   });
 }

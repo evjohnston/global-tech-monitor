@@ -127,14 +127,32 @@ formal/political names (e.g. "People's Republic of China" → "China") with
 the name people actually say — extend that table rather than reverting to
 codes if a name reads oddly.
 
-Color budget for country display: US and China keep the app's two brand
-colors everywhere (`--us`, `--cn`) since they're the headline comparison
-this tool leads with. Every other real country shares one neutral tone
-(`--other`) — the country CODE/NAME text is what distinguishes them, not a
-unique hue. The one deliberate exception is `TrendChart.tsx`'s multi-line
-forecast, which needs several simultaneous lines to actually read and so
-assigns a small rotating palette (`ANCHOR_COLORS`) to non-US/CN lines —
-that's scoped to that one chart, don't treat it as a general country palette.
+Color budget for country display, v4 (changed 2026-07-19): every country is
+colored by continent — six tones (`--cont-na/-sa/-eu/-as/-af/-oc` in
+`index.css`), applied via `countryColor()` in `src/lib/countries.ts`. This
+replaced the earlier "US/China get brand colors, everyone else is neutral"
+scheme — that's gone; `--us`/`--cn`/`--eu`/`--other` still exist as tokens
+but are now reused only for pipeline STAGE color (innovation/scaling/
+adoption/investment in `StageColumn.tsx`, `App.tsx`'s `STAGE_PIE_COLOR`,
+`VolumeTrend.tsx`), a different semantic from country color — don't conflate
+the two when touching either. `--cont-as` is deliberately a different red
+from `--red` (the Hoover accent) so an Asian country badge never reads as
+"the brand color." The continent lookup (`continentOf()`) reads from
+`src/lib/continentMap.ts`, a generated static file — see
+`scripts/gen-continent-map.ts` for why it's generated rather than importing
+`world-countries` directly into client code (that package carries every
+field for 250 countries; importing it straight into a browser-bundled module
+cost 250KB+ of dead weight for the one field — `region`/`subregion` — this
+app actually uses). Rerun `npm run gen-continent-map` only if the ISO
+country list itself changes, which is rare.
+
+Known tension, not yet resolved: `TrendChart.tsx`'s forecast now colors each
+line by continent too, so two countries on the same continent (e.g. China
+and India, both Asia) render as the same line color, distinguished only by
+the legend/tooltip labels, not hue. That's a direct consequence of the
+six-color continent scheme applied to a multi-line chart that used to have a
+per-line rotating palette — flagged here rather than silently patched over,
+in case it needs a per-chart tweak later.
 
 Treat attribution as a lead, not a verdict — say so in anything user-facing.
 
@@ -300,8 +318,8 @@ soft-fail, same as everywhere else in this project.
   institution-attributed or hand-verified data.
 - The China-funding caveat in the investment section.
 - Soft-fail on every fetch source, including all three Worker-proxied routes.
-- The daily commit of data.json (trend accumulation depends on it — the
-  Worker is additive freshness on top, not a replacement for this).
+- The daily commit of data.json (trend AND entries accumulation both depend
+  on it — the Worker is additive freshness on top, not a replacement for this).
 - One shared implementation per source (`src/lib/sources/*`) — if you touch
   attribution or transform logic for OpenAlex/EPO/NSF/RSS, edit it there
   once, not in the Node script and the Worker separately.
@@ -332,8 +350,10 @@ padding). Prefer "is/has" over "serves as/features". State the fact, stop.
 
 ```
 npm install
-npm run fetch-data      # writes public/data.json (watch the source lines it prints)
-npm run backfill-trend  # one-time: reconstructs past trend[] history from real OpenAlex dates
+npm run fetch-data       # writes public/data.json (watch the source lines it prints)
+npm run backfill-trend   # one-time: reconstructs past trend[] history from real OpenAlex dates
+npm run backfill-entries # one-off top-up: deep OpenAlex/NSF pull merged into entries[]
+npm run gen-continent-map # regenerate src/lib/continentMap.ts (only if the ISO list changes)
 npm run dev
 npm run build
 npm run typecheck
@@ -355,3 +375,25 @@ one real point per day on its own. It reconstructs history from OpenAlex's
 real `publication_date` field (a rolling 30-day window computed per past
 day, exactly matching the live query's own math), not a fabricated curve —
 see the comment at the top of `scripts/backfill-trend.ts` before changing it.
+
+**`entries[]` accumulates across runs (fixed 2026-07-19).** `fetch-data.ts`
+seeds its id-keyed merge map from the *previous* `data.json`'s `entries[]`
+before layering this run's SEED/live/patents/funding/news on top — the same
+accumulate-don't-replace pattern `trend[]` already used. Before this fix,
+every nightly run silently discarded anything not present in that run's own
+narrow pulls (a 30-day OpenAlex window, one day of RSS), which meant a
+one-time deep backfill would just get wiped by the next regular fetch. If
+you ever touch the `byId` construction in `main()`, keep the "start from
+`prev?.entries`" line — dropping it reintroduces that bug.
+
+`backfill-entries` is the one-time entries-side counterpart to
+`backfill-trend`: a much deeper OpenAlex window (2 years, paged) plus a much
+larger NSF batch (`rpp=2000`, confirmed the awardapi accepts up to at least
+3000), merged into `entries[]` once to seed a realistic starting volume
+without changing `fetch-data.ts`'s own narrow nightly windows or touching
+`trend[]`. Real data only, same shared `src/lib/sources/*` modules as every
+other fetch path — not fabricated volume, just a deeper pull of what already
+exists. Scaling/adoption don't have an equivalent lever: the RSS feeds only
+ever expose their own current retention window regardless of how far back
+you ask, so `data/seed.ts` stays the only way to grow those two stages with
+real, verified milestones.

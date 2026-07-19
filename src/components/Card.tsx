@@ -13,8 +13,6 @@ export function Card({ entry, dim }: { entry: Entry; dim?: boolean }) {
   const color = countryColor(entry.country);
   return (
     <div className={`ecard${dim ? " dim" : ""}`} style={{ ["--acc" as string]: color }}>
-      {entry.provenance === "seeded" && <span className="seeded">seeded</span>}
-      {entry.provenance === "auto" && <span className="seeded auto">auto-classified</span>}
       <div className="ecard-meta">
         <span
           className="ecard-badge"
@@ -26,6 +24,8 @@ export function Card({ entry, dim }: { entry: Entry; dim?: boolean }) {
         {entry.date && <span>{entry.date}</span>}
         <span className="ecard-src">{entry.source}</span>
         {amt && <span className="ecard-amt">{amt}</span>}
+        {entry.provenance === "seeded" && <span className="seeded">seeded</span>}
+        {entry.provenance === "auto" && <span className="seeded auto">auto-classified</span>}
       </div>
       <div className="ecard-title">
         <a href={entry.url} target="_blank" rel="noopener noreferrer">{entry.title}</a>

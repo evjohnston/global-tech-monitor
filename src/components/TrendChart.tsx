@@ -1,21 +1,8 @@
 import { useRef, useState, type MouseEvent } from "react";
 import type { TrendPoint } from "../lib/types.ts";
 import { projectCountryShares } from "../lib/aggregate.ts";
-import { countryName } from "../lib/countries.ts";
+import { countryName, countryColor } from "../lib/countries.ts";
 import { Tooltip } from "./Tooltip.tsx";
-
-// US/China keep their consistent brand colors everywhere in the app. The
-// other plotted lines get one of these instead of the neutral "everyone
-// else" badge tone — a chart with 4-6 simultaneous lines genuinely needs
-// per-line color to read, unlike a badge where the text code already
-// disambiguates. Scoped to this chart only; don't reuse ANCHOR_COLORS
-// elsewhere as if it were a general country palette.
-const ANCHOR_COLORS = ["var(--eu)", "#7a6a9e", "#4d8a7a", "#a3763f"];
-function lineColor(code: string, otherIndex: number): string {
-  if (code === "US") return "var(--us)";
-  if (code === "CN") return "var(--cn)";
-  return ANCHOR_COLORS[otherIndex % ANCHOR_COLORS.length];
-}
 
 export function TrendChart({
   trend,
@@ -39,7 +26,7 @@ export function TrendChart({
   }
 
   const order = countries;
-  const colorOf = (code: string) => lineColor(code, order.filter((c) => c !== "US" && c !== "CN").indexOf(code));
+  const colorOf = (code: string) => countryColor(code);
 
   const projection = projectCountryShares(trend, order, projectDays);
   const steps = projection ? projection[0].points.length : 0;
