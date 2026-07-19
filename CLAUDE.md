@@ -258,15 +258,23 @@ the localhost dev ports. `VITE_WORKER_URL` is set both in `.env.local` (local
 dev) and in `build-and-deploy.yml`'s Build step (production) — it's a public
 URL, not a secret, so it's fine committed in the workflow file.
 
-EPO_KEY / EPO_SECRET were deliberately skipped — that account is taking a
-while to set up. `/patents` soft-fails cleanly (`{"error":"EPO key/secret not
-set"}`) until they're added:
-```
-cd worker
-npx wrangler secret put EPO_KEY             # paste when prompted
-npx wrangler secret put EPO_SECRET
-npm run deploy                              # re-deploy to pick them up
-```
+EPO_KEY / EPO_SECRET now added (2026-07-19), in both places that need them —
+they're independent, adding one doesn't feed the other:
+- **Worker** (`/patents` on the live path): `cd worker && npx wrangler secret
+  put EPO_KEY` then `npx wrangler secret put EPO_SECRET` — paste the value at
+  the interactive prompt, never as the command-line argument (that pastes the
+  key into shell history and, worse, into wrangler as the *secret's name*
+  rather than its value — `npx wrangler secret list` will look wrong,
+  showing your key material back as a "name," if this slips). Then `npm run
+  deploy` to pick them up.
+- **GitHub Actions** (nightly `npm run fetch-data`, which feeds `data.json`
+  and `trend[]`): add `EPO_KEY`/`EPO_SECRET` (and `OPENALEX_KEY`, same
+  category of miss) as repo secrets — Settings → Secrets and variables →
+  Actions — and pass them through in `build-and-deploy.yml`'s "Fetch data"
+  step `env:` block. Without that `env:` block the workflow step never sees
+  them even once they're stored as repo secrets — `process.env.EPO_KEY` in
+  `scripts/fetch-data.ts` reads empty either way, silently, since every
+  source here fails soft.
 
 Redeploying after any other change to `worker/`: `cd worker && npm run
 deploy` (already logged in — no need to re-run `wrangler login`).

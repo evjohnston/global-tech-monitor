@@ -35,6 +35,10 @@ jobs:
       # Pull fresh data server-side (no CORS limits here).
       - name: Fetch data
         run: npm run fetch-data
+        env:
+          OPENALEX_KEY: ${{ secrets.OPENALEX_KEY }}
+          EPO_KEY: ${{ secrets.EPO_KEY }}
+          EPO_SECRET: ${{ secrets.EPO_SECRET }}
 
       # Build with the repo name as base path for project Pages.
       # If deploying to a user/root or custom domain, set GTM_BASE to "/".
