@@ -22,7 +22,10 @@ export interface Env {
   ALLOWED_ORIGINS: string;
 }
 
-const N = 40;
+// Matches scripts/fetch-data.ts's per-source caps, checked against each
+// API's real ceiling (EPO's is a docs claim, untested — no key yet).
+const NSF_N = 100;
+const EPO_N = 100;
 const CACHE_SECONDS = 3600; // an hour — both sources move slowly by nature
 
 function pickOrigin(reqOrigin: string | null, allowedCsv: string): string {
@@ -77,10 +80,10 @@ export default {
 
     try {
       if (url.pathname === "/patents") {
-        return withCors(await cached(req, () => fetchPatents(env.EPO_KEY, env.EPO_SECRET, N)), origin);
+        return withCors(await cached(req, () => fetchPatents(env.EPO_KEY, env.EPO_SECRET, EPO_N)), origin);
       }
       if (url.pathname === "/funding") {
-        return withCors(await cached(req, () => fetchNSF(N)), origin);
+        return withCors(await cached(req, () => fetchNSF(NSF_N)), origin);
       }
       if (url.pathname === "/" || url.pathname === "/health") {
         return withCors(json({ ok: true, routes: ["/patents", "/funding"] }), origin);

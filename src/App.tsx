@@ -24,7 +24,7 @@ const DATA_URL = `${import.meta.env.BASE_URL}data.json`;
 const WORKER_URL = (import.meta.env.VITE_WORKER_URL as string | undefined)?.replace(/\/$/, "");
 const ARXIV_URL =
   "https://export.arxiv.org/api/query?search_query=cat:quant-ph" +
-  "&sortBy=submittedDate&sortOrder=descending&max_results=30";
+  "&sortBy=submittedDate&sortOrder=descending&max_results=200";
 const ACTOR_VAR: Record<Actor, string> = {
   us: "var(--us)", cn: "var(--cn)", eu: "var(--eu)", other: "var(--other)",
 };
@@ -76,7 +76,7 @@ async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
   const failed: string[] = [];
   let innovation: Entry[] = [];
   try {
-    innovation = await fetchOpenAlex({ mailto: "gtm@example.com" });
+    innovation = await fetchOpenAlex({ mailto: "gtm@example.com", n: 200 });
   } catch {
     try {
       innovation = await fetchArxivBrowser();

@@ -33,7 +33,17 @@ import { NOTES } from "../data/notes.ts";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(__dirname, "../public/data.json");
 const TECH = "quantum-computing";
-const N = 40;
+
+// Per-request caps, one per source — each API has a different real ceiling,
+// checked by hand before picking these: OpenAlex's per-page max is 200
+// (confirmed; ~3,178 arXiv works actually matched the 21-day window when
+// this was checked, so 200 is real recent volume, not a stretch), NSF's
+// awardapi accepts rpp up to at least 100 (confirmed), EPO OPS search caps
+// around 100 per request on the free tier (per their docs — untested here,
+// no key yet).
+const OA_N = 200;
+const NSF_N = 100;
+const EPO_N = 100;
 
 // OpenAlex quant-ph, EPO patents, and NSF grants are all fetched through the
 // shared src/lib/sources/* modules — the same code the Cloudflare Worker uses
@@ -46,7 +56,7 @@ const EPO_SECRET = process.env.EPO_SECRET ?? "";
 
 const ARXIV_URL =
   "https://export.arxiv.org/api/query?search_query=cat:quant-ph" +
-  `&sortBy=submittedDate&sortOrder=descending&max_results=${N}`;
+  `&sortBy=submittedDate&sortOrder=descending&max_results=${OA_N}`;
 
 // ── arXiv fallback (no country codes → keyword inference) ─────────
 async function fetchArxiv(): Promise<Entry[]> {
@@ -91,7 +101,7 @@ async function main() {
   let live: Entry[] = [];
   let sourceUsed = "openalex";
   try {
-    live = await fetchOpenAlex({ key: OA_KEY, mailto: OA_MAILTO, sinceDays: 21, n: N });
+    live = await fetchOpenAlex({ key: OA_KEY, mailto: OA_MAILTO, sinceDays: 21, n: OA_N });
     console.log(`OpenAlex: ${live.length} works with country attribution`);
   } catch (err) {
     console.error("OpenAlex failed:", (err as Error).message);
@@ -111,14 +121,14 @@ async function main() {
   // a down endpoint drops that source without breaking the build.
   let patents: Entry[] = [];
   try {
-    patents = await fetchPatents(EPO_KEY, EPO_SECRET, N);
+    patents = await fetchPatents(EPO_KEY, EPO_SECRET, EPO_N);
     console.log(`EPO: ${patents.length} patents`);
   } catch (err) {
     console.error("patents skipped:", (err as Error).message);
   }
   let funding: Entry[] = [];
   try {
-    funding = await fetchNSF(N);
+    funding = await fetchNSF(NSF_N);
     console.log(`NSF: ${funding.length} grants`);
   } catch (err) {
     console.error("funding skipped:", (err as Error).message);
