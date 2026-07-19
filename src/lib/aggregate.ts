@@ -70,26 +70,6 @@ export function orgLeaderboard(entries: Entry[], stage?: Stage, limit = 8): OrgR
   return [...map.values()].sort((a, b) => b.count - a.count).slice(0, limit);
 }
 
-// Count entries by source kind (paper/arxiv/patent/etc.), optionally within
-// one stage — the "how solid is this signal" breakdown, since source kind
-// tracks closely with attribution quality (paper > arxiv, structurally).
-export function countBySource(entries: Entry[], stage?: Stage): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const e of entries) {
-    if (stage && e.stage !== stage) continue;
-    out[e.source] = (out[e.source] ?? 0) + 1;
-  }
-  return out;
-}
-
-// Count entries by provenance tier (live/seeded/auto) — the honesty-mix
-// across the whole dataset, made explicit as a chart rather than only
-// visible one badge at a time.
-export function countByProvenance(entries: Entry[]): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const e of entries) out[e.provenance] = (out[e.provenance] ?? 0) + 1;
-  return out;
-}
 
 // Count entries by stage, for the "entries by stage" breakdown panel.
 export function countByStage(entries: Entry[]): Record<Stage, number> {

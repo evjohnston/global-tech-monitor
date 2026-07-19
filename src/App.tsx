@@ -5,7 +5,7 @@ import { inferInstitutionCountry } from "./lib/institutionCountry.ts";
 import { countryColor, countryName } from "./lib/countries.ts";
 import { fetchOpenAlexPages } from "./lib/sources/openalex.ts";
 import {
-  countByCountry, countByProvenance, countBySource, countByStage, countryShares,
+  countByCountry, countByStage, countryShares,
   fundingByCountry, orgLeaderboard, pctDelta, periodCounts, periodFunding, topCountries,
 } from "./lib/aggregate.ts";
 import { StageColumn } from "./components/StageColumn.tsx";
@@ -16,6 +16,7 @@ import { KpiCard } from "./components/KpiCard.tsx";
 import { WorldMap } from "./components/WorldMap.tsx";
 import { Leaderboard } from "./components/Leaderboard.tsx";
 import { RecentEntries } from "./components/RecentEntries.tsx";
+import { PieChart } from "./components/PieChart.tsx";
 
 type LiveMode = "loading" | "static" | "refreshed" | "fallback";
 const DATA_URL = `${import.meta.env.BASE_URL}data.json`;
@@ -174,13 +175,7 @@ export default function App() {
   const fundingTop = useMemo(() => topCountries(fundingByCountry(entries), 5), [entries]);
   const fundingGrandTotal = fundingTop.top.reduce((s, c) => s + c.count, 0) + fundingTop.rest.reduce((s, c) => s + c.count, 0) || 1;
 
-  const sourceCounts = useMemo(() => countBySource(entries, "innovation"), [entries]);
-  const sourceTotal = Object.values(sourceCounts).reduce((s, n) => s + n, 0) || 1;
-  const SOURCE_LABEL: Record<string, string> = { paper: "Journal paper", arxiv: "arXiv preprint", patent: "Patent" };
-
-  const provenanceCounts = useMemo(() => countByProvenance(entries), [entries]);
-  const provenanceTotal = Object.values(provenanceCounts).reduce((s, n) => s + n, 0) || 1;
-  const PROVENANCE_LABEL: Record<string, string> = { live: "Live (institution-attributed)", seeded: "Seeded (hand-verified)", auto: "Auto (keyword-classified)" };
+  const STAGE_PIE_COLOR: Record<Stage, string> = { innovation: "var(--cn)", scaling: "var(--eu)", adoption: "var(--us)", investment: "var(--ink-2)" };
 
   // Real period-over-period deltas — null (and hidden) when there's no honest baseline.
   const totalPeriod = useMemo(() => STAGES.reduce((acc, s) => {
@@ -208,6 +203,16 @@ export default function App() {
   // including US/CN if they have any presence, so the headline comparison
   // never silently drops off the chart it anchors.
   const forecastCountries = useMemo(() => topCountries(innovationCounts, 5).top.map((c) => c.country), [innovationCounts]);
+  // Project out to Dec 31 of the last recorded trend year, not a fixed
+  // step count — "current trajectory through year end," derived from the
+  // real last recorded date rather than hardcoded.
+  const daysToYearEnd = useMemo(() => {
+    if (trend.length === 0) return 4;
+    const last = new Date(trend[trend.length - 1].date);
+    const yearEnd = new Date(`${last.getFullYear()}-12-31`);
+    const days = Math.round((yearEnd.getTime() - last.getTime()) / 86_400_000);
+    return Math.max(1, days);
+  }, [trend]);
 
   const generated = data?.generatedAt
     ? new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })
@@ -294,36 +299,40 @@ export default function App() {
           />
         </div>
 
-        <div className="row3">
-          <div className="panel">
-            <h3>Innovation output over time</h3>
-            <VolumeTrend trend={trend} />
+        <div className="row-map">
+          <div className="row-map-stack">
+            <div className="panel">
+              <h3>Output by country · innovation stage</h3>
+              {innovationTop.top.map((c) => (
+                <BarRow
+                  key={c.country}
+                  label={countryName(c.country)}
+                  pct={innovationTopShares[c.country] ?? 0}
+                  color={countryColor(c.country)}
+                  valueLabel={`${c.count} · ${((c.count / innovationTotal) * 100).toFixed(0)}%`}
+                  detail={`${countryName(c.country)} · ${c.count} works · ${((c.count / innovationTotal) * 100).toFixed(1)}% of innovation output · click to filter`}
+                  onClick={() => toggleCountry(c.country)}
+                  active={country === c.country}
+                />
+              ))}
+              {innovationRestCount > 0 && (
+                <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
+                  +{innovationTop.rest.length} more countries, {innovationRestCount} works — see the map →
+                </div>
+              )}
+            </div>
+            <div className="panel">
+              <h3>Innovation output over time</h3>
+              <VolumeTrend trend={trend} />
+            </div>
           </div>
-          <div className="panel">
-            <h3>Output by country · innovation stage</h3>
-            {innovationTop.top.map((c) => (
-              <BarRow
-                key={c.country}
-                label={countryName(c.country)}
-                pct={innovationTopShares[c.country] ?? 0}
-                color={countryColor(c.country)}
-                valueLabel={`${c.count} · ${((c.count / innovationTotal) * 100).toFixed(0)}%`}
-                detail={`${countryName(c.country)} · ${c.count} works · ${((c.count / innovationTotal) * 100).toFixed(1)}% of innovation output · click to filter`}
-                onClick={() => toggleCountry(c.country)}
-                active={country === c.country}
-              />
-            ))}
-            {innovationRestCount > 0 && (
-              <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
-                +{innovationTop.rest.length} more countries, {innovationRestCount} works — see the map →
-              </div>
-            )}
-          </div>
-          <div className="panel">
+          <div className="panel map-panel">
             <h3>Where the work happens</h3>
-            <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} />
-            <div className="trend-empty" style={{ padding: "6px 0 0", fontSize: 10.5 }}>
-              Every country with at least one attributed work is shaded — darker means more output. Click any country to filter the page. Expand for the full interactive map.
+            <div className="map-fill">
+              <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} trend={trend} />
+              <div className="trend-empty" style={{ padding: "6px 0 0", fontSize: 10.5 }}>
+                Every country with at least one attributed work is shaded — darker means more output. Click any country to filter the page. Drag the time bar below to see real recorded history; expand for the full interactive map.
+              </div>
             </div>
           </div>
         </div>
@@ -331,17 +340,13 @@ export default function App() {
         <div className="row3">
           <div className="panel">
             <h3>Entries by stage</h3>
-            {STAGES.map((s) => (
-              <BarRow
-                key={s.id}
-                label={s.label}
-                pct={(stageCounts[s.id] / stageTotal) * 100}
-                color="var(--ink-2)"
-                valueLabel={`${stageCounts[s.id]} · ${((stageCounts[s.id] / stageTotal) * 100).toFixed(0)}%`}
-                detail={`${stageCounts[s.id]} entries · ${((stageCounts[s.id] / stageTotal) * 100).toFixed(1)}% of tracked total · click to jump`}
-                onClick={() => scrollToStage(s.id)}
-              />
-            ))}
+            <PieChart
+              slices={STAGES.map((s) => ({
+                key: s.id, label: s.label, value: stageCounts[s.id], color: STAGE_PIE_COLOR[s.id],
+                detail: `${s.label} · ${stageCounts[s.id]} entries · ${((stageCounts[s.id] / stageTotal) * 100).toFixed(1)}% of tracked total · click to jump`,
+              }))}
+              onSelect={(key) => scrollToStage(key as Stage)}
+            />
           </div>
           <div className="panel">
             <h3>Top institutions <span className="drop">innovation</span></h3>
@@ -354,58 +359,30 @@ export default function App() {
           </div>
         </div>
 
-        <div className="row3">
-          <div className="panel">
-            <h3>Funding by country <span className="drop">investment</span></h3>
-            {fundingTop.top.length === 0
-              ? <div className="trend-empty">No disclosed funding yet.</div>
-              : fundingTop.top.map((c) => (
-                <BarRow
-                  key={c.country}
-                  label={countryName(c.country)}
-                  pct={(c.count / fundingGrandTotal) * 100}
-                  color={countryColor(c.country)}
-                  valueLabel={fmtUsd(c.count)}
-                  detail={`${countryName(c.country)} · ${fmtUsd(c.count)} disclosed · ${((c.count / fundingGrandTotal) * 100).toFixed(1)}% of tracked funding`}
-                />
-              ))}
-            {fundingTop.rest.length > 0 && (
-              <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
-                +{fundingTop.rest.length} more countries, {fmtUsd(fundingTop.rest.reduce((s, c) => s + c.count, 0))}
-              </div>
-            )}
-          </div>
-          <div className="panel">
-            <h3>Innovation by source <span className="drop">how solid</span></h3>
-            {Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]).map(([src, n]) => (
+        <div className="panel">
+          <h3>Funding by country <span className="drop">investment</span></h3>
+          {fundingTop.top.length === 0
+            ? <div className="trend-empty">No disclosed funding yet.</div>
+            : fundingTop.top.map((c) => (
               <BarRow
-                key={src}
-                label={SOURCE_LABEL[src] ?? src}
-                pct={(n / sourceTotal) * 100}
-                color="var(--ink-2)"
-                valueLabel={`${n} · ${((n / sourceTotal) * 100).toFixed(0)}%`}
-                detail={`${n} entries · ${((n / sourceTotal) * 100).toFixed(1)}% of innovation-stage entries`}
+                key={c.country}
+                label={countryName(c.country)}
+                pct={(c.count / fundingGrandTotal) * 100}
+                color={countryColor(c.country)}
+                valueLabel={fmtUsd(c.count)}
+                detail={`${countryName(c.country)} · ${fmtUsd(c.count)} disclosed · ${((c.count / fundingGrandTotal) * 100).toFixed(1)}% of tracked funding`}
               />
             ))}
-          </div>
-          <div className="panel">
-            <h3>Provenance mix <span className="drop">all stages</span></h3>
-            {(["live", "seeded", "auto"] as const).filter((p) => provenanceCounts[p]).map((p) => (
-              <BarRow
-                key={p}
-                label={PROVENANCE_LABEL[p]}
-                pct={(provenanceCounts[p] / provenanceTotal) * 100}
-                color={p === "live" ? "var(--us)" : p === "seeded" ? "var(--red)" : "var(--other)"}
-                valueLabel={`${provenanceCounts[p]} · ${((provenanceCounts[p] / provenanceTotal) * 100).toFixed(0)}%`}
-                detail={`${provenanceCounts[p]} entries · ${((provenanceCounts[p] / provenanceTotal) * 100).toFixed(1)}% of everything tracked`}
-              />
-            ))}
-          </div>
+          {fundingTop.rest.length > 0 && (
+            <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
+              +{fundingTop.rest.length} more countries, {fmtUsd(fundingTop.rest.reduce((s, c) => s + c.count, 0))}
+            </div>
+          )}
         </div>
 
         <div className="panel">
-          <h3>Country share forecast <span className="fc-tag">Projected — linear trend</span></h3>
-          <TrendChart trend={trend} countries={forecastCountries} />
+          <h3>Country share forecast <span className="fc-tag">Projected to year end — linear trend</span></h3>
+          <TrendChart trend={trend} countries={forecastCountries} projectDays={daysToYearEnd} />
         </div>
 
         <section className="section">

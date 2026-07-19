@@ -143,8 +143,10 @@ Treat attribution as a lead, not a verdict — say so in anything user-facing.
 v3, "tightened instrument" — a deliberate rebuild after v2 (Garamond + big
 serif hero) read as generic/AI-templated. Rules, not vibes:
 
-- **One radius value** (`--r: 6px`), used everywhere — cards, pills, badges,
-  tags. Never introduce a second radius.
+- **Zero radius** (`--r: 0px`), used everywhere — cards, pills, badges,
+  tags. v3 started at a small 6px radius; dropped to 0 on request for a
+  squarer, more instrument-like read. Keep it at one value regardless —
+  never introduce a second radius, even a second value of 0-ish intent.
 - **Borders, not shadows.** Every panel is `.panel`: a 1px border, no
   box-shadow. Nothing floats.
 - **Inter, one type ramp, no serif.** Adobe Garamond Pro is gone — this isn't
@@ -202,6 +204,15 @@ gray). Compact view uses `countries-110m.json` (bundled, ~108KB); clicking
 map. Expand renders a fixed-position full-viewport overlay (own component
 state, Escape key closes it) — not the browser's native Fullscreen API,
 which needs a user-gesture dance across browsers this doesn't need.
+
+**Time scrubber** (`TimeBar` in `WorldMap.tsx`): drags/plays through real
+`trend[]` points, recoloring the choropleth to that date's actual recorded
+counts — not an animation between two points, an actual different real
+snapshot per frame. Only renders once `trend.length >= 3`; below that a
+scrubber would just toggle between one or two points, not show a trend.
+"Live" jumps back to the caller's current `counts` prop, which can be
+fresher than the last recorded trend point. Needs real history to be worth
+showing — see `scripts/backfill-trend.ts` below.
 
 Compact-view chips/bars/KPIs show a caller-chosen top N (currently 6,
 `TOP_N` in `App.tsx`) of whichever countries actually have the most volume
@@ -313,7 +324,8 @@ padding). Prefer "is/has" over "serves as/features". State the fact, stop.
 
 ```
 npm install
-npm run fetch-data   # writes public/data.json (watch the source lines it prints)
+npm run fetch-data      # writes public/data.json (watch the source lines it prints)
+npm run backfill-trend  # one-time: reconstructs past trend[] history from real OpenAlex dates
 npm run dev
 npm run build
 npm run typecheck
@@ -328,3 +340,10 @@ npm run typecheck
 On the first real fetch, confirm it prints "OpenAlex: N works", "NSF: N grants",
 "EPO: N patents", "RSS: N auto-classified scaling/adoption items" rather than
 skip messages. A skip means that key isn't set (EPO) or every feed failed.
+
+`backfill-trend` only needs to run once (or again if `trend[]` ever gets
+reset/thinned) — it's not part of the nightly build, which keeps appending
+one real point per day on its own. It reconstructs history from OpenAlex's
+real `publication_date` field (a rolling 30-day window computed per past
+day, exactly matching the live query's own math), not a fabricated curve —
+see the comment at the top of `scripts/backfill-trend.ts` before changing it.

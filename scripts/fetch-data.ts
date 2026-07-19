@@ -161,8 +161,11 @@ async function main() {
   for (const e of [...SEED, ...live, ...patents, ...funding, ...news]) byId.set(e.id, e);
 
   // Append today's trend point, keeping prior history. One point per date.
+  // Also drops any leftover pre-refactor us/cn/eu/other-bucket point — real
+  // country codes are never lowercase, so this is an unambiguous tell.
+  const today = new Date().toISOString().slice(0, 10);
   const history = (prev?.trend ?? []).filter(
-    (p) => p.date !== new Date().toISOString().slice(0, 10)
+    (p) => p.date !== today && !Object.keys(p.counts).some((k) => ["us", "cn", "eu", "other"].includes(k))
   );
   const trend = live.length > 0 ? [...history, trendPoint(live)] : history;
 

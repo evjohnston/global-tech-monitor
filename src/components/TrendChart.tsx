@@ -17,7 +17,15 @@ function lineColor(code: string, otherIndex: number): string {
   return ANCHOR_COLORS[otherIndex % ANCHOR_COLORS.length];
 }
 
-export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countries: string[] }) {
+export function TrendChart({
+  trend,
+  countries,
+  projectDays = 4,
+}: {
+  trend: TrendPoint[];
+  countries: string[];
+  projectDays?: number;
+}) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<{ i: number; x: number; y: number; projected: boolean } | null>(null);
 
@@ -33,12 +41,12 @@ export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countrie
   const order = countries;
   const colorOf = (code: string) => lineColor(code, order.filter((c) => c !== "US" && c !== "CN").indexOf(code));
 
-  const projection = projectCountryShares(trend, order);
+  const projection = projectCountryShares(trend, order, projectDays);
   const steps = projection ? projection[0].points.length : 0;
   const nHist = trend.length;
   const nTotal = nHist + steps;
 
-  const W = 720, H = 240, padL = 34, padR = 12, padT = 14, padB = 26;
+  const W = 720, H = 240, padL = 30, padR = 12, padT = 14, padB = 26;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
 
@@ -50,8 +58,20 @@ export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countrie
     };
   });
 
+  // Dynamic Y-axis: zoom into the real range instead of a fixed 0-100% —
+  // with 4-6 countries splitting the pie, no single share usually gets
+  // anywhere near 100%, so a fixed full-scale axis reads as flat lines
+  // hugging the bottom. Round up to the nearest 10 and add 5pt headroom
+  // above the highest real (historical or projected) point.
+  const allVals = [
+    ...shares.flatMap((s) => order.map((c) => s.pct[c])),
+    ...(projection?.flatMap((p) => p.points) ?? []),
+  ];
+  const rawMax = Math.max(1, ...allVals);
+  const yMax = Math.ceil((rawMax + 5) / 10) * 10;
+
   const x = (i: number) => padL + (i / Math.max(1, nTotal - 1)) * plotW;
-  const y = (pct: number) => padT + (1 - pct / 100) * plotH;
+  const y = (pct: number) => padT + (1 - pct / yMax) * plotH;
 
   const histLine = (code: string) =>
     shares.map((s, i) => `${i === 0 ? "M" : "L"} ${x(i).toFixed(1)} ${y(s.pct[code]).toFixed(1)}`).join(" ");
@@ -72,7 +92,7 @@ export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countrie
     setHover({ i: clamped, x: e.clientX, y: e.clientY, projected: clamped >= nHist });
   }
 
-  const gridVals = [0, 25, 50, 75, 100];
+  const gridVals = [0, yMax * 0.25, yMax * 0.5, yMax * 0.75, yMax];
 
   return (
     <figure style={{ margin: 0 }}>
@@ -88,7 +108,7 @@ export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countrie
         {gridVals.map((v) => (
           <g key={v}>
             <line x1={padL} y1={y(v)} x2={W - padR} y2={y(v)} stroke="var(--line)" strokeWidth="1" />
-            <text x={padL - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="var(--mist)">{v}%</text>
+            <text x={padL - 5} y={y(v) + 3} textAnchor="end" fontSize="9" fill="var(--mist)">{Math.round(v)}%</text>
           </g>
         ))}
         {projection && (
@@ -107,9 +127,11 @@ export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countrie
           <line x1={x(hover.i)} y1={padT} x2={x(hover.i)} y2={H - padB} stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 2" />
         )}
         <text x={padL} y={H - 6} fontSize="9" fill="var(--mist)">{shares[0].date}</text>
-        <text x={W - padR} y={H - 6} textAnchor="end" fontSize="9" fill="var(--mist)">{shares[shares.length - 1].date}</text>
+        <text x={W - padR} y={H - 6} textAnchor="end" fontSize="9" fill="var(--mist)">
+          {projection ? `${new Date(trend[0].date).getFullYear()}-12-31` : shares[shares.length - 1].date}
+        </text>
         {projection && (
-          <text x={x(nHist - 1) + 6} y={padT + 11} fontSize="9" fill="var(--mist)">projected</text>
+          <text x={x(nHist - 1) + 6} y={padT + 11} fontSize="9" fill="var(--mist)">projected to year end</text>
         )}
       </svg>
       {hover && (
@@ -133,7 +155,7 @@ export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countrie
           </span>
         ))}
         <span className="trend-note">
-          {projection ? "solid = measured, dashed = linear projection" : "share of quant-ph preprints by institution country"}
+          {projection ? "solid = measured, dashed = linear projection to year end" : "share of quant-ph preprints by institution country"}
         </span>
       </figcaption>
     </figure>

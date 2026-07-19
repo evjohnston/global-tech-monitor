@@ -1,6 +1,7 @@
 import { useEffect, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
 import worldLow from "world-atlas/countries-110m.json";
+import type { TrendPoint } from "../lib/types.ts";
 import { alpha2FromNumeric, countryName } from "../lib/countries.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
@@ -63,7 +64,7 @@ function MapBody({
                     stroke="var(--line)"
                     strokeWidth={0.5}
                     style={{
-                      default: { outline: "none", opacity: active && !isActive ? 0.45 : 1, transition: "opacity 0.15s" },
+                      default: { outline: "none", opacity: active && !isActive ? 0.45 : 1, transition: "fill 0.2s, opacity 0.15s" },
                       hover: { outline: "none", fill: "var(--red)", cursor: code && onSelect ? "pointer" : "default" },
                       pressed: { outline: "none", fill: "var(--red)" },
                     }}
@@ -87,18 +88,70 @@ function MapBody({
   );
 }
 
+// Scrubs through real trend[] history — each point is a genuine rolling
+// 30-day snapshot (see scripts/backfill-trend.ts), not a fabricated
+// in-between frame. "Live" jumps back to the caller's current counts,
+// which can be fresher than the last recorded trend point.
+function TimeBar({
+  trend,
+  scrubIndex,
+  onScrub,
+  onLive,
+}: {
+  trend: TrendPoint[];
+  scrubIndex: number | null;
+  onScrub: (i: number) => void;
+  onLive: () => void;
+}) {
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    if (!playing) return;
+    const id = setInterval(() => {
+      const next = (scrubIndex ?? trend.length - 1) + 1;
+      onScrub(next >= trend.length ? 0 : next);
+    }, 450);
+    return () => clearInterval(id);
+  }, [playing, scrubIndex, trend.length, onScrub]);
+
+  const sliderValue = scrubIndex ?? trend.length - 1;
+  const date = trend[sliderValue]?.date ?? "";
+
+  return (
+    <div className="map-timebar">
+      <button onClick={() => setPlaying((p) => !p)} aria-label={playing ? "Pause" : "Play through time"}>
+        {playing ? "⏸" : "▶"}
+      </button>
+      <input
+        type="range"
+        min={0}
+        max={trend.length - 1}
+        value={sliderValue}
+        onChange={(e) => { setPlaying(false); onScrub(Number(e.target.value)); }}
+      />
+      <span className="date num">{scrubIndex === null ? "Live" : date}</span>
+      <button onClick={() => { setPlaying(false); onLive(); }} disabled={scrubIndex === null}>Live</button>
+    </div>
+  );
+}
+
 export function WorldMap({
   counts,
   onSelect,
   active,
+  trend = [],
 }: {
   counts: Record<string, number>;
   onSelect?: (country: string) => void;
   active?: string | null;
+  trend?: TrendPoint[];
 }) {
   const [expanded, setExpanded] = useState(false);
   const [hiRes, setHiRes] = useState<Record<string, unknown> | null>(null);
-  const max = Math.max(1, ...Object.values(counts));
+  const [scrubIndex, setScrubIndex] = useState<number | null>(null);
+
+  const shownCounts = scrubIndex !== null && trend[scrubIndex] ? trend[scrubIndex].counts : counts;
+  const max = Math.max(1, ...Object.values(shownCounts));
+  const canScrub = trend.length >= 3;
 
   useEffect(() => {
     if (!expanded) return;
@@ -124,21 +177,25 @@ export function WorldMap({
         <div className="map-fullscreen-body">
           <MapBody
             geoData={(hiRes ?? (worldLow as unknown as Record<string, unknown>))}
-            counts={counts}
+            counts={shownCounts}
             max={max}
             onSelect={onSelect}
             active={active}
-            height={860}
+            height={820}
           />
         </div>
+        {canScrub && <TimeBar trend={trend} scrubIndex={scrubIndex} onScrub={setScrubIndex} onLive={() => setScrubIndex(null)} />}
       </div>
     );
   }
 
   return (
-    <div className="mapbox">
-      <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={counts} max={max} onSelect={onSelect} active={active} height={320} />
-      <button className="map-expand" onClick={() => setExpanded(true)} aria-label="Expand map to full page">⤢</button>
+    <div>
+      <div className="mapbox">
+        <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={shownCounts} max={max} onSelect={onSelect} active={active} height={260} />
+        <button className="map-expand" onClick={() => setExpanded(true)} aria-label="Expand map to full page">⤢</button>
+      </div>
+      {canScrub && <TimeBar trend={trend} scrubIndex={scrubIndex} onScrub={setScrubIndex} onLive={() => setScrubIndex(null)} />}
     </div>
   );
 }
