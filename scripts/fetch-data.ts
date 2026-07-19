@@ -28,7 +28,15 @@
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { config } from "dotenv";
 import { XMLParser } from "fast-xml-parser";
+
+// Running this script directly with tsx (as opposed to through Vite) reads
+// nothing from .env.local on its own — Vite's env-loading only applies to
+// `npm run dev`/`build`. Load it explicitly so a local `npm run fetch-data`
+// can pick up real EPO_KEY/EPO_SECRET/OPENALEX_KEY the same way the GitHub
+// Actions workflow's `env:` block does in CI.
+config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env.local") });
 import { inferInstitutionCountry } from "../src/lib/institutionCountry.ts";
 import type { DataFile, Entry, TrendPoint } from "../src/lib/types.ts";
 import { fetchOpenAlexPages } from "../src/lib/sources/openalex.ts";

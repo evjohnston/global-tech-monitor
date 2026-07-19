@@ -17,10 +17,13 @@
 import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { config } from "dotenv";
 import { fetchOpenAlexPages } from "../src/lib/sources/openalex.ts";
 import type { DataFile, TrendPoint } from "../src/lib/types.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+// See scripts/fetch-data.ts for why this is needed when running via tsx directly.
+config({ path: resolve(__dirname, "../.env.local") });
 const OUT = resolve(__dirname, "../public/data.json");
 const OA_KEY = process.env.OPENALEX_KEY ?? "";
 const OA_MAILTO = process.env.OPENALEX_MAILTO ?? "gtm@example.com";
