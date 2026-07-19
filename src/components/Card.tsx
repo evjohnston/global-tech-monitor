@@ -12,10 +12,10 @@ function fmtAmt(n?: number): string | null {
   return `$${n}`;
 }
 
-export function Card({ entry }: { entry: Entry }) {
+export function Card({ entry, dim }: { entry: Entry; dim?: boolean }) {
   const amt = fmtAmt(entry.amountUsd);
   return (
-    <div className="ecard" style={{ ["--acc" as string]: ACTOR_VAR[entry.actor] }}>
+    <div className={`ecard${dim ? " dim" : ""}`} style={{ ["--acc" as string]: ACTOR_VAR[entry.actor] }}>
       {entry.provenance === "seeded" && <span className="seeded">seeded</span>}
       <div className="ecard-meta">
         <span className="ecard-badge" style={{ background: ACTOR_VAR[entry.actor] }}>

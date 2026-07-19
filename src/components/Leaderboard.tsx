@@ -7,7 +7,17 @@ const ACTOR_VAR: Record<Actor, string> = {
 };
 const ACTOR_SHORT: Record<Actor, string> = { us: "US", cn: "CN", eu: "EU", other: "—" };
 
-export function Leaderboard({ rows, unit = "works" }: { rows: OrgRow[]; unit?: string }) {
+export function Leaderboard({
+  rows,
+  unit = "works",
+  onSelect,
+  activeOrg,
+}: {
+  rows: OrgRow[];
+  unit?: string;
+  onSelect?: (org: string) => void;
+  activeOrg?: string | null;
+}) {
   if (rows.length === 0) {
     return <div className="trend-empty">No institution data yet — populated once a live fetch runs.</div>;
   }
@@ -23,7 +33,12 @@ export function Leaderboard({ rows, unit = "works" }: { rows: OrgRow[]; unit?: s
       </thead>
       <tbody>
         {rows.map((r, i) => (
-          <tr key={r.org}>
+          <tr
+            key={r.org}
+            className={`${onSelect ? "clickable" : ""}${activeOrg === r.org ? " active" : ""}`}
+            onClick={() => onSelect?.(r.org)}
+            title={onSelect ? "Click to highlight this institution's entries in the pipeline" : undefined}
+          >
             <td className="rank">{i + 1}</td>
             <td className="org-name">{r.org}</td>
             <td>
