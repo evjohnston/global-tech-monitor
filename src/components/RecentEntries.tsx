@@ -23,8 +23,8 @@ export function RecentEntries({ entries, limit = 6 }: { entries: Entry[]; limit?
           <tr key={e.id} className="clickable" onClick={() => window.open(e.url, "_blank", "noopener,noreferrer")} title="Open source">
             <td className="org-name" style={{ maxWidth: 260, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{e.title}</td>
             <td>
-              <span className="actor-tag" style={{ background: countryColor(e.country) }} title={e.country ? countryName(e.country) : "Unknown"}>
-                {e.country ?? "—"}
+              <span className="actor-tag" style={{ background: countryColor(e.country) }}>
+                {countryName(e.country)}
               </span>
             </td>
             <td>{STAGE_LABEL[e.stage]}</td>

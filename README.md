@@ -12,7 +12,10 @@ Four stages, plus data-visualization up top:
 
 Above the pipeline: KPI cards with real period-over-period deltas, a
 country breakdown, a real interactive world map, a stage breakdown, an
-institution leaderboard, a recent-entries table, and a country-share trend
+institution leaderboard, a recent-entries table, a funding-by-country
+breakdown, an innovation-by-source read (paper / arXiv / patent — a proxy
+for attribution quality, not just volume), a provenance-mix chart
+(live/seeded/auto across everything tracked), and a country-share trend
 chart with a linear-projection tail. Every one of those is interactive —
 hover for the underlying number, click to filter or jump (the map included:
 click any country to filter the whole page, or expand it to a full-page,
@@ -22,14 +25,17 @@ on exactly one accent, country colors used only to encode real data. Rules
 are in `CLAUDE.md`'s design-system section — read that before changing
 `src/styles/index.css`.
 
-Every entry logs its real country (ISO code) — there is no "Other" bucket
-anywhere in the app. The July 2026 dataset resolves to 36 distinct real
-countries, not four. Compact views (filter chips, bar lists) show the top 6
-by volume, computed live; the map is where every country is visible,
-however small its count. Entries are also labeled `live`, `seeded`, or
-`auto` — three honesty tiers, so the board never implies a
-keyword-classified RSS pickup is as solid as institution-attributed or
-hand-verified data.
+Every entry logs its real country (ISO code, shown as a full name in the
+UI — never a raw "US"/"CN" code) — there is no "Other" bucket anywhere in
+the app. The dataset resolves to 30+ distinct real countries, not four.
+Compact views (filter chips, bar lists) show the top 6 by volume, computed
+live; the map is where every country is visible, however small its count.
+Entries are also labeled `live`, `seeded`, or `auto` — three honesty tiers,
+so the board never implies a keyword-classified RSS pickup is as solid as
+institution-attributed or hand-verified data. "Org" is only ever a real
+institution name or blank — never an author's name standing in for one
+(an earlier version let "Anonymous" get counted as a top institution with
+dozens of works; fixed by never treating a person's name as an org).
 
 ## OpenAlex key (recommended)
 
@@ -75,9 +81,9 @@ The nightly build above is the base layer. `worker/` is a small Cloudflare
 Worker, **deployed** at `gtm-live-proxy.evjohnston.workers.dev`, that adds a
 live layer on top: on page load, the browser fetches OpenAlex directly (no
 proxy needed, OpenAlex's CORS is open) and hits the Worker for NSF funding
-and scaling/adoption news (research.gov and two of the three news outlets
+and scaling/adoption news (research.gov and three of the four news outlets
 send no CORS headers, so those need the proxy). The news route pulls from
-three quantum-industry RSS feeds, auto-classifies each item into scaling or
+four quantum-industry RSS feeds, auto-classifies each item into scaling or
 adoption by keyword, and tags it `auto` provenance — real automation, weaker
 attribution than everything else in the app. EPO patents are wired up but
 paused (that account is still being set up) — `/patents` soft-fails cleanly

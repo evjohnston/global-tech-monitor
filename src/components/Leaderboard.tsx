@@ -37,7 +37,7 @@ export function Leaderboard({
             <td className="org-name">{r.org}</td>
             <td>
               <span className="actor-tag" style={{ background: countryColor(r.country) }}>
-                {r.country ?? "—"} · {r.country ? countryName(r.country) : "Unknown"}
+                {countryName(r.country)}
               </span>
             </td>
             <td className="right count">{r.count}</td>

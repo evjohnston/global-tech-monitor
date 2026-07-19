@@ -66,7 +66,8 @@ a { color: inherit; }
 .legend i { width: 10px; height: 2px; display: inline-block; }
 
 /* ── bar-row: one component, used for actor share and stage share ── */
-.barrow { display: grid; grid-template-columns: 76px 1fr 76px; align-items: center; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line); }
+.barrow { display: grid; grid-template-columns: 108px 1fr 76px; align-items: center; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line); }
+.barrow .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .barrow:first-child { border-top: none; }
 .barrow.clickable { cursor: pointer; }
 .barrow.clickable:hover .name { color: var(--red); }

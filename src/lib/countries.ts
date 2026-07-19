@@ -6,9 +6,20 @@ import en from "i18n-iso-countries/langs/en.json";
 
 countries.registerLocale(en);
 
+// A handful of ISO short names are their full formal/political name, which
+// reads oddly repeated on every badge in a dense list (e.g. "People's
+// Republic of China," "Lao People's Democratic Republic"). Override with
+// the name people actually use in conversation; everything else uses the
+// ISO name as-is rather than hand-maintaining a full table.
+const COMMON_NAME: Record<string, string> = {
+  US: "United States", CN: "China", RU: "Russia", LA: "Laos",
+  CD: "DR Congo", TZ: "Tanzania", VA: "Vatican City",
+  FM: "Micronesia", BN: "Brunei", CI: "Ivory Coast",
+};
+
 export function countryName(code: string | null | undefined): string {
   if (!code) return "Unknown";
-  return countries.getName(code, "en") ?? code;
+  return COMMON_NAME[code] ?? countries.getName(code, "en") ?? code;
 }
 
 // world-atlas / Natural Earth topojson keys each country feature by its ISO

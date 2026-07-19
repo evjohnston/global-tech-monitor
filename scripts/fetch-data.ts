@@ -31,7 +31,7 @@ import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
 import { inferInstitutionCountry } from "../src/lib/institutionCountry.ts";
 import type { DataFile, Entry, TrendPoint } from "../src/lib/types.ts";
-import { fetchOpenAlex } from "../src/lib/sources/openalex.ts";
+import { fetchOpenAlexPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchQuantumNewsRss } from "../src/lib/sources/rss.ts";
@@ -45,13 +45,14 @@ const TECH = "quantum-computing";
 
 // Per-request caps, one per source — each API has a different real ceiling,
 // checked by hand before picking these: OpenAlex's per-page max is 200
-// (confirmed; ~3,178 arXiv works actually matched the 21-day window when
-// this was checked, so 200 is real recent volume, not a stretch), NSF's
-// awardapi accepts rpp up to at least 100 (confirmed), EPO OPS search caps
-// around 100 per request on the free tier (per their docs — untested here,
-// no key yet).
+// (confirmed), and the current Topic+journal query matched 476 works in a
+// 30-day window when checked, so OA_PAGES pages the request past the
+// per-page cap to reach more of that real total. NSF's awardapi accepts
+// rpp up to at least 100 (confirmed), EPO OPS search caps around 100 per
+// request on the free tier (per their docs — untested here, no key yet).
 const OA_N = 200;
-const NSF_N = 100;
+const OA_PAGES = 3; // up to 600 works/run, covers the great majority of a 30-day window
+const NSF_N = 300; // confirmed working with rpp up to 500, no ceiling hit yet
 const EPO_N = 100;
 
 // OpenAlex quant-ph, EPO patents, and NSF grants are all fetched through the
@@ -116,7 +117,7 @@ async function main() {
   let live: Entry[] = [];
   let sourceUsed = "openalex";
   try {
-    live = await fetchOpenAlex({ key: OA_KEY, mailto: OA_MAILTO, sinceDays: 30, n: OA_N });
+    live = await fetchOpenAlexPages({ key: OA_KEY, mailto: OA_MAILTO, sinceDays: 30, n: OA_N, pages: OA_PAGES });
     console.log(`OpenAlex: ${live.length} works with country attribution`);
   } catch (err) {
     console.error("OpenAlex failed:", (err as Error).message);

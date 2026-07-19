@@ -3,10 +3,10 @@ import type { DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
 import { STAGES } from "./lib/types.ts";
 import { inferInstitutionCountry } from "./lib/institutionCountry.ts";
 import { countryColor, countryName } from "./lib/countries.ts";
-import { fetchOpenAlex } from "./lib/sources/openalex.ts";
+import { fetchOpenAlexPages } from "./lib/sources/openalex.ts";
 import {
-  countByCountry, countByStage, countryShares, orgLeaderboard,
-  pctDelta, periodCounts, periodFunding, topCountries,
+  countByCountry, countByProvenance, countBySource, countByStage, countryShares,
+  fundingByCountry, orgLeaderboard, pctDelta, periodCounts, periodFunding, topCountries,
 } from "./lib/aggregate.ts";
 import { StageColumn } from "./components/StageColumn.tsx";
 import { TrendChart } from "./components/TrendChart.tsx";
@@ -76,7 +76,7 @@ async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
   const failed: string[] = [];
   let innovation: Entry[] = [];
   try {
-    innovation = await fetchOpenAlex({ mailto: "gtm@example.com", n: 200 });
+    innovation = await fetchOpenAlexPages({ mailto: "gtm@example.com", n: 200, pages: 3 });
   } catch {
     try {
       innovation = await fetchArxivBrowser();
@@ -171,6 +171,17 @@ export default function App() {
   const stageTotal = Object.values(stageCounts).reduce((s, n) => s + n, 0) || 1;
   const orgRows = useMemo(() => orgLeaderboard(entries, "innovation", 6), [entries]);
 
+  const fundingTop = useMemo(() => topCountries(fundingByCountry(entries), 5), [entries]);
+  const fundingGrandTotal = fundingTop.top.reduce((s, c) => s + c.count, 0) + fundingTop.rest.reduce((s, c) => s + c.count, 0) || 1;
+
+  const sourceCounts = useMemo(() => countBySource(entries, "innovation"), [entries]);
+  const sourceTotal = Object.values(sourceCounts).reduce((s, n) => s + n, 0) || 1;
+  const SOURCE_LABEL: Record<string, string> = { paper: "Journal paper", arxiv: "arXiv preprint", patent: "Patent" };
+
+  const provenanceCounts = useMemo(() => countByProvenance(entries), [entries]);
+  const provenanceTotal = Object.values(provenanceCounts).reduce((s, n) => s + n, 0) || 1;
+  const PROVENANCE_LABEL: Record<string, string> = { live: "Live (institution-attributed)", seeded: "Seeded (hand-verified)", auto: "Auto (keyword-classified)" };
+
   // Real period-over-period deltas — null (and hidden) when there's no honest baseline.
   const totalPeriod = useMemo(() => STAGES.reduce((acc, s) => {
     const { current, previous } = periodCounts(entries, s.id, WINDOW_DAYS);
@@ -240,8 +251,8 @@ export default function App() {
           <span className="lbl">Filter country</span>
           <button className="chip" aria-pressed={country === "all"} onClick={() => setCountry("all")}>All</button>
           {topFilterCountries.map((c) => (
-            <button key={c.country} className="chip" aria-pressed={country === c.country} title={countryName(c.country)} onClick={() => toggleCountry(c.country)}>
-              {c.country}
+            <button key={c.country} className="chip" aria-pressed={country === c.country} onClick={() => toggleCountry(c.country)}>
+              {countryName(c.country)}
             </button>
           ))}
           <span className="lbl" style={{ marginLeft: 2 }}>— or click any country on the map below</span>
@@ -293,7 +304,7 @@ export default function App() {
             {innovationTop.top.map((c) => (
               <BarRow
                 key={c.country}
-                label={c.country}
+                label={countryName(c.country)}
                 pct={innovationTopShares[c.country] ?? 0}
                 color={countryColor(c.country)}
                 valueLabel={`${c.count} · ${((c.count / innovationTotal) * 100).toFixed(0)}%`}
@@ -340,6 +351,55 @@ export default function App() {
           <div className="panel">
             <h3>Recent entries</h3>
             <RecentEntries entries={shown} limit={6} />
+          </div>
+        </div>
+
+        <div className="row3">
+          <div className="panel">
+            <h3>Funding by country <span className="drop">investment</span></h3>
+            {fundingTop.top.length === 0
+              ? <div className="trend-empty">No disclosed funding yet.</div>
+              : fundingTop.top.map((c) => (
+                <BarRow
+                  key={c.country}
+                  label={countryName(c.country)}
+                  pct={(c.count / fundingGrandTotal) * 100}
+                  color={countryColor(c.country)}
+                  valueLabel={fmtUsd(c.count)}
+                  detail={`${countryName(c.country)} · ${fmtUsd(c.count)} disclosed · ${((c.count / fundingGrandTotal) * 100).toFixed(1)}% of tracked funding`}
+                />
+              ))}
+            {fundingTop.rest.length > 0 && (
+              <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
+                +{fundingTop.rest.length} more countries, {fmtUsd(fundingTop.rest.reduce((s, c) => s + c.count, 0))}
+              </div>
+            )}
+          </div>
+          <div className="panel">
+            <h3>Innovation by source <span className="drop">how solid</span></h3>
+            {Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]).map(([src, n]) => (
+              <BarRow
+                key={src}
+                label={SOURCE_LABEL[src] ?? src}
+                pct={(n / sourceTotal) * 100}
+                color="var(--ink-2)"
+                valueLabel={`${n} · ${((n / sourceTotal) * 100).toFixed(0)}%`}
+                detail={`${n} entries · ${((n / sourceTotal) * 100).toFixed(1)}% of innovation-stage entries`}
+              />
+            ))}
+          </div>
+          <div className="panel">
+            <h3>Provenance mix <span className="drop">all stages</span></h3>
+            {(["live", "seeded", "auto"] as const).filter((p) => provenanceCounts[p]).map((p) => (
+              <BarRow
+                key={p}
+                label={PROVENANCE_LABEL[p]}
+                pct={(provenanceCounts[p] / provenanceTotal) * 100}
+                color={p === "live" ? "var(--us)" : p === "seeded" ? "var(--red)" : "var(--other)"}
+                valueLabel={`${provenanceCounts[p]} · ${((provenanceCounts[p] / provenanceTotal) * 100).toFixed(0)}%`}
+                detail={`${provenanceCounts[p]} entries · ${((provenanceCounts[p] / provenanceTotal) * 100).toFixed(1)}% of everything tracked`}
+              />
+            ))}
           </div>
         </div>
 

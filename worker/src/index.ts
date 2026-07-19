@@ -28,7 +28,7 @@ export interface Env {
 
 // Matches scripts/fetch-data.ts's per-source caps, checked against each
 // API's real ceiling (EPO's is a docs claim, untested — no key yet).
-const NSF_N = 100;
+const NSF_N = 300; // confirmed working with rpp up to 500, no ceiling hit yet
 const EPO_N = 100;
 const CACHE_SECONDS = 3600; // an hour — both sources move slowly by nature
 

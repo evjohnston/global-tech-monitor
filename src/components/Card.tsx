@@ -19,9 +19,9 @@ export function Card({ entry, dim }: { entry: Entry; dim?: boolean }) {
         <span
           className="ecard-badge"
           style={{ background: color }}
-          title={[entry.country ? countryName(entry.country) : "Unknown country", entry.countryEvidence].filter(Boolean).join(" — ")}
+          title={entry.countryEvidence || undefined}
         >
-          {entry.country ?? "—"}
+          {countryName(entry.country)}
         </span>
         {entry.date && <span>{entry.date}</span>}
         <span className="ecard-src">{entry.source}</span>

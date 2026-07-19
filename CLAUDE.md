@@ -43,22 +43,45 @@ the hero, look like an instrument.
   (arXiv doesn't collect structured affiliations, and OpenAlex essentially
   never backfills it for preprints, confirmed by sampling papers up to a
   year old). The Topic+journal filter gets real institution data on roughly
-  a third to two-thirds of works, at the cost of lagging arXiv by weeks to
-  months (journal publication time). That trade was made deliberately.
+  a third to three-quarters of works (checked by hand, varies by date
+  window), at the cost of lagging arXiv by weeks to months (journal
+  publication time). That trade was made deliberately.
+  When a work has no structured institution match, `fetchOpenAlex` tries
+  OpenAlex's `raw_affiliation_strings` (free text OpenAlex still often
+  carries even without a resolved institution record) as a secondary
+  signal — both for a country guess via `institutionCountry.ts` and for an
+  org name (text before the first comma). That fallback entry gets
+  `provenance: "auto"`, not `"live"` — it's a text heuristic, not a lookup.
+  **Never fall back to an author's name as the `org` value** — an
+  individual person is not an institution, and doing this previously let
+  something like "Anonymous" get aggregated in the institution leaderboard
+  as if it were one prolific org with dozens of works. When there's truly
+  no institution-shaped data, `org` is `""` (nothing shown), not a name.
+  `fetchOpenAlexPages` pages past OpenAlex's 200-per-page cap (3 pages by
+  default, both in the nightly build and the browser live-refresh) — one
+  implementation, so paging behavior can't drift between the two paths.
 - **Patents** — EPO OPS, feeds innovation stage. Needs `EPO_KEY` + `EPO_SECRET`.
   Schema is fiddly; if patents come back empty, inspect the raw response first.
 - **Scaling / adoption** — two layers: a hand-verified floor in `data/seed.ts`
   (every entry fetched and confirmed against its source before being added),
   plus a live RSS layer (`src/lib/sources/rss.ts`) auto-classifying items
-  from quantum-industry trade press. The RSS layer is real automation, not
-  hand-curation — but its stage/actor calls are a keyword guess, weaker than
-  everything else in this app. That's why it gets its own provenance tier
-  (see below), not "live" — don't upgrade it to "live" without adding real
-  verification, and don't delete `data/seed.ts` on the assumption RSS makes
-  it redundant. It doesn't; the RSS classifier drops anything ambiguous.
-- **Investment** — NSF Awards (US), public, no key. There is NO public
-  machine-readable feed for China's NSFC, so this stage is US/EU-weighted by
-  construction. The UI says so explicitly. Do not fabricate a China number.
+  from quantum-industry trade press (4 feeds now, including Quantum
+  Zeitgeist which alone carries ~200 items/fetch vs. ~10 for the other
+  three — checked by hand, it also carries a lot of listicle/explainer
+  content the others don't, which is what the `EXCLUDE_WORDS` guide/"what
+  is" patterns and the `QUANTUM_RELEVANT` topical gate are tuned against).
+  The RSS layer is real automation, not hand-curation — but its stage/
+  country calls are a keyword guess, weaker than everything else in this
+  app. That's why it gets its own provenance tier (see below), not "live" —
+  don't upgrade it to "live" without adding real verification, and don't
+  delete `data/seed.ts` on the assumption RSS makes it redundant. It
+  doesn't; the RSS classifier drops anything ambiguous.
+- **Investment** — NSF Awards (US), public, no key. `NSF_N` is 300 — checked
+  by hand, the awardapi accepts `rpp` up to at least 500 with no ceiling
+  hit, so there's room to raise this further if the query volume grows.
+  There is NO public machine-readable feed for China's NSFC, so this stage
+  is US/EU-weighted by construction. The UI says so explicitly. Do not
+  fabricate a China number.
 
 Every external source fails soft — a missing key or down endpoint drops that
 one source without breaking the build.
@@ -95,6 +118,14 @@ That distinction matters for what this code is actually for (bibliometric/
 policy attribution of institutions, same as OpenAlex/NSF/ASPI do) and for
 how it's described: keep comments and naming framed as "where is this
 institution located," not "who does this person belong to."
+
+Display uses full country names (`countryName()`), never the raw alpha-2
+code — a badge that says "US" reads fine once, but a page full of two-
+letter codes reads like a data table, not an instrument for a policy
+reader. `COMMON_NAME` in `countries.ts` overrides a handful of ISO's
+formal/political names (e.g. "People's Republic of China" → "China") with
+the name people actually say — extend that table rather than reverting to
+codes if a name reads oddly.
 
 Color budget for country display: US and China keep the app's two brand
 colors everywhere (`--us`, `--cn`) since they're the headline comparison
@@ -150,6 +181,14 @@ Never fabricate a number to make a chart feel richer — the KPI deltas and the
 forecast line are real (period-over-period comparisons, linear extrapolation
 of `trend[]`), and they disappear/omit rather than show a made-up figure when
 there isn't enough history yet. Keep it that way when adding new panels.
+
+Panel set as of this writing: KPI row, innovation-over-time, output by
+country, world map, entries by stage, top institutions, recent entries,
+funding by country, innovation by source (paper/arXiv/patent — a read on
+attribution quality, not just volume), provenance mix (live/seeded/auto
+across everything tracked), and the country-share forecast. The source-mix
+and provenance-mix panels exist specifically so the honesty tiers are a
+first-class chart, not just a badge you'd only notice one card at a time.
 
 ## The world map
 

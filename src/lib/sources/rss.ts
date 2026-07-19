@@ -24,6 +24,11 @@ export const QUANTUM_NEWS_FEEDS: RssFeedConfig[] = [
   { url: "https://thequantuminsider.com/feed/", name: "The Quantum Insider", corsOpen: true },
   { url: "https://www.insidequantumtechnology.com/feed/", name: "Inside Quantum Technology", corsOpen: false },
   { url: "https://quantumcomputingreport.com/feed/", name: "Quantum Computing Report", corsOpen: false },
+  // By far the highest-volume of the four (~200 items covering ~5 days vs.
+  // 10 items/feed for the others) — also carries a lot of listicle/explainer
+  // content the others don't, which is what EXCLUDE_WORDS' guide/"what is"
+  // patterns below are specifically tuned against.
+  { url: "https://quantumzeitgeist.com/feed/", name: "Quantum Zeitgeist", corsOpen: false },
 ];
 
 function decodeEntities(s: string): string {
@@ -70,7 +75,7 @@ function parseRssItems(xml: string): RssItem[] {
 // items are dropped outright, before the stage check — company news isn't
 // a milestone in either sense, however it's worded.
 const EXCLUDE_WORDS =
-  /\b(joins|appoints?|appointment|executive\s+(?:leadership|team)|hires?|welcomes\s+\S+\s+as|names?\s+\S+\s+as|who.s\s+news|podcast|webinar|\bepisode\b|profile|interview|op-ed|obituary|raises?\s+(?:US)?\$|seed\s+round|series\s+[a-e]\b|venture\s+capital|conference|summit|symposium|register\s+now|call\s+for\s+papers)\b/i;
+  /\b(joins|appoints?|appointment|executive\s+(?:leadership|team)|hires?|welcomes\s+\S+\s+as|names?\s+\S+\s+as|who.s\s+news|podcast|webinar|\bepisode\b|profile|interview|op-ed|obituary|raises?\s+(?:US)?\$|seed\s+round|series\s+[a-e]\b|venture\s+capital|conference|summit|symposium|register\s+now|call\s+for\s+papers|complete\s+(?:vendor\s+)?guide|vendor\s+guide|companies\s+\d{4}|^what\s+(?:is|are)\b|\?$)/i;
 
 // Deliberately conservative beyond that: an item matching BOTH sets, or
 // NEITHER, is dropped rather than assigned to a guessed stage. Money words
@@ -81,9 +86,14 @@ const SCALING_WORDS =
   /\b(qubit|chip|processor|fidelity|error.correct|fabricat|\bfab\b|roadmap|superconducting|photonic|neutral.atom|trapped.ion|topological|spin.qubit|dilution\s+refrigerator|coherence|logical\s+qubit|quantum\s+volume)\b/i;
 const ADOPTION_WORDS =
   /\b(deploy|procure(?:ment)?|contract|cloud\s+access|partner(?:ship)?|government|commercial(?:ize|ization)?|customer|pilot\s+program|benchmark|data\s*cent(?:er|re)|co-locat|grant|award(?:ed|s)?|national\s+quantum(?:\s+mission|\s+initiative|\s+strategy)?)\b/i;
+// A general-purpose HPC/tech outlet could join this list later — this gate
+// keeps that safe by requiring real topical relevance regardless of source,
+// rather than assuming every feed here is 100% quantum content.
+const QUANTUM_RELEVANT = /quantum/i;
 
 function classifyStage(title: string, description: string): Stage | null {
   const text = `${title} ${description}`;
+  if (!QUANTUM_RELEVANT.test(text)) return null;
   if (EXCLUDE_WORDS.test(text)) return null;
   const scaling = SCALING_WORDS.test(text);
   const adoption = ADOPTION_WORDS.test(text);
