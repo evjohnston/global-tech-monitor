@@ -1,19 +1,27 @@
 import { useRef, useState, type MouseEvent } from "react";
-import type { Actor, TrendPoint } from "../lib/types.ts";
-import { projectShares } from "../lib/aggregate.ts";
+import type { TrendPoint } from "../lib/types.ts";
+import { projectCountryShares } from "../lib/aggregate.ts";
+import { countryName } from "../lib/countries.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
-const ACTOR_COLOR: Record<Actor, string> = {
-  us: "var(--us)", cn: "var(--cn)", eu: "var(--eu)", other: "var(--other)",
-};
-const ACTOR_LABEL: Record<Actor, string> = { us: "US", cn: "China", eu: "Europe", other: "Other" };
-const ORDER: Actor[] = ["us", "cn", "eu", "other"];
+// US/China keep their consistent brand colors everywhere in the app. The
+// other plotted lines get one of these instead of the neutral "everyone
+// else" badge tone — a chart with 4-6 simultaneous lines genuinely needs
+// per-line color to read, unlike a badge where the text code already
+// disambiguates. Scoped to this chart only; don't reuse ANCHOR_COLORS
+// elsewhere as if it were a general country palette.
+const ANCHOR_COLORS = ["var(--eu)", "#7a6a9e", "#4d8a7a", "#a3763f"];
+function lineColor(code: string, otherIndex: number): string {
+  if (code === "US") return "var(--us)";
+  if (code === "CN") return "var(--cn)";
+  return ANCHOR_COLORS[otherIndex % ANCHOR_COLORS.length];
+}
 
-export function TrendChart({ trend }: { trend: TrendPoint[] }) {
+export function TrendChart({ trend, countries }: { trend: TrendPoint[]; countries: string[] }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<{ i: number; x: number; y: number; projected: boolean } | null>(null);
 
-  if (trend.length < 2) {
+  if (trend.length < 2 || countries.length === 0) {
     return (
       <div className="trend-empty">
         Trend builds as the daily fetch accumulates. One point recorded so far —
@@ -22,7 +30,10 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
     );
   }
 
-  const projection = projectShares(trend);
+  const order = countries;
+  const colorOf = (code: string) => lineColor(code, order.filter((c) => c !== "US" && c !== "CN").indexOf(code));
+
+  const projection = projectCountryShares(trend, order);
   const steps = projection ? projection[0].points.length : 0;
   const nHist = trend.length;
   const nTotal = nHist + steps;
@@ -32,21 +43,21 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
   const plotH = H - padT - padB;
 
   const shares = trend.map((p) => {
-    const total = ORDER.reduce((s, a) => s + p.counts[a], 0) || 1;
+    const total = order.reduce((s, c) => s + (p.counts[c] ?? 0), 0) || 1;
     return {
       date: p.date,
-      pct: Object.fromEntries(ORDER.map((a) => [a, (p.counts[a] / total) * 100])) as Record<Actor, number>,
+      pct: Object.fromEntries(order.map((c) => [c, ((p.counts[c] ?? 0) / total) * 100])) as Record<string, number>,
     };
   });
 
   const x = (i: number) => padL + (i / Math.max(1, nTotal - 1)) * plotW;
   const y = (pct: number) => padT + (1 - pct / 100) * plotH;
 
-  const histLine = (actor: Actor) =>
-    shares.map((s, i) => `${i === 0 ? "M" : "L"} ${x(i).toFixed(1)} ${y(s.pct[actor]).toFixed(1)}`).join(" ");
+  const histLine = (code: string) =>
+    shares.map((s, i) => `${i === 0 ? "M" : "L"} ${x(i).toFixed(1)} ${y(s.pct[code]).toFixed(1)}`).join(" ");
 
-  const projLine = (actor: Actor, points: number[]) => {
-    const last = shares[shares.length - 1].pct[actor];
+  const projLine = (code: string, points: number[]) => {
+    const last = shares[shares.length - 1].pct[code];
     const all = [last, ...points];
     return all.map((v, i) => `${i === 0 ? "M" : "L"} ${x(nHist - 1 + i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
   };
@@ -69,7 +80,7 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         role="img"
-        aria-label="Actor share of quantum preprints over time, with projection"
+        aria-label="Country share of quantum preprints over time, with projection"
         width="100%"
         onMouseMove={handleMove}
         onMouseLeave={() => setHover(null)}
@@ -83,14 +94,14 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
         {projection && (
           <rect x={x(nHist - 1)} y={padT} width={W - padR - x(nHist - 1)} height={plotH} fill="var(--panel-2)" opacity="0.6" />
         )}
-        {ORDER.map((a) => (
-          <path key={a} d={histLine(a)} fill="none" stroke={ACTOR_COLOR[a]} strokeWidth="2" strokeLinejoin="round" />
+        {order.map((c) => (
+          <path key={c} d={histLine(c)} fill="none" stroke={colorOf(c)} strokeWidth="2" strokeLinejoin="round" />
         ))}
-        {projection?.map(({ actor, points }) => (
-          <path key={actor} d={projLine(actor, points)} fill="none" stroke={ACTOR_COLOR[actor]} strokeWidth="2" strokeDasharray="4 3" strokeLinejoin="round" />
+        {projection?.map(({ country, points }) => (
+          <path key={country} d={projLine(country, points)} fill="none" stroke={colorOf(country)} strokeWidth="2" strokeDasharray="4 3" strokeLinejoin="round" />
         ))}
-        {ORDER.map((a) => (
-          <circle key={a} cx={x(nHist - 1)} cy={y(shares[shares.length - 1].pct[a])} r="3" fill={ACTOR_COLOR[a]} />
+        {order.map((c) => (
+          <circle key={c} cx={x(nHist - 1)} cy={y(shares[shares.length - 1].pct[c])} r="3" fill={colorOf(c)} />
         ))}
         {hover && (
           <line x1={x(hover.i)} y1={padT} x2={x(hover.i)} y2={H - padB} stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 2" />
@@ -106,23 +117,23 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
           <div style={{ fontWeight: 600, marginBottom: 3 }}>
             {hover.projected ? "Projected" : shares[hover.i]?.date}
           </div>
-          {ORDER.map((a) => {
+          {order.map((c) => {
             const v = hover.projected
-              ? projection?.find((p) => p.actor === a)?.points[hover.i - nHist]
-              : shares[hover.i]?.pct[a];
-            return v == null ? null : <div key={a}>{ACTOR_LABEL[a]} {v.toFixed(1)}%</div>;
+              ? projection?.find((p) => p.country === c)?.points[hover.i - nHist]
+              : shares[hover.i]?.pct[c];
+            return v == null ? null : <div key={c}>{countryName(c)} {v.toFixed(1)}%</div>;
           })}
         </Tooltip>
       )}
       <figcaption className="trend-legend">
-        {ORDER.map((a) => (
-          <span key={a} className="legend-item">
-            <span className="swatch" style={{ background: ACTOR_COLOR[a] }} />
-            {ACTOR_LABEL[a]}
+        {order.map((c) => (
+          <span key={c} className="legend-item">
+            <span className="swatch" style={{ background: colorOf(c) }} />
+            {countryName(c)}
           </span>
         ))}
         <span className="trend-note">
-          {projection ? "solid = measured, dashed = linear projection" : "share of quant-ph preprints by author-affiliation country"}
+          {projection ? "solid = measured, dashed = linear projection" : "share of quant-ph preprints by institution country"}
         </span>
       </figcaption>
     </figure>

@@ -1,9 +1,5 @@
 import type { Entry } from "../lib/types.ts";
-
-const ACTOR_VAR: Record<Entry["actor"], string> = {
-  us: "var(--us)", cn: "var(--cn)", eu: "var(--eu)", other: "var(--other)",
-};
-const ACTOR_SHORT: Record<Entry["actor"], string> = { us: "US", cn: "CN", eu: "EU", other: "—" };
+import { countryColor, countryName } from "../lib/countries.ts";
 
 function fmtAmt(n?: number): string | null {
   if (!n) return null;
@@ -14,12 +10,18 @@ function fmtAmt(n?: number): string | null {
 
 export function Card({ entry, dim }: { entry: Entry; dim?: boolean }) {
   const amt = fmtAmt(entry.amountUsd);
+  const color = countryColor(entry.country);
   return (
-    <div className={`ecard${dim ? " dim" : ""}`} style={{ ["--acc" as string]: ACTOR_VAR[entry.actor] }}>
+    <div className={`ecard${dim ? " dim" : ""}`} style={{ ["--acc" as string]: color }}>
       {entry.provenance === "seeded" && <span className="seeded">seeded</span>}
+      {entry.provenance === "auto" && <span className="seeded auto">auto-classified</span>}
       <div className="ecard-meta">
-        <span className="ecard-badge" style={{ background: ACTOR_VAR[entry.actor] }}>
-          {ACTOR_SHORT[entry.actor]}
+        <span
+          className="ecard-badge"
+          style={{ background: color }}
+          title={[entry.country ? countryName(entry.country) : "Unknown country", entry.countryEvidence].filter(Boolean).join(" — ")}
+        >
+          {entry.country ?? "—"}
         </span>
         {entry.date && <span>{entry.date}</span>}
         <span className="ecard-src">{entry.source}</span>

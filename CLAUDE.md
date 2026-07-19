@@ -28,18 +28,34 @@ the hero, look like an instrument.
   writing `trend[]`, and nothing below replaces it.
 - **A Cloudflare Worker** (`worker/`) adds a live layer on top of that static
   base. On page load the browser fetches OpenAlex directly (open CORS, no
-  secret needed) and hits the Worker for EPO patents and NSF funding — both
-  need something a browser can't hold (a client secret, or CORS support that
-  simply doesn't exist on research.gov). See "Live data" below.
+  secret needed) and hits the Worker for EPO patents, NSF funding, and
+  quantum-news RSS — all three need something a browser can't hold (a
+  client secret, or CORS support that doesn't exist on those origins). See
+  "Live data" below.
 
 ## Data sources and their honesty caveats
 
-- **Innovation** — OpenAlex (has institution country codes → real actor
-  attribution) with an arXiv fallback (no country data). Needs `OPENALEX_KEY`.
+- **Innovation** — OpenAlex, filtered by Topic T10682 ("Quantum Computing
+  Algorithms and Architecture") restricted to journal-type sources, with an
+  arXiv fallback. Needs `OPENALEX_KEY`. **Do not switch this back to
+  filtering by arXiv-as-primary-location** — that was the original query and
+  it was checked by hand to return 0/50 works with ANY institution data
+  (arXiv doesn't collect structured affiliations, and OpenAlex essentially
+  never backfills it for preprints, confirmed by sampling papers up to a
+  year old). The Topic+journal filter gets real institution data on roughly
+  a third to two-thirds of works, at the cost of lagging arXiv by weeks to
+  months (journal publication time). That trade was made deliberately.
 - **Patents** — EPO OPS, feeds innovation stage. Needs `EPO_KEY` + `EPO_SECRET`.
   Schema is fiddly; if patents come back empty, inspect the raw response first.
-- **Scaling / adoption** — hand-curated in `data/seed.ts`. No clean live feed
-  exists for these; that gap is real, not a bug.
+- **Scaling / adoption** — two layers: a hand-verified floor in `data/seed.ts`
+  (every entry fetched and confirmed against its source before being added),
+  plus a live RSS layer (`src/lib/sources/rss.ts`) auto-classifying items
+  from quantum-industry trade press. The RSS layer is real automation, not
+  hand-curation — but its stage/actor calls are a keyword guess, weaker than
+  everything else in this app. That's why it gets its own provenance tier
+  (see below), not "live" — don't upgrade it to "live" without adding real
+  verification, and don't delete `data/seed.ts` on the assumption RSS makes
+  it redundant. It doesn't; the RSS classifier drops anything ambiguous.
 - **Investment** — NSF Awards (US), public, no key. There is NO public
   machine-readable feed for China's NSFC, so this stage is US/EU-weighted by
   construction. The UI says so explicitly. Do not fabricate a China number.
@@ -47,13 +63,49 @@ the hero, look like an instrument.
 Every external source fails soft — a missing key or down endpoint drops that
 one source without breaking the build.
 
-## Actor attribution
+## Country attribution
 
-Assigned from institution country codes (OpenAlex), not keyword guessing.
-`src/lib/actorFromCountry.ts` is the logic; `src/lib/inferActor.ts` is the
-weaker keyword fallback used only on the arXiv path. Every entry carries an
-`actorEvidence` string so any classification is auditable. Treat attribution as
-a lead, not a verdict — say so in anything user-facing.
+v4 change: there is no `Actor` bucket type anymore (`us`/`cn`/`eu`/`other`
+is gone from the codebase). Every `Entry` carries a real ISO 3166-1
+alpha-2 `country` code (`src/lib/types.ts`), or `null` when a source
+genuinely gives us nothing to go on. Nothing is bucketed into a catch-all
+"other" — the July 2026 dataset resolves to 36 distinct real countries.
+`src/lib/countries.ts` wraps `i18n-iso-countries` for names and for
+bridging alpha-2 ↔ the numeric IDs `world-atlas`'s topojson uses; don't
+hand-write a country name/code table, that package already has one.
+
+Three provenance tiers, and the UI must keep them visually distinct:
+- **`live`** — institution/awardee/filer country codes (OpenAlex
+  Topic+journal path, NSF, EPO). Real data, no inference.
+- **`seeded`** — hand-verified by a human against the source URL
+  (`data/seed.ts`). Also real, just not automated.
+- **`auto`** — keyword-inferred (`src/lib/institutionCountry.ts`), used on
+  the arXiv fallback and the RSS news layer. This WILL misplace an
+  organization when a text mentions multiple countries, or resolve to
+  `null` when it names neither a place nor a recognized org. Every entry
+  carries a `countryEvidence` string so any call is auditable, and
+  `Card.tsx` shows it on hover of the country badge; RSS/arXiv entries
+  append a note like "(auto-classified from X RSS, unverified)" — don't
+  strip that qualifier when editing the transform code.
+
+`src/lib/institutionCountry.ts` maps an ORGANIZATION NAME to the country
+it's physically based in (headquarters/campus/site) — it is not, and must
+never become, anything that infers a person's nationality or citizenship.
+That distinction matters for what this code is actually for (bibliometric/
+policy attribution of institutions, same as OpenAlex/NSF/ASPI do) and for
+how it's described: keep comments and naming framed as "where is this
+institution located," not "who does this person belong to."
+
+Color budget for country display: US and China keep the app's two brand
+colors everywhere (`--us`, `--cn`) since they're the headline comparison
+this tool leads with. Every other real country shares one neutral tone
+(`--other`) — the country CODE/NAME text is what distinguishes them, not a
+unique hue. The one deliberate exception is `TrendChart.tsx`'s multi-line
+forecast, which needs several simultaneous lines to actually read and so
+assigns a small rotating palette (`ANCHOR_COLORS`) to non-US/CN lines —
+that's scoped to that one chart, don't treat it as a general country palette.
+
+Treat attribution as a lead, not a verdict — say so in anything user-facing.
 
 ## Design system
 
@@ -69,10 +121,12 @@ serif hero) read as generic/AI-templated. Rules, not vibes:
   sizes, not display type.
 - **Color is spent on two things only:** Hoover Red (#98002e) as the single
   brand accent (one highlighted KPI, the primary button, the forecast tag —
-  never more than a small handful of elements at once), and actor colors
-  (`--us` / `--cn` / `--eu` / `--other`) which exist *only* to encode real
-  country data in bars/badges/dots. Never use a color decoratively. No
-  gradients, no icon-bubble chrome that doesn't mean anything.
+  never more than a small handful of elements at once), and country colors
+  (`--us` / `--cn` / `--other`, see "Country attribution" above) which exist
+  *only* to encode real country data in bars/badges/the map. Never use a
+  color decoratively. No gradients, no icon-bubble chrome that doesn't mean
+  anything. `--eu` still exists as a token but is no longer a country
+  bucket — it's only reused as one of `TrendChart`'s rotating line colors.
 - **Reuse one component for one job.** `BarRow` renders both the actor-share
   and stage-share panels — don't fork a second bar component for the same
   visual job. Resist wrapping things in cards-inside-cards.
@@ -86,9 +140,9 @@ the *information architecture* of a reference, not its literal chrome.
 ## Interactivity
 
 Charts and breakdowns are meant to be explored, not just looked at:
-- Hover any bar row, map dot, or chart point → a tooltip with the real
+- Hover any bar row, map country, or chart point → a tooltip with the real
   underlying number (see `Tooltip.tsx`, `BarRow.tsx`).
-- Click an actor bar/dot → toggles the global actor filter.
+- Click a country bar/map country → toggles the global country filter.
 - Click a stage bar → scrolls to that stage's pipeline column.
 - Click an institution row → highlights that org's entries in the innovation
   column (dims the rest) rather than navigating away.
@@ -97,14 +151,50 @@ forecast line are real (period-over-period comparisons, linear extrapolation
 of `trend[]`), and they disappear/omit rather than show a made-up figure when
 there isn't enough history yet. Keep it that way when adding new panels.
 
+## The world map
+
+`WorldMap.tsx` is a real choropleth (`react-simple-maps` + `world-atlas`
+topojson), not an illustrative diagram — every country with at least one
+attributed entry is shaded by volume (sqrt-scaled so a couple of dominant
+countries don't wash every smaller real country down to indistinguishable
+gray). Compact view uses `countries-110m.json` (bundled, ~108KB); clicking
+"expand" dynamically imports the higher-resolution `countries-50m.json`
+(~750KB) so that cost is never paid by someone who never opens the full
+map. Expand renders a fixed-position full-viewport overlay (own component
+state, Escape key closes it) — not the browser's native Fullscreen API,
+which needs a user-gesture dance across browsers this doesn't need.
+
+Compact-view chips/bars/KPIs show a caller-chosen top N (currently 6,
+`TOP_N` in `App.tsx`) of whichever countries actually have the most volume
+— computed from real data every render, never hardcoded to specific
+countries. The map has no such cap; it's the place every real country,
+however small its count, is actually visible. Don't add a second capped
+view of the map data — if a panel needs to show "the rest," point at the
+map rather than inventing another top-N list.
+
 ## Live data (Cloudflare Worker)
 
 `worker/` is a separate deployable (its own `package.json`/`wrangler.jsonc`),
-not part of the Vite build. It proxies exactly two sources — EPO and NSF —
-and nothing else; OpenAlex is CORS-open so the browser calls it directly
-(`src/App.tsx` → `fetchLive()`). Both the Worker and the Node fetch script
-import the *same* `src/lib/sources/{openalex,epo,nsf}.ts` modules, so
-attribution logic can't drift between the live path and the nightly build.
+not part of the Vite build. It proxies three routes — `/patents` (EPO),
+`/funding` (NSF), `/news` (RSS, all three feeds — two of the three don't
+send CORS headers, so it's simplest to have the Worker fetch all three
+rather than split by which one happens to allow a direct browser call).
+OpenAlex is the one source that's CORS-open, so the browser calls it
+directly (`src/App.tsx` → `fetchLive()`). The Worker and the Node fetch
+script import the *same* `src/lib/sources/{openalex,epo,nsf,rss}.ts`
+modules, so attribution/classification logic can't drift between the live
+path and the nightly build.
+
+The RSS feeds are listed in `src/lib/sources/rss.ts`'s `QUANTUM_NEWS_FEEDS` —
+checked by hand before adding any of them (must return valid RSS 2.0 XML
+from a real, actively-publishing quantum-industry outlet). Add more there,
+not as a one-off fetch somewhere else. The classifier in that file
+(`SCALING_WORDS`/`ADOPTION_WORDS`/`EXCLUDE_WORDS`) was tuned against real
+false positives — personnel/hiring announcements and podcast episodes were
+both getting swept in on loose keyword overlap, and money-amount words
+alone were catching private funding-round news that doesn't belong in
+either stage. If you loosen the classifier, re-run `npm run fetch-data` and
+read the actual `rss-*` entries it produces before trusting it.
 
 Responses are cached at the edge for an hour — patents lag ~18 months and NSF
 posts a few times a day, so there's no honest reason to hit either upstream
@@ -143,19 +233,31 @@ soft-fail, same as everywhere else in this project.
 
 ## Things to preserve
 
-- The `live` vs `seeded` provenance label on entries — the UI must never imply
-  curated data is a live feed.
+- Real per-country attribution, never a regional bucket. If you're tempted
+  to add back a `us`/`cn`/`eu`/`other`-shaped type for convenience, don't —
+  derive whatever headline comparison you need (e.g. "US vs CN") directly
+  from `entry.country` instead. This was a deliberate, requested removal.
+- The `live` / `seeded` / `auto` provenance tiers on entries — the UI must
+  never imply RSS-classified or arXiv-keyword-classified data is as solid as
+  institution-attributed or hand-verified data.
 - The China-funding caveat in the investment section.
-- Soft-fail on every fetch source, including the Worker's two proxied routes.
+- Soft-fail on every fetch source, including all three Worker-proxied routes.
 - The daily commit of data.json (trend accumulation depends on it — the
   Worker is additive freshness on top, not a replacement for this).
 - One shared implementation per source (`src/lib/sources/*`) — if you touch
-  attribution or transform logic for OpenAlex/EPO/NSF, edit it there once,
-  not in the Node script and the Worker separately.
+  attribution or transform logic for OpenAlex/EPO/NSF/RSS, edit it there
+  once, not in the Node script and the Worker separately.
+- `data/seed.ts` as the verified floor for scaling/adoption, even though RSS
+  now supplements it live — don't let the live layer's existence become an
+  excuse to stop hand-verifying new seed entries.
 
 ## How to extend
 
-- New scaling/adoption entries → `data/seed.ts` (one typed object each).
+- New scaling/adoption milestones you want guaranteed correct → `data/seed.ts`
+  (one typed object each, fetched and confirmed against its URL first).
+- New RSS sources for the live scaling/adoption layer → `QUANTUM_NEWS_FEEDS`
+  in `src/lib/sources/rss.ts` — check the feed URL actually returns valid
+  RSS from a real outlet before adding it.
 - Analyst "so what" notes → `data/notes.ts` (one per stage, newest shown).
 - New technology vertical → parameterize `TECH` and the query in the fetch
   script; the types are technology-agnostic.
@@ -185,4 +287,5 @@ npm run typecheck
 ```
 
 On the first real fetch, confirm it prints "OpenAlex: N works", "NSF: N grants",
-"EPO: N patents" rather than skip messages. A skip means that key isn't set.
+"EPO: N patents", "RSS: N auto-classified scaling/adoption items" rather than
+skip messages. A skip means that key isn't set (EPO) or every feed failed.

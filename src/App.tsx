@@ -1,35 +1,35 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Actor, DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
-import { ACTORS, STAGES } from "./lib/types.ts";
-import { inferActor } from "./lib/inferActor.ts";
+import type { DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
+import { STAGES } from "./lib/types.ts";
+import { inferInstitutionCountry } from "./lib/institutionCountry.ts";
+import { countryColor, countryName } from "./lib/countries.ts";
 import { fetchOpenAlex } from "./lib/sources/openalex.ts";
 import {
-  ACTOR_LABEL, actorShares, countByActor, countByStage,
-  orgLeaderboard, pctDelta, periodCounts, periodFunding,
+  countByCountry, countByStage, countryShares, orgLeaderboard,
+  pctDelta, periodCounts, periodFunding, topCountries,
 } from "./lib/aggregate.ts";
 import { StageColumn } from "./components/StageColumn.tsx";
 import { TrendChart } from "./components/TrendChart.tsx";
 import { VolumeTrend } from "./components/VolumeTrend.tsx";
 import { BarRow } from "./components/BarRow.tsx";
 import { KpiCard } from "./components/KpiCard.tsx";
-import { MiniMap } from "./components/MiniMap.tsx";
+import { WorldMap } from "./components/WorldMap.tsx";
 import { Leaderboard } from "./components/Leaderboard.tsx";
 import { RecentEntries } from "./components/RecentEntries.tsx";
 
 type LiveMode = "loading" | "static" | "refreshed" | "fallback";
 const DATA_URL = `${import.meta.env.BASE_URL}data.json`;
-// The EPO/NSF proxy — see worker/. Unset in dev until you've deployed one
-// and added VITE_WORKER_URL to .env.local; those two sources are just
+// The EPO/NSF/news proxy — see worker/. Unset in dev until you've deployed
+// one and added VITE_WORKER_URL to .env.local; those sources are just
 // skipped (soft-fail) when it's not configured.
 const WORKER_URL = (import.meta.env.VITE_WORKER_URL as string | undefined)?.replace(/\/$/, "");
 const ARXIV_URL =
   "https://export.arxiv.org/api/query?search_query=cat:quant-ph" +
   "&sortBy=submittedDate&sortOrder=descending&max_results=200";
-const ACTOR_VAR: Record<Actor, string> = {
-  us: "var(--us)", cn: "var(--cn)", eu: "var(--eu)", other: "var(--other)",
-};
-const ACTOR_ORDER: Actor[] = ["us", "cn", "eu", "other"];
 const WINDOW_DAYS = 21;
+const TOP_N = 6; // compact-view country count — every real country still gets
+// counted everywhere; this only bounds how many show up in chips/bars/KPIs.
+// The full map has no such cap.
 
 function fmtUsd(n: number): string {
   if (n >= 1e9) return `$${(n / 1e9).toFixed(1)}B`;
@@ -61,17 +61,17 @@ async function fetchArxivBrowser(): Promise<Entry[]> {
     const links = [...n.getElementsByTagName("link")];
     const url = links.find((l) => l.getAttribute("rel") === "alternate")?.getAttribute("href")
       ?? n.getElementsByTagName("id")[0]?.textContent ?? "https://arxiv.org/list/quant-ph/recent";
-    const { actor: a, evidence } = inferActor(`${affil} ${org} ${title}`);
+    const { country, evidence } = inferInstitutionCountry(`${affil} ${org} ${title}`);
     const absId = url.split("/abs/")[1] ?? title.slice(0, 40);
-    return { id: `arxiv-${absId}`, stage: "innovation" as Stage, actor: a, provenance: "live" as const,
-      source: "arxiv" as const, title, org, date: pub, url, actorEvidence: evidence };
+    return { id: `arxiv-${absId}`, stage: "innovation" as Stage, country, provenance: "auto" as const,
+      source: "arxiv" as const, title, org, date: pub, url, countryEvidence: evidence };
   });
 }
 
 // One fresh read across every source that can be fetched from the browser
-// (OpenAlex direct) or through the worker proxy (EPO, NSF). Each leg fails
-// soft — same ethos as the nightly build — so one dead source never blanks
-// the others.
+// (OpenAlex direct) or through the worker proxy (EPO, NSF, news). Each leg
+// fails soft — same ethos as the nightly build — so one dead source never
+// blanks the others.
 async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
   const failed: string[] = [];
   let innovation: Entry[] = [];
@@ -87,21 +87,24 @@ async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
 
   let patents: Entry[] = [];
   let funding: Entry[] = [];
+  let news: Entry[] = [];
   if (WORKER_URL) {
-    const [pRes, fRes] = await Promise.allSettled([
+    const [pRes, fRes, nRes] = await Promise.allSettled([
       fetch(`${WORKER_URL}/patents`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
       fetch(`${WORKER_URL}/funding`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
+      fetch(`${WORKER_URL}/news`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
     ]);
     if (pRes.status === "fulfilled") patents = pRes.value as Entry[]; else failed.push("patents");
     if (fRes.status === "fulfilled") funding = fRes.value as Entry[]; else failed.push("funding");
+    if (nRes.status === "fulfilled") news = nRes.value as Entry[]; else failed.push("news");
   }
 
-  return { entries: [...innovation, ...patents, ...funding], failed };
+  return { entries: [...innovation, ...patents, ...funding, ...news], failed };
 }
 
 export default function App() {
   const [data, setData] = useState<DataFile | null>(null);
-  const [actor, setActor] = useState<Actor | "all">("all");
+  const [country, setCountry] = useState<string | "all">("all");
   const [mode, setMode] = useState<LiveMode>("loading");
   const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
 
@@ -135,7 +138,7 @@ export default function App() {
 
   const entries = data?.entries ?? [];
   const trend = data?.trend ?? [];
-  const shown = actor === "all" ? entries : entries.filter((e) => e.actor === actor);
+  const shown = country === "all" ? entries : entries.filter((e) => e.country === country);
 
   const byStage = useMemo(() => {
     const by: Record<Stage, Entry[]> = { innovation: [], scaling: [], adoption: [], investment: [] };
@@ -150,8 +153,20 @@ export default function App() {
     return by;
   }, [data]);
 
-  const innovationCounts = useMemo(() => countByActor(entries, "innovation"), [entries]);
-  const innovationShares = useMemo(() => actorShares(innovationCounts), [innovationCounts]);
+  // Which countries drive the compact views — real ranking off real
+  // volume, not a hardcoded list. Computed across all stages so the top
+  // filter chips reflect the whole dataset, not just one lens.
+  const topFilterCountries = useMemo(() => topCountries(countByCountry(entries), TOP_N).top, [entries]);
+
+  const innovationCounts = useMemo(() => countByCountry(entries, "innovation"), [entries]);
+  const innovationTop = useMemo(() => topCountries(innovationCounts, TOP_N), [innovationCounts]);
+  const innovationTopShares = useMemo(
+    () => countryShares(Object.fromEntries(innovationTop.top.map((c) => [c.country, c.count]))),
+    [innovationTop]
+  );
+  const innovationRestCount = innovationTop.rest.reduce((s, c) => s + c.count, 0);
+  const innovationTotal = Object.values(innovationCounts).reduce((s, n) => s + n, 0) || 1;
+
   const stageCounts = useMemo(() => countByStage(entries), [entries]);
   const stageTotal = Object.values(stageCounts).reduce((s, n) => s + n, 0) || 1;
   const orgRows = useMemo(() => orgLeaderboard(entries, "innovation", 6), [entries]);
@@ -164,17 +179,24 @@ export default function App() {
   const innovationPeriod = useMemo(() => periodCounts(entries, "innovation", WINDOW_DAYS), [entries]);
   const investmentPeriod = useMemo(() => periodCounts(entries, "investment", WINDOW_DAYS), [entries]);
   const fundingPeriod = useMemo(() => periodFunding(entries, WINDOW_DAYS), [entries]);
-  const shareGap = innovationShares.us - innovationShares.cn;
+
+  const overallShares = useMemo(() => countryShares(innovationCounts), [innovationCounts]);
+  const shareGap = (overallShares.US ?? 0) - (overallShares.CN ?? 0);
   const shareGapLeader = shareGap >= 0 ? "US" : "CN";
   const gapTrendLabel = useMemo(() => {
     if (trend.length < 2) return null;
     const gapAt = (i: number) => {
-      const s = actorShares(trend[i].counts);
-      return s.us - s.cn;
+      const s = countryShares(trend[i].counts);
+      return (s.US ?? 0) - (s.CN ?? 0);
     };
     const diff = gapAt(trend.length - 1) - gapAt(0);
     return Math.abs(diff) < 0.5 ? "flat" : diff < 0 ? "narrowing" : "widening";
   }, [trend]);
+
+  // Forecast lines: top 5 countries by current innovation volume, always
+  // including US/CN if they have any presence, so the headline comparison
+  // never silently drops off the chart it anchors.
+  const forecastCountries = useMemo(() => topCountries(innovationCounts, 5).top.map((c) => c.country), [innovationCounts]);
 
   const generated = data?.generatedAt
     ? new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })
@@ -182,8 +204,8 @@ export default function App() {
   const statusText = mode === "loading" ? "syncing" : mode === "fallback" ? "data unavailable"
     : mode === "refreshed" ? "refreshed live" : "static build";
 
-  function toggleActor(a: Actor) {
-    setActor((prev) => (prev === a ? "all" : a));
+  function toggleCountry(c: string) {
+    setCountry((prev) => (prev === c ? "all" : c));
   }
   function selectOrg(org: string) {
     setHighlightOrg((prev) => (prev === org ? null : org));
@@ -215,11 +237,14 @@ export default function App() {
         </div>
 
         <div className="controls">
-          <span className="lbl">Filter actor</span>
-          <button className="chip" aria-pressed={actor === "all"} onClick={() => setActor("all")}>All</button>
-          {ACTORS.map((a) => (
-            <button key={a.id} className="chip" aria-pressed={actor === a.id} onClick={() => toggleActor(a.id)}>{a.label}</button>
+          <span className="lbl">Filter country</span>
+          <button className="chip" aria-pressed={country === "all"} onClick={() => setCountry("all")}>All</button>
+          {topFilterCountries.map((c) => (
+            <button key={c.country} className="chip" aria-pressed={country === c.country} title={countryName(c.country)} onClick={() => toggleCountry(c.country)}>
+              {c.country}
+            </button>
           ))}
+          <span className="lbl" style={{ marginLeft: 2 }}>— or click any country on the map below</span>
           <span className="spacer" />
           <button className="ghost-btn" onClick={refresh}>↻ refresh live</button>
         </div>
@@ -264,24 +289,31 @@ export default function App() {
             <VolumeTrend trend={trend} />
           </div>
           <div className="panel">
-            <h3>Output by actor · innovation stage</h3>
-            {ACTOR_ORDER.map((a) => (
+            <h3>Output by country · innovation stage</h3>
+            {innovationTop.top.map((c) => (
               <BarRow
-                key={a}
-                label={ACTOR_LABEL[a]}
-                pct={innovationShares[a]}
-                color={ACTOR_VAR[a]}
-                valueLabel={`${innovationCounts[a]} · ${innovationShares[a].toFixed(0)}%`}
-                detail={`${innovationCounts[a]} works · ${innovationShares[a].toFixed(1)}% of innovation output · click to filter`}
-                onClick={() => toggleActor(a)}
-                active={actor === a}
+                key={c.country}
+                label={c.country}
+                pct={innovationTopShares[c.country] ?? 0}
+                color={countryColor(c.country)}
+                valueLabel={`${c.count} · ${((c.count / innovationTotal) * 100).toFixed(0)}%`}
+                detail={`${countryName(c.country)} · ${c.count} works · ${((c.count / innovationTotal) * 100).toFixed(1)}% of innovation output · click to filter`}
+                onClick={() => toggleCountry(c.country)}
+                active={country === c.country}
               />
             ))}
+            {innovationRestCount > 0 && (
+              <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
+                +{innovationTop.rest.length} more countries, {innovationRestCount} works — see the map →
+              </div>
+            )}
           </div>
           <div className="panel">
             <h3>Where the work happens</h3>
-            <MiniMap counts={innovationCounts} onSelect={toggleActor} active={actor} />
-            <div className="maplegend"><span className="dot" />High volume<span className="dot sm" style={{ marginLeft: 8 }} />Low volume</div>
+            <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} />
+            <div className="trend-empty" style={{ padding: "6px 0 0", fontSize: 10.5 }}>
+              Every country with at least one attributed work is shaded — darker means more output. Click any country to filter the page. Expand for the full interactive map.
+            </div>
           </div>
         </div>
 
@@ -312,8 +344,8 @@ export default function App() {
         </div>
 
         <div className="panel">
-          <h3>Actor share forecast <span className="fc-tag">Projected — linear trend</span></h3>
-          <TrendChart trend={trend} />
+          <h3>Country share forecast <span className="fc-tag">Projected — linear trend</span></h3>
+          <TrendChart trend={trend} countries={forecastCountries} />
         </div>
 
         <section className="section">
@@ -339,10 +371,11 @@ export default function App() {
         <footer className="foot">
           <div className="h">Sources & method</div>
           Innovation streams from OpenAlex (institution country codes) with an arXiv fallback, plus EPO
-          patents where a key is set. Scaling and adoption are curated in <code>data/seed.ts</code>.
-          Investment is NSF Awards (US) — no equivalent public feed exists for China. Analyst notes live
-          in <code>data/notes.ts</code>. Actor attribution is a lead, not a verdict. Forecast lines are a
-          linear extrapolation of recorded trend points, not a measurement.
+          patents where a key is set. Scaling and adoption are curated in <code>data/seed.ts</code> plus a
+          live RSS layer. Investment is NSF Awards (US) — no equivalent public feed exists for China.
+          Analyst notes live in <code>data/notes.ts</code>. Every entry logs the real country an
+          institution/awardee/filer is located in — country attribution is a lead, not a verdict. Forecast
+          lines are a linear extrapolation of recorded trend points, not a measurement.
           <div className="sig">Ideas Advancing Freedom</div>
         </footer>
       </div>

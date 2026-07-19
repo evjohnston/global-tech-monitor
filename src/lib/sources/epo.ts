@@ -2,7 +2,6 @@
 // Cloudflare Worker (never the browser: this needs a client secret, which is
 // why it's proxied). Uses global fetch + btoa, both available in Node 20+
 // and Workers, so no runtime-specific APIs (no node:buffer) are needed.
-import { actorFromCountry } from "../actorFromCountry.ts";
 import type { Entry } from "../types.ts";
 import { asArray } from "./util.ts";
 
@@ -39,11 +38,11 @@ export async function fetchPatents(key: string, secret: string, n: number): Prom
     const num = `${country}${ex?.["@doc-number"] ?? i}`;
     return {
       id: `epo-${num}`, stage: "innovation",
-      actor: actorFromCountry(country), provenance: "live", source: "patent",
+      country: country || null, provenance: "live", source: "patent",
       title: String(title).replace(/\s+/g, " ").trim() || "Quantum computing patent",
       org: `${country} filing`, date: "",
       url: `https://worldwide.espacenet.com/patent/search?q=${num}`,
-      actorEvidence: `EPO filing country ${country}`,
+      countryEvidence: country ? `EPO filing country ${country}` : "EPO record has no filing country",
     };
   });
 }

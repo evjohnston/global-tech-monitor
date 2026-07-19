@@ -6,22 +6,30 @@ Vertical 01: **quantum computing.**
 Four stages, plus data-visualization up top:
 
 1. **Innovation** — research (OpenAlex, with arXiv fallback) and patents (EPO).
-2. **Production / scaling** — hardware milestones (curated).
-3. **Adoption** — commercial and government use (curated).
+2. **Production / scaling** — hardware milestones (hand-verified floor + live RSS).
+3. **Adoption** — commercial and government use (hand-verified floor + live RSS).
 4. **Investment** — public research funding (NSF; US/EU only, see caveat).
 
-Above the pipeline: KPI cards with real period-over-period deltas, an
-actor-share breakdown, a "where the work happens" diagram, a stage breakdown,
-an institution leaderboard, a recent-entries table, and an actor-share trend
+Above the pipeline: KPI cards with real period-over-period deltas, a
+country breakdown, a real interactive world map, a stage breakdown, an
+institution leaderboard, a recent-entries table, and a country-share trend
 chart with a linear-projection tail. Every one of those is interactive —
-hover for the underlying number, click to filter or jump. The design is a
-tightened instrument, not a dashboard template: one border radius, borders
-instead of shadows, Hoover Red spent on exactly one accent, actor colors used
-only to encode real country data. Rules are in `CLAUDE.md`'s design-system
-section — read that before changing `src/styles/index.css`.
+hover for the underlying number, click to filter or jump (the map included:
+click any country to filter the whole page, or expand it to a full-page,
+zoomable view). The design is a tightened instrument, not a dashboard
+template: one border radius, borders instead of shadows, Hoover Red spent
+on exactly one accent, country colors used only to encode real data. Rules
+are in `CLAUDE.md`'s design-system section — read that before changing
+`src/styles/index.css`.
 
-Every entry is tagged by actor (US / China / Europe / Other) and labeled `live`
-or `seeded` so the board never implies a curated milestone is a live feed.
+Every entry logs its real country (ISO code) — there is no "Other" bucket
+anywhere in the app. The July 2026 dataset resolves to 36 distinct real
+countries, not four. Compact views (filter chips, bar lists) show the top 6
+by volume, computed live; the map is where every country is visible,
+however small its count. Entries are also labeled `live`, `seeded`, or
+`auto` — three honesty tiers, so the board never implies a
+keyword-classified RSS pickup is as solid as institution-attributed or
+hand-verified data.
 
 ## OpenAlex key (recommended)
 
@@ -40,8 +48,9 @@ export OPENALEX_MAILTO=you@example.com
 npm run fetch-data
 ```
 
-Without the key the fetch still runs, but it falls back to arXiv, which has no
-country data — so the actor filter and trend chart go quiet.
+Without the key the fetch still runs, but it falls back to arXiv, which has
+weak keyword-guessed country data — so the country filter and trend chart
+have much less to work with.
 
 ## Patents and funding keys (optional)
 
@@ -65,12 +74,15 @@ pair, just registered with two separate deploy targets.
 The nightly build above is the base layer. `worker/` is a small Cloudflare
 Worker, **deployed** at `gtm-live-proxy.evjohnston.workers.dev`, that adds a
 live layer on top: on page load, the browser fetches OpenAlex directly (no
-proxy needed, OpenAlex's CORS is open) and hits the Worker for NSF funding,
-which a browser can't fetch on its own — research.gov sends no CORS headers
-at all. EPO patents are wired up but paused (that account is still being set
-up) — `/patents` soft-fails cleanly until `EPO_KEY`/`EPO_SECRET` are set as
-Worker secrets. Full setup and exact commands are in `CLAUDE.md` under "Live
-data (Cloudflare Worker)."
+proxy needed, OpenAlex's CORS is open) and hits the Worker for NSF funding
+and scaling/adoption news (research.gov and two of the three news outlets
+send no CORS headers, so those need the proxy). The news route pulls from
+three quantum-industry RSS feeds, auto-classifies each item into scaling or
+adoption by keyword, and tags it `auto` provenance — real automation, weaker
+attribution than everything else in the app. EPO patents are wired up but
+paused (that account is still being set up) — `/patents` soft-fails cleanly
+until `EPO_KEY`/`EPO_SECRET` are set as Worker secrets. Full setup and exact
+commands are in `CLAUDE.md` under "Live data (Cloudflare Worker)."
 
 ## Stack
 
@@ -79,9 +91,10 @@ data (Cloudflare Worker)."
   and NSF server-side and writes `public/data.json`. Running server-side
   sidesteps browser CORS limits and is where the EPO secret lives.
 - **GitHub Actions** runs the fetch daily, rebuilds, and deploys to Pages.
-- **A Cloudflare Worker** (`worker/`, optional) proxies EPO and NSF for live
-  browser reads. Shares its fetch/transform logic with the Node script via
-  `src/lib/sources/*` — one implementation per source, not two.
+- **A Cloudflare Worker** (`worker/`, optional) proxies EPO, NSF, and
+  scaling/adoption RSS for live browser reads. Shares its fetch/transform
+  logic with the Node script via `src/lib/sources/*` — one implementation
+  per source, not two.
 
 The app reads a committed JSON file, so the page loads instantly and needs no
 running server even without the Worker. On top of that, it auto-refreshes
@@ -138,31 +151,34 @@ script, duplicate the seed file, and you have Vertical 02.
 
 ```
 scripts/fetch-data.ts       nightly data build — OpenAlex + arXiv fallback, trend accumulation
-worker/                     Cloudflare Worker — live proxy for EPO + NSF (separate deploy, own package.json)
-src/lib/sources/            shared fetch/transform logic — OpenAlex, EPO, NSF (used by both the script and the Worker)
-data/seed.ts                curated scaling/adoption entries — edit by hand
+worker/                     Cloudflare Worker — live proxy for EPO + NSF + news RSS (separate deploy, own package.json)
+src/lib/sources/            shared fetch/transform logic — OpenAlex, EPO, NSF, RSS (used by both the script and the Worker)
+data/seed.ts                curated scaling/adoption entries — edit by hand, real country per entry
 data/notes.ts               analyst "so what" notes — edit by hand
-src/lib/types.ts            the data contract
-src/lib/aggregate.ts        counts, period-over-period deltas, share, linear projection
-src/lib/actorFromCountry.ts country code → actor (OpenAlex path)
-src/lib/inferActor.ts       affiliation keyword heuristic (arXiv fallback only)
-src/components/             Card, StageColumn, NoteCard, TrendChart, BarRow, KpiCard, MiniMap, Tooltip, Leaderboard, RecentEntries
+src/lib/types.ts            the data contract — Entry.country is the real ISO code, no Actor bucket type
+src/lib/aggregate.ts        counts, period-over-period deltas, top-N-by-country, linear projection
+src/lib/countries.ts        ISO country names + alpha-2/numeric bridging (wraps i18n-iso-countries)
+src/lib/institutionCountry.ts  org-name → country-of-location keyword heuristic (arXiv/RSS fallback only)
+src/components/             Card, StageColumn, NoteCard, TrendChart, BarRow, KpiCard, WorldMap, Tooltip, Leaderboard, RecentEntries
 src/App.tsx                 state, filters, live refresh
 src/styles/index.css        design tokens — one radius, borders not shadows, Hoover Red as the one accent
 ```
 
 ## Method & honesty notes
 
-- **Actor attribution comes from OpenAlex institution country codes**, which
-  is far better than parsing raw affiliation strings — but not perfect. A work
-  is assigned to the modal country across its authors' institutions, with ties
-  broken toward the first author. `actorEvidence` on each entry records the
-  country tally so any call is auditable. Works with no institution on record
-  fall to "other." If OpenAlex is unreachable, the arXiv fallback has no country
-  data and everything reads as "other" until the next good run.
-- **Stage 02 is deliberately thin.** Production/scaling has no queryable feed;
-  those entries are hand-curated milestones. That gap is a real feature of the
-  domain, not a bug in the tool.
+- **Country attribution comes from OpenAlex institution country codes** for
+  roughly a third to two-thirds of innovation-stage entries — checked by
+  hand, not assumed. A work is assigned to the modal country across its
+  authors' institutions. `countryEvidence` on each entry records the country
+  tally (or the keyword match, for `auto`-tier entries) so any call is
+  auditable — hover the country badge on any card to see it. Works with no
+  institution on record get `country: null`, honestly, rather than a guess
+  or a catch-all bucket.
+- **Stage 02/03 (scaling/adoption) have no clean API**, so a hand-verified
+  seed set is the floor and a live RSS layer supplements it — real
+  automation, but keyword-classified (`auto` provenance), the weakest
+  attribution tier in the app. That gap between "no live feed exists" and
+  "a perfect live feed" is real, not something the RSS layer fully closes.
 
 Hoover Red (#98002E) is the one color carried over from the Hoover Institution
 2023 brand guide; everything else is its own tightened instrument, not the

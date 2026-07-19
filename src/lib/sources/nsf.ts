@@ -1,7 +1,6 @@
 // NSF Awards API — shared by the Node fetch script and the Cloudflare
 // Worker (not called directly from the browser: research.gov doesn't send
 // CORS headers, confirmed by hand before building the proxy).
-import { actorFromCountry } from "../actorFromCountry.ts";
 import type { Entry } from "../types.ts";
 
 interface NSFAward {
@@ -24,16 +23,20 @@ export async function fetchNSF(n: number, keyword = "quantum"): Promise<Entry[]>
     const d = a.startDate ?? ""; // MM/DD/YYYY → ISO
     const iso = /^\d{2}\/\d{2}\/\d{4}$/.test(d)
       ? `${d.slice(6, 10)}-${d.slice(0, 2)}-${d.slice(3, 5)}` : d.slice(0, 10);
+    // NSF awardees are overwhelmingly US institutions; a missing code on an
+    // NSF award is reasonably read as US rather than unknown, unlike a
+    // generic missing-data case elsewhere in this app.
+    const country = a.awardeeCountryCode ?? "US";
     return {
       id: `nsf-${a.id ?? Math.random().toString(36).slice(2)}`,
       stage: "investment",
-      actor: actorFromCountry(a.awardeeCountryCode ?? "US"),
+      country,
       provenance: "live", source: "grant",
       title: (a.title ?? "").replace(/\s+/g, " ").trim(),
       org: a.awardeeName ?? "", date: iso,
       url: `https://www.nsf.gov/awardsearch/showAward?AWD_ID=${a.id ?? ""}`,
       amountUsd: amt,
-      actorEvidence: `NSF awardee country ${a.awardeeCountryCode ?? "US"}`,
+      countryEvidence: `NSF awardee country ${country}`,
     };
   });
 }

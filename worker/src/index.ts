@@ -1,19 +1,23 @@
 // Global Tech Monitor — live-data proxy.
 //
-// Exists for exactly two reasons the browser can't handle on its own:
+// Exists for reasons the browser can't handle on its own:
 //   - EPO needs an OAuth client secret, which can never ship in frontend code.
 //   - research.gov (NSF Awards) sends no CORS headers, confirmed by hand
 //     before building this — a direct browser fetch is silently blocked.
+//   - Two of the three quantum-news RSS feeds also send no CORS headers
+//     (only thequantuminsider.com does) — proxying all three here keeps the
+//     news path in one place instead of a browser/worker hybrid.
 // OpenAlex has neither problem (open CORS, no required secret) and is fetched
 // straight from the browser instead — see src/App.tsx.
 //
-// Both source functions are shared with scripts/fetch-data.ts (the nightly
-// build) so attribution logic never drifts between the live and static
-// paths. Responses are cached at the edge: patents lag ~18 months and NSF
-// awards post a few times a day, so there is no honest reason to hit either
-// upstream on every page load.
+// All source functions are shared with scripts/fetch-data.ts (the nightly
+// build) so attribution/classification logic never drifts between the live
+// and static paths. Responses are cached at the edge: patents lag ~18
+// months and NSF/news move at most a few times a day, so there is no
+// honest reason to hit any upstream on every page load.
 import { fetchPatents } from "../../src/lib/sources/epo.ts";
 import { fetchNSF } from "../../src/lib/sources/nsf.ts";
+import { fetchQuantumNewsRss } from "../../src/lib/sources/rss.ts";
 import type { Entry } from "../../src/lib/types.ts";
 
 export interface Env {
@@ -85,8 +89,11 @@ export default {
       if (url.pathname === "/funding") {
         return withCors(await cached(req, () => fetchNSF(NSF_N)), origin);
       }
+      if (url.pathname === "/news") {
+        return withCors(await cached(req, () => fetchQuantumNewsRss(30)), origin);
+      }
       if (url.pathname === "/" || url.pathname === "/health") {
-        return withCors(json({ ok: true, routes: ["/patents", "/funding"] }), origin);
+        return withCors(json({ ok: true, routes: ["/patents", "/funding", "/news"] }), origin);
       }
       return withCors(json({ error: "not found" }, 404), origin);
     } catch (err) {

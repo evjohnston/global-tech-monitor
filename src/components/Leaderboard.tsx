@@ -1,11 +1,5 @@
-import type { Actor } from "../lib/types.ts";
 import type { OrgRow } from "../lib/aggregate.ts";
-import { ACTOR_LABEL } from "../lib/aggregate.ts";
-
-const ACTOR_VAR: Record<Actor, string> = {
-  us: "var(--us)", cn: "var(--cn)", eu: "var(--eu)", other: "var(--other)",
-};
-const ACTOR_SHORT: Record<Actor, string> = { us: "US", cn: "CN", eu: "EU", other: "—" };
+import { countryColor, countryName } from "../lib/countries.ts";
 
 export function Leaderboard({
   rows,
@@ -27,7 +21,7 @@ export function Leaderboard({
         <tr>
           <th className="rank">#</th>
           <th>Institution</th>
-          <th>Actor</th>
+          <th>Country</th>
           <th className="right">{unit}</th>
         </tr>
       </thead>
@@ -42,8 +36,8 @@ export function Leaderboard({
             <td className="rank">{i + 1}</td>
             <td className="org-name">{r.org}</td>
             <td>
-              <span className="actor-tag" style={{ background: ACTOR_VAR[r.actor] }}>
-                {ACTOR_SHORT[r.actor]} · {ACTOR_LABEL[r.actor]}
+              <span className="actor-tag" style={{ background: countryColor(r.country) }}>
+                {r.country ?? "—"} · {r.country ? countryName(r.country) : "Unknown"}
               </span>
             </td>
             <td className="right count">{r.count}</td>

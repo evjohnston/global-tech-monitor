@@ -3,17 +3,17 @@
 // it last as a distinct lens, since its data source and cadence differ.
 export type Stage = "innovation" | "scaling" | "adoption" | "investment";
 
-// Geopolitical actor. "other" is the honest catch-all, not a failure state.
-export type Actor = "us" | "cn" | "eu" | "other";
-
-// Where an entry came from, and — crucially — whether it's live or curated.
-// This is the provenance layer. The prototype conflated these; the real
-// version keeps them explicit so the UI can never imply a seeded milestone
-// is a live feed.
-export type Provenance = "live" | "seeded";
+// Where an entry came from, and — crucially — how much to trust it.
+// "live" = institution/awardee-attributed real data (OpenAlex, NSF, EPO).
+// "seeded" = hand-verified by a human, fetched and confirmed against its
+// source before being added (data/seed.ts).
+// "auto" = live-fetched (RSS) but machine-classified — stage and country are
+// a keyword guess, not a verified fact. Weakest tier; the UI must say so.
+export type Provenance = "live" | "seeded" | "auto";
 
 export type SourceKind =
-  | "arxiv" // research preprint (innovation)
+  | "paper" // published research, journal/conference (innovation) — real institution data
+  | "arxiv" // research preprint, arXiv fallback only (innovation) — rarely has institution data
   | "patent" // patent filing (innovation)
   | "milestone" // hardware / scaling announcement (scaling)
   | "deployment" // commercial or govt adoption (adoption)
@@ -22,27 +22,33 @@ export type SourceKind =
 export interface Entry {
   id: string; // stable, dedupe key
   stage: Stage;
-  actor: Actor;
+  // ISO 3166-1 alpha-2 code for the country the institution/awardee/filer is
+  // physically located in — null when a source genuinely gives us nothing
+  // to go on. Every real country gets logged as itself; nothing is bucketed
+  // into a catch-all "other." See src/lib/countries.ts for display helpers.
+  country: string | null;
   provenance: Provenance;
   source: SourceKind;
   title: string;
   org: string; // affiliation, lab, or vendor
   date: string; // ISO date (YYYY-MM-DD) or YYYY-MM for coarse milestones
   url: string;
-  // How the actor was decided, so misclassification is auditable rather
-  // than silent. Empty for hand-curated entries where actor is known.
-  actorEvidence?: string;
+  // How the country was decided, so misclassification is auditable rather
+  // than silent. Empty for hand-curated entries where it's simply known.
+  countryEvidence?: string;
   // Optional signal fields. citations powers the "high-impact" weighting
   // (ASPI uses top-10% most-cited); amountUsd powers the funding view.
   citations?: number;
   amountUsd?: number;
 }
 
-// One dated observation of actor share, appended each nightly run. This is
+// One dated observation of country share, appended each nightly run. This is
 // how trend-over-time works: we stop overwriting and start accumulating.
+// Keyed by ISO alpha-2 code — open-ended, not a fixed bucket set, so it
+// naturally covers however many countries a given day's data touched.
 export interface TrendPoint {
   date: string; // ISO date of the fetch run
-  counts: Record<Actor, number>; // innovation-stage works by actor that run
+  counts: Record<string, number>; // innovation-stage works by country that run
 }
 
 // A dated analyst note attached to a pipeline stage — the "so what" layer.
@@ -61,7 +67,7 @@ export interface DataFile {
   technology: string; // "quantum-computing"
   generatedAt: string; // ISO timestamp of the last fetch run
   entries: Entry[];
-  trend: TrendPoint[]; // accumulated actor-share history
+  trend: TrendPoint[]; // accumulated country-share history
   notes: StageNote[]; // analyst interpretation per stage
 }
 
@@ -88,9 +94,3 @@ export const STAGES: { id: Stage; label: string; blurb: string }[] = [
   },
 ];
 
-export const ACTORS: { id: Actor; label: string; short: string }[] = [
-  { id: "us", label: "United States", short: "US" },
-  { id: "cn", label: "China", short: "CN" },
-  { id: "eu", label: "Europe", short: "EU" },
-  { id: "other", label: "Other", short: "—" },
-];

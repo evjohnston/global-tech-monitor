@@ -4,16 +4,24 @@
  * Runs in Node (locally via `npm run fetch-data`, or daily on GitHub Actions).
  *
  * Sources:
- *   - OpenAlex for innovation-stage works WITH institution country codes.
- *     This is what makes actor attribution real rather than a keyword guess.
- *     Falls back to arXiv (no affiliations) if OpenAlex is unreachable or the
- *     key is missing, so the build never fails hard.
- *   - data/seed.ts for scaling/adoption (no clean live feed).
+ *   - OpenAlex for innovation-stage works, filtered by Topic (quantum
+ *     computing) restricted to journal-type sources — real institution
+ *     attribution roughly 68% of the time, checked by hand. Falls back to
+ *     arXiv (no affiliations, keyword-inferred actor) if OpenAlex is
+ *     unreachable, so the build never fails hard.
+ *   - RSS (src/lib/sources/rss.ts) for scaling/adoption — auto-classified
+ *     from quantum-industry trade press, weakest attribution tier
+ *     (provenance "auto"). Supplements, doesn't replace, data/seed.ts.
+ *   - data/seed.ts for scaling/adoption — the hand-verified floor.
  *   - data/notes.ts for the analyst "so what" layer.
+ *
+ * Every entry logs the real country an institution/awardee/filer is
+ * located in (ISO alpha-2), not a US/China/Europe/Other bucket — see
+ * src/lib/types.ts and src/lib/countries.ts.
  *
  * Accumulation:
  *   Reads the PREVIOUS public/data.json and appends one trend point per run,
- *   so actor-share history builds up over time instead of being overwritten.
+ *   so country-share history builds up over time instead of being overwritten.
  *
  * Output: public/data.json — the app reads this at load.
  */
@@ -21,11 +29,12 @@ import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
-import { inferActor } from "../src/lib/inferActor.ts";
-import type { Actor, DataFile, Entry, TrendPoint } from "../src/lib/types.ts";
+import { inferInstitutionCountry } from "../src/lib/institutionCountry.ts";
+import type { DataFile, Entry, TrendPoint } from "../src/lib/types.ts";
 import { fetchOpenAlex } from "../src/lib/sources/openalex.ts";
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
+import { fetchQuantumNewsRss } from "../src/lib/sources/rss.ts";
 import { asArray } from "../src/lib/sources/util.ts";
 import { SEED } from "../data/seed.ts";
 import { NOTES } from "../data/notes.ts";
@@ -75,12 +84,15 @@ async function fetchArxiv(): Promise<Entry[]> {
     const links = asArray<any>(e.link);
     const alt = links.find((l) => l["@_rel"] === "alternate");
     const url = alt?.["@_href"] ?? e.id ?? "https://arxiv.org/list/quant-ph/recent";
-    const { actor, evidence } = inferActor(`${org} ${title}`);
+    // "auto" provenance, not "live" — this is the same keyword-guess
+    // mechanism as the RSS layer, just applied to arXiv metadata instead of
+    // news headlines. It's only reached when OpenAlex itself is down.
+    const { country, evidence } = inferInstitutionCountry(`${org} ${title}`);
     return {
       id: `arxiv-${String(e.id ?? "").split("/abs/")[1] ?? title.slice(0, 40)}`,
-      stage: "innovation", actor, provenance: "live", source: "arxiv",
+      stage: "innovation", country, provenance: "auto", source: "arxiv",
       title, org, date: String(e.published ?? "").slice(0, 10), url,
-      actorEvidence: `${evidence} (arXiv fallback, no country data)`,
+      countryEvidence: `${evidence} (arXiv fallback, no institution country data)`,
     };
   });
 }
@@ -92,8 +104,11 @@ function readPrevious(): DataFile | null {
 }
 
 function trendPoint(live: Entry[]): TrendPoint {
-  const counts: Record<Actor, number> = { us: 0, cn: 0, eu: 0, other: 0 };
-  for (const e of live) if (e.stage === "innovation") counts[e.actor]++;
+  const counts: Record<string, number> = {};
+  for (const e of live) {
+    if (e.stage !== "innovation" || !e.country) continue;
+    counts[e.country] = (counts[e.country] ?? 0) + 1;
+  }
   return { date: new Date().toISOString().slice(0, 10), counts };
 }
 
@@ -101,7 +116,7 @@ async function main() {
   let live: Entry[] = [];
   let sourceUsed = "openalex";
   try {
-    live = await fetchOpenAlex({ key: OA_KEY, mailto: OA_MAILTO, sinceDays: 21, n: OA_N });
+    live = await fetchOpenAlex({ key: OA_KEY, mailto: OA_MAILTO, sinceDays: 30, n: OA_N });
     console.log(`OpenAlex: ${live.length} works with country attribution`);
   } catch (err) {
     console.error("OpenAlex failed:", (err as Error).message);
@@ -133,9 +148,16 @@ async function main() {
   } catch (err) {
     console.error("funding skipped:", (err as Error).message);
   }
+  let news: Entry[] = [];
+  try {
+    news = await fetchQuantumNewsRss(30);
+    console.log(`RSS: ${news.length} auto-classified scaling/adoption items`);
+  } catch (err) {
+    console.error("news skipped:", (err as Error).message);
+  }
 
   const byId = new Map<string, Entry>();
-  for (const e of [...SEED, ...live, ...patents, ...funding]) byId.set(e.id, e);
+  for (const e of [...SEED, ...live, ...patents, ...funding, ...news]) byId.set(e.id, e);
 
   // Append today's trend point, keeping prior history. One point per date.
   const history = (prev?.trend ?? []).filter(

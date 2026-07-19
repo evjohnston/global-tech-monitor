@@ -1,42 +1,58 @@
-import type { Actor, Entry, Stage, TrendPoint } from "./types.ts";
-import { ACTORS } from "./types.ts";
+import type { Entry, Stage, TrendPoint } from "./types.ts";
 
-const ACTOR_ORDER: Actor[] = ["us", "cn", "eu", "other"];
-
-// Count entries by actor within a stage (or all stages).
-export function countByActor(entries: Entry[], stage?: Stage): Record<Actor, number> {
-  const out: Record<Actor, number> = { us: 0, cn: 0, eu: 0, other: 0 };
+// Count entries by country within a stage (or all stages). Open-ended —
+// keyed by whatever real countries are actually present, not a fixed
+// bucket set. Entries with no resolved country (country === null) are
+// left out of this ranking; they still count toward stage/entry totals
+// elsewhere, they just can't be attributed to a specific place.
+export function countByCountry(entries: Entry[], stage?: Stage): Record<string, number> {
+  const out: Record<string, number> = {};
   for (const e of entries) {
     if (stage && e.stage !== stage) continue;
-    out[e.actor]++;
+    if (!e.country) continue;
+    out[e.country] = (out[e.country] ?? 0) + 1;
   }
   return out;
 }
 
-// Citation-weighted share by actor — the ASPI "high-impact" idea. Falls back
-// to raw counts when citation data is absent (arXiv/patent entries).
-export function weightByActor(entries: Entry[], stage?: Stage): Record<Actor, number> {
-  const out: Record<Actor, number> = { us: 0, cn: 0, eu: 0, other: 0 };
+// Citation-weighted count by country — the ASPI "high-impact" idea. Falls
+// back to raw counts when citation data is absent (arXiv/patent entries).
+export function weightByCountry(entries: Entry[], stage?: Stage): Record<string, number> {
+  const out: Record<string, number> = {};
   for (const e of entries) {
     if (stage && e.stage !== stage) continue;
-    out[e.actor] += (e.citations ?? 0) + 1; // +1 so uncited work still counts
+    if (!e.country) continue;
+    out[e.country] = (out[e.country] ?? 0) + (e.citations ?? 0) + 1; // +1 so uncited work still counts
   }
   return out;
 }
 
-// Sum funding amounts by actor (investment stage).
-export function fundingByActor(entries: Entry[]): Record<Actor, number> {
-  const out: Record<Actor, number> = { us: 0, cn: 0, eu: 0, other: 0 };
+// Sum funding amounts by country (investment stage).
+export function fundingByCountry(entries: Entry[]): Record<string, number> {
+  const out: Record<string, number> = {};
   for (const e of entries) {
-    if (e.stage !== "investment") continue;
-    out[e.actor] += e.amountUsd ?? 0;
+    if (e.stage !== "investment" || !e.country) continue;
+    out[e.country] = (out[e.country] ?? 0) + (e.amountUsd ?? 0);
   }
   return out;
+}
+
+export interface CountryCount { country: string; count: number }
+
+// Ranks a country→count map and splits it into the top N (for compact views
+// — chips, bar lists, KPIs) plus a "rest" total covering every other real
+// country that showed up. Nothing is dropped or hidden; "rest" is a real
+// sum a caller can label ("+N more countries"), not a discarded bucket.
+export function topCountries(counts: Record<string, number>, n: number): { top: CountryCount[]; rest: CountryCount[] } {
+  const sorted = Object.entries(counts)
+    .map(([country, count]) => ({ country, count }))
+    .sort((a, b) => b.count - a.count);
+  return { top: sorted.slice(0, n), rest: sorted.slice(n) };
 }
 
 export interface OrgRow {
   org: string;
-  actor: Actor;
+  country: string | null;
   count: number;
 }
 
@@ -49,14 +65,10 @@ export function orgLeaderboard(entries: Entry[], stage?: Stage, limit = 8): OrgR
     const key = e.org;
     const cur = map.get(key);
     if (cur) cur.count++;
-    else map.set(key, { org: e.org, actor: e.actor, count: 1 });
+    else map.set(key, { org: e.org, country: e.country, count: 1 });
   }
   return [...map.values()].sort((a, b) => b.count - a.count).slice(0, limit);
 }
-
-export const ACTOR_LABEL: Record<Actor, string> = Object.fromEntries(
-  ACTORS.map((a) => [a.id, a.label])
-) as Record<Actor, string>;
 
 // Count entries by stage, for the "entries by stage" breakdown panel.
 export function countByStage(entries: Entry[]): Record<Stage, number> {
@@ -120,27 +132,34 @@ export function pctDelta(current: number, previous: number): number | null {
   return ((current - previous) / previous) * 100;
 }
 
-export function actorShares(counts: Record<Actor, number>): Record<Actor, number> {
-  const total = ACTOR_ORDER.reduce((s, a) => s + counts[a], 0) || 1;
-  return Object.fromEntries(ACTOR_ORDER.map((a) => [a, (counts[a] / total) * 100])) as Record<Actor, number>;
+// Share (%) of a country→count map, relative to the sum of every country in
+// it — pass a pre-filtered map (e.g. just the top N) if you want shares
+// relative to that subset rather than the whole world.
+export function countryShares(counts: Record<string, number>): Record<string, number> {
+  const total = Object.values(counts).reduce((s, n) => s + n, 0) || 1;
+  return Object.fromEntries(Object.entries(counts).map(([c, n]) => [c, (n / total) * 100]));
 }
 
 export interface ProjectedSeries {
-  actor: Actor;
+  country: string;
   points: number[]; // future share-percent points, one per projected step
 }
 
-// Linear extrapolation of each actor's share of innovation-stage trend
-// points. Needs at least 3 recorded days to be worth showing — anything
-// thinner is a projection built on noise, not a trend. Labeled as a
-// projection wherever it's rendered, never presented as measured data.
-export function projectShares(trend: TrendPoint[], steps = 4): ProjectedSeries[] | null {
-  if (trend.length < 3) return null;
+// Linear extrapolation of each given country's share of innovation-stage
+// trend points. Needs at least 3 recorded days to be worth showing —
+// anything thinner is a projection built on noise, not a trend. Labeled as
+// a projection wherever it's rendered, never presented as measured data.
+// `countries` should be a small caller-chosen set (e.g. top 4-5 by current
+// volume) — projecting every country ever seen would be an unreadable
+// tangle of lines, not a decision this function should make on its own.
+export function projectCountryShares(trend: TrendPoint[], countries: string[], steps = 4): ProjectedSeries[] | null {
+  if (trend.length < 3 || countries.length === 0) return null;
   const n = trend.length;
-  const shareSeries: Record<Actor, number[]> = { us: [], cn: [], eu: [], other: [] };
+  const shareSeries: Record<string, number[]> = {};
+  for (const c of countries) shareSeries[c] = [];
   for (const p of trend) {
-    const total = ACTOR_ORDER.reduce((s, a) => s + p.counts[a], 0) || 1;
-    for (const a of ACTOR_ORDER) shareSeries[a].push((p.counts[a] / total) * 100);
+    const total = Object.values(p.counts).reduce((s, v) => s + v, 0) || 1;
+    for (const c of countries) shareSeries[c].push(((p.counts[c] ?? 0) / total) * 100);
   }
   function fit(ys: number[]): (x: number) => number {
     const xs = ys.map((_, i) => i);
@@ -156,9 +175,9 @@ export function projectShares(trend: TrendPoint[], steps = 4): ProjectedSeries[]
     const intercept = ybar - slope * xbar;
     return (x: number) => intercept + slope * x;
   }
-  return ACTOR_ORDER.map((a) => {
-    const f = fit(shareSeries[a]);
+  return countries.map((c) => {
+    const f = fit(shareSeries[c]);
     const points = Array.from({ length: steps }, (_, i) => Math.max(0, Math.min(100, f(n - 1 + i + 1))));
-    return { actor: a, points };
+    return { country: c, points };
   });
 }
