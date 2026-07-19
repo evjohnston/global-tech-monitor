@@ -42,6 +42,9 @@ jobs:
         run: npm run build
         env:
           GTM_BASE: /${{ github.event.repository.name }}/
+          # Live-data proxy (worker/) — a public URL, not a secret. Update
+          # this if the Worker is ever redeployed under a different name.
+          VITE_WORKER_URL: https://gtm-live-proxy.evjohnston.workers.dev
 
       - uses: actions/upload-pages-artifact@v3
         with:

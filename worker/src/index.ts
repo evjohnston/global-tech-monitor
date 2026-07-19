@@ -1,0 +1,93 @@
+// Global Tech Monitor — live-data proxy.
+//
+// Exists for exactly two reasons the browser can't handle on its own:
+//   - EPO needs an OAuth client secret, which can never ship in frontend code.
+//   - research.gov (NSF Awards) sends no CORS headers, confirmed by hand
+//     before building this — a direct browser fetch is silently blocked.
+// OpenAlex has neither problem (open CORS, no required secret) and is fetched
+// straight from the browser instead — see src/App.tsx.
+//
+// Both source functions are shared with scripts/fetch-data.ts (the nightly
+// build) so attribution logic never drifts between the live and static
+// paths. Responses are cached at the edge: patents lag ~18 months and NSF
+// awards post a few times a day, so there is no honest reason to hit either
+// upstream on every page load.
+import { fetchPatents } from "../../src/lib/sources/epo.ts";
+import { fetchNSF } from "../../src/lib/sources/nsf.ts";
+import type { Entry } from "../../src/lib/types.ts";
+
+export interface Env {
+  EPO_KEY: string;
+  EPO_SECRET: string;
+  ALLOWED_ORIGINS: string;
+}
+
+const N = 40;
+const CACHE_SECONDS = 3600; // an hour — both sources move slowly by nature
+
+function pickOrigin(reqOrigin: string | null, allowedCsv: string): string {
+  const allowed = allowedCsv.split(",").map((s) => s.trim()).filter(Boolean);
+  if (reqOrigin && allowed.includes(reqOrigin)) return reqOrigin;
+  return allowed[0] ?? "";
+}
+
+function withCors(res: Response, origin: string): Response {
+  const headers = new Headers(res.headers);
+  headers.set("Access-Control-Allow-Origin", origin);
+  headers.set("Vary", "Origin");
+  return new Response(res.body, { status: res.status, headers });
+}
+
+function json(data: unknown, status = 200, extraHeaders: HeadersInit = {}): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json", ...extraHeaders },
+  });
+}
+
+async function cached(
+  req: Request,
+  fetcher: () => Promise<Entry[]>
+): Promise<Response> {
+  const cache = caches.default;
+  const cacheKey = new Request(req.url, req);
+  const hit = await cache.match(cacheKey);
+  if (hit) return hit;
+
+  const entries = await fetcher();
+  const res = json(entries, 200, { "Cache-Control": `public, max-age=${CACHE_SECONDS}` });
+  await cache.put(cacheKey, res.clone());
+  return res;
+}
+
+export default {
+  async fetch(req: Request, env: Env): Promise<Response> {
+    const url = new URL(req.url);
+    const origin = pickOrigin(req.headers.get("Origin"), env.ALLOWED_ORIGINS);
+
+    if (req.method === "OPTIONS") {
+      return withCors(
+        new Response(null, { headers: { "Access-Control-Allow-Methods": "GET, OPTIONS" } }),
+        origin
+      );
+    }
+    if (req.method !== "GET") {
+      return withCors(json({ error: "method not allowed" }, 405), origin);
+    }
+
+    try {
+      if (url.pathname === "/patents") {
+        return withCors(await cached(req, () => fetchPatents(env.EPO_KEY, env.EPO_SECRET, N)), origin);
+      }
+      if (url.pathname === "/funding") {
+        return withCors(await cached(req, () => fetchNSF(N)), origin);
+      }
+      if (url.pathname === "/" || url.pathname === "/health") {
+        return withCors(json({ ok: true, routes: ["/patents", "/funding"] }), origin);
+      }
+      return withCors(json({ error: "not found" }, 404), origin);
+    } catch (err) {
+      return withCors(json({ error: (err as Error).message }, 502), origin);
+    }
+  },
+} satisfies ExportedHandler<Env>;

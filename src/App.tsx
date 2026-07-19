@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Actor, DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
 import { ACTORS, STAGES } from "./lib/types.ts";
 import { inferActor } from "./lib/inferActor.ts";
+import { fetchOpenAlex } from "./lib/sources/openalex.ts";
 import {
   ACTOR_LABEL, actorShares, countByActor, countByStage,
   orgLeaderboard, pctDelta, periodCounts, periodFunding,
@@ -17,6 +18,10 @@ import { RecentEntries } from "./components/RecentEntries.tsx";
 
 type LiveMode = "loading" | "static" | "refreshed" | "fallback";
 const DATA_URL = `${import.meta.env.BASE_URL}data.json`;
+// The EPO/NSF proxy — see worker/. Unset in dev until you've deployed one
+// and added VITE_WORKER_URL to .env.local; those two sources are just
+// skipped (soft-fail) when it's not configured.
+const WORKER_URL = (import.meta.env.VITE_WORKER_URL as string | undefined)?.replace(/\/$/, "");
 const ARXIV_URL =
   "https://export.arxiv.org/api/query?search_query=cat:quant-ph" +
   "&sortBy=submittedDate&sortOrder=descending&max_results=30";
@@ -38,6 +43,62 @@ function fmtDelta(pct: number | null): string | null {
   return `${pct > 0 ? "+" : "−"}${Math.abs(pct).toFixed(1)}%`;
 }
 
+// arXiv fallback for the browser path — only used if a direct OpenAlex call
+// fails. Kept separate from scripts/lib/sources/* because it leans on
+// DOMParser, which only exists in the browser.
+async function fetchArxivBrowser(): Promise<Entry[]> {
+  const res = await fetch(ARXIV_URL);
+  if (!res.ok) throw new Error(String(res.status));
+  const xml = new DOMParser().parseFromString(await res.text(), "application/xml");
+  const nodes = [...xml.getElementsByTagName("entry")];
+  return nodes.map((n) => {
+    const title = (n.getElementsByTagName("title")[0]?.textContent ?? "").replace(/\s+/g, " ").trim();
+    const pub = (n.getElementsByTagName("published")[0]?.textContent ?? "").slice(0, 10);
+    const authors = [...n.getElementsByTagName("author")];
+    const names = authors.map((a) => a.getElementsByTagName("name")[0]?.textContent ?? "");
+    const affil = authors.map((a) => a.getElementsByTagName("arxiv:affiliation")[0]?.textContent ?? "").join(" ");
+    const org = names.length > 1 ? `${names[0]} et al.` : names[0] ?? "";
+    const links = [...n.getElementsByTagName("link")];
+    const url = links.find((l) => l.getAttribute("rel") === "alternate")?.getAttribute("href")
+      ?? n.getElementsByTagName("id")[0]?.textContent ?? "https://arxiv.org/list/quant-ph/recent";
+    const { actor: a, evidence } = inferActor(`${affil} ${org} ${title}`);
+    const absId = url.split("/abs/")[1] ?? title.slice(0, 40);
+    return { id: `arxiv-${absId}`, stage: "innovation" as Stage, actor: a, provenance: "live" as const,
+      source: "arxiv" as const, title, org, date: pub, url, actorEvidence: evidence };
+  });
+}
+
+// One fresh read across every source that can be fetched from the browser
+// (OpenAlex direct) or through the worker proxy (EPO, NSF). Each leg fails
+// soft — same ethos as the nightly build — so one dead source never blanks
+// the others.
+async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
+  const failed: string[] = [];
+  let innovation: Entry[] = [];
+  try {
+    innovation = await fetchOpenAlex({ mailto: "gtm@example.com" });
+  } catch {
+    try {
+      innovation = await fetchArxivBrowser();
+    } catch {
+      failed.push("innovation");
+    }
+  }
+
+  let patents: Entry[] = [];
+  let funding: Entry[] = [];
+  if (WORKER_URL) {
+    const [pRes, fRes] = await Promise.allSettled([
+      fetch(`${WORKER_URL}/patents`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
+      fetch(`${WORKER_URL}/funding`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
+    ]);
+    if (pRes.status === "fulfilled") patents = pRes.value as Entry[]; else failed.push("patents");
+    if (fRes.status === "fulfilled") funding = fRes.value as Entry[]; else failed.push("funding");
+  }
+
+  return { entries: [...innovation, ...patents, ...funding], failed };
+}
+
 export default function App() {
   const [data, setData] = useState<DataFile | null>(null);
   const [actor, setActor] = useState<Actor | "all">("all");
@@ -47,32 +108,19 @@ export default function App() {
   useEffect(() => {
     fetch(DATA_URL)
       .then((r) => r.json() as Promise<DataFile>)
-      .then((d) => { setData(d); setMode("static"); })
+      .then((d) => {
+        setData(d);
+        setMode("static");
+        refresh(); // layer a live read on top of the static build, once
+      })
       .catch(() => setMode("fallback"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function refresh() {
     setMode("loading");
     try {
-      const res = await fetch(ARXIV_URL);
-      if (!res.ok) throw new Error(String(res.status));
-      const xml = new DOMParser().parseFromString(await res.text(), "application/xml");
-      const nodes = [...xml.getElementsByTagName("entry")];
-      const fresh: Entry[] = nodes.map((n) => {
-        const title = (n.getElementsByTagName("title")[0]?.textContent ?? "").replace(/\s+/g, " ").trim();
-        const pub = (n.getElementsByTagName("published")[0]?.textContent ?? "").slice(0, 10);
-        const authors = [...n.getElementsByTagName("author")];
-        const names = authors.map((a) => a.getElementsByTagName("name")[0]?.textContent ?? "");
-        const affil = authors.map((a) => a.getElementsByTagName("arxiv:affiliation")[0]?.textContent ?? "").join(" ");
-        const org = names.length > 1 ? `${names[0]} et al.` : names[0] ?? "";
-        const links = [...n.getElementsByTagName("link")];
-        const url = links.find((l) => l.getAttribute("rel") === "alternate")?.getAttribute("href")
-          ?? n.getElementsByTagName("id")[0]?.textContent ?? "https://arxiv.org/list/quant-ph/recent";
-        const { actor: a, evidence } = inferActor(`${affil} ${org} ${title}`);
-        const absId = url.split("/abs/")[1] ?? title.slice(0, 40);
-        return { id: `arxiv-${absId}`, stage: "innovation" as Stage, actor: a, provenance: "live" as const,
-          source: "arxiv" as const, title, org, date: pub, url, actorEvidence: evidence };
-      });
+      const { entries: fresh, failed } = await fetchLive();
       setData((prev) => {
         const base = prev?.entries ?? [];
         const byId = new Map<string, Entry>();
@@ -80,7 +128,8 @@ export default function App() {
         return { technology: prev?.technology ?? "quantum-computing", generatedAt: new Date().toISOString(),
           entries: [...byId.values()], trend: prev?.trend ?? [], notes: prev?.notes ?? [] };
       });
-      setMode("refreshed");
+      if (failed.length) console.warn(`live refresh: ${failed.join(", ")} unavailable, kept prior data for those`);
+      setMode(fresh.length > 0 ? "refreshed" : "static");
     } catch { setMode(data ? "static" : "fallback"); }
   }
 

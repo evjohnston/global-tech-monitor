@@ -24,7 +24,13 @@ the hero, look like an instrument.
   where patent/funding sources live.
 - **GitHub Action** (`.github/workflows/build-and-deploy.yml`) fetches daily at
   07:00 UTC, commits the updated data.json back (so trend history accumulates),
-  builds, and deploys to Pages.
+  builds, and deploys to Pages. This keeps running — it's the only thing
+  writing `trend[]`, and nothing below replaces it.
+- **A Cloudflare Worker** (`worker/`) adds a live layer on top of that static
+  base. On page load the browser fetches OpenAlex directly (open CORS, no
+  secret needed) and hits the Worker for EPO patents and NSF funding — both
+  need something a browser can't hold (a client secret, or CORS support that
+  simply doesn't exist on research.gov). See "Live data" below.
 
 ## Data sources and their honesty caveats
 
@@ -91,13 +97,61 @@ forecast line are real (period-over-period comparisons, linear extrapolation
 of `trend[]`), and they disappear/omit rather than show a made-up figure when
 there isn't enough history yet. Keep it that way when adding new panels.
 
+## Live data (Cloudflare Worker)
+
+`worker/` is a separate deployable (its own `package.json`/`wrangler.jsonc`),
+not part of the Vite build. It proxies exactly two sources — EPO and NSF —
+and nothing else; OpenAlex is CORS-open so the browser calls it directly
+(`src/App.tsx` → `fetchLive()`). Both the Worker and the Node fetch script
+import the *same* `src/lib/sources/{openalex,epo,nsf}.ts` modules, so
+attribution logic can't drift between the live path and the nightly build.
+
+Responses are cached at the edge for an hour — patents lag ~18 months and NSF
+posts a few times a day, so there's no honest reason to hit either upstream
+on every page load. CORS is locked to `ALLOWED_ORIGINS` (checked against the
+request's `Origin` header), not left open with `*`.
+
+**Deployed.** Live at `https://gtm-live-proxy.evjohnston.workers.dev`, under
+the `evj@stanford.edu` Cloudflare account. `ALLOWED_ORIGINS` in
+`wrangler.jsonc` already includes `https://evjohnston.github.io` alongside
+the localhost dev ports. `VITE_WORKER_URL` is set both in `.env.local` (local
+dev) and in `build-and-deploy.yml`'s Build step (production) — it's a public
+URL, not a secret, so it's fine committed in the workflow file.
+
+EPO_KEY / EPO_SECRET were deliberately skipped — that account is taking a
+while to set up. `/patents` soft-fails cleanly (`{"error":"EPO key/secret not
+set"}`) until they're added:
+```
+cd worker
+npx wrangler secret put EPO_KEY             # paste when prompted
+npx wrangler secret put EPO_SECRET
+npm run deploy                              # re-deploy to pick them up
+```
+
+Redeploying after any other change to `worker/`: `cd worker && npm run
+deploy` (already logged in — no need to re-run `wrangler login`).
+
+Local dev doesn't need login: `cd worker && npm run dev` runs on
+`localhost:8787` against `.dev.vars` (copy `.dev.vars.example`, fill in real
+EPO creds if you want patents locally — NSF needs no key either way). Swap
+`VITE_WORKER_URL` in `.env.local` to point at it instead of the deployed
+Worker when iterating on `worker/` itself.
+
+If `VITE_WORKER_URL` is unset, the app just skips patents/funding on the live
+path and falls back to whatever the last static build had for those stages —
+soft-fail, same as everywhere else in this project.
+
 ## Things to preserve
 
 - The `live` vs `seeded` provenance label on entries — the UI must never imply
   curated data is a live feed.
 - The China-funding caveat in the investment section.
-- Soft-fail on every fetch source.
-- The daily commit of data.json (trend accumulation depends on it).
+- Soft-fail on every fetch source, including the Worker's two proxied routes.
+- The daily commit of data.json (trend accumulation depends on it — the
+  Worker is additive freshness on top, not a replacement for this).
+- One shared implementation per source (`src/lib/sources/*`) — if you touch
+  attribution or transform logic for OpenAlex/EPO/NSF, edit it there once,
+  not in the Node script and the Worker separately.
 
 ## How to extend
 
@@ -121,6 +175,12 @@ npm install
 npm run fetch-data   # writes public/data.json (watch the source lines it prints)
 npm run dev
 npm run build
+npm run typecheck
+
+cd worker
+npm install
+npm run dev          # local proxy on :8787, no login needed
+npm run deploy       # needs `npx wrangler login` first
 npm run typecheck
 ```
 

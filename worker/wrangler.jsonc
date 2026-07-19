@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gtm-live-proxy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-18",
+  "observability": {
+    "enabled": true
+  },
+  // Non-secret config only. EPO_KEY / EPO_SECRET are set with
+  // `wrangler secret put EPO_KEY` (and EPO_SECRET) when that account is
+  // ready — skipped for now, /patents just soft-fails with a clear error
+  // until they're added. Never put real credentials in this file.
+  "vars": {
+    "ALLOWED_ORIGINS": "http://localhost:5173,http://localhost:5183,https://evjohnston.github.io"
+  }
+}
