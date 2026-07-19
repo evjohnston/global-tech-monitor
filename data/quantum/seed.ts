@@ -1,4 +1,4 @@
-import type { Entry } from "../src/lib/types.ts";
+import type { Entry } from "../../src/lib/types.ts";
 
 // Hand-curated entries for the pipeline stages that have no clean live feed.
 // This is the honest layer: production/scaling milestones and adoption events

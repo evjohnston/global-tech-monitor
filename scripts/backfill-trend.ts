@@ -12,7 +12,9 @@
  *
  * Existing trend points win over backfilled ones for the same date (a real
  * recorded run is strictly better than a reconstruction), and days already
- * covered are left alone. Run with: npm run backfill-trend
+ * covered are left alone.
+ *
+ * Run with: npm run backfill-trend -- <vertical-id>   (defaults to quantum-computing)
  */
 import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -20,11 +22,14 @@ import { fileURLToPath } from "node:url";
 import { config } from "dotenv";
 import { fetchOpenAlexPages } from "../src/lib/sources/openalex.ts";
 import type { DataFile, TrendPoint } from "../src/lib/types.ts";
+import { verticalById } from "../src/lib/verticals.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // See scripts/fetch-data.ts for why this is needed when running via tsx directly.
 config({ path: resolve(__dirname, "../.env.local") });
-const OUT = resolve(__dirname, "../public/data.json");
+
+const v = verticalById(process.argv[2] ?? "quantum-computing");
+const OUT = resolve(__dirname, `../public/data/${v.id}.json`);
 const OA_KEY = process.env.OPENALEX_KEY ?? "";
 const OA_MAILTO = process.env.OPENALEX_MAILTO ?? "gtm@example.com";
 
@@ -34,12 +39,13 @@ const ROLLING_WINDOW = 30; // matches the live query's sinceDays, so each
 const FETCH_WINDOW = BACKFILL_DAYS + ROLLING_WINDOW; // need works back this far
 
 async function main() {
+  console.log(`backfilling trend for ${v.label} (${v.id})`);
   if (!existsSync(OUT)) throw new Error(`${OUT} doesn't exist — run npm run fetch-data first`);
   const data = JSON.parse(readFileSync(OUT, "utf8")) as DataFile;
 
   console.log(`fetching ${FETCH_WINDOW}-day window of OpenAlex works...`);
   const works = await fetchOpenAlexPages({
-    key: OA_KEY, mailto: OA_MAILTO, sinceDays: FETCH_WINDOW, n: 200, pages: 8,
+    filter: v.openAlexFilter, key: OA_KEY, mailto: OA_MAILTO, sinceDays: FETCH_WINDOW, n: 200, pages: 8,
   });
   console.log(`fetched ${works.length} works with real publication dates`);
 

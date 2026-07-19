@@ -10,7 +10,7 @@
  * only if `npm update world-countries` changes the ISO country list (rare —
  * it doesn't need to be part of the regular build).
  */
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import worldCountries from "world-countries";
@@ -26,6 +26,21 @@ for (const c of worldCountries as Array<{ cca2: string; region: string; subregio
   else if (c.region === "Asia") map[c.cca2] = "asia";
   else if (c.region === "Africa") map[c.cca2] = "africa";
   else if (c.region === "Oceania") map[c.cca2] = "oceania";
+}
+
+// world-countries has no Middle East region of its own — it folds those
+// countries into Asia (Egypt into Africa). country.json (hand-supplied,
+// 2026-07-19) carries an explicit Middle East bucket, so those specific
+// codes are overridden after the world-countries base pass rather than left
+// on whatever world-countries called them. Everything else stays on the
+// generated, not-hand-maintained, base — this is a one-region carve-out,
+// not a switch to a fully hand-maintained table.
+const countryInfo = JSON.parse(readFileSync(resolve(__dirname, "../country.json"), "utf-8")).country_info as Record<
+  string,
+  [string, string]
+>;
+for (const [code, [, region]] of Object.entries(countryInfo)) {
+  if (region === "Middle East") map[code] = "middle-east";
 }
 
 const body =

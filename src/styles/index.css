@@ -12,6 +12,11 @@
      country badge never reads as "the brand color." */
   --cont-na: #2f4b6e; --cont-sa: #4d8a7a; --cont-eu: #b08343;
   --cont-as: #ab4a41; --cont-af: #c2762e; --cont-oc: #7a6a9e;
+  /* Middle East split out from Asia (v4.1, 2026-07-19, from a hand-supplied
+     country->region table) — olive, the one hue (~60°) the other six tones
+     don't already occupy, so it doesn't crowd the warm tan/orange/brick
+     cluster (--cont-eu/-af/-as) that a bordering Asia/Middle East hue would. */
+  --cont-me: #8f8a3a;
   --ink: #14181d; --ink-2: #3a434e; --slate: #5c6773; --mist: #7c8794;
   --line: #dfe2e5; --line-2: #cdd3da; --panel: #f4f5f6; --panel-2: #eef1f4; --paper: #ffffff;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -33,6 +38,10 @@ a { color: inherit; }
 .wordmark .gtm { color: var(--red); }
 .topbar-meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--mist); display: flex; gap: 14px; flex-wrap: wrap; }
 .topbar-meta .on { color: #1f9d55; }
+.verticals { display: flex; gap: 4px; }
+.vtab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 9px; border: 1px solid var(--line-2); background: var(--paper); color: var(--mist); cursor: pointer; border-radius: 0; }
+.vtab:hover { border-color: var(--slate); color: var(--ink); }
+.vtab[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 
 /* ── page head ──────────────────────────────────────────────────── */
 .pagehead { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0 10px; gap: 12px; flex-wrap: wrap; }

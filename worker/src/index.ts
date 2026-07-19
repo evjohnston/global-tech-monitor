@@ -17,8 +17,9 @@
 // honest reason to hit any upstream on every page load.
 import { fetchPatents } from "../../src/lib/sources/epo.ts";
 import { fetchNSF } from "../../src/lib/sources/nsf.ts";
-import { fetchQuantumNewsRss } from "../../src/lib/sources/rss.ts";
+import { fetchNewsRss } from "../../src/lib/sources/rss.ts";
 import type { Entry } from "../../src/lib/types.ts";
+import { verticalById } from "../../src/lib/verticals.ts";
 
 export interface Env {
   EPO_KEY: string;
@@ -82,15 +83,21 @@ export default {
       return withCors(json({ error: "method not allowed" }, 405), origin);
     }
 
+    // Defaults to quantum for a bare-URL request (back-compat with the first
+    // vertical's existing cached clients); every real caller since the
+    // multi-vertical build passes ?vertical=<id> explicitly. Included in the
+    // cache key automatically since `cached()` keys off the full request URL.
+    const vertical = verticalById(url.searchParams.get("vertical") ?? "quantum-computing");
+
     try {
       if (url.pathname === "/patents") {
-        return withCors(await cached(req, () => fetchPatents(env.EPO_KEY, env.EPO_SECRET, EPO_N)), origin);
+        return withCors(await cached(req, () => fetchPatents(env.EPO_KEY, env.EPO_SECRET, EPO_N, vertical.epoCpcQuery)), origin);
       }
       if (url.pathname === "/funding") {
-        return withCors(await cached(req, () => fetchNSF(NSF_N)), origin);
+        return withCors(await cached(req, () => fetchNSF(NSF_N, vertical.fundingKeyword)), origin);
       }
       if (url.pathname === "/news") {
-        return withCors(await cached(req, () => fetchQuantumNewsRss(30)), origin);
+        return withCors(await cached(req, () => fetchNewsRss(vertical.rssFeeds, vertical.rssClassifier, 30)), origin);
       }
       if (url.pathname === "/" || url.pathname === "/health") {
         return withCors(json({ ok: true, routes: ["/patents", "/funding", "/news"] }), origin);

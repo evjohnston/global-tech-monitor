@@ -2,24 +2,28 @@
 // the Cloudflare Worker, and the browser's live-refresh path. Runtime-agnostic:
 // only uses global fetch, so it runs unmodified in Node 20+, Workers, and browsers.
 //
-// Filters by OpenAlex's structured Topic "Quantum Computing Algorithms and
-// Architecture" (T10682) restricted to journal-type sources, NOT by arXiv as
-// primary location. Checked by hand before this was the query: filtering to
-// arXiv-as-primary-location gave 0/50 works with ANY institution data (arXiv
-// doesn't collect structured affiliations at submission, and OpenAlex mostly
-// never backfills it for preprints — confirmed by sampling papers up to a
-// year old, not just recent ones). The Topic+journal filter gives ~30-70% of
-// works with real institution data in the same kind of sample (checked by
-// hand, varies by date window). Trade-off: journal publication lags
-// preprints, so this reads a few weeks to months behind the newest arXiv
-// postings — the arXiv fallback below exists for when OpenAlex itself is
-// unreachable, not as a "fresher" alternate feed.
+// `opts.filter` is a raw OpenAlex filter fragment identifying the vertical —
+// see src/lib/verticals.ts for the per-vertical values. Both verticals now
+// use an explicit OR'd list of Topic ids (`topics.id:T1|T2|...`) rather than
+// a single Topic or a whole Subfield rollup — OpenAlex's Topic taxonomy
+// fragments AI across dozens of narrow application topics with no single
+// cohesive "core AI" Topic the way quantum's core is T10682, and even a
+// same-subfield rollup pulls in real noise (unrelated topics OpenAlex
+// miscategorizes into that subfield), so each vertical's filter is a
+// hand-checked list of the Topic ids that actually returned on-topic works
+// on a live sample; see verticals.ts. Every
+// vertical restricts to journal-type sources, NOT arXiv-as-primary-location:
+// checked by hand for quantum that arXiv-as-primary-location gave 0/50 works
+// with ANY institution data (arXiv doesn't collect structured affiliations
+// at submission, and OpenAlex mostly never backfills it for preprints).
+// Trade-off: journal publication lags preprints by weeks to months — the
+// arXiv fallback below exists for when OpenAlex itself is unreachable, not
+// as a "fresher" alternate feed.
 import type { Entry } from "../types.ts";
 import { inferInstitutionCountry } from "../institutionCountry.ts";
 
-const TOPIC_QUANTUM_COMPUTING = "T10682";
-
 export interface OpenAlexOpts {
+  filter: string; // raw OpenAlex filter fragment, e.g. "topics.id:T10682" or "primary_topic.subfield.id:1702"
   key?: string; // OPENALEX_KEY — optional, raises the rate limit
   mailto?: string; // polite pool — identifies the caller to OpenAlex
   sinceDays?: number;
@@ -59,14 +63,14 @@ function orgFromRawAffiliation(raw: string): string {
   return raw.split(",")[0].replace(/\.$/, "").trim();
 }
 
-export async function fetchOpenAlex(opts: OpenAlexOpts = {}): Promise<Entry[]> {
-  const { key = "", mailto = "gtm@example.com", sinceDays = 30, n = 40, page = 1 } = opts;
+export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
+  const { filter, key = "", mailto = "gtm@example.com", sinceDays = 30, n = 40, page = 1 } = opts;
   const since = new Date(Date.now() - sinceDays * 864e5).toISOString().slice(0, 10);
   const url =
     "https://api.openalex.org/works" +
     "?filter=" +
     [
-      `topics.id:${TOPIC_QUANTUM_COMPUTING}`,
+      filter,
       "primary_location.source.type:journal",
       `from_publication_date:${since}`,
     ].join(",") +
@@ -142,7 +146,7 @@ export async function fetchOpenAlex(opts: OpenAlexOpts = {}): Promise<Entry[]> {
 // number of PAGES; each page is a full 200-item request. One implementation
 // used by both the nightly build and the browser's live refresh, so paging
 // behavior can't drift between them.
-export async function fetchOpenAlexPages(opts: OpenAlexOpts & { pages?: number } = {}): Promise<Entry[]> {
+export async function fetchOpenAlexPages(opts: OpenAlexOpts & { pages?: number }): Promise<Entry[]> {
   const { pages = 1, ...rest } = opts;
   const byId = new Map<string, Entry>();
   for (let page = 1; page <= pages; page++) {

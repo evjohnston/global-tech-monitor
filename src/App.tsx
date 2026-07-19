@@ -4,6 +4,7 @@ import { STAGES } from "./lib/types.ts";
 import { inferInstitutionCountry } from "./lib/institutionCountry.ts";
 import { countryColor, countryName } from "./lib/countries.ts";
 import { fetchOpenAlexPages } from "./lib/sources/openalex.ts";
+import { VERTICALS, type VerticalConfig } from "./lib/verticals.ts";
 import {
   countByCountry, countByStage, countryShares,
   fundingByCountry, orgLeaderboard, pctDelta, periodCounts, periodFunding, topCountries,
@@ -19,14 +20,10 @@ import { RecentEntries } from "./components/RecentEntries.tsx";
 import { PieChart } from "./components/PieChart.tsx";
 
 type LiveMode = "loading" | "static" | "refreshed" | "fallback";
-const DATA_URL = `${import.meta.env.BASE_URL}data.json`;
 // The EPO/NSF/news proxy — see worker/. Unset in dev until you've deployed
 // one and added VITE_WORKER_URL to .env.local; those sources are just
 // skipped (soft-fail) when it's not configured.
 const WORKER_URL = (import.meta.env.VITE_WORKER_URL as string | undefined)?.replace(/\/$/, "");
-const ARXIV_URL =
-  "https://export.arxiv.org/api/query?search_query=cat:quant-ph" +
-  "&sortBy=submittedDate&sortOrder=descending&max_results=200";
 const WINDOW_DAYS = 21;
 const TOP_N = 6; // compact-view country count — every real country still gets
 // counted everywhere; this only bounds how many show up in chips/bars/KPIs.
@@ -47,8 +44,11 @@ function fmtDelta(pct: number | null): string | null {
 // arXiv fallback for the browser path — only used if a direct OpenAlex call
 // fails. Kept separate from scripts/lib/sources/* because it leans on
 // DOMParser, which only exists in the browser.
-async function fetchArxivBrowser(): Promise<Entry[]> {
-  const res = await fetch(ARXIV_URL);
+async function fetchArxivBrowser(category: string): Promise<Entry[]> {
+  const url =
+    `https://export.arxiv.org/api/query?search_query=cat:${encodeURIComponent(category)}` +
+    "&sortBy=submittedDate&sortOrder=descending&max_results=200";
+  const res = await fetch(url);
   if (!res.ok) throw new Error(String(res.status));
   const xml = new DOMParser().parseFromString(await res.text(), "application/xml");
   const nodes = [...xml.getElementsByTagName("entry")];
@@ -61,7 +61,7 @@ async function fetchArxivBrowser(): Promise<Entry[]> {
     const org = names.length > 1 ? `${names[0]} et al.` : names[0] ?? "";
     const links = [...n.getElementsByTagName("link")];
     const url = links.find((l) => l.getAttribute("rel") === "alternate")?.getAttribute("href")
-      ?? n.getElementsByTagName("id")[0]?.textContent ?? "https://arxiv.org/list/quant-ph/recent";
+      ?? n.getElementsByTagName("id")[0]?.textContent ?? `https://arxiv.org/list/${category}/recent`;
     const { country, evidence } = inferInstitutionCountry(`${affil} ${org} ${title}`);
     const absId = url.split("/abs/")[1] ?? title.slice(0, 40);
     return { id: `arxiv-${absId}`, stage: "innovation" as Stage, country, provenance: "auto" as const,
@@ -72,15 +72,16 @@ async function fetchArxivBrowser(): Promise<Entry[]> {
 // One fresh read across every source that can be fetched from the browser
 // (OpenAlex direct) or through the worker proxy (EPO, NSF, news). Each leg
 // fails soft — same ethos as the nightly build — so one dead source never
-// blanks the others.
-async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
+// blanks the others. `?vertical=<id>` tells the Worker which CPC/keyword/RSS
+// config to use (see worker/src/index.ts + src/lib/verticals.ts).
+async function fetchLive(v: VerticalConfig): Promise<{ entries: Entry[]; failed: string[] }> {
   const failed: string[] = [];
   let innovation: Entry[] = [];
   try {
-    innovation = await fetchOpenAlexPages({ mailto: "gtm@example.com", n: 200, pages: 3 });
+    innovation = await fetchOpenAlexPages({ filter: v.openAlexFilter, mailto: "gtm@example.com", n: 200, pages: 3 });
   } catch {
     try {
-      innovation = await fetchArxivBrowser();
+      innovation = await fetchArxivBrowser(v.arxivCategory);
     } catch {
       failed.push("innovation");
     }
@@ -90,10 +91,11 @@ async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
   let funding: Entry[] = [];
   let news: Entry[] = [];
   if (WORKER_URL) {
+    const q = `?vertical=${encodeURIComponent(v.id)}`;
     const [pRes, fRes, nRes] = await Promise.allSettled([
-      fetch(`${WORKER_URL}/patents`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
-      fetch(`${WORKER_URL}/funding`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
-      fetch(`${WORKER_URL}/news`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
+      fetch(`${WORKER_URL}/patents${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
+      fetch(`${WORKER_URL}/funding${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
+      fetch(`${WORKER_URL}/news${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
     ]);
     if (pRes.status === "fulfilled") patents = pRes.value as Entry[]; else failed.push("patents");
     if (fRes.status === "fulfilled") funding = fRes.value as Entry[]; else failed.push("funding");
@@ -104,13 +106,20 @@ async function fetchLive(): Promise<{ entries: Entry[]; failed: string[] }> {
 }
 
 export default function App() {
+  const [verticalId, setVerticalId] = useState(VERTICALS[0].id);
+  const vertical = VERTICALS.find((v) => v.id === verticalId) ?? VERTICALS[0];
   const [data, setData] = useState<DataFile | null>(null);
   const [country, setCountry] = useState<string | "all">("all");
   const [mode, setMode] = useState<LiveMode>("loading");
   const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(DATA_URL)
+    setData(null);
+    setMode("loading");
+    setCountry("all");
+    setHighlightOrg(null);
+    const dataUrl = `${import.meta.env.BASE_URL}data/${vertical.id}.json`;
+    fetch(dataUrl)
       .then((r) => r.json() as Promise<DataFile>)
       .then((d) => {
         setData(d);
@@ -119,17 +128,17 @@ export default function App() {
       })
       .catch(() => setMode("fallback"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [vertical.id]);
 
   async function refresh() {
     setMode("loading");
     try {
-      const { entries: fresh, failed } = await fetchLive();
+      const { entries: fresh, failed } = await fetchLive(vertical);
       setData((prev) => {
         const base = prev?.entries ?? [];
         const byId = new Map<string, Entry>();
         for (const e of [...base, ...fresh]) byId.set(e.id, e);
-        return { technology: prev?.technology ?? "quantum-computing", generatedAt: new Date().toISOString(),
+        return { technology: prev?.technology ?? vertical.id, generatedAt: new Date().toISOString(),
           entries: [...byId.values()], trend: prev?.trend ?? [], notes: prev?.notes ?? [] };
       });
       if (failed.length) console.warn(`live refresh: ${failed.join(", ")} unavailable, kept prior data for those`);
@@ -186,22 +195,27 @@ export default function App() {
   const investmentPeriod = useMemo(() => periodCounts(entries, "investment", WINDOW_DAYS), [entries]);
   const fundingPeriod = useMemo(() => periodFunding(entries, WINDOW_DAYS), [entries]);
 
+  // The headline comparison is "who leads, and by how much" — computed off
+  // whichever two countries actually lead this vertical's innovation output,
+  // not hardcoded to US/CN (that was a quantum-specific assumption that
+  // doesn't generalize once other verticals with different leaders exist).
+  const top2 = useMemo(() => topCountries(innovationCounts, 2).top, [innovationCounts]);
+  const [leadCountry, runnerUp] = [top2[0]?.country, top2[1]?.country];
   const overallShares = useMemo(() => countryShares(innovationCounts), [innovationCounts]);
-  const shareGap = (overallShares.US ?? 0) - (overallShares.CN ?? 0);
-  const shareGapLeader = shareGap >= 0 ? "US" : "CN";
+  const shareGap = leadCountry ? (overallShares[leadCountry] ?? 0) - (runnerUp ? overallShares[runnerUp] ?? 0 : 0) : 0;
   const gapTrendLabel = useMemo(() => {
-    if (trend.length < 2) return null;
+    if (trend.length < 2 || !leadCountry) return null;
     const gapAt = (i: number) => {
       const s = countryShares(trend[i].counts);
-      return (s.US ?? 0) - (s.CN ?? 0);
+      return (s[leadCountry] ?? 0) - (runnerUp ? s[runnerUp] ?? 0 : 0);
     };
     const diff = gapAt(trend.length - 1) - gapAt(0);
     return Math.abs(diff) < 0.5 ? "flat" : diff < 0 ? "narrowing" : "widening";
-  }, [trend]);
+  }, [trend, leadCountry, runnerUp]);
 
-  // Forecast lines: top 5 countries by current innovation volume, always
-  // including US/CN if they have any presence, so the headline comparison
-  // never silently drops off the chart it anchors.
+  // Forecast lines: top 5 countries by current innovation volume — always
+  // whichever countries actually lead, so the headline comparison never
+  // silently drops off the chart it anchors.
   const forecastCountries = useMemo(() => topCountries(innovationCounts, 5).top.map((c) => c.country), [innovationCounts]);
   // Project out to Dec 31 of the last recorded trend year, not a fixed
   // step count — "current trajectory through year end," derived from the
@@ -236,8 +250,19 @@ export default function App() {
       <div className="topbar">
         <div className="topbar-inner">
           <span className="wordmark"><span className="gtm">GTM</span> / Global Tech Monitor</span>
+          <span className="verticals">
+            {VERTICALS.map((v) => (
+              <button
+                key={v.id}
+                className="vtab"
+                aria-pressed={v.id === vertical.id}
+                onClick={() => setVerticalId(v.id)}
+              >
+                {v.number} · {v.shortLabel}
+              </button>
+            ))}
+          </span>
           <span className="topbar-meta">
-            <span>Vertical 01 · Quantum</span>
             <span className={mode === "refreshed" ? "on" : ""}>● {statusText}</span>
             <span>updated {generated}</span>
           </span>
@@ -248,7 +273,7 @@ export default function App() {
         <div className="pagehead">
           <div>
             <h1>Global Tech Monitor</h1>
-            <div className="sub">Quantum computing · innovation, scaling, adoption, investment</div>
+            <div className="sub">{vertical.tagline}</div>
           </div>
         </div>
 
@@ -280,8 +305,8 @@ export default function App() {
             caption={`works + patents, trailing ${WINDOW_DAYS}d`}
           />
           <KpiCard
-            label="US – CN share gap"
-            value={`${shareGapLeader} +${Math.abs(shareGap).toFixed(0)}pt`}
+            label={runnerUp ? `${countryName(leadCountry)} – ${countryName(runnerUp)} share gap` : "Leader share"}
+            value={leadCountry ? `${leadCountry} +${Math.abs(shareGap).toFixed(0)}pt` : "—"}
             delta={gapTrendLabel}
             caption={gapTrendLabel ? `since ${trend[0]?.date}` : "not enough history yet"}
           />
@@ -408,9 +433,9 @@ export default function App() {
         <footer className="foot">
           <div className="h">Sources & method</div>
           Innovation streams from OpenAlex (institution country codes) with an arXiv fallback, plus EPO
-          patents where a key is set. Scaling and adoption are curated in <code>data/seed.ts</code> plus a
+          patents where a key is set. Scaling and adoption are curated in <code>data/{vertical.dataDir}/seed.ts</code> plus a
           live RSS layer. Investment is NSF Awards (US) — no equivalent public feed exists for China.
-          Analyst notes live in <code>data/notes.ts</code>. Every entry logs the real country an
+          Analyst notes live in <code>data/{vertical.dataDir}/notes.ts</code>. Every entry logs the real country an
           institution/awardee/filer is located in — country attribution is a lead, not a verdict. Forecast
           lines are a linear extrapolation of recorded trend points, not a measurement.
           <div className="sig">Ideas Advancing Freedom</div>

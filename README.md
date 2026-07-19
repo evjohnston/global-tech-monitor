@@ -1,9 +1,12 @@
 # Global Tech Monitor
 
 A pipeline view of a technology from research through scaling to adoption.
-Vertical 01: **quantum computing.**
+Multi-vertical: Vertical 01 is **quantum computing**, Vertical 02 is
+**artificial intelligence**, switchable via the tabs in the topbar. Adding a
+vertical is real research work (verified data sources, not a flag) — see
+CLAUDE.md's "Multi-vertical architecture" section before adding one.
 
-Four stages, plus data-visualization up top:
+Four stages per vertical, plus data-visualization up top:
 
 1. **Innovation** — research (OpenAlex, with arXiv fallback) and patents (EPO).
 2. **Production / scaling** — hardware milestones (hand-verified floor + live RSS).

@@ -16,7 +16,7 @@ countries.registerLocale(en);
 // for one field. "Americas" splits into North and South by subregion;
 // Central America + the Caribbean fold into North America, the standard
 // 7-continent grouping.
-export type Continent = "north-america" | "south-america" | "europe" | "asia" | "africa" | "oceania";
+export type Continent = "north-america" | "south-america" | "europe" | "asia" | "africa" | "oceania" | "middle-east";
 
 export function continentOf(code: string | null | undefined): Continent | null {
   if (!code) return null;
@@ -67,6 +67,7 @@ const CONTINENT_COLOR: Record<Continent, string> = {
   asia: "var(--cont-as)",
   africa: "var(--cont-af)",
   oceania: "var(--cont-oc)",
+  "middle-east": "var(--cont-me)",
 };
 
 export function countryColor(code: string | null | undefined): string {

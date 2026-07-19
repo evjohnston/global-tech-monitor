@@ -6,7 +6,7 @@ export type Stage = "innovation" | "scaling" | "adoption" | "investment";
 // Where an entry came from, and — crucially — how much to trust it.
 // "live" = institution/awardee-attributed real data (OpenAlex, NSF, EPO).
 // "seeded" = hand-verified by a human, fetched and confirmed against its
-// source before being added (data/seed.ts).
+// source before being added (data/<vertical>/seed.ts).
 // "auto" = live-fetched (RSS) but machine-classified — stage and country are
 // a keyword guess, not a verified fact. Weakest tier; the UI must say so.
 export type Provenance = "live" | "seeded" | "auto";
@@ -52,7 +52,7 @@ export interface TrendPoint {
 }
 
 // A dated analyst note attached to a pipeline stage — the "so what" layer.
-// Written by a human, held in data/notes.ts. This is what a 10-minute reader
+// Written by a human, held in data/<vertical>/notes.ts. This is what a 10-minute reader
 // gets before the raw feed.
 export interface StageNote {
   stage: Stage;
@@ -64,7 +64,7 @@ export interface StageNote {
 
 // The shape of the committed data file the app reads at load.
 export interface DataFile {
-  technology: string; // "quantum-computing"
+  technology: string; // vertical id — see src/lib/verticals.ts, e.g. "quantum-computing"
   generatedAt: string; // ISO timestamp of the last fetch run
   entries: Entry[];
   trend: TrendPoint[]; // accumulated country-share history
@@ -80,7 +80,7 @@ export const STAGES: { id: Stage; label: string; blurb: string }[] = [
   {
     id: "scaling",
     label: "Production / scaling",
-    blurb: "Engineering the qubit count. Hardware milestones and fab capacity.",
+    blurb: "Engineering to scale. Hardware milestones and capacity.",
   },
   {
     id: "adoption",

@@ -7,25 +7,88 @@ README, then `src/lib/types.ts` (the data contract) before making changes.
 ## What this is
 
 Global Tech Monitor — a pipeline view of a technology from research through
-scaling, adoption, and public investment. Vertical 01 is quantum computing.
-It's meant as a research instrument for a policy audience (Hoover/TFL), not a
-consumer dashboard. Reference point for the design and framing is ASPI's
-Critical Technology Tracker: lead with country comparison, treat data-viz as
-the hero, look like an instrument.
+scaling, adoption, and public investment. Multi-vertical as of 2026-07-19:
+Vertical 01 is quantum computing, Vertical 02 is artificial intelligence, and
+more critical/emerging technologies (biotechnology, semiconductors, space)
+are the intended next additions — see "Multi-vertical architecture" below
+before adding one. It's meant as a research instrument for a policy audience
+(Hoover/TFL), not a consumer dashboard. Reference point for the design and
+framing is ASPI's Critical Technology Tracker: lead with country comparison,
+treat data-viz as the hero, look like an instrument.
+
+## Multi-vertical architecture
+
+Every technology tracked by this app is one entry in `VERTICALS`,
+`src/lib/verticals.ts` — the single source of truth every fetch path reads
+from (the nightly script, the Worker, the browser's live-refresh path).
+A `VerticalConfig` carries: `id` (also the `public/data/<id>.json` filename
+and `DataFile.technology` value), `number`/`label`/`shortLabel`/`tagline`
+(topbar + pagehead display), `dataDir` (`data/<dataDir>/{seed,notes}.ts`),
+`openAlexFilter` (a raw OpenAlex filter fragment), `arxivCategory` (the
+break-glass fallback if OpenAlex itself is down), `epoCpcQuery` (a raw EPO
+OPS CQL fragment), `fundingKeyword` (NSF Awards API keyword), and
+`rssFeeds`/`rssClassifier` (that vertical's trade press + keyword
+classifier). `src/lib/sources/{openalex,epo,nsf,rss}.ts` are tech-agnostic
+machinery that take these as parameters — none of them hardcode a technology
+anymore. `scripts/fetch-data.ts` loops over `VERTICALS` and writes one
+`public/data/<id>.json` per vertical; `App.tsx` has a topbar tab per vertical
+(`.vtab` buttons) that switches which data file is loaded and which
+`?vertical=<id>` query param gets passed to the Worker's live routes.
+
+**Adding a vertical is real research work, not a config flag.** Each one
+needs, checked by hand before it goes in `VERTICALS`:
+- An OpenAlex filter that actually gets good institution-country coverage on
+  a real sample (`primary_location.source.type:journal` restricted) — a
+  Topic id if the field has one cohesive Topic (quantum: T10682), or a
+  broader Subfield id if it doesn't (AI/ML: OpenAlex fragments "AI" across
+  dozens of narrow application Topics with no dominant one, so it uses
+  Subfield 1702 instead — checked institution-data quality by hand, 49/50
+  sampled works had real structured country data).
+- A real EPO CPC classification code (or an OR'd pair, if the field spans
+  more than one — AI uses `G06N3 OR G06N20`, neural networks + machine
+  learning specifically, since there's no single code the way quantum has
+  G06N10). Verify against USPTO/WIPO CPC definitions, not from memory.
+- A funding-source keyword for the NSF Awards API (or a different funding
+  API entirely, if NSF's US-centric coverage is a bad fit for the field —
+  biotechnology, for instance, might fit NIH grants better).
+- Real, hand-verified RSS feeds from actively-publishing trade press (valid
+  RSS 2.0, checked by curl) — see `QUANTUM_RSS_FEEDS`/`AI_RSS_FEEDS` in
+  `verticals.ts` for the bar. Check each feed's `Access-Control-Allow-Origin`
+  header too — the Worker proxies the ones that don't send one.
+- A keyword classifier (`relevant`/`scaling`/`adoption` regexes) tuned
+  against that vertical's real news vocabulary — reuse
+  `DEFAULT_EXCLUDE_WORDS` from `rss.ts` for the generic personnel/podcast/
+  funding-round noise filter, don't rewrite it per vertical.
+- A `data/<dataDir>/seed.ts` floor of real, individually-verified scaling/
+  adoption milestones (same standard as `data/quantum/seed.ts`: fetched and
+  confirmed against the source URL before being added) and a
+  `data/<dataDir>/notes.ts` analyst-note set (one per stage, house style
+  below). The AI vertical's initial 171-entry seed set (77 scaling/94
+  adoption, spanning 32 countries) was built by dispatching parallel research
+  agents across distinct real-world domains (OpenAI/Anthropic; Google
+  DeepMind/Meta/xAI/Mistral; AI hardware/data-centers; China's ecosystem;
+  national government AI policy; commercial/enterprise adoption), each
+  required to verify every claim against a real source URL — that's the
+  effort level to expect per new vertical, not a quick pass.
+- Register the new entries in `scripts/fetch-data.ts`'s
+  `SEED_BY_VERTICAL`/`NOTES_BY_VERTICAL` maps (static imports — fine at this
+  scale; revisit if the vertical list grows large).
 
 ## Stack and why
 
 - **Vite + React + TypeScript.** Types matter here because entries have a real
   shape and the project grows by adding verticals.
 - **A Node fetch script** (`scripts/fetch-data.ts`) runs server-side — on a
-  daily GitHub Action — and writes `public/data.json`. The app reads that JSON,
-  so the page is static, instant, and works on GitHub Pages with no server.
-  Fetching server-side is deliberate: it dodges browser CORS limits and is
-  where patent/funding sources live.
+  daily GitHub Action — and writes `public/data/<vertical-id>.json`, one per
+  entry in `VERTICALS`. The app reads whichever JSON matches the active
+  vertical tab, so the page is static, instant, and works on GitHub Pages
+  with no server. Fetching server-side is deliberate: it dodges browser CORS
+  limits and is where patent/funding sources live.
 - **GitHub Action** (`.github/workflows/build-and-deploy.yml`) fetches daily at
-  07:00 UTC, commits the updated data.json back (so trend history accumulates),
-  builds, and deploys to Pages. This keeps running — it's the only thing
-  writing `trend[]`, and nothing below replaces it.
+  07:00 UTC, commits the updated data files back (so trend/entries history
+  accumulates for every vertical), builds, and deploys to Pages. This keeps
+  running — it's the only thing writing `trend[]`, and nothing below
+  replaces it.
 - **A Cloudflare Worker** (`worker/`) adds a live layer on top of that static
   base. On page load the browser fetches OpenAlex directly (open CORS, no
   secret needed) and hits the Worker for EPO patents, NSF funding, and
@@ -253,16 +316,21 @@ script import the *same* `src/lib/sources/{openalex,epo,nsf,rss}.ts`
 modules, so attribution/classification logic can't drift between the live
 path and the nightly build.
 
-The RSS feeds are listed in `src/lib/sources/rss.ts`'s `QUANTUM_NEWS_FEEDS` —
-checked by hand before adding any of them (must return valid RSS 2.0 XML
-from a real, actively-publishing quantum-industry outlet). Add more there,
-not as a one-off fetch somewhere else. The classifier in that file
-(`SCALING_WORDS`/`ADOPTION_WORDS`/`EXCLUDE_WORDS`) was tuned against real
-false positives — personnel/hiring announcements and podcast episodes were
-both getting swept in on loose keyword overlap, and money-amount words
-alone were catching private funding-round news that doesn't belong in
-either stage. If you loosen the classifier, re-run `npm run fetch-data` and
-read the actual `rss-*` entries it produces before trusting it.
+The RSS feeds and classifiers are per-vertical config in
+`src/lib/verticals.ts` (`QUANTUM_RSS_FEEDS`/`QUANTUM_RSS_CLASSIFIER`,
+`AI_RSS_FEEDS`/`AI_RSS_CLASSIFIER`) — `src/lib/sources/rss.ts` itself is
+tech-agnostic fetch/parse/classify machinery with no hardcoded feed list.
+Checked by hand before adding any feed (must return valid RSS 2.0 XML from a
+real, actively-publishing trade outlet for that vertical). Add more to the
+relevant vertical's list in `verticals.ts`, not as a one-off fetch
+somewhere else. Quantum's classifier (`scaling`/`adoption`/`exclude` regexes)
+was tuned against real false positives — personnel/hiring announcements and
+podcast episodes were both getting swept in on loose keyword overlap, and
+money-amount words alone were catching private funding-round news that
+doesn't belong in either stage; `DEFAULT_EXCLUDE_WORDS` in `rss.ts` carries
+that baseline forward for every vertical. If you loosen a classifier, re-run
+`npm run fetch-data` and read the actual `rss-*` entries it produces for
+that vertical before trusting it.
 
 Responses are cached at the edge for an hour — patents lag ~18 months and NSF
 posts a few times a day, so there's no honest reason to hit either upstream
@@ -318,25 +386,35 @@ soft-fail, same as everywhere else in this project.
   institution-attributed or hand-verified data.
 - The China-funding caveat in the investment section.
 - Soft-fail on every fetch source, including all three Worker-proxied routes.
-- The daily commit of data.json (trend AND entries accumulation both depend
-  on it — the Worker is additive freshness on top, not a replacement for this).
+- The daily commit of `public/data/*.json` (trend AND entries accumulation
+  both depend on it for every vertical — the Worker is additive freshness on
+  top, not a replacement for this). The GitHub Actions workflow's "Commit
+  updated data" step does this now (fixed 2026-07-19 — it was missing
+  entirely before, so every nightly run's accumulation was silently
+  discarded after that run's deploy; see the workflow file's comment).
 - One shared implementation per source (`src/lib/sources/*`) — if you touch
   attribution or transform logic for OpenAlex/EPO/NSF/RSS, edit it there
-  once, not in the Node script and the Worker separately.
-- `data/seed.ts` as the verified floor for scaling/adoption, even though RSS
-  now supplements it live — don't let the live layer's existence become an
-  excuse to stop hand-verifying new seed entries.
+  once, not in the Node script and the Worker separately. Vertical-specific
+  config (filters, CPC codes, keywords, feeds) lives in `verticals.ts`, not
+  duplicated into the source modules themselves.
+- `data/<vertical>/seed.ts` as the verified floor for scaling/adoption in
+  every vertical, even though RSS supplements it live — don't let the live
+  layer's existence become an excuse to stop hand-verifying new seed entries.
 
 ## How to extend
 
-- New scaling/adoption milestones you want guaranteed correct → `data/seed.ts`
-  (one typed object each, fetched and confirmed against its URL first).
-- New RSS sources for the live scaling/adoption layer → `QUANTUM_NEWS_FEEDS`
-  in `src/lib/sources/rss.ts` — check the feed URL actually returns valid
-  RSS from a real outlet before adding it.
-- Analyst "so what" notes → `data/notes.ts` (one per stage, newest shown).
-- New technology vertical → parameterize `TECH` and the query in the fetch
-  script; the types are technology-agnostic.
+- New scaling/adoption milestones you want guaranteed correct →
+  `data/<vertical>/seed.ts` (one typed object each, fetched and confirmed
+  against its URL first).
+- New RSS sources for a vertical's live scaling/adoption layer → that
+  vertical's feed list in `src/lib/verticals.ts` (`QUANTUM_RSS_FEEDS`,
+  `AI_RSS_FEEDS`, ...) — check the feed URL actually returns valid RSS from
+  a real outlet before adding it.
+- Analyst "so what" notes → `data/<vertical>/notes.ts` (one per stage,
+  newest shown).
+- New technology vertical → see "Multi-vertical architecture" above — add a
+  `VerticalConfig` to `VERTICALS` plus a `data/<dataDir>/{seed,notes}.ts`
+  pair; every fetch path picks it up automatically.
 - Funding is US/EU only until a PRC source exists — don't paper over it.
 
 ## House style (for any prose: notes, copy, READMEs)
@@ -350,9 +428,9 @@ padding). Prefer "is/has" over "serves as/features". State the fact, stop.
 
 ```
 npm install
-npm run fetch-data       # writes public/data.json (watch the source lines it prints)
-npm run backfill-trend   # one-time: reconstructs past trend[] history from real OpenAlex dates
-npm run backfill-entries # one-off top-up: deep OpenAlex/NSF pull merged into entries[]
+npm run fetch-data       # loops over every VERTICALS entry, writes public/data/<id>.json each (watch the source lines it prints)
+npm run backfill-trend -- <vertical-id>   # one-time: reconstructs past trend[] history from real OpenAlex dates (defaults to quantum-computing)
+npm run backfill-entries -- <vertical-id> # one-off top-up: deep OpenAlex/NSF pull merged into entries[] (defaults to quantum-computing)
 npm run gen-continent-map # regenerate src/lib/continentMap.ts (only if the ISO list changes)
 npm run dev
 npm run build

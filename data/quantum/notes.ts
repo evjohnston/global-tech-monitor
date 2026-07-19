@@ -1,4 +1,4 @@
-import type { StageNote } from "../src/lib/types.ts";
+import type { StageNote } from "../../src/lib/types.ts";
 
 // The interpretation layer. A raw feed doesn't help a reader with ten minutes;
 // a dated analyst note does. Write these yourself — one per stage, updated as

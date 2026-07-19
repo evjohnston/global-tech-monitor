@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -32,13 +32,32 @@ jobs:
 
       - run: npm ci
 
-      # Pull fresh data server-side (no CORS limits here).
+      # Pull fresh data server-side (no CORS limits here). Loops over every
+      # vertical in src/lib/verticals.ts and writes public/data/<id>.json.
       - name: Fetch data
         run: npm run fetch-data
         env:
           OPENALEX_KEY: ${{ secrets.OPENALEX_KEY }}
           EPO_KEY: ${{ secrets.EPO_KEY }}
           EPO_SECRET: ${{ secrets.EPO_SECRET }}
+
+      # Commit the updated data files back to main so trend[]/entries[]
+      # accumulation is real infrastructure, not something that only happens
+      # when a human runs fetch-data locally and commits by hand. Found
+      # missing during the multi-vertical build (2026-07-19) — before this,
+      # every nightly run's accumulated result was discarded after that run's
+      # deploy, since nothing ever persisted it back to the repo; the "start
+      # from prev.entries" merge in fetch-data.ts only helps if there's a
+      # real prev file to start from. Skips the commit if nothing changed
+      # (a content-only diff, not a timestamp-only one, would be nice here
+      # but generatedAt always differs — accept a commit most nights).
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          git diff --staged --quiet && echo "no data changes" || git commit -m "data: nightly fetch $(date -u +%Y-%m-%d) [skip ci]"
+          git push
 
       # Build with the repo name as base path for project Pages.
       # If deploying to a user/root or custom domain, set GTM_BASE to "/".

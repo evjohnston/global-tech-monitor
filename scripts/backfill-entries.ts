@@ -6,7 +6,7 @@
  * and trend[] keeps a consistent rolling-window meaning (see
  * scripts/backfill-trend.ts for why that matters). This script is the
  * entries-side equivalent: a ONE-TIME deeper pull — a 2-year OpenAlex window
- * and a much larger NSF batch — merged into the existing public/data.json
+ * and a much larger NSF batch — merged into the existing public/data/<vertical-id>.json
  * to seed a realistic starting volume, without touching trend[] or changing
  * the nightly script's own windows.
  *
@@ -14,7 +14,8 @@
  * fetch path in this app — this is not fabricated volume, just a deeper
  * pull of what already exists at OpenAlex/NSF.
  *
- * Run again any time you want another one-off top-up: `npm run backfill-entries`.
+ * Run again any time you want another one-off top-up:
+ *   npm run backfill-entries -- <vertical-id>   (defaults to quantum-computing)
  */
 import { writeFileSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -23,16 +24,20 @@ import { config } from "dotenv";
 import type { DataFile, Entry } from "../src/lib/types.ts";
 import { fetchOpenAlexPages } from "../src/lib/sources/openalex.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
+import { verticalById } from "../src/lib/verticals.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // See scripts/fetch-data.ts for why this is needed when running via tsx directly.
 config({ path: resolve(__dirname, "../.env.local") });
-const OUT = resolve(__dirname, "../public/data.json");
+
+const v = verticalById(process.argv[2] ?? "quantum-computing");
+const OUT = resolve(__dirname, `../public/data/${v.id}.json`);
 
 const OA_KEY = process.env.OPENALEX_KEY ?? "";
 const OA_MAILTO = process.env.OPENALEX_MAILTO ?? "gtm@example.com";
 
 async function main() {
+  console.log(`backfilling entries for ${v.label} (${v.id})`);
   const prev = JSON.parse(readFileSync(OUT, "utf8")) as DataFile;
   const byId = new Map<string, Entry>();
   for (const e of prev.entries) byId.set(e.id, e);
@@ -40,14 +45,14 @@ async function main() {
 
   console.log("Fetching OpenAlex 2-year historical window (paged)...");
   const oa = await fetchOpenAlexPages({
-    key: OA_KEY, mailto: OA_MAILTO, sinceDays: 730, n: 200, pages: 25,
+    filter: v.openAlexFilter, key: OA_KEY, mailto: OA_MAILTO, sinceDays: 730, n: 200, pages: 25,
   });
   let oaNew = 0;
   for (const e of oa) { if (!byId.has(e.id)) oaNew++; byId.set(e.id, e); }
   console.log(`OpenAlex: ${oa.length} works fetched, ${oaNew} new`);
 
   console.log("Fetching NSF historical batch...");
-  const nsf = await fetchNSF(2000);
+  const nsf = await fetchNSF(2000, v.fundingKeyword);
   let nsfNew = 0;
   for (const e of nsf) { if (!byId.has(e.id)) nsfNew++; byId.set(e.id, e); }
   console.log(`NSF: ${nsf.length} awards fetched, ${nsfNew} new`);

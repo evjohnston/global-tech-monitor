@@ -5,7 +5,11 @@
 import type { Entry } from "../types.ts";
 import { asArray } from "./util.ts";
 
-export async function fetchPatents(key: string, secret: string, n: number): Promise<Entry[]> {
+// `cpcQuery` is the CPC classification's OPS CQL fragment identifying the
+// vertical, e.g. "cpc=G06N10" for quantum computing or "cpc=G06N3 OR
+// cpc=G06N20" for AI/ML (neural networks + machine learning, since AI has no
+// single CPC code the way quantum's G06N10 does — see verticals.ts).
+export async function fetchPatents(key: string, secret: string, n: number, cpcQuery: string): Promise<Entry[]> {
   if (!key || !secret) throw new Error("EPO key/secret not set");
   const tokenRes = await fetch("https://ops.epo.org/3.2/auth/accesstoken", {
     method: "POST",
@@ -17,10 +21,10 @@ export async function fetchPatents(key: string, secret: string, n: number): Prom
   });
   if (!tokenRes.ok) throw new Error(`EPO auth HTTP ${tokenRes.status}`);
   const token = ((await tokenRes.json()) as { access_token?: string }).access_token;
-  // CPC G06N10 = quantum computing. Published-data search, newest first.
+  // Published-data search, newest first.
   const searchRes = await fetch(
     "https://ops.epo.org/3.2/rest-services/published-data/search/biblio" +
-      `?q=cpc%3DG06N10&Range=1-${n}`,
+      `?q=${encodeURIComponent(cpcQuery)}&Range=1-${n}`,
     { headers: { Authorization: `Bearer ${token}`, Accept: "application/json" } }
   );
   if (!searchRes.ok) throw new Error(`EPO search HTTP ${searchRes.status}`);
