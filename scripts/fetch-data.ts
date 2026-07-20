@@ -17,6 +17,10 @@
  *   - RSS (src/lib/sources/rss.ts) for scaling/adoption — auto-classified
  *     from that vertical's trade press, weakest attribution tier
  *     (provenance "auto"). Supplements, doesn't replace, data/<id>/seed.ts.
+ *   - Google News RSS (src/lib/sources/rss.ts, fetchInvestmentNews) for
+ *     investment-stage funding news — same "auto" tier, personal/
+ *     non-commercial use only per Google News's feed license (see the
+ *     comment above fetchInvestmentNews before reusing this elsewhere).
  *   - data/<id>/seed.ts for scaling/adoption — the hand-verified floor.
  *   - data/<id>/notes.ts for the analyst "so what" layer.
  *
@@ -46,7 +50,7 @@ import type { DataFile, Entry, StageNote, TrendPoint } from "../src/lib/types.ts
 import { fetchOpenAlexPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
-import { fetchNewsRss } from "../src/lib/sources/rss.ts";
+import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
 import { asArray } from "../src/lib/sources/util.ts";
 import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
 import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
@@ -181,6 +185,13 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   } catch (err) {
     console.error("news skipped:", (err as Error).message);
   }
+  let investmentNews: Entry[] = [];
+  try {
+    investmentNews = await fetchInvestmentNews({ query: v.investmentNewsQuery, relevant: v.rssClassifier.relevant }, 30);
+    console.log(`Google News: ${investmentNews.length} auto-classified investment items`);
+  } catch (err) {
+    console.error("investment news skipped:", (err as Error).message);
+  }
 
   // Entries accumulate across runs, the same way trend[] does — each night's
   // OpenAlex pull is only a rolling 30-day window, so without this, anything
@@ -192,7 +203,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const notes = NOTES_BY_VERTICAL[v.id] ?? [];
   const byId = new Map<string, Entry>();
   for (const e of prev?.entries ?? []) byId.set(e.id, e);
-  for (const e of [...seed, ...live, ...patents, ...funding, ...news]) byId.set(e.id, e);
+  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews]) byId.set(e.id, e);
 
   // Append today's trend point, keeping prior history. One point per date.
   // Also drops any leftover pre-refactor us/cn/eu/other-bucket point — real

@@ -17,7 +17,8 @@ export type SourceKind =
   | "patent" // patent filing (innovation)
   | "milestone" // hardware / scaling announcement (scaling)
   | "deployment" // commercial or govt adoption (adoption)
-  | "grant"; // research funding award (investment)
+  | "grant" // research funding award (investment) — NSF, real awardee data
+  | "news"; // funding/investment news, auto-classified (investment) — Google News RSS, keyword-guessed
 
 export interface Entry {
   id: string; // stable, dedupe key

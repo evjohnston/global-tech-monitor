@@ -162,6 +162,15 @@ a { color: inherit; }
 .stage-name { font-size: 13px; font-weight: 700; margin-top: 5px; }
 .stage-count { font-family: var(--mono); font-size: 10px; color: var(--mist); margin-top: 1px; }
 .stage-blurb { font-size: 10px; color: var(--mist); margin-top: 4px; line-height: 1.35; }
+.stage-controls { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 7px; }
+.stage-sort { display: flex; gap: 4px; margin-left: auto; }
+.stage-chip {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.03em; text-transform: uppercase;
+  border: 1px solid var(--line-2); background: var(--paper); color: var(--mist);
+  padding: 2px 7px; border-radius: var(--r); cursor: pointer;
+}
+.stage-chip:hover { border-color: var(--stage,var(--slate)); color: var(--ink); }
+.stage-chip[aria-pressed="true"] { background: var(--stage,var(--ink)); border-color: var(--stage,var(--ink)); color: #fff; }
 .stage-body { padding: 6px; overflow-y: auto; flex: 1; max-height: 480px; }
 .stage-body::-webkit-scrollbar { width: 6px; }
 .stage-body::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 0; }

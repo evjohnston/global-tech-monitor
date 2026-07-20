@@ -7,6 +7,8 @@
 //   - Two of the three quantum-news RSS feeds also send no CORS headers
 //     (only thequantuminsider.com does) — proxying all three here keeps the
 //     news path in one place instead of a browser/worker hybrid.
+//   - Google News RSS (investment-stage funding news) sends no CORS headers
+//     either (confirmed by hand) — proxied at /investment-news.
 // OpenAlex has neither problem (open CORS, no required secret) and is fetched
 // straight from the browser instead — see src/App.tsx.
 //
@@ -17,7 +19,7 @@
 // honest reason to hit any upstream on every page load.
 import { fetchPatents } from "../../src/lib/sources/epo.ts";
 import { fetchNSF } from "../../src/lib/sources/nsf.ts";
-import { fetchNewsRss } from "../../src/lib/sources/rss.ts";
+import { fetchNewsRss, fetchInvestmentNews } from "../../src/lib/sources/rss.ts";
 import type { Entry } from "../../src/lib/types.ts";
 import { verticalById } from "../../src/lib/verticals.ts";
 
@@ -99,8 +101,16 @@ export default {
       if (url.pathname === "/news") {
         return withCors(await cached(req, () => fetchNewsRss(vertical.rssFeeds, vertical.rssClassifier, 30)), origin);
       }
+      if (url.pathname === "/investment-news") {
+        return withCors(
+          await cached(req, () =>
+            fetchInvestmentNews({ query: vertical.investmentNewsQuery, relevant: vertical.rssClassifier.relevant }, 30)
+          ),
+          origin
+        );
+      }
       if (url.pathname === "/" || url.pathname === "/health") {
-        return withCors(json({ ok: true, routes: ["/patents", "/funding", "/news"] }), origin);
+        return withCors(json({ ok: true, routes: ["/patents", "/funding", "/news", "/investment-news"] }), origin);
       }
       return withCors(json({ error: "not found" }, 404), origin);
     } catch (err) {

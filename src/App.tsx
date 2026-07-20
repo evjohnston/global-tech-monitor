@@ -90,19 +90,22 @@ async function fetchLive(v: VerticalConfig): Promise<{ entries: Entry[]; failed:
   let patents: Entry[] = [];
   let funding: Entry[] = [];
   let news: Entry[] = [];
+  let investmentNews: Entry[] = [];
   if (WORKER_URL) {
     const q = `?vertical=${encodeURIComponent(v.id)}`;
-    const [pRes, fRes, nRes] = await Promise.allSettled([
+    const [pRes, fRes, nRes, inRes] = await Promise.allSettled([
       fetch(`${WORKER_URL}/patents${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
       fetch(`${WORKER_URL}/funding${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
       fetch(`${WORKER_URL}/news${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
+      fetch(`${WORKER_URL}/investment-news${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
     ]);
     if (pRes.status === "fulfilled") patents = pRes.value as Entry[]; else failed.push("patents");
     if (fRes.status === "fulfilled") funding = fRes.value as Entry[]; else failed.push("funding");
     if (nRes.status === "fulfilled") news = nRes.value as Entry[]; else failed.push("news");
+    if (inRes.status === "fulfilled") investmentNews = inRes.value as Entry[]; else failed.push("investment-news");
   }
 
-  return { entries: [...innovation, ...patents, ...funding, ...news], failed };
+  return { entries: [...innovation, ...patents, ...funding, ...news, ...investmentNews], failed };
 }
 
 export default function App() {
@@ -434,7 +437,8 @@ export default function App() {
           <div className="h">Sources & method</div>
           Innovation streams from OpenAlex (institution country codes) with an arXiv fallback, plus EPO
           patents where a key is set. Scaling and adoption are curated in <code>data/{vertical.dataDir}/seed.ts</code> plus a
-          live RSS layer. Investment is NSF Awards (US) — no equivalent public feed exists for China.
+          live RSS layer. Investment is NSF Awards (US) — no equivalent public feed exists for China — plus
+          auto-classified funding news from Google News RSS.
           Analyst notes live in <code>data/{vertical.dataDir}/notes.ts</code>. Every entry logs the real country an
           institution/awardee/filer is located in — country attribution is a lead, not a verdict. Forecast
           lines are a linear extrapolation of recorded trend points, not a measurement.

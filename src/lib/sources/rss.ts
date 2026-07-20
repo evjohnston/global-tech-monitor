@@ -144,3 +144,99 @@ export async function fetchNewsRss(
   for (const e of out) byId.set(e.id, e);
   return [...byId.values()];
 }
+
+// ── Investment-stage news (Google News RSS) ─────────────────────────────
+//
+// investment stage otherwise has exactly one source (NSF) and exactly one
+// real value on every field (source: "grant", provenance: "live") — no news
+// layer existed here the way scaling/adoption already had one. Google
+// News's own RSS feed license restricts use to "personal, non-commercial"
+// feed-reading (confirmed by hand, 2026-07-19, reading the feed's own
+// <copyright> tag) — this app is run personally/non-commercially, which is
+// why this is Google News rather than GDELT (checked as a legitimately-
+// licensed alternative, but the user chose to stay with Google News's
+// richer real headlines given that use is covered). Revisit if this project
+// is ever deployed publicly/commercially — that license does not cover that.
+//
+// One request per vertical (not per-feed like fetchNewsRss above) since the
+// vertical's whole funding vocabulary is expressed as a single search
+// query, not a fixed outlet list.
+//
+// Known constraint (confirmed 2026-07-19): Google News returns a real,
+// content-bearing feed when hit from a residential/dev IP (a local machine
+// running `npm run fetch-data`), but returns HTTP 503 when hit from the
+// Cloudflare Worker's edge — Google appears to rate-limit or block
+// datacenter-IP traffic to this endpoint, consistent with the feed's own
+// "personal feed reader" framing. This fails soft like every other source
+// here (the Worker route just returns nothing that request), so it isn't a
+// crash, but it means the *live* browser-refresh leg of investment news may
+// come up empty more often than the nightly `npm run fetch-data` build
+// does. Nightly CI runs on GitHub Actions' own datacenter IPs too, so the
+// same risk may apply there — watch the "Google News: N items" log line in
+// the Action's output before assuming this source is populating reliably.
+export interface InvestmentNewsConfig {
+  query: string; // Google News search query (their normal search syntax — quotes, OR groups)
+  relevant: RegExp; // topical gate — reuse the vertical's existing rssClassifier.relevant
+}
+
+function googleNewsRssUrl(query: string): string {
+  return `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`;
+}
+
+// Google's search ranks on the topical term alone, so plenty of results
+// mention "AI"/"quantum" without being about funding at all ("National AI
+// Appreciation Day," NASA science-data pages) — this second gate, shared
+// across verticals, requires actual funding/investment vocabulary before an
+// item is considered at all. Checked by hand against real AI/quantum
+// queries (2026-07-19).
+const FUNDING_RELEVANT =
+  /\b(grant|funding|invest(?:s|ment|ing)?|award(?:ed|s)?|appropriat\w*|subsid(?:y|ies)|national\s+(?:ai|quantum|artificial\s+intelligence)\s+(?:strategy|initiative|program|mission))\b/i;
+
+// A funding-keyword search pulls in stock-ticker/investor-advice content
+// that isn't investment-stage news in this app's sense (a "buy now" piece
+// isn't a government program, and neither is a private funding round —
+// same "not investment in this app's sense" logic DEFAULT_EXCLUDE_WORDS
+// already applies to VC rounds elsewhere) — checked by hand against real
+// quantum and AI queries, the latter noticeably noisier (stock-picking
+// content is common AI-news-query filler in a way it isn't for quantum).
+const STOCK_NOISE_WORDS =
+  /\b(stocks?|shares?|ticker|buy\s+now|sell\s+rating|price\s+target|investors?\s+in|investment\s+(?:opportunity|bubble|moves|advice)|portfolio|\bIPO\b|nasdaq|nyse|earnings\s+(?:call|report)|real\s+estate|best[- ]performing|smartest|money\s+moves|valuation|funding\s+round|raise[sd]?\s+(?:strategic\s+)?funding|returns?\s+(?:on|from)\s+.{0,20}invest)\b/i;
+
+// Google News RSS titles carry " - Outlet Name" appended to the real
+// headline — split it so `org` reflects the actual outlet, not a mangled
+// headline-plus-outlet string.
+function splitGoogleNewsTitle(raw: string): { title: string; org: string } {
+  const m = raw.match(/^(.*) - ([^-]+)$/);
+  return m ? { title: m[1].trim(), org: m[2].trim() } : { title: raw, org: "" };
+}
+
+export async function fetchInvestmentNews(cfg: InvestmentNewsConfig, sinceDays = 30): Promise<Entry[]> {
+  const cutoffMs = Date.now() - sinceDays * 864e5;
+  const res = await fetch(googleNewsRssUrl(cfg.query), {
+    headers: { "User-Agent": "GlobalTechMonitor/0.3 (research dashboard)" },
+  });
+  if (!res.ok) throw new Error(`Google News RSS HTTP ${res.status}`);
+  const items = parseRssItems(await res.text());
+  const out: Entry[] = [];
+  for (const item of items) {
+    const date = parseDate(item.pubDate);
+    if (!date || new Date(date).getTime() < cutoffMs) continue;
+    const text = `${item.title} ${item.description}`;
+    if (!cfg.relevant.test(text)) continue;
+    if (!FUNDING_RELEVANT.test(text)) continue;
+    if (DEFAULT_EXCLUDE_WORDS.test(text)) continue;
+    if (STOCK_NOISE_WORDS.test(text)) continue;
+    const { title, org } = splitGoogleNewsTitle(item.title);
+    const { country, evidence } = inferInstitutionCountry(text);
+    const idSlug = item.link.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").slice(-70);
+    out.push({
+      id: `gnews-${idSlug}`,
+      stage: "investment", country, provenance: "auto", source: "news",
+      title, org, date, url: item.link,
+      countryEvidence: `${evidence} (auto-classified from Google News RSS, unverified)`,
+    });
+  }
+  const byId = new Map<string, Entry>();
+  for (const e of out) byId.set(e.id, e);
+  return [...byId.values()];
+}

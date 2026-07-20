@@ -20,6 +20,7 @@ export interface VerticalConfig {
   fundingKeyword: string; // NSF Awards API keyword
   rssFeeds: RssFeedConfig[];
   rssClassifier: RssClassifierConfig;
+  investmentNewsQuery: string; // Google News RSS search query for investment-stage funding news
 }
 
 const QUANTUM_RSS_FEEDS: RssFeedConfig[] = [
@@ -87,6 +88,11 @@ export const VERTICALS: VerticalConfig[] = [
     fundingKeyword: "quantum",
     rssFeeds: QUANTUM_RSS_FEEDS,
     rssClassifier: QUANTUM_RSS_CLASSIFIER,
+    // Checked by hand (2026-07-19): real NSF-grant writeups, government
+    // funding announcements, and legit private R&D commitments, with the
+    // stock-ticker/investor-advice noise a bare "quantum funding" query
+    // pulls in filtered by rss.ts's FUNDING_RELEVANT/STOCK_NOISE_WORDS gates.
+    investmentNewsQuery: '"quantum computing" (grant OR funding OR investment OR "national quantum" OR NSF)',
   },
   {
     id: "artificial-intelligence",
@@ -134,6 +140,11 @@ export const VERTICALS: VerticalConfig[] = [
     fundingKeyword: "artificial intelligence",
     rssFeeds: AI_RSS_FEEDS,
     rssClassifier: AI_RSS_CLASSIFIER,
+    // Checked by hand (2026-07-19) — noisier than quantum's equivalent query
+    // (AI funding news attracts more stock-picking/investor-advice filler),
+    // cleaned up by the same shared FUNDING_RELEVANT/STOCK_NOISE_WORDS gates.
+    investmentNewsQuery:
+      '"artificial intelligence" (grant OR funding OR investment OR "national ai" OR "ai strategy" OR NSF)',
   },
 ];
 
