@@ -132,7 +132,7 @@ jobs:
                 if (fresh.entries.length < live.entries.length) {
                   console.error(
                     "REFUSING regression for " + file + ": this run built " + fresh.entries.length +
-                    " entries, fewer than origin/data's current " + live.entries.length +
+                    " entries, fewer than origin/data current " + live.entries.length +
                     " — keeping origin/data, not overwriting"
                   );
                   keep = live;
