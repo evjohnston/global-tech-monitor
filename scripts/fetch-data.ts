@@ -56,6 +56,7 @@ import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
 import { canonicalizeOrg } from "../src/lib/entityResolution.ts";
 import { relevanceScoreFor } from "../src/lib/relevanceScore.ts";
 import { buildSourceMeta } from "../src/lib/sourceMeta.ts";
+import { periodCounts, periodFunding } from "../src/lib/aggregate.ts";
 import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
 import { NOTES as QUANTUM_NOTES } from "../data/quantum/notes.ts";
 import { SEED as AI_SEED } from "../data/ai/seed.ts";
@@ -125,19 +126,54 @@ async function fetchArxiv(category: string): Promise<Entry[]> {
   });
 }
 
+// A JSON parse failure here used to return null silently — which reads to
+// every caller exactly like "no previous file, this is a fresh vertical,"
+// so accumulation quietly restarted from zero instead of failing loudly.
+// Confirmed as the real cause of a live incident (2026-07-20): a human
+// merge conflict left literal <<<<<<< markers in quantum-computing.json (a
+// recurrence of an earlier corruption this exact file already had once
+// today), the next run's readPrevious() choked on it and returned null,
+// and that run committed a ~280-entry, 30-trend-point regression with no
+// error anywhere in the logs — the only sign was the live dashboard's
+// numbers dropping. Logging here doesn't fix the corruption, but it means
+// the next incident shows up in the workflow's own output instead of
+// silently downstream in the KPI row.
 function readPrevious(outPath: string): DataFile | null {
   if (!existsSync(outPath)) return null;
   try { return JSON.parse(readFileSync(outPath, "utf8")) as DataFile; }
-  catch { return null; }
+  catch (err) {
+    console.error(`readPrevious: ${outPath} exists but failed to parse (${(err as Error).message}) — treating as no previous data, which will look like a regression if this file really did have history. Fix the file, don't just rerun.`);
+    return null;
+  }
 }
 
-function trendPoint(live: Entry[]): TrendPoint {
+// `live` (this run's fresh OpenAlex/arXiv pull, a rolling ~30d window) feeds
+// `counts` — unchanged from before. `allEntries` (the full accumulated set,
+// post-merge) feeds the newer fields via the exact same periodCounts/
+// periodFunding a live page render uses, so a history point means the same
+// thing a live "trailing 21d" KPI does: entries whose real event date falls
+// in the last TREND_WINDOW_DAYS as of this run, not a cumulative-forever
+// total (which would just monotonically grow and never show a real trend).
+const TREND_WINDOW_DAYS = 21;
+function trendPoint(live: Entry[], allEntries: Entry[]): TrendPoint {
   const counts: Record<string, number> = {};
   for (const e of live) {
     if (e.stage !== "innovation" || !e.country) continue;
     counts[e.country] = (counts[e.country] ?? 0) + 1;
   }
-  return { date: new Date().toISOString().slice(0, 10), counts };
+  const now = new Date();
+  const stageCounts = { innovation: 0, scaling: 0, adoption: 0, investment: 0 } as Record<Entry["stage"], number>;
+  for (const s of Object.keys(stageCounts) as Entry["stage"][]) {
+    stageCounts[s] = periodCounts(allEntries, s, TREND_WINDOW_DAYS, now).current;
+  }
+  const fundingUsd = periodFunding(allEntries, TREND_WINDOW_DAYS, now).current;
+  return {
+    date: now.toISOString().slice(0, 10),
+    counts,
+    stageCounts,
+    fundingUsd,
+    totalEntries: allEntries.length,
+  };
 }
 
 async function fetchVertical(v: VerticalConfig): Promise<void> {
@@ -245,7 +281,8 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const history = (prev?.trend ?? []).filter(
     (p) => p.date !== today && !Object.keys(p.counts).some((k) => ["us", "cn", "eu", "other"].includes(k))
   );
-  const trend = live.length > 0 ? [...history, trendPoint(live)] : history;
+  const allEntries = [...byId.values()];
+  const trend = live.length > 0 ? [...history, trendPoint(live, allEntries)] : history;
 
   const sourceMeta = buildSourceMeta(prev?.sourceMeta, {
     openalex: openalexOk,
@@ -260,11 +297,30 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const out: DataFile = {
     technology: v.id,
     generatedAt: now,
-    entries: [...byId.values()],
+    entries: allEntries,
     trend,
     notes,
     sourceMeta,
   };
+
+  // entries[]/trend[] only ever accumulate by design (see the byId merge
+  // above) — a real drop of this size can only mean readPrevious() failed
+  // to see real prior history (a corrupted file, a missing seed step), not
+  // a legitimate day-to-day fluctuation. Refuse to overwrite good
+  // accumulated history with a regression instead of writing (and this
+  // repo's CI committing) a silent data loss — confirmed necessary by a
+  // real incident (2026-07-20): a corrupted quantum-computing.json made
+  // readPrevious() return null, and the run that followed happily wrote
+  // ~280 fewer entries and 30 fewer trend points with no error anywhere.
+  const prevCount = prev?.entries.length ?? 0;
+  if (prevCount > 50 && out.entries.length < prevCount * 0.8) {
+    throw new Error(
+      `refusing to write ${outPath}: ${out.entries.length} entries is a suspicious drop from the previous ` +
+      `${prevCount} (more than 20% smaller). This almost always means readPrevious() couldn't read real prior ` +
+      `history — check the log line above for a parse error, or that public/data/ was seeded correctly before ` +
+      `this ran. Fix the actual cause; don't raise this threshold to make the error go away.`
+    );
+  }
 
   mkdirSync(OUT_DIR, { recursive: true });
   writeFileSync(outPath, JSON.stringify(out, null, 2));
