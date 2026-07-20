@@ -77,6 +77,8 @@ a { color: inherit; }
 .ticker-link { font: inherit; border: none; background: none; padding: 0; color: inherit; cursor: pointer; }
 .ticker-link:hover { color: var(--red); }
 .ticker-tag { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; padding: 1px 4px; }
+.cited-tag { background: var(--ink-2); }
+.cited-ticker { border-top: 1px solid var(--line); border-bottom: none; }
 .ticker-sep { color: var(--line-2); }
 @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } .live-dot { animation: none; } }

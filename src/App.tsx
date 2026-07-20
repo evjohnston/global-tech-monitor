@@ -24,6 +24,7 @@ import { StageComposition } from "./components/StageComposition.tsx";
 import { SmallMultiples } from "./components/SmallMultiples.tsx";
 import { InstitutionConcentration } from "./components/InstitutionConcentration.tsx";
 import { AwardSizeHistogram } from "./components/AwardSizeHistogram.tsx";
+import { TopCitedTicker } from "./components/TopCitedTicker.tsx";
 
 // Static-store-only (2026-07-20): the frontend reads whichever
 // public/data/<vertical>.json the nightly build last wrote and nothing
@@ -41,6 +42,10 @@ const WINDOW_DAYS = 21;
 const TOP_N = 6; // compact-view country count — every real country still gets
 // counted everywhere; this only bounds how many show up in chips/bars/KPIs.
 // The full map has no such cap.
+// Last 3 complete calendar years — matches TOP_CITED_YEARS in
+// scripts/fetch-data.ts (the actual fetch), computed the same simple way
+// so the ticker reads the same years the data was actually pulled for.
+const TOP_CITED_YEARS = [1, 2, 3].map((offset) => new Date().getFullYear() - offset);
 
 function fmtDelta(pct: number | null): string | null {
   if (pct == null) return null;
@@ -466,9 +471,15 @@ export default function App() {
           hyperscaler/lab capital spend, which dwarfs NSF's disclosed totals for this vertical, has no public
           per-grant source and isn't included. Percentage deltas are hidden outright when the prior comparison
           period is too thin to be a real baseline, rather than shown as a technically-real but misleading number.
+          The "Most cited" ticker below is OpenAlex's real cited_by_count, top-N fetched separately per
+          calendar year (not resorted from one pool) — citations accrue over time, so ranking undifferentiated
+          would just favor the oldest year. Limited to the last 3 complete years; the current year is excluded
+          because its works haven't had time to accrue citations yet.
           <div className="sig">Ideas Advancing Freedom</div>
         </footer>
       </div>
+
+      <TopCitedTicker entries={entries} years={TOP_CITED_YEARS} onSelect={setSelectedEntry} />
 
       {selectedEntry && <EntryModal entry={selectedEntry} onClose={() => setSelectedEntry(null)} />}
     </>

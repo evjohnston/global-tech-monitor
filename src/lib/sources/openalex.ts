@@ -82,6 +82,70 @@ function orgFromRawAffiliation(raw: string): string {
   return raw.split(",")[0].replace(/\.$/, "").trim();
 }
 
+// Shared by every OpenAlex fetch path (recent-window, top-cited-by-year) —
+// one implementation of "raw OAWork -> real Entry" so institution/country
+// resolution and abstract reconstruction can't drift between them.
+function mapWork(w: OAWork): Entry {
+  const title = (w.title ?? w.display_name ?? "").replace(/\s+/g, " ").trim();
+  const abstractText = reconstructAbstract(w.abstract_inverted_index);
+  const auths = w.authorships ?? [];
+
+  const institutionNames: string[] = [];
+  const countries: string[] = [];
+  const rawAffiliations: string[] = [];
+  const authorNames: string[] = [];
+  for (const a of auths) {
+    if (a.author?.display_name) authorNames.push(a.author.display_name);
+    for (const i of a.institutions ?? []) {
+      if (i.display_name) institutionNames.push(i.display_name);
+      if (i.country_code) countries.push(i.country_code);
+    }
+    for (const raw of a.raw_affiliation_strings ?? []) if (raw) rawAffiliations.push(raw);
+  }
+
+  let org = modalString(institutionNames);
+  let country = modalString(countries);
+  let evidence = country
+    ? `institution country codes [${countries.join(", ")}] → ${country}`
+    : "no institution country on record";
+  let provenance: Entry["provenance"] = "live";
+
+  // No structured institution match — fall back to the raw affiliation
+  // text OpenAlex still often carries even when it couldn't resolve a
+  // formal institution record. Weaker signal, so this drops to "auto".
+  if (!org && rawAffiliations.length > 0) {
+    org = orgFromRawAffiliation(rawAffiliations[0]);
+  }
+  if (!country && rawAffiliations.length > 0) {
+    const inferred = rawAffiliations
+      .map((raw) => inferInstitutionCountry(raw).country)
+      .filter((c): c is string => c !== null);
+    const guess = modalString(inferred);
+    if (guess) {
+      country = guess;
+      evidence = `inferred from raw affiliation text "${rawAffiliations[0]}" → ${guess}`;
+      provenance = "auto";
+    }
+  }
+  // Never fall back to an author's name as if it were an institution —
+  // "Anonymous" or an individual researcher's name is not an org, and
+  // showing it as one pollutes the institution leaderboard with what is
+  // really just "no institution data available."
+  org = org ?? "";
+
+  const oaId = (w.id ?? "").split("/").pop() ?? title.slice(0, 40);
+  const workUrl = w.doi ?? w.id ?? "https://openalex.org";
+  return {
+    id: `oa-${oaId}`, stage: "innovation", country, provenance,
+    source: "paper", title, org, date: (w.publication_date ?? "").slice(0, 10),
+    url: workUrl, countryEvidence: evidence,
+    citations: w.cited_by_count,
+    abstract: abstractText,
+    authors: authorNames.length > 0 ? authorNames.slice(0, 6) : undefined,
+    venue: w.primary_location?.source?.display_name ?? undefined,
+  };
+}
+
 export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
   const { filter, key = "", mailto = "gtm@example.com", sinceDays = 30, n = 40, page = 1 } = opts;
   const since = new Date(Date.now() - sinceDays * 864e5).toISOString().slice(0, 10);
@@ -105,66 +169,46 @@ export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
   const works = json.results ?? [];
   if (works.length === 0) throw new Error("OpenAlex returned no results");
 
-  return works.map((w): Entry => {
-    const title = (w.title ?? w.display_name ?? "").replace(/\s+/g, " ").trim();
-    const abstractText = reconstructAbstract(w.abstract_inverted_index);
-    const auths = w.authorships ?? [];
+  return works.map(mapWork);
+}
 
-    const institutionNames: string[] = [];
-    const countries: string[] = [];
-    const rawAffiliations: string[] = [];
-    const authorNames: string[] = [];
-    for (const a of auths) {
-      if (a.author?.display_name) authorNames.push(a.author.display_name);
-      for (const i of a.institutions ?? []) {
-        if (i.display_name) institutionNames.push(i.display_name);
-        if (i.country_code) countries.push(i.country_code);
-      }
-      for (const raw of a.raw_affiliation_strings ?? []) if (raw) rawAffiliations.push(raw);
-    }
+// Top-N most-cited works of one real calendar year — a different question
+// than fetchOpenAlex's rolling recent window, and needs its own query
+// shape: sorted by citations (not recency), bounded to one full year, and
+// restricted to `type:article` specifically. Confirmed by hand
+// (2026-07-20): without that type restriction, OpenAlex's top hit for a
+// quantum 2025 query was a journal-ISSUE-level record ("Communications in
+// Computational Physics," 509 "citations") masquerading as a work, not a
+// real paper — `type:article` excludes it and every result after is a real
+// article. Deliberately queried per-year rather than "top N over 3 years
+// in one query" — citations accrue over time, so an undifferentiated pool
+// would just be dominated by the oldest year; per-year top-N is how the
+// most-cited 2025 work and the most-cited 2023 work both get a fair shot
+// at appearing, not just whichever year has had longest to accumulate.
+export async function fetchTopCitedByYear(opts: {
+  filter: string; year: number; n: number; key?: string; mailto?: string;
+}): Promise<Entry[]> {
+  const { filter, year, n, key = "", mailto = "gtm@example.com" } = opts;
+  const url =
+    "https://api.openalex.org/works" +
+    "?filter=" +
+    [
+      filter,
+      "primary_location.source.type:journal",
+      "type:article",
+      `from_publication_date:${year}-01-01`,
+      `to_publication_date:${year}-12-31`,
+    ].join(",") +
+    "&sort=cited_by_count:desc" +
+    `&per-page=${n}` +
+    `&mailto=${encodeURIComponent(mailto)}` +
+    (key ? `&api_key=${key}` : "");
 
-    let org = modalString(institutionNames);
-    let country = modalString(countries);
-    let evidence = country
-      ? `institution country codes [${countries.join(", ")}] → ${country}`
-      : "no institution country on record";
-    let provenance: Entry["provenance"] = "live";
-
-    // No structured institution match — fall back to the raw affiliation
-    // text OpenAlex still often carries even when it couldn't resolve a
-    // formal institution record. Weaker signal, so this drops to "auto".
-    if (!org && rawAffiliations.length > 0) {
-      org = orgFromRawAffiliation(rawAffiliations[0]);
-    }
-    if (!country && rawAffiliations.length > 0) {
-      const inferred = rawAffiliations
-        .map((raw) => inferInstitutionCountry(raw).country)
-        .filter((c): c is string => c !== null);
-      const guess = modalString(inferred);
-      if (guess) {
-        country = guess;
-        evidence = `inferred from raw affiliation text "${rawAffiliations[0]}" → ${guess}`;
-        provenance = "auto";
-      }
-    }
-    // Never fall back to an author's name as if it were an institution —
-    // "Anonymous" or an individual researcher's name is not an org, and
-    // showing it as one pollutes the institution leaderboard with what is
-    // really just "no institution data available."
-    org = org ?? "";
-
-    const oaId = (w.id ?? "").split("/").pop() ?? title.slice(0, 40);
-    const workUrl = w.doi ?? w.id ?? "https://openalex.org";
-    return {
-      id: `oa-${oaId}`, stage: "innovation", country, provenance,
-      source: "paper", title, org, date: (w.publication_date ?? "").slice(0, 10),
-      url: workUrl, countryEvidence: evidence,
-      citations: w.cited_by_count,
-      abstract: abstractText,
-      authors: authorNames.length > 0 ? authorNames.slice(0, 6) : undefined,
-      venue: w.primary_location?.source?.display_name ?? undefined,
-    };
-  });
+  const res = await fetch(url, { headers: { "User-Agent": `GlobalTechMonitor/0.2 (mailto:${mailto})` } });
+  if (!res.ok) throw new Error(`OpenAlex HTTP ${res.status}`);
+  const json = (await res.json()) as { results?: OAWork[] };
+  const works = json.results ?? [];
+  return works.map(mapWork);
 }
 
 // Fetches multiple pages and concatenates — OpenAlex caps per-page at 200,
