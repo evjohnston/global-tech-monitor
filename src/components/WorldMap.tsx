@@ -7,16 +7,24 @@ import { Tooltip } from "./Tooltip.tsx";
 
 // Hoover Red, as RGB — the choropleth scale runs from the neutral panel
 // tone to this, so "more activity here" reads as "more of the one brand
-// accent," not a new color introduced just for the map.
+// accent," not a new color introduced just for the map. Two variants
+// because both the red accent and the panel tone flip in dark mode (see
+// :root[data-theme="dark"] in index.css) — react-simple-maps needs a real
+// computed color per geography, not a CSS var, so this can't just read the
+// token at paint time the way the rest of the app does.
 const RED_RGB: [number, number, number] = [152, 0, 46];
+const RED_RGB_DARK: [number, number, number] = [200, 57, 92];
 const BASE_RGB: [number, number, number] = [238, 241, 244]; // var(--panel-2)
+const BASE_RGB_DARK: [number, number, number] = [32, 36, 43]; // var(--panel-2), dark
 
-function heatColor(count: number, max: number): string {
-  if (count <= 0) return "#f4f5f6"; // var(--panel) — no data, not zero-as-alarming
+function heatColor(count: number, max: number, dark: boolean): string {
+  const base = dark ? BASE_RGB_DARK : BASE_RGB;
+  if (count <= 0) return dark ? "#1a1d22" : "#f4f5f6"; // var(--panel) — no data, not zero-as-alarming
   // sqrt compresses the scale so a handful of dominant countries (US, China)
   // don't wash every other real country down to indistinguishable-from-zero.
+  const red = dark ? RED_RGB_DARK : RED_RGB;
   const t = Math.sqrt(count / max);
-  const rgb = BASE_RGB.map((c0, i) => Math.round(c0 + (RED_RGB[i] - c0) * t));
+  const rgb = base.map((c0, i) => Math.round(c0 + (red[i] - c0) * t));
   return `rgb(${rgb.join(",")})`;
 }
 
@@ -29,6 +37,7 @@ function MapBody({
   onSelect,
   active,
   height,
+  dark,
 }: {
   geoData: Record<string, unknown>;
   counts: Record<string, number>;
@@ -36,6 +45,7 @@ function MapBody({
   onSelect?: (country: string) => void;
   active?: string | null;
   height: number;
+  dark: boolean;
 }) {
   const [zoomState, setZoomState] = useState<{ center: [number, number]; zoom: number }>({ center: [10, 20], zoom: 1 });
   const [tip, setTip] = useState<{ x: number; y: number; code: string } | null>(null);
@@ -60,7 +70,7 @@ function MapBody({
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill={heatColor(count, max)}
+                    fill={heatColor(count, max, dark)}
                     stroke="var(--line)"
                     strokeWidth={0.5}
                     style={{
@@ -139,11 +149,13 @@ export function WorldMap({
   onSelect,
   active,
   trend = [],
+  dark = false,
 }: {
   counts: Record<string, number>;
   onSelect?: (country: string) => void;
   active?: string | null;
   trend?: TrendPoint[];
+  dark?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [hiRes, setHiRes] = useState<Record<string, unknown> | null>(null);
@@ -182,6 +194,7 @@ export function WorldMap({
             onSelect={onSelect}
             active={active}
             height={820}
+            dark={dark}
           />
         </div>
         {canScrub && <TimeBar trend={trend} scrubIndex={scrubIndex} onScrub={setScrubIndex} onLive={() => setScrubIndex(null)} />}
@@ -192,7 +205,7 @@ export function WorldMap({
   return (
     <div>
       <div className="mapbox">
-        <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={shownCounts} max={max} onSelect={onSelect} active={active} height={260} />
+        <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={shownCounts} max={max} onSelect={onSelect} active={active} height={260} dark={dark} />
         <button className="map-expand" onClick={() => setExpanded(true)} aria-label="Expand map to full page">⤢</button>
       </div>
       {canScrub && <TimeBar trend={trend} scrubIndex={scrubIndex} onScrub={setScrubIndex} onLive={() => setScrubIndex(null)} />}

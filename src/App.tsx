@@ -10,6 +10,7 @@ import {
   fundingByCountry, orgLeaderboard, pctDelta, periodCounts, periodFunding, topCountries,
 } from "./lib/aggregate.ts";
 import { StageColumn } from "./components/StageColumn.tsx";
+import { NewsTicker } from "./components/NewsTicker.tsx";
 import { TrendChart } from "./components/TrendChart.tsx";
 import { VolumeTrend } from "./components/VolumeTrend.tsx";
 import { BarRow } from "./components/BarRow.tsx";
@@ -25,6 +26,9 @@ type LiveMode = "loading" | "static" | "refreshed" | "fallback";
 // skipped (soft-fail) when it's not configured.
 const WORKER_URL = (import.meta.env.VITE_WORKER_URL as string | undefined)?.replace(/\/$/, "");
 const WINDOW_DAYS = 21;
+// Genuinely re-pulls every live source on its own, not just a UI animation —
+// same soft-fail `refresh()` path the manual button already uses.
+const AUTO_REFRESH_MS = 3 * 60 * 1000;
 const TOP_N = 6; // compact-view country count — every real country still gets
 // counted everywhere; this only bounds how many show up in chips/bars/KPIs.
 // The full map has no such cap.
@@ -115,6 +119,25 @@ export default function App() {
   const [country, setCountry] = useState<string | "all">("all");
   const [mode, setMode] = useState<LiveMode>("loading");
   const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
+  const [dark, setDark] = useState<boolean>(() => {
+    const saved = localStorage.getItem("gtm-theme");
+    if (saved === "dark" || saved === "light") return saved === "dark";
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+  });
+  const [nowTick, setNowTick] = useState(0);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    localStorage.setItem("gtm-theme", dark ? "dark" : "light");
+  }, [dark]);
+
+  // A real ticking clock — "12s ago" against the actual last-fetch
+  // timestamp, not a fabricated animation. nowTick just forces a re-render
+  // each second; the value itself isn't read anywhere.
+  useEffect(() => {
+    const id = setInterval(() => setNowTick((t) => t + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     setData(null);
@@ -130,6 +153,14 @@ export default function App() {
         refresh(); // layer a live read on top of the static build, once
       })
       .catch(() => setMode("fallback"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vertical.id]);
+
+  // Actually live: re-pulls every source on a timer, not just on the manual
+  // button or the one-time layer-on-load. Restarts on vertical switch.
+  useEffect(() => {
+    const id = setInterval(() => { refresh(); }, AUTO_REFRESH_MS);
+    return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vertical.id]);
 
@@ -236,6 +267,16 @@ export default function App() {
     : "—";
   const statusText = mode === "loading" ? "syncing" : mode === "fallback" ? "data unavailable"
     : mode === "refreshed" ? "refreshed live" : "static build";
+  // Ticks every second (nowTick) against the real last-fetch timestamp —
+  // "12s ago," not a fabricated animation.
+  const updatedAgo = (() => {
+    if (!data?.generatedAt) return null;
+    void nowTick;
+    const secs = Math.max(0, Math.round((Date.now() - new Date(data.generatedAt).getTime()) / 1000));
+    if (secs < 60) return `${secs}s ago`;
+    if (secs < 3600) return `${Math.floor(secs / 60)}m ago`;
+    return `${Math.floor(secs / 3600)}h ago`;
+  })();
 
   function toggleCountry(c: string) {
     setCountry((prev) => (prev === c ? "all" : c));
@@ -266,11 +307,24 @@ export default function App() {
             ))}
           </span>
           <span className="topbar-meta">
-            <span className={mode === "refreshed" ? "on" : ""}>● {statusText}</span>
-            <span>updated {generated}</span>
+            <span className={mode === "refreshed" ? "on" : ""}>
+              {mode === "refreshed" ? <span className="live-dot" /> : "● "}
+              {statusText}
+            </span>
+            <span>{generated}{updatedAgo ? ` · ${updatedAgo}` : ""}</span>
           </span>
+          <button
+            className="theme-toggle"
+            onClick={() => setDark((d) => !d)}
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            title={dark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {dark ? "☀" : "☾"}
+          </button>
         </div>
       </div>
+
+      <NewsTicker entries={shown} />
 
       <div className="wrap">
         <div className="pagehead">
@@ -357,7 +411,7 @@ export default function App() {
           <div className="panel map-panel">
             <h3>Where the work happens</h3>
             <div className="map-fill">
-              <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} trend={trend} />
+              <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} trend={trend} dark={dark} />
               <div className="trend-empty" style={{ padding: "6px 0 0", fontSize: 10.5 }}>
                 Every country with at least one attributed work is shaded — darker means more output. Click any country to filter the page. Drag the time bar below to see real recorded history; expand for the full interactive map.
               </div>
