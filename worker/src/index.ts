@@ -96,7 +96,7 @@ export default {
         return withCors(await cached(req, () => fetchPatents(env.EPO_KEY, env.EPO_SECRET, EPO_N, vertical.epoCpcQuery)), origin);
       }
       if (url.pathname === "/funding") {
-        return withCors(await cached(req, () => fetchNSF(NSF_N, vertical.fundingKeyword)), origin);
+        return withCors(await cached(req, () => fetchNSF(NSF_N, vertical.fundingKeyword, vertical.rssClassifier.relevant)), origin);
       }
       if (url.pathname === "/news") {
         return withCors(await cached(req, () => fetchNewsRss(vertical.rssFeeds, vertical.rssClassifier, 30)), origin);

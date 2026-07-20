@@ -49,7 +49,7 @@ a { color: inherit; }
 .wordmark { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
 .wordmark .gtm { color: var(--red); }
 .topbar-meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--mist); display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-.topbar-meta .on { color: #1f9d55; }
+/* live-dot is still used by NewsTicker's "Latest" label, not the topbar (the topbar's live-refresh state was removed 2026-07-20 with the static-store-only pass) */
 .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #1f9d55; margin-right: 5px; animation: live-pulse 1.8s ease-in-out infinite; }
 @keyframes live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 .theme-toggle {

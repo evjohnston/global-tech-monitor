@@ -107,6 +107,7 @@ export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
 
   return works.map((w): Entry => {
     const title = (w.title ?? w.display_name ?? "").replace(/\s+/g, " ").trim();
+    const abstractText = reconstructAbstract(w.abstract_inverted_index);
     const auths = w.authorships ?? [];
 
     const institutionNames: string[] = [];
@@ -159,7 +160,7 @@ export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
       source: "paper", title, org, date: (w.publication_date ?? "").slice(0, 10),
       url: workUrl, countryEvidence: evidence,
       citations: w.cited_by_count,
-      abstract: reconstructAbstract(w.abstract_inverted_index),
+      abstract: abstractText,
       authors: authorNames.length > 0 ? authorNames.slice(0, 6) : undefined,
       venue: w.primary_location?.source?.display_name ?? undefined,
     };

@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
 import { STAGES } from "./lib/types.ts";
-import { inferInstitutionCountry } from "./lib/institutionCountry.ts";
 import { countryColor, countryName } from "./lib/countries.ts";
-import { fetchOpenAlexPages } from "./lib/sources/openalex.ts";
-import { VERTICALS, type VerticalConfig } from "./lib/verticals.ts";
+import { VERTICALS } from "./lib/verticals.ts";
 import {
   countByCountry, countByStage, countryShares,
   fundingByCountry, orgLeaderboard, pctDelta, periodCounts, periodFunding, topCountries,
@@ -22,15 +20,19 @@ import { PieChart } from "./components/PieChart.tsx";
 import { EntryModal } from "./components/EntryModal.tsx";
 import { fmtUsd } from "./lib/format.ts";
 
-type LiveMode = "loading" | "static" | "refreshed" | "fallback";
-// The EPO/NSF/news proxy — see worker/. Unset in dev until you've deployed
-// one and added VITE_WORKER_URL to .env.local; those sources are just
-// skipped (soft-fail) when it's not configured.
-const WORKER_URL = (import.meta.env.VITE_WORKER_URL as string | undefined)?.replace(/\/$/, "");
+// Static-store-only (2026-07-20): the frontend reads whichever
+// public/data/<vertical>.json the nightly build last wrote and nothing
+// else — it never live-queries OpenAlex/EPO/NSF/RSS itself. That build is
+// the one real ingestion pipeline (scripts/fetch-data.ts, on a schedule —
+// see build-and-deploy.yml); the browser used to layer a live re-fetch on
+// top (direct OpenAlex + the Worker for EPO/NSF/RSS) but that meant two
+// different code paths could show two different pictures of "now," and the
+// UI's "refreshed live"/auto-refresh pulse implied a streaming feed this
+// app was never built to be. worker/ still exists and is still deployed —
+// it's just unused by this frontend now; left in place in case a future
+// on-demand feature wants it, not decommissioned.
+type LiveMode = "loading" | "static" | "fallback";
 const WINDOW_DAYS = 21;
-// Genuinely re-pulls every live source on its own, not just a UI animation —
-// same soft-fail `refresh()` path the manual button already uses.
-const AUTO_REFRESH_MS = 3 * 60 * 1000;
 const TOP_N = 6; // compact-view country count — every real country still gets
 // counted everywhere; this only bounds how many show up in chips/bars/KPIs.
 // The full map has no such cap.
@@ -39,73 +41,6 @@ function fmtDelta(pct: number | null): string | null {
   if (pct == null) return null;
   if (Math.abs(pct) < 0.05) return "flat";
   return `${pct > 0 ? "+" : "−"}${Math.abs(pct).toFixed(1)}%`;
-}
-
-// arXiv fallback for the browser path — only used if a direct OpenAlex call
-// fails. Kept separate from scripts/lib/sources/* because it leans on
-// DOMParser, which only exists in the browser.
-async function fetchArxivBrowser(category: string): Promise<Entry[]> {
-  const url =
-    `https://export.arxiv.org/api/query?search_query=cat:${encodeURIComponent(category)}` +
-    "&sortBy=submittedDate&sortOrder=descending&max_results=200";
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(String(res.status));
-  const xml = new DOMParser().parseFromString(await res.text(), "application/xml");
-  const nodes = [...xml.getElementsByTagName("entry")];
-  return nodes.map((n) => {
-    const title = (n.getElementsByTagName("title")[0]?.textContent ?? "").replace(/\s+/g, " ").trim();
-    const pub = (n.getElementsByTagName("published")[0]?.textContent ?? "").slice(0, 10);
-    const authors = [...n.getElementsByTagName("author")];
-    const names = authors.map((a) => a.getElementsByTagName("name")[0]?.textContent ?? "");
-    const affil = authors.map((a) => a.getElementsByTagName("arxiv:affiliation")[0]?.textContent ?? "").join(" ");
-    const org = names.length > 1 ? `${names[0]} et al.` : names[0] ?? "";
-    const links = [...n.getElementsByTagName("link")];
-    const url = links.find((l) => l.getAttribute("rel") === "alternate")?.getAttribute("href")
-      ?? n.getElementsByTagName("id")[0]?.textContent ?? `https://arxiv.org/list/${category}/recent`;
-    const { country, evidence } = inferInstitutionCountry(`${affil} ${org} ${title}`);
-    const absId = url.split("/abs/")[1] ?? title.slice(0, 40);
-    return { id: `arxiv-${absId}`, stage: "innovation" as Stage, country, provenance: "auto" as const,
-      source: "arxiv" as const, title, org, date: pub, url, countryEvidence: evidence };
-  });
-}
-
-// One fresh read across every source that can be fetched from the browser
-// (OpenAlex direct) or through the worker proxy (EPO, NSF, news). Each leg
-// fails soft — same ethos as the nightly build — so one dead source never
-// blanks the others. `?vertical=<id>` tells the Worker which CPC/keyword/RSS
-// config to use (see worker/src/index.ts + src/lib/verticals.ts).
-async function fetchLive(v: VerticalConfig): Promise<{ entries: Entry[]; failed: string[] }> {
-  const failed: string[] = [];
-  let innovation: Entry[] = [];
-  try {
-    innovation = await fetchOpenAlexPages({ filter: v.openAlexFilter, mailto: "gtm@example.com", n: 200, pages: 3 });
-  } catch {
-    try {
-      innovation = await fetchArxivBrowser(v.arxivCategory);
-    } catch {
-      failed.push("innovation");
-    }
-  }
-
-  let patents: Entry[] = [];
-  let funding: Entry[] = [];
-  let news: Entry[] = [];
-  let investmentNews: Entry[] = [];
-  if (WORKER_URL) {
-    const q = `?vertical=${encodeURIComponent(v.id)}`;
-    const [pRes, fRes, nRes, inRes] = await Promise.allSettled([
-      fetch(`${WORKER_URL}/patents${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
-      fetch(`${WORKER_URL}/funding${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
-      fetch(`${WORKER_URL}/news${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
-      fetch(`${WORKER_URL}/investment-news${q}`).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
-    ]);
-    if (pRes.status === "fulfilled") patents = pRes.value as Entry[]; else failed.push("patents");
-    if (fRes.status === "fulfilled") funding = fRes.value as Entry[]; else failed.push("funding");
-    if (nRes.status === "fulfilled") news = nRes.value as Entry[]; else failed.push("news");
-    if (inRes.status === "fulfilled") investmentNews = inRes.value as Entry[]; else failed.push("investment-news");
-  }
-
-  return { entries: [...innovation, ...patents, ...funding, ...news, ...investmentNews], failed };
 }
 
 export default function App() {
@@ -127,8 +62,9 @@ export default function App() {
   // re-fetching and re-parsing it from scratch on every tab switch is real,
   // avoidable latency once a vertical's already been visited this session.
   // Switching back to a vertical already in this map shows its last-known
-  // data instantly while a fresh fetch still runs underneath to catch
-  // anything new — never permanently stale, just not blocking on repeat
+  // data instantly while the same fetch below still re-checks the static
+  // file underneath (in case the nightly build landed a new one while this
+  // tab was open) — never permanently stale, just not blocking on repeat
   // visits. First-ever visit to a vertical is still bound by that file's
   // real network+parse time; this doesn't shrink the file itself.
   const dataCacheRef = useRef<Record<string, DataFile>>({});
@@ -159,35 +95,10 @@ export default function App() {
         dataCacheRef.current[vertical.id] = d;
         setData(d);
         setMode("static");
-        refresh(); // layer a live read on top of the static build, once
       })
       .catch(() => { if (!cached) setMode("fallback"); });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vertical.id]);
-
-  // Actually live: re-pulls every source on a timer, not just on the manual
-  // button or the one-time layer-on-load. Restarts on vertical switch.
-  useEffect(() => {
-    const id = setInterval(() => { refresh(); }, AUTO_REFRESH_MS);
-    return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vertical.id]);
-
-  async function refresh() {
-    setMode("loading");
-    try {
-      const { entries: fresh, failed } = await fetchLive(vertical);
-      setData((prev) => {
-        const base = prev?.entries ?? [];
-        const byId = new Map<string, Entry>();
-        for (const e of [...base, ...fresh]) byId.set(e.id, e);
-        return { technology: prev?.technology ?? vertical.id, generatedAt: new Date().toISOString(),
-          entries: [...byId.values()], trend: prev?.trend ?? [], notes: prev?.notes ?? [] };
-      });
-      if (failed.length) console.warn(`live refresh: ${failed.join(", ")} unavailable, kept prior data for those`);
-      setMode(fresh.length > 0 ? "refreshed" : "static");
-    } catch { setMode(data ? "static" : "fallback"); }
-  }
 
   const entries = data?.entries ?? [];
   const trend = data?.trend ?? [];
@@ -300,8 +211,7 @@ export default function App() {
   const generated = data?.generatedAt
     ? new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "—";
-  const statusText = mode === "loading" ? "syncing" : mode === "fallback" ? "data unavailable"
-    : mode === "refreshed" ? "refreshed live" : "static build";
+  const statusText = mode === "loading" ? "loading" : mode === "fallback" ? "data unavailable" : "static build";
   // Ticks every second (nowTick) against the real last-fetch timestamp —
   // "12s ago," not a fabricated animation.
   const updatedAgo = (() => {
@@ -342,11 +252,10 @@ export default function App() {
             ))}
           </span>
           <span className="topbar-meta">
-            <span className={mode === "refreshed" ? "on" : ""}>
-              {mode === "refreshed" ? <span className="live-dot" /> : "● "}
-              {statusText}
+            <span>● {statusText}</span>
+            <span title="Nightly build timestamp — this app reads a static build, it doesn't live-query sources on page load">
+              {generated}{updatedAgo ? ` · ${updatedAgo}` : ""}
             </span>
-            <span>{generated}{updatedAgo ? ` · ${updatedAgo}` : ""}</span>
           </span>
           <button
             className="theme-toggle"
@@ -378,8 +287,6 @@ export default function App() {
             </button>
           ))}
           <span className="lbl" style={{ marginLeft: 2 }}>— or click any country on the map below</span>
-          <span className="spacer" />
-          <button className="ghost-btn" onClick={refresh}>↻ refresh live</button>
         </div>
 
         <div className="kpirow">
@@ -411,7 +318,7 @@ export default function App() {
           <KpiCard
             label="Disclosed investment"
             value={fmtUsd(fundingPeriod.current)}
-            delta={fmtDelta(pctDelta(fundingPeriod.current, fundingPeriod.previous))}
+            delta={fmtDelta(pctDelta(fundingPeriod.current, fundingPeriod.previous, 10_000))}
             caption={`US / EU only, no PRC feed${filterSuffix}`}
           />
         </div>

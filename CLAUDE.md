@@ -20,7 +20,9 @@ treat data-viz as the hero, look like an instrument.
 
 Every technology tracked by this app is one entry in `VERTICALS`,
 `src/lib/verticals.ts` — the single source of truth every fetch path reads
-from (the nightly script, the Worker, the browser's live-refresh path).
+from (the nightly build script, and the Worker — though nothing calls the
+Worker's routes from the frontend anymore as of 2026-07-20; see "Live data"
+below).
 A `VerticalConfig` carries: `id` (also the `public/data/<id>.json` filename
 and `DataFile.technology` value), `number`/`label`/`shortLabel`/`tagline`
 (topbar + pagehead display), `dataDir` (`data/<dataDir>/{seed,notes}.ts`),
@@ -32,8 +34,9 @@ classifier). `src/lib/sources/{openalex,epo,nsf,rss}.ts` are tech-agnostic
 machinery that take these as parameters — none of them hardcode a technology
 anymore. `scripts/fetch-data.ts` loops over `VERTICALS` and writes one
 `public/data/<id>.json` per vertical; `App.tsx` has a topbar tab per vertical
-(`.vtab` buttons) that switches which data file is loaded and which
-`?vertical=<id>` query param gets passed to the Worker's live routes.
+(`.vtab` buttons) that switches which data file is loaded — that's the whole
+mechanism now, the frontend has no live-fetch path to configure per
+vertical.
 
 **Adding a vertical is real research work, not a config flag.** Each one
 needs, checked by hand before it goes in `VERTICALS`:
@@ -79,22 +82,28 @@ needs, checked by hand before it goes in `VERTICALS`:
 - **Vite + React + TypeScript.** Types matter here because entries have a real
   shape and the project grows by adding verticals.
 - **A Node fetch script** (`scripts/fetch-data.ts`) runs server-side — on a
-  daily GitHub Action — and writes `public/data/<vertical-id>.json`, one per
-  entry in `VERTICALS`. The app reads whichever JSON matches the active
-  vertical tab, so the page is static, instant, and works on GitHub Pages
-  with no server. Fetching server-side is deliberate: it dodges browser CORS
-  limits and is where patent/funding sources live.
-- **GitHub Action** (`.github/workflows/build-and-deploy.yml`) fetches daily at
-  07:00 UTC, commits the updated data files back (so trend/entries history
+  scheduled GitHub Action, every 3 hours — and writes
+  `public/data/<vertical-id>.json`, one per entry in `VERTICALS`. The app
+  reads whichever JSON matches the active vertical tab, so the page is
+  static, instant, and works on GitHub Pages with no server. Fetching
+  server-side is deliberate: it dodges browser CORS limits and is where
+  patent/funding sources live. **This script is now the app's only real
+  ingestion path** (see "Live data" below for what changed 2026-07-20) — the
+  frontend never calls OpenAlex/EPO/NSF/RSS itself.
+- **GitHub Action** (`.github/workflows/build-and-deploy.yml`) fetches every 3
+  hours, commits the updated data files back (so trend/entries history
   accumulates for every vertical), builds, and deploys to Pages. This keeps
-  running — it's the only thing writing `trend[]`, and nothing below
-  replaces it.
-- **A Cloudflare Worker** (`worker/`) adds a live layer on top of that static
-  base. On page load the browser fetches OpenAlex directly (open CORS, no
-  secret needed) and hits the Worker for EPO patents, NSF funding, and
-  quantum-news RSS — all three need something a browser can't hold (a
-  client secret, or CORS support that doesn't exist on those origins). See
-  "Live data" below.
+  running — it's the only thing writing `trend[]` (and, since 2026-07-20, the
+  only thing that ever pulls fresh data at all), and nothing below replaces
+  it. Cadence was daily (07:00 UTC) until 2026-07-20; bumped to every 3 hours
+  specifically to compensate for removing the browser's 3-minute live
+  auto-refresh — see "Live data" below.
+- **A Cloudflare Worker** (`worker/`) still exists and is still deployed, but
+  as of 2026-07-20 the frontend doesn't call it. It used to add a live layer
+  on top of the static base (the browser fetching OpenAlex directly plus the
+  Worker proxying EPO/NSF/RSS on every page load and every 3 minutes after).
+  That's gone — see "Live data" below for why, and don't wire the browser
+  back up to it without re-reading that reasoning first.
 
 ## Data sources and their honesty caveats
 
@@ -121,8 +130,9 @@ needs, checked by hand before it goes in `VERTICALS`:
   as if it were one prolific org with dozens of works. When there's truly
   no institution-shaped data, `org` is `""` (nothing shown), not a name.
   `fetchOpenAlexPages` pages past OpenAlex's 200-per-page cap (3 pages by
-  default, both in the nightly build and the browser live-refresh) — one
-  implementation, so paging behavior can't drift between the two paths.
+  default) — one implementation, shared by the nightly build and the
+  one-time `backfill-trend`/`backfill-entries` scripts (the browser doesn't
+  call this anymore; see "Live data" below).
 - **Patents** — EPO OPS, feeds innovation stage. Needs `EPO_KEY` + `EPO_SECRET`.
   Schema is fiddly; if patents come back empty, inspect the raw response first.
 - **Scaling / adoption** — two layers: a hand-verified floor in `data/seed.ts`
@@ -303,18 +313,37 @@ however small its count, is actually visible. Don't add a second capped
 view of the map data — if a panel needs to show "the rest," point at the
 map rather than inventing another top-N list.
 
-## Live data (Cloudflare Worker)
+## Live data (Cloudflare Worker) — now dormant, frontend is static-store-only
 
-`worker/` is a separate deployable (its own `package.json`/`wrangler.jsonc`),
-not part of the Vite build. It proxies three routes — `/patents` (EPO),
-`/funding` (NSF), `/news` (RSS, all three feeds — two of the three don't
-send CORS headers, so it's simplest to have the Worker fetch all three
-rather than split by which one happens to allow a direct browser call).
-OpenAlex is the one source that's CORS-open, so the browser calls it
-directly (`src/App.tsx` → `fetchLive()`). The Worker and the Node fetch
-script import the *same* `src/lib/sources/{openalex,epo,nsf,rss}.ts`
-modules, so attribution/classification logic can't drift between the live
-path and the nightly build.
+**Changed 2026-07-20: the frontend no longer live-queries any source.**
+Before this, `src/App.tsx` had a `fetchLive()` that ran on every page load
+and on a 3-minute timer — the browser called OpenAlex directly (open CORS)
+and hit the Worker for EPO/NSF/RSS, merging the result on top of the static
+build client-side. That's gone. The frontend now does exactly one thing:
+fetch `public/data/<vertical>.json` and render it. Nothing in `src/App.tsx`
+calls OpenAlex, EPO, NSF, RSS, or the Worker anymore — `VITE_WORKER_URL` was
+removed from `build-and-deploy.yml`'s Build step because nothing reads it.
+
+Why: two different code paths (the nightly build vs. the browser's live
+merge) could show two different pictures of "now" depending on when you
+loaded the page, the "refreshed live" pulse and 3-minute auto-refresh
+implied a streaming feed this app was never built to be, and the topbar's
+green pulsing dot read as more real-time than a periodic poll actually is.
+**Do not reintroduce a client-side fetch of any source module from
+`src/App.tsx`** — if you want fresher data, the lever is the GitHub Action's
+cron cadence (currently every 3 hours, bumped from daily specifically to
+compensate for removing this), not a new browser-side fetch path.
+
+`worker/` (its own `package.json`/`wrangler.jsonc`, not part of the Vite
+build) is **still deployed, just unused** — left in place deliberately
+rather than decommissioned, in case a future on-demand-refresh feature wants
+it. It still proxies three routes — `/patents` (EPO), `/funding` (NSF),
+`/news` (RSS) — and still imports the *same*
+`src/lib/sources/{openalex,epo,nsf,rss}.ts` modules the nightly script does,
+so if it's ever wired back up, attribution/classification logic still can't
+drift between the two. Redeploying it (`cd worker && npm run deploy`) still
+works exactly as before if you're testing it directly; nothing about its own
+code changed.
 
 The RSS feeds and classifiers are per-vertical config in
 `src/lib/verticals.ts` (`QUANTUM_RSS_FEEDS`/`QUANTUM_RSS_CLASSIFIER`,
@@ -337,12 +366,13 @@ posts a few times a day, so there's no honest reason to hit either upstream
 on every page load. CORS is locked to `ALLOWED_ORIGINS` (checked against the
 request's `Origin` header), not left open with `*`.
 
-**Deployed.** Live at `https://gtm-live-proxy.evjohnston.workers.dev`, under
-the `evj@stanford.edu` Cloudflare account. `ALLOWED_ORIGINS` in
-`wrangler.jsonc` already includes `https://evjohnston.github.io` alongside
-the localhost dev ports. `VITE_WORKER_URL` is set both in `.env.local` (local
-dev) and in `build-and-deploy.yml`'s Build step (production) — it's a public
-URL, not a secret, so it's fine committed in the workflow file.
+**Deployed, unused by the frontend.** Still live at
+`https://gtm-live-proxy.evjohnston.workers.dev`, under the
+`evj@stanford.edu` Cloudflare account. `ALLOWED_ORIGINS` in `wrangler.jsonc`
+still includes `https://evjohnston.github.io` alongside the localhost dev
+ports. `VITE_WORKER_URL` was removed from `build-and-deploy.yml`'s Build
+step 2026-07-20 (nothing reads it anymore) — it may still be set in your own
+`.env.local` from before that change, which is harmless, just dead config.
 
 EPO_KEY / EPO_SECRET now added (2026-07-19), in both places that need them —
 they're independent, adding one doesn't feed the other:
@@ -362,18 +392,12 @@ they're independent, adding one doesn't feed the other:
   `scripts/fetch-data.ts` reads empty either way, silently, since every
   source here fails soft.
 
-Redeploying after any other change to `worker/`: `cd worker && npm run
-deploy` (already logged in — no need to re-run `wrangler login`).
-
 Local dev doesn't need login: `cd worker && npm run dev` runs on
 `localhost:8787` against `.dev.vars` (copy `.dev.vars.example`, fill in real
-EPO creds if you want patents locally — NSF needs no key either way). Swap
-`VITE_WORKER_URL` in `.env.local` to point at it instead of the deployed
-Worker when iterating on `worker/` itself.
-
-If `VITE_WORKER_URL` is unset, the app just skips patents/funding on the live
-path and falls back to whatever the last static build had for those stages —
-soft-fail, same as everywhere else in this project.
+EPO creds if you want patents locally — NSF needs no key either way). This
+is only useful for testing the Worker's own routes directly (`curl
+localhost:8787/patents?...`) — there's no `VITE_WORKER_URL` wiring left in
+the app to point at it.
 
 ## Things to preserve
 
@@ -385,13 +409,18 @@ soft-fail, same as everywhere else in this project.
   never imply RSS-classified or arXiv-keyword-classified data is as solid as
   institution-attributed or hand-verified data.
 - The China-funding caveat in the investment section.
-- Soft-fail on every fetch source, including all three Worker-proxied routes.
-- The daily commit of `public/data/*.json` (trend AND entries accumulation
-  both depend on it for every vertical — the Worker is additive freshness on
-  top, not a replacement for this). The GitHub Actions workflow's "Commit
-  updated data" step does this now (fixed 2026-07-19 — it was missing
-  entirely before, so every nightly run's accumulation was silently
-  discarded after that run's deploy; see the workflow file's comment).
+- Soft-fail on every fetch source, including all three Worker-proxied routes
+  (even though the frontend doesn't call them anymore — the Worker itself
+  should still degrade gracefully if it's ever used again).
+- The scheduled commit of `public/data/*.json` (trend AND entries
+  accumulation both depend on it for every vertical). Since 2026-07-20 this
+  GitHub Action run is the *only* thing that ever pulls fresh data — there
+  is no more browser-side live layer on top of it, so don't reason about
+  freshness as "static base + live topping" anymore, it's just "however
+  current the last scheduled run is." The workflow's "Commit updated data"
+  step does the actual commit (fixed 2026-07-19 — it was missing entirely
+  before, so every run's accumulation was silently discarded after that
+  run's deploy; see the workflow file's comment).
 - One shared implementation per source (`src/lib/sources/*`) — if you touch
   attribution or transform logic for OpenAlex/EPO/NSF/RSS, edit it there
   once, not in the Node script and the Worker separately. Vertical-specific

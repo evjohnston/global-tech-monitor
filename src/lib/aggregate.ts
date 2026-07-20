@@ -1,4 +1,5 @@
 import type { Entry, Stage, TrendPoint } from "./types.ts";
+import { canonicalizeOrg } from "./entityResolution.ts";
 
 // Count entries by country within a stage (or all stages). Open-ended —
 // keyed by whatever real countries are actually present, not a fixed
@@ -64,12 +65,19 @@ export interface OrgRow {
 // the entry. Real data only (OpenAlex's cited_by_count); patents/grants/news
 // entries carry no citations field, so they fall back to count alone, same
 // as an uncited paper would.
+//
+// Groups by `orgId` (the canonical entity, see entityResolution.ts) rather
+// than the raw `org` string, so "NVIDIA" and "Nvidia" — or "IBM Quantum" and
+// "IBM Research - Zurich" — count as the one real institution they are,
+// instead of splitting a leaderboard row three ways. Falls back to
+// computing it on the fly for entries fetched before this field existed
+// (fetch-data.ts stamps `orgId` at ingest for everything going forward).
 export function orgLeaderboard(entries: Entry[], stage?: Stage, limit = 8): OrgRow[] {
   const map = new Map<string, OrgRow>();
   for (const e of entries) {
     if (stage && e.stage !== stage) continue;
     if (!e.org) continue;
-    const key = e.org;
+    const key = e.orgId ?? canonicalizeOrg(e.org).id;
     const cur = map.get(key);
     const citations = e.citations ?? 0;
     if (cur) { cur.count++; cur.citations += citations; }
@@ -135,9 +143,18 @@ export function periodFunding(
 }
 
 // Percent change, or null when there's no honest baseline to compare against
-// (zero previous-period activity) rather than showing a misleading number.
-export function pctDelta(current: number, previous: number): number | null {
-  if (previous === 0) return null;
+// rather than showing a misleading number. `minBase` guards against a
+// near-zero (not just zero) denominator — confirmed on real data
+// (2026-07-20): the AI vertical's investment KPI had a trailing-21d
+// previous-period count of 3, current of 324, rendering as "+10700.0%";
+// its combined-stage total had a previous of 5, rendering "+32140.0%".
+// Both are a real division, but the "previous" side is thin enough to be
+// noise, not a baseline — a single extra grant or paper landing a day
+// earlier/later would swing the percentage wildly. Caller picks the floor
+// appropriate to its own units (a raw entry count vs. a dollar amount need
+// different minimums); default of 10 fits count-based callers.
+export function pctDelta(current: number, previous: number, minBase = 10): number | null {
+  if (previous < minBase) return null;
   return ((current - previous) / previous) * 100;
 }
 

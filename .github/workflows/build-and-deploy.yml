@@ -1,9 +1,13 @@
 name: build-and-deploy
 
 on:
-  # Daily at 07:00 UTC — after most arXiv announcements land.
+  # Every 3 hours (bumped from once-daily 2026-07-20, when the frontend
+  # stopped live-querying sources on page load — see App.tsx's
+  # "static-store-only" comment. This nightly-turned-frequent build is now
+  # the only thing that ever pulls fresh data; the old 3-minute browser
+  # auto-refresh no longer exists, so this cadence is what "fresh" means.
   schedule:
-    - cron: "0 7 * * *"
+    - cron: "0 */3 * * *"
   # Deploy on push to main.
   push:
     branches: [main]
@@ -106,9 +110,9 @@ jobs:
         run: npm run build
         env:
           GTM_BASE: /${{ github.event.repository.name }}/
-          # Live-data proxy (worker/) — a public URL, not a secret. Update
-          # this if the Worker is ever redeployed under a different name.
-          VITE_WORKER_URL: https://gtm-live-proxy.evjohnston.workers.dev
+          # VITE_WORKER_URL removed 2026-07-20 — the frontend no longer
+          # reads it (static-store-only, see App.tsx). The Worker itself is
+          # still deployed, just unused by this build now; see CLAUDE.md.
 
       - uses: actions/upload-pages-artifact@v3
         with:

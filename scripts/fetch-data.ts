@@ -53,6 +53,9 @@ import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
 import { asArray } from "../src/lib/sources/util.ts";
 import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
+import { canonicalizeOrg } from "../src/lib/entityResolution.ts";
+import { relevanceScoreFor } from "../src/lib/relevanceScore.ts";
+import { buildSourceMeta } from "../src/lib/sourceMeta.ts";
 import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
 import { NOTES as QUANTUM_NOTES } from "../data/quantum/notes.ts";
 import { SEED as AI_SEED } from "../data/ai/seed.ts";
@@ -143,16 +146,20 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
 
   let live: Entry[] = [];
   let sourceUsed = "openalex";
+  let openalexOk = false;
+  let arxivOk = false;
   try {
     live = await fetchOpenAlexPages({
       filter: v.openAlexFilter, key: OA_KEY, mailto: OA_MAILTO, sinceDays: 30, n: OA_N, pages: OA_PAGES,
     });
+    openalexOk = true;
     console.log(`OpenAlex: ${live.length} works with country attribution`);
   } catch (err) {
     console.error("OpenAlex failed:", (err as Error).message);
     try {
       live = await fetchArxiv(v.arxivCategory);
       sourceUsed = "arxiv-fallback";
+      arxivOk = true;
       console.log(`arXiv fallback: ${live.length} works (no country data)`);
     } catch (err2) {
       console.error("arXiv also failed:", (err2 as Error).message);
@@ -165,29 +172,37 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   // Patents and funding are additive and each fails soft — a missing key or
   // a down endpoint drops that source without breaking the build.
   let patents: Entry[] = [];
+  let epoOk = false;
   try {
     patents = await fetchPatents(EPO_KEY, EPO_SECRET, EPO_N, v.epoCpcQuery);
+    epoOk = true;
     console.log(`EPO: ${patents.length} patents`);
   } catch (err) {
     console.error("patents skipped:", (err as Error).message);
   }
   let funding: Entry[] = [];
+  let nsfOk = false;
   try {
-    funding = await fetchNSF(NSF_N, v.fundingKeyword);
+    funding = await fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant);
+    nsfOk = true;
     console.log(`NSF: ${funding.length} grants`);
   } catch (err) {
     console.error("funding skipped:", (err as Error).message);
   }
   let news: Entry[] = [];
+  let rssNewsOk = false;
   try {
     news = await fetchNewsRss(v.rssFeeds, v.rssClassifier, 30);
+    rssNewsOk = true;
     console.log(`RSS: ${news.length} auto-classified scaling/adoption items`);
   } catch (err) {
     console.error("news skipped:", (err as Error).message);
   }
   let investmentNews: Entry[] = [];
+  let rssInvestmentOk = false;
   try {
     investmentNews = await fetchInvestmentNews({ query: v.investmentNewsQuery, relevant: v.rssClassifier.relevant }, 30);
+    rssInvestmentOk = true;
     console.log(`Google News: ${investmentNews.length} auto-classified investment items`);
   } catch (err) {
     console.error("investment news skipped:", (err as Error).message);
@@ -201,25 +216,54 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   // on top by id, means entries only grow or get refreshed, never disappear.
   const seed = SEED_BY_VERTICAL[v.id] ?? [];
   const notes = NOTES_BY_VERTICAL[v.id] ?? [];
+  const now = new Date().toISOString();
   const byId = new Map<string, Entry>();
   for (const e of prev?.entries ?? []) byId.set(e.id, e);
-  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews]) byId.set(e.id, e);
+  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews]) {
+    // ingestedAt is stamped once, at first sight, and preserved on every
+    // later re-fetch of the same id — it must never reset to "now" just
+    // because a source returned the same entry again.
+    const existing = byId.get(e.id);
+    byId.set(e.id, { ...e, ingestedAt: existing?.ingestedAt ?? now });
+  }
+  // orgId/relevanceScore are derived fields, cheap and idempotent to
+  // recompute — unlike ingestedAt, there's no "first seen" meaning to
+  // preserve, so every run recomputes them for every entry. That makes them
+  // self-healing if entityResolution's alias table or the relevance
+  // heuristic improves later, instead of freezing whatever value an entry
+  // happened to get the run it was first ingested.
+  for (const e of byId.values()) {
+    if (e.org) e.orgId = canonicalizeOrg(e.org).id;
+    e.relevanceScore = relevanceScoreFor(e.source, e.provenance);
+    if (!e.ingestedAt) e.ingestedAt = now; // entries from before this field existed
+  }
 
   // Append today's trend point, keeping prior history. One point per date.
   // Also drops any leftover pre-refactor us/cn/eu/other-bucket point — real
   // country codes are never lowercase, so this is an unambiguous tell.
-  const today = new Date().toISOString().slice(0, 10);
+  const today = now.slice(0, 10);
   const history = (prev?.trend ?? []).filter(
     (p) => p.date !== today && !Object.keys(p.counts).some((k) => ["us", "cn", "eu", "other"].includes(k))
   );
   const trend = live.length > 0 ? [...history, trendPoint(live)] : history;
 
+  const sourceMeta = buildSourceMeta(prev?.sourceMeta, {
+    openalex: openalexOk,
+    "arxiv-fallback": arxivOk,
+    epo: epoOk,
+    nsf: nsfOk,
+    "rss-news": rssNewsOk,
+    "rss-investment": rssInvestmentOk,
+    seed: seed.length > 0, // a static import, not a fetch — always "succeeds" when configured
+  }, now);
+
   const out: DataFile = {
     technology: v.id,
-    generatedAt: new Date().toISOString(),
+    generatedAt: now,
     entries: [...byId.values()],
     trend,
     notes,
+    sourceMeta,
   };
 
   mkdirSync(OUT_DIR, { recursive: true });

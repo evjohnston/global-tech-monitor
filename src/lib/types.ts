@@ -52,6 +52,46 @@ export interface Entry {
   authors?: string[];
   venue?: string;
   classification?: string;
+  // ISO timestamp of when THIS app first ingested this entry — distinct
+  // from `date` (when the real-world thing happened). Stamped once, at
+  // first sight, and preserved across every later merge (see fetch-data.ts)
+  // — it must never get overwritten by a later run's timestamp just because
+  // the same entry was fetched again. Absent on entries ingested before this
+  // field existed; backfilled once, not reconstructable for those.
+  ingestedAt?: string;
+  // Canonical entity id for `org`, e.g. "IBM Quantum" / "IBM Research -
+  // Zurich" / "International Business Machines Corporation" all resolve to
+  // the same id — see entityResolution.ts. `org` itself is left as the raw
+  // string a source actually returned; this is only a grouping key, so
+  // leaderboards/filters count the real org once instead of splitting it
+  // across case/legal-suffix variants.
+  orgId?: string;
+  // 0-1 confidence that this entry genuinely belongs in its vertical —
+  // currently a disclosed, coarse heuristic by source kind (see
+  // sourceMeta.ts's RELEVANCE_SCORE_BY_SOURCE), not a per-entry ML score.
+  // Real per-entry scoring (an LLM relevance pass) was deliberately deferred
+  // — regex/keyword tightening handled the concrete false positives found
+  // by hand (2026-07-20) well enough for NSF/RSS text; this field exists so
+  // a future per-entry score has somewhere to land without a schema change,
+  // and so the UI can show *some* honest confidence signal today rather
+  // than none.
+  relevanceScore?: number;
+}
+
+// Per-source freshness/coverage facts — one row per real upstream source,
+// not per vertical (the sources are the same shape across verticals; only
+// `lastSuccessfulPull` and whether a source is used at all can differ).
+// `pollCadence`/`structuralLag`/`coverageGaps` are facts about the source
+// itself, not computed; `lastSuccessfulPull` is the one dynamic field,
+// updated only when that source's fetch actually succeeds this run — a
+// transient failure carries the previous value forward rather than erasing
+// when this source last really worked (see fetch-data.ts).
+export interface SourceMeta {
+  sourceName: string;
+  lastSuccessfulPull: string | null; // ISO timestamp, null if never succeeded
+  pollCadence: string;
+  structuralLag: string;
+  coverageGaps: string; // "" if none material
 }
 
 // One dated observation of country share, appended each nightly run. This is
@@ -81,6 +121,7 @@ export interface DataFile {
   entries: Entry[];
   trend: TrendPoint[]; // accumulated country-share history
   notes: StageNote[]; // analyst interpretation per stage
+  sourceMeta: SourceMeta[]; // per-source freshness/cadence/lag/coverage facts
 }
 
 export const STAGES: { id: Stage; label: string; blurb: string }[] = [
