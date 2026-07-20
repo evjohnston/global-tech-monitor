@@ -5,7 +5,7 @@ import { countryColor, countryName } from "./lib/countries.ts";
 import { VERTICALS } from "./lib/verticals.ts";
 import {
   countByCountry, countByStage, countryShares,
-  fundingByCountry, orgLeaderboard, pctDelta, periodCounts, periodFunding, topCountries,
+  fundingByCountry, orgLeaderboard, safeDelta, periodCounts, periodFunding, topCountries,
 } from "./lib/aggregate.ts";
 import { StageColumn } from "./components/StageColumn.tsx";
 import { NewsTicker } from "./components/NewsTicker.tsx";
@@ -19,6 +19,11 @@ import { RecentEntries } from "./components/RecentEntries.tsx";
 import { PieChart } from "./components/PieChart.tsx";
 import { EntryModal } from "./components/EntryModal.tsx";
 import { fmtUsd } from "./lib/format.ts";
+import { STAGE_COLOR } from "./lib/stageColor.ts";
+import { StageComposition } from "./components/StageComposition.tsx";
+import { SmallMultiples } from "./components/SmallMultiples.tsx";
+import { InstitutionConcentration } from "./components/InstitutionConcentration.tsx";
+import { AwardSizeHistogram } from "./components/AwardSizeHistogram.tsx";
 
 // Static-store-only (2026-07-20): the frontend reads whichever
 // public/data/<vertical>.json the nightly build last wrote and nothing
@@ -140,73 +145,64 @@ export default function App() {
   const stageCounts = useMemo(() => countByStage(entries), [entries]);
   const stageTotal = Object.values(stageCounts).reduce((s, n) => s + n, 0) || 1;
   const orgRows = useMemo(() => orgLeaderboard(shown, "innovation", 6), [shown]);
+  const orgRows20 = useMemo(() => orgLeaderboard(shown, "innovation", 20), [shown]);
 
   const fundingTop = useMemo(() => topCountries(fundingByCountry(entries), 5), [entries]);
   const fundingGrandTotal = fundingTop.top.reduce((s, c) => s + c.count, 0) + fundingTop.rest.reduce((s, c) => s + c.count, 0) || 1;
 
-  const STAGE_PIE_COLOR: Record<Stage, string> = { innovation: "var(--cn)", scaling: "var(--eu)", adoption: "var(--us)", investment: "var(--ink-2)" };
-
-  // Real period-over-period deltas — null (and hidden) when there's no honest
-  // baseline. Computed off `shown` (the country-filtered set) rather than the
-  // full `entries`, so the KPI row actually answers "how is the filtered
-  // country doing" once a filter is active, instead of always reporting the
-  // whole vertical regardless of what's selected.
-  const totalPeriod = useMemo(() => STAGES.reduce((acc, s) => {
-    const { current, previous } = periodCounts(shown, s.id, WINDOW_DAYS);
-    return { current: acc.current + current, previous: acc.previous + previous };
-  }, { current: 0, previous: 0 }), [shown]);
+  // Real period-over-period counts — computed off `shown` (the country-
+  // filtered set) rather than the full `entries`, so the KPI row actually
+  // answers "how is the filtered country doing" once a filter is active.
+  // Only innovationPeriod's delta is ever shown (gated on velocityDeltaReady
+  // above) — Card 1/3/5 never show a delta, Card 4 dropped its delta
+  // outright (gtm-claude-code-spec.md Part 1).
   const innovationPeriod = useMemo(() => periodCounts(shown, "innovation", WINDOW_DAYS), [shown]);
-  const investmentPeriod = useMemo(() => periodCounts(shown, "investment", WINDOW_DAYS), [shown]);
   const fundingPeriod = useMemo(() => periodFunding(shown, WINDOW_DAYS), [shown]);
+  // Card 3 — verified milestones only (hand-checked against a source URL,
+  // not RSS-classified), across the two stages where "seeded" actually
+  // means something distinct from "live": innovation's seeded/live split
+  // doesn't exist (OpenAlex/EPO are both "live"), but scaling/adoption's
+  // does. Immune to auto-classified RSS volume noise by construction.
+  const frontierReleases = useMemo(
+    () => shown.filter((e) => e.provenance === "seeded" && (e.stage === "scaling" || e.stage === "adoption")).length,
+    [shown]
+  );
   const filterSuffix = country !== "all" ? ` · ${countryName(country)}` : "";
 
-  // The headline comparison is anchored on the US specifically — this is a
-  // US policy-audience instrument, so "how does the US compare" is the
-  // fixed question. (An earlier version anchored on "whichever country
-  // actually leads this vertical's innovation output," which is correct in
-  // the abstract but reads as a bug in practice: quantum's real overall
-  // leader is China, not the US, so filtering to Germany produced "China –
-  // Germany gap" instead of the "US – Germany gap" every other filter
-  // choice was supposed to produce.) `compareCountry` is the second half:
-  // the filtered country when one's selected (other than the US itself,
-  // which just collapses back to the top non-US rival), else the top
-  // non-US rival — so "all"/US/whichever country already trails the US
-  // render the same US-vs-top-rival gap, and filtering to any other real
-  // country (India, Germany, ...) swaps the comparison to "US – <that
-  // country>." Still reads off the full unfiltered `innovationCounts` (via
-  // overallShares/trend21 below) — both countries need their real overall
-  // shares, which a country-filtered subset alone can't provide.
-  const leadCountry = "US";
-  const rankedByVolume = useMemo(() => topCountries(innovationCounts, 5).top, [innovationCounts]);
-  const topRival = rankedByVolume.find((c) => c.country !== leadCountry)?.country;
-  const compareCountry = country !== "all" && country !== leadCountry ? country : topRival;
+  // Card 1 is a fixed China–US innovation-share comparison, not filter-
+  // reactive like the other four cards — it's the one macro fact the whole
+  // page anchors on ("where do the two frontier leaders stand today"), not
+  // a number that means anything different once you've filtered to, say,
+  // Germany. Point-in-time only: no direction word, no delta. An earlier
+  // version tried to make this card follow the filter (compare "leader" to
+  // "whichever country is filtered") and separately tried to show whether
+  // the gap was "widening"/"narrowing" — dropped both 2026-07-20: the
+  // directional read flipped between builds on ~6 days of real history
+  // (one build read "CN +3pt narrowing," the next read "US +4pt widening" —
+  // same underlying metric, opposite story), which is a worse failure mode
+  // for this audience than just not claiming a trend at all. See
+  // gtm-claude-code-spec.md Part 0.2.
   const hasInnovationData = Object.keys(innovationCounts).length > 0;
   const overallShares = useMemo(() => countryShares(innovationCounts), [innovationCounts]);
-  const shareGap = (overallShares[leadCountry] ?? 0) - (compareCountry ? overallShares[compareCountry] ?? 0 : 0);
-  const gapTrendLabel = useMemo(() => {
-    if (trend21.length < 2 || !hasInnovationData) return null;
-    const gapAt = (i: number) => {
-      const s = countryShares(trend21[i].counts);
-      return (s[leadCountry] ?? 0) - (compareCountry ? s[compareCountry] ?? 0 : 0);
-    };
-    const diff = gapAt(trend21.length - 1) - gapAt(0);
-    return Math.abs(diff) < 0.5 ? "flat" : diff < 0 ? "narrowing" : "widening";
-  }, [trend21, hasInnovationData, compareCountry]);
+  const chinaUsGap = Math.abs((overallShares.CN ?? 0) - (overallShares.US ?? 0));
+  const chinaUsLeader = (overallShares.CN ?? 0) >= (overallShares.US ?? 0) ? "CN" : "US";
 
   // Forecast lines: top 5 countries by current innovation volume — always
   // whichever countries actually lead, so the headline comparison never
   // silently drops off the chart it anchors.
   const forecastCountries = useMemo(() => topCountries(innovationCounts, 5).top.map((c) => c.country), [innovationCounts]);
-  // Project out to Dec 31 of the last recorded trend year, not a fixed
-  // step count — "current trajectory through year end," derived from the
-  // real last recorded date rather than hardcoded.
-  const daysToYearEnd = useMemo(() => {
-    if (trend.length === 0) return 4;
-    const last = new Date(trend[trend.length - 1].date);
-    const yearEnd = new Date(`${last.getFullYear()}-12-31`);
-    const days = Math.round((yearEnd.getTime() - last.getTime()) / 86_400_000);
-    return Math.max(1, days);
-  }, [trend]);
+
+  // Real history depth, not just "trend[] is non-empty" — one point per
+  // real day (see fetch-data.ts), so filtering to points that actually
+  // carry the newer per-stage/funding fields (added 2026-07-20) doubles as
+  // "how many real days of that data exist." Gates the innovation-velocity
+  // delta per gtm-claude-code-spec.md Part 1 Card 2: a percent change is
+  // only honest once it's comparing two full 21-day windows against each
+  // other, which needs 42 days of real history, not just a non-zero prior
+  // window (safeDelta's own minBase catches the latter, this catches the
+  // former — both have to pass).
+  const historyDays = useMemo(() => trend.filter((p) => p.stageCounts).length, [trend]);
+  const velocityDeltaReady = historyDays >= 42;
 
   const generated = data?.generatedAt
     ? new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })
@@ -292,34 +288,30 @@ export default function App() {
         <div className="kpirow">
           <KpiCard
             highlight
-            label="Total tracked entries"
-            value={String(shown.length)}
-            delta={fmtDelta(pctDelta(totalPeriod.current, totalPeriod.previous))}
-            caption={`across all 4 stages · trailing ${WINDOW_DAYS}d vs prior${filterSuffix}`}
+            label={`${countryName(chinaUsLeader)} – ${countryName(chinaUsLeader === "CN" ? "US" : "CN")} innovation gap`}
+            value={hasInnovationData ? `${chinaUsLeader} +${chinaUsGap.toFixed(0)}pt` : "—"}
+            caption={`innovation share · as of ${generated} · point-in-time`}
           />
           <KpiCard
             label="Innovation velocity"
             value={String(innovationPeriod.current)}
-            delta={fmtDelta(pctDelta(innovationPeriod.current, innovationPeriod.previous))}
+            delta={velocityDeltaReady ? fmtDelta(safeDelta(innovationPeriod.current, innovationPeriod.previous)) : null}
             caption={`works + patents, trailing ${WINDOW_DAYS}d${filterSuffix}`}
           />
           <KpiCard
-            label={compareCountry ? `${countryName(leadCountry)} – ${countryName(compareCountry)} share gap` : "Leader share"}
-            value={hasInnovationData ? `${leadCountry} +${Math.abs(shareGap).toFixed(0)}pt` : "—"}
-            delta={gapTrendLabel}
-            caption={gapTrendLabel ? `since ${trend21[0]?.date}` : "not enough history yet"}
-          />
-          <KpiCard
-            label="Open funding awards"
-            value={String(investmentPeriod.current)}
-            delta={fmtDelta(pctDelta(investmentPeriod.current, investmentPeriod.previous))}
-            caption={`NSF, disclosed only${filterSuffix}`}
+            label="Frontier releases tracked"
+            value={String(frontierReleases)}
+            caption={`verified milestones · curated, not auto-classified${filterSuffix}`}
           />
           <KpiCard
             label="Disclosed investment"
             value={fmtUsd(fundingPeriod.current)}
-            delta={fmtDelta(pctDelta(fundingPeriod.current, fundingPeriod.previous, 10_000))}
             caption={`US / EU only, no PRC feed${filterSuffix}`}
+          />
+          <KpiCard
+            label="Coverage & freshness"
+            value={String(shown.length)}
+            caption={`across 4 stages · static build, ${generated}${filterSuffix}`}
           />
         </div>
 
@@ -349,6 +341,10 @@ export default function App() {
               <h3>Innovation output over time</h3>
               <VolumeTrend trend={trend21} />
             </div>
+            <div className="panel">
+              <h3>Innovation output, by country <span className="drop">trailing {trend21.length}d</span></h3>
+              <SmallMultiples trend={trend21} countries={forecastCountries} />
+            </div>
           </div>
           <div className="panel map-panel">
             <h3>Where the work happens</h3>
@@ -361,12 +357,18 @@ export default function App() {
           </div>
         </div>
 
+        <div className="panel">
+          <h3>Where each country's activity sits</h3>
+          <div className="trend-note" style={{ marginBottom: 8 }}>share of tracked entries by stage · composition, not flow</div>
+          <StageComposition entries={shown} />
+        </div>
+
         <div className="row3">
           <div className="panel">
             <h3>Entries by stage</h3>
             <PieChart
               slices={STAGES.map((s) => ({
-                key: s.id, label: s.label, value: stageCounts[s.id], color: STAGE_PIE_COLOR[s.id],
+                key: s.id, label: s.label, value: stageCounts[s.id], color: STAGE_COLOR[s.id],
                 detail: `${s.label} · ${stageCounts[s.id]} entries · ${((stageCounts[s.id] / stageTotal) * 100).toFixed(1)}% of tracked total · click to jump`,
               }))}
               onSelect={(key) => scrollToStage(key as Stage)}
@@ -381,6 +383,12 @@ export default function App() {
             <h3>Recent entries</h3>
             <RecentEntries entries={shown} limit={6} onSelect={setSelectedEntry} />
           </div>
+        </div>
+
+        <div className="panel">
+          <h3>Who's producing the work</h3>
+          <div className="trend-note" style={{ marginBottom: 8 }}>institutions by tracked output · colored by country</div>
+          <InstitutionConcentration rows={orgRows20} />
         </div>
 
         <div className="panel">
@@ -405,8 +413,14 @@ export default function App() {
         </div>
 
         <div className="panel">
-          <h3>Country share forecast <span className="fc-tag">Projected to year end — linear trend</span></h3>
-          <TrendChart trend={trend21} countries={forecastCountries} projectDays={daysToYearEnd} />
+          <h3>Disclosed award sizes</h3>
+          <div className="trend-note" style={{ marginBottom: 4 }}>NSF grants only · private hyperscaler capex not shown and dwarfs this</div>
+          <AwardSizeHistogram entries={shown} />
+        </div>
+
+        <div className="panel">
+          <h3>Country innovation share <span className="drop">recorded</span></h3>
+          <TrendChart trend={trend21} countries={forecastCountries} />
         </div>
 
         <section className="section">
@@ -437,8 +451,17 @@ export default function App() {
           live RSS layer. Investment is NSF Awards (US) — no equivalent public feed exists for China — plus
           auto-classified funding news from Google News RSS.
           Analyst notes live in <code>data/{vertical.dataDir}/notes.ts</code>. Every entry logs the real country an
-          institution/awardee/filer is located in — country attribution is a lead, not a verdict. Forecast
-          lines are a linear extrapolation of recorded trend points, not a measurement.
+          institution/awardee/filer is located in — country attribution is a lead, not a verdict.
+          "Country innovation share" plots recorded history only — no projection; a linear forecast used to run
+          to year end here and was removed because it could land a single country near 100% share off a
+          handful of days of real data. "Where each country's activity sits" and the country small-multiples
+          are a composition/shape read, not a flow or a trend claim — the four pipeline stages are different
+          records, not one entity moving through stages. "Who's producing the work" omits citation counts:
+          OpenAlex citation data takes months to accrue and this corpus is mostly days old, so a citations
+          column would currently read as all zeros. "Disclosed award sizes" covers NSF grants only; private
+          hyperscaler/lab capital spend, which dwarfs NSF's disclosed totals for this vertical, has no public
+          per-grant source and isn't included. Percentage deltas are hidden outright when the prior comparison
+          period is too thin to be a real baseline, rather than shown as a technically-real but misleading number.
           <div className="sig">Ideas Advancing Freedom</div>
         </footer>
       </div>

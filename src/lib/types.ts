@@ -100,7 +100,16 @@ export interface SourceMeta {
 // naturally covers however many countries a given day's data touched.
 export interface TrendPoint {
   date: string; // ISO date of the fetch run
-  counts: Record<string, number>; // innovation-stage works by country that run
+  counts: Record<string, number>; // innovation-stage works by country, rolling ~30d OpenAlex window that run
+  // Added 2026-07-20 — trailing-21d snapshots (as of `date`) of the same
+  // shape periodCounts()/periodFunding() compute live, so a real day-over-
+  // day trend exists for stage volume and disclosed funding, not just
+  // innovation-country share. Optional because every point recorded before
+  // this date lacks them — treat their absence as "no data that day," not
+  // zero, when reading history (see aggregate.ts's loadHistory()).
+  stageCounts?: Record<Stage, number>;
+  fundingUsd?: number;
+  totalEntries?: number; // cumulative corpus size as of this date (monotonic by nature — real, not a rate)
 }
 
 // A dated analyst note attached to a pipeline stage — the "so what" layer.

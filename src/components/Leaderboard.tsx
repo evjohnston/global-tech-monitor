@@ -13,7 +13,7 @@ export function Leaderboard({
   activeOrg?: string | null;
 }) {
   if (rows.length === 0) {
-    return <div className="trend-empty">No institution data yet — populated once a live fetch runs.</div>;
+    return <div className="trend-empty">No institution data yet — populated on the next scheduled build.</div>;
   }
   return (
     <table className="lb">
@@ -23,7 +23,6 @@ export function Leaderboard({
           <th>Institution</th>
           <th>Country</th>
           <th className="right">{unit}</th>
-          <th className="right">citations</th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +41,6 @@ export function Leaderboard({
               </span>
             </td>
             <td className="right count">{r.count}</td>
-            <td className="right count">{r.citations}</td>
           </tr>
         ))}
       </tbody>

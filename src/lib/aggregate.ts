@@ -55,16 +55,17 @@ export interface OrgRow {
   org: string;
   country: string | null;
   count: number;
-  citations: number;
 }
 
 // Institution leaderboard — who is publishing most, across a stage. Ranked
-// by count + citations (the same ASPI "high-impact" weighting as
-// weightByCountry above), not raw count alone — a work count tells you
-// volume but not impact, and citations are the one impact signal already on
-// the entry. Real data only (OpenAlex's cited_by_count); patents/grants/news
-// entries carry no citations field, so they fall back to count alone, same
-// as an uncited paper would.
+// by raw count. (Previously weighted by citations too, same idea as
+// weightByCountry above — reverted 2026-07-20: checked the live AI-vertical
+// build, every visible row read 0 citations, because OpenAlex's
+// cited_by_count take real months to accrue and this corpus is days old.
+// Ranking by a signal that's currently indistinguishable from zero, while
+// also displaying it as if it were meaningful, is worse than not having it —
+// see Leaderboard.tsx, which no longer shows the column either. Bring both
+// back together once citations are non-trivial for a real slice of entries.)
 //
 // Groups by `orgId` (the canonical entity, see entityResolution.ts) rather
 // than the raw `org` string, so "NVIDIA" and "Nvidia" — or "IBM Quantum" and
@@ -79,11 +80,10 @@ export function orgLeaderboard(entries: Entry[], stage?: Stage, limit = 8): OrgR
     if (!e.org) continue;
     const key = e.orgId ?? canonicalizeOrg(e.org).id;
     const cur = map.get(key);
-    const citations = e.citations ?? 0;
-    if (cur) { cur.count++; cur.citations += citations; }
-    else map.set(key, { org: e.org, country: e.country, count: 1, citations });
+    if (cur) cur.count++;
+    else map.set(key, { org: e.org, country: e.country, count: 1 });
   }
-  return [...map.values()].sort((a, b) => (b.count + b.citations) - (a.count + a.citations)).slice(0, limit);
+  return [...map.values()].sort((a, b) => b.count - a.count).slice(0, limit);
 }
 
 
@@ -143,17 +143,20 @@ export function periodFunding(
 }
 
 // Percent change, or null when there's no honest baseline to compare against
-// rather than showing a misleading number. `minBase` guards against a
+// rather than showing a misleading number — never "0%", never "N/A", the
+// caller just omits the delta element entirely. `minBase` guards against a
 // near-zero (not just zero) denominator — confirmed on real data
 // (2026-07-20): the AI vertical's investment KPI had a trailing-21d
 // previous-period count of 3, current of 324, rendering as "+10700.0%";
-// its combined-stage total had a previous of 5, rendering "+32140.0%".
-// Both are a real division, but the "previous" side is thin enough to be
-// noise, not a baseline — a single extra grant or paper landing a day
-// earlier/later would swing the percentage wildly. Caller picks the floor
-// appropriate to its own units (a raw entry count vs. a dollar amount need
-// different minimums); default of 10 fits count-based callers.
-export function pctDelta(current: number, previous: number, minBase = 10): number | null {
+// its combined-stage total had a previous of 5, rendering "+32140.0%". A
+// minBase of 10 didn't even catch those (previous of 3/5 is well under 10,
+// but the live site still showed "+1212.1%" off a previous of ~50 for the
+// same reason: this corpus is only ~6 days old, so *every* trailing-21d
+// "previous" window is thin by construction, not just occasionally noisy).
+// Raised to 30 for that reason — still a real division, but the audience
+// here (policy analysts who'll cite this) should see no delta at all
+// rather than a technically-real number computed off a window this young.
+export function safeDelta(current: number, previous: number, minBase = 30): number | null {
   if (previous < minBase) return null;
   return ((current - previous) / previous) * 100;
 }
@@ -166,64 +169,27 @@ export function countryShares(counts: Record<string, number>): Record<string, nu
   return Object.fromEntries(Object.entries(counts).map(([c, n]) => [c, (n / total) * 100]));
 }
 
-export interface ProjectedSeries {
-  country: string;
-  points: number[]; // future share-percent points, evenly spaced across totalDays
+// Count entries by country AND stage in one pass — feeds the stage-
+// composition chart (each country's activity normalized to its own 100%
+// across the four stages). Kept separate from countByCountry(entries, stage)
+// called four times in a loop purely so the composition chart's data prep
+// is one pass over entries, not four.
+export function countByCountryAndStage(entries: Entry[]): Record<string, Record<Stage, number>> {
+  const out: Record<string, Record<Stage, number>> = {};
+  for (const e of entries) {
+    if (!e.country) continue;
+    const row = out[e.country] ?? (out[e.country] = { innovation: 0, scaling: 0, adoption: 0, investment: 0 });
+    row[e.stage]++;
+  }
+  return out;
 }
 
-// Linear extrapolation of each given country's share of innovation-stage
-// trend points, out to `totalDays` ahead (real calendar days — e.g. the
-// caller's days-to-year-end). Needs at least 3 recorded days to be worth
-// showing — anything thinner is a projection built on noise, not a trend.
-// Labeled as a projection wherever it's rendered, never presented as
-// measured data. `countries` should be a small caller-chosen set (e.g. top
-// 4-5 by current volume) — projecting every country ever seen would be an
-// unreadable tangle of lines, not a decision this function should make on
-// its own.
-//
-// `renderPoints` is deliberately decoupled from `totalDays` — it's how many
-// points get drawn, not how many days out they land. Early in the year,
-// `totalDays` (days to Dec 31) can be 150+, and one point per real day used
-// to mean the chart's x-axis (nHist + this many points) squeezed the actual
-// recorded history down to a sliver against a huge dashed run — a straight
-// line only needs a couple of points to draw correctly, so a small fixed
-// count here keeps the historical trend readable regardless of how far out
-// the projection reaches. The final rendered point still lands on the real
-// extrapolated year-end value (slope × totalDays), it's just not one point
-// per day getting there.
-export function projectCountryShares(trend: TrendPoint[], countries: string[], totalDays = 4, renderPoints = 6): ProjectedSeries[] | null {
-  if (trend.length < 3 || countries.length === 0 || totalDays <= 0) return null;
-  const n = trend.length;
-  const shareSeries: Record<string, number[]> = {};
-  for (const c of countries) shareSeries[c] = [];
-  for (const p of trend) {
-    const total = Object.values(p.counts).reduce((s, v) => s + v, 0) || 1;
-    for (const c of countries) shareSeries[c].push(((p.counts[c] ?? 0) / total) * 100);
-  }
-  // Least-squares slope only — the fitted line's value AT the last historical
-  // index can differ from the actual last recorded share (real data isn't
-  // perfectly linear), which used to make the dashed line visibly jump at
-  // the point it starts. Anchoring on the real last value and extending by
-  // the estimated slope keeps the projection continuous with what's measured
-  // while still reflecting the real trend direction/magnitude.
-  function slopeOf(ys: number[]): number {
-    const xs = ys.map((_, i) => i);
-    const xbar = xs.reduce((s, x) => s + x, 0) / n;
-    const ybar = ys.reduce((s, y) => s + y, 0) / n;
-    let num = 0;
-    let den = 0;
-    for (let i = 0; i < n; i++) {
-      num += (xs[i] - xbar) * (ys[i] - ybar);
-      den += (xs[i] - xbar) ** 2;
-    }
-    return den === 0 ? 0 : num / den;
-  }
-  const dayStep = totalDays / renderPoints;
-  return countries.map((c) => {
-    const ys = shareSeries[c];
-    const slope = slopeOf(ys);
-    const last = ys[ys.length - 1];
-    const points = Array.from({ length: renderPoints }, (_, i) => Math.max(0, Math.min(100, last + slope * dayStep * (i + 1))));
-    return { country: c, points };
-  });
+// All real recorded snapshots, oldest first — the substrate every trend/
+// delta UI element should read from and gate on, rather than assuming
+// history exists. Trend points recorded before 2026-07-20 lack the newer
+// per-stage/funding fields (added then); callers that need those fields
+// should filter on their presence rather than raw trend.length, since a
+// handful of old points won't have them no matter how long trend[] is.
+export function loadHistory(trend: TrendPoint[]): TrendPoint[] {
+  return trend;
 }
