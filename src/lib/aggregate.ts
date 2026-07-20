@@ -151,18 +151,31 @@ export function countryShares(counts: Record<string, number>): Record<string, nu
 
 export interface ProjectedSeries {
   country: string;
-  points: number[]; // future share-percent points, one per projected step
+  points: number[]; // future share-percent points, evenly spaced across totalDays
 }
 
 // Linear extrapolation of each given country's share of innovation-stage
-// trend points. Needs at least 3 recorded days to be worth showing —
-// anything thinner is a projection built on noise, not a trend. Labeled as
-// a projection wherever it's rendered, never presented as measured data.
-// `countries` should be a small caller-chosen set (e.g. top 4-5 by current
-// volume) — projecting every country ever seen would be an unreadable
-// tangle of lines, not a decision this function should make on its own.
-export function projectCountryShares(trend: TrendPoint[], countries: string[], steps = 4): ProjectedSeries[] | null {
-  if (trend.length < 3 || countries.length === 0) return null;
+// trend points, out to `totalDays` ahead (real calendar days — e.g. the
+// caller's days-to-year-end). Needs at least 3 recorded days to be worth
+// showing — anything thinner is a projection built on noise, not a trend.
+// Labeled as a projection wherever it's rendered, never presented as
+// measured data. `countries` should be a small caller-chosen set (e.g. top
+// 4-5 by current volume) — projecting every country ever seen would be an
+// unreadable tangle of lines, not a decision this function should make on
+// its own.
+//
+// `renderPoints` is deliberately decoupled from `totalDays` — it's how many
+// points get drawn, not how many days out they land. Early in the year,
+// `totalDays` (days to Dec 31) can be 150+, and one point per real day used
+// to mean the chart's x-axis (nHist + this many points) squeezed the actual
+// recorded history down to a sliver against a huge dashed run — a straight
+// line only needs a couple of points to draw correctly, so a small fixed
+// count here keeps the historical trend readable regardless of how far out
+// the projection reaches. The final rendered point still lands on the real
+// extrapolated year-end value (slope × totalDays), it's just not one point
+// per day getting there.
+export function projectCountryShares(trend: TrendPoint[], countries: string[], totalDays = 4, renderPoints = 6): ProjectedSeries[] | null {
+  if (trend.length < 3 || countries.length === 0 || totalDays <= 0) return null;
   const n = trend.length;
   const shareSeries: Record<string, number[]> = {};
   for (const c of countries) shareSeries[c] = [];
@@ -188,11 +201,12 @@ export function projectCountryShares(trend: TrendPoint[], countries: string[], s
     }
     return den === 0 ? 0 : num / den;
   }
+  const dayStep = totalDays / renderPoints;
   return countries.map((c) => {
     const ys = shareSeries[c];
     const slope = slopeOf(ys);
     const last = ys[ys.length - 1];
-    const points = Array.from({ length: steps }, (_, i) => Math.max(0, Math.min(100, last + slope * (i + 1))));
+    const points = Array.from({ length: renderPoints }, (_, i) => Math.max(0, Math.min(100, last + slope * dayStep * (i + 1))));
     return { country: c, points };
   });
 }

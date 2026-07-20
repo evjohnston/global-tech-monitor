@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
 import { STAGES } from "./lib/types.ts";
 import { inferInstitutionCountry } from "./lib/institutionCountry.ts";
@@ -122,6 +122,16 @@ export default function App() {
     return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
   });
   const [nowTick, setNowTick] = useState(0);
+  // Per-vertical in-memory cache — each data file runs ~2-3MB (abstracts,
+  // authors, citations on every entry add up across 1000+ entries), so
+  // re-fetching and re-parsing it from scratch on every tab switch is real,
+  // avoidable latency once a vertical's already been visited this session.
+  // Switching back to a vertical already in this map shows its last-known
+  // data instantly while a fresh fetch still runs underneath to catch
+  // anything new — never permanently stale, just not blocking on repeat
+  // visits. First-ever visit to a vertical is still bound by that file's
+  // real network+parse time; this doesn't shrink the file itself.
+  const dataCacheRef = useRef<Record<string, DataFile>>({});
 
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
@@ -137,19 +147,21 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    setData(null);
-    setMode("loading");
+    const cached = dataCacheRef.current[vertical.id];
+    setData(cached ?? null);
+    setMode(cached ? "static" : "loading");
     setCountry("all");
     setHighlightOrg(null);
     const dataUrl = `${import.meta.env.BASE_URL}data/${vertical.id}.json`;
     fetch(dataUrl)
       .then((r) => r.json() as Promise<DataFile>)
       .then((d) => {
+        dataCacheRef.current[vertical.id] = d;
         setData(d);
         setMode("static");
         refresh(); // layer a live read on top of the static build, once
       })
-      .catch(() => setMode("fallback"));
+      .catch(() => { if (!cached) setMode("fallback"); });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vertical.id]);
 
@@ -216,7 +228,7 @@ export default function App() {
 
   const stageCounts = useMemo(() => countByStage(entries), [entries]);
   const stageTotal = Object.values(stageCounts).reduce((s, n) => s + n, 0) || 1;
-  const orgRows = useMemo(() => orgLeaderboard(entries, "innovation", 6), [entries]);
+  const orgRows = useMemo(() => orgLeaderboard(shown, "innovation", 6), [shown]);
 
   const fundingTop = useMemo(() => topCountries(fundingByCountry(entries), 5), [entries]);
   const fundingGrandTotal = fundingTop.top.reduce((s, c) => s + c.count, 0) + fundingTop.rest.reduce((s, c) => s + c.count, 0) || 1;
@@ -237,33 +249,38 @@ export default function App() {
   const fundingPeriod = useMemo(() => periodFunding(shown, WINDOW_DAYS), [shown]);
   const filterSuffix = country !== "all" ? ` · ${countryName(country)}` : "";
 
-  // The headline comparison is "who leads, and by how much" — computed off
-  // whichever two countries actually lead this vertical's innovation output,
-  // not hardcoded to US/CN (that was a quantum-specific assumption that
-  // doesn't generalize once other verticals with different leaders exist).
-  // `compareCountry` is the second half of that comparison: normally the
-  // runner-up, but if the filter is pointed at some other real country (not
-  // the leader itself, which just collapses back to the runner-up), the
-  // comparison follows the filter instead — "US – India gap" when filtered
-  // to India, "US – Germany gap" for Germany, unchanged for "all"/leader/
-  // runner-up. This intentionally still reads off the full unfiltered
-  // `innovationCounts` (via overallShares/trend21 below) — the two
-  // countries being compared need their real overall shares, which a
-  // country-filtered subset can't provide on its own.
-  const top2 = useMemo(() => topCountries(innovationCounts, 2).top, [innovationCounts]);
-  const [leadCountry, runnerUp] = [top2[0]?.country, top2[1]?.country];
-  const compareCountry = country !== "all" && country !== leadCountry ? country : runnerUp;
+  // The headline comparison is anchored on the US specifically — this is a
+  // US policy-audience instrument, so "how does the US compare" is the
+  // fixed question. (An earlier version anchored on "whichever country
+  // actually leads this vertical's innovation output," which is correct in
+  // the abstract but reads as a bug in practice: quantum's real overall
+  // leader is China, not the US, so filtering to Germany produced "China –
+  // Germany gap" instead of the "US – Germany gap" every other filter
+  // choice was supposed to produce.) `compareCountry` is the second half:
+  // the filtered country when one's selected (other than the US itself,
+  // which just collapses back to the top non-US rival), else the top
+  // non-US rival — so "all"/US/whichever country already trails the US
+  // render the same US-vs-top-rival gap, and filtering to any other real
+  // country (India, Germany, ...) swaps the comparison to "US – <that
+  // country>." Still reads off the full unfiltered `innovationCounts` (via
+  // overallShares/trend21 below) — both countries need their real overall
+  // shares, which a country-filtered subset alone can't provide.
+  const leadCountry = "US";
+  const rankedByVolume = useMemo(() => topCountries(innovationCounts, 5).top, [innovationCounts]);
+  const topRival = rankedByVolume.find((c) => c.country !== leadCountry)?.country;
+  const compareCountry = country !== "all" && country !== leadCountry ? country : topRival;
+  const hasInnovationData = Object.keys(innovationCounts).length > 0;
   const overallShares = useMemo(() => countryShares(innovationCounts), [innovationCounts]);
-  const shareGap = leadCountry ? (overallShares[leadCountry] ?? 0) - (compareCountry ? overallShares[compareCountry] ?? 0 : 0) : 0;
+  const shareGap = (overallShares[leadCountry] ?? 0) - (compareCountry ? overallShares[compareCountry] ?? 0 : 0);
   const gapTrendLabel = useMemo(() => {
-    if (trend21.length < 2 || !leadCountry) return null;
+    if (trend21.length < 2 || !hasInnovationData) return null;
     const gapAt = (i: number) => {
       const s = countryShares(trend21[i].counts);
       return (s[leadCountry] ?? 0) - (compareCountry ? s[compareCountry] ?? 0 : 0);
     };
     const diff = gapAt(trend21.length - 1) - gapAt(0);
     return Math.abs(diff) < 0.5 ? "flat" : diff < 0 ? "narrowing" : "widening";
-  }, [trend21, leadCountry, compareCountry]);
+  }, [trend21, hasInnovationData, compareCountry]);
 
   // Forecast lines: top 5 countries by current innovation volume — always
   // whichever countries actually lead, so the headline comparison never
@@ -381,7 +398,7 @@ export default function App() {
           />
           <KpiCard
             label={compareCountry ? `${countryName(leadCountry)} – ${countryName(compareCountry)} share gap` : "Leader share"}
-            value={leadCountry ? `${leadCountry} +${Math.abs(shareGap).toFixed(0)}pt` : "—"}
+            value={hasInnovationData ? `${leadCountry} +${Math.abs(shareGap).toFixed(0)}pt` : "—"}
             delta={gapTrendLabel}
             caption={gapTrendLabel ? `since ${trend21[0]?.date}` : "not enough history yet"}
           />

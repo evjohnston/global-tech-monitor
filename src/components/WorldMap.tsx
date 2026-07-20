@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { ComposableMap, Geographies, Geography, useGeographies, ZoomableGroup } from "react-simple-maps";
-import { geoCentroid } from "d3-geo";
+import { geoArea, geoCentroid } from "d3-geo";
 import worldLow from "world-atlas/countries-110m.json";
 import type { TrendPoint } from "../lib/types.ts";
 import { alpha2FromNumeric, countryName } from "../lib/countries.ts";
@@ -44,6 +44,28 @@ function heatColor(count: number, max: number, dark: boolean): string {
 
 interface GeoFeature { rsmKey: string; id?: string | number }
 
+// The whole-feature spherical centroid (geoCentroid on the full MultiPolygon)
+// gets pulled off the real landmass by small, far-away exclaves — confirmed
+// by hand (2026-07-20): France's whole-feature centroid lands in the Bay of
+// Biscay, well west of the mainland, because Natural Earth's FR feature
+// bundles overseas territories into the same MultiPolygon. Countries with a
+// single Polygon (no exclaves) aren't affected and skip the extra work.
+// Centroid of just the largest ring by area reliably lands on the actual
+// country instead (confirmed for FR, US, NZ, JP, GB, IT — all moved onto
+// their mainland).
+function mainlandCentroid(geo: GeoFeature & { geometry?: { type: string; coordinates: unknown } }): [number, number] {
+  const geometry = geo.geometry;
+  if (!geometry || geometry.type !== "MultiPolygon") return geoCentroid(geo as never);
+  let best: { type: "Polygon"; coordinates: unknown } | null = null;
+  let bestArea = -1;
+  for (const poly of geometry.coordinates as unknown[]) {
+    const candidate = { type: "Polygon" as const, coordinates: poly };
+    const area = Math.abs(geoArea(candidate as never));
+    if (area > bestArea) { bestArea = area; best = candidate; }
+  }
+  return best ? geoCentroid({ type: "Feature", geometry: best, properties: {} } as never) : geoCentroid(geo as never);
+}
+
 // Renders nothing — mounted alongside <Geographies> purely to read the same
 // topojson-derived GeoJSON features via the hook react-simple-maps' own
 // <Geographies> uses internally, so a real per-country centroid (from the
@@ -59,7 +81,7 @@ function CentroidCapture({ geoData, onReady }: { geoData: Record<string, unknown
     for (const geo of geographies) {
       const code = alpha2FromNumeric(String(geo.id ?? ""));
       if (!code) continue;
-      const centroid = geoCentroid(geo);
+      const centroid = mainlandCentroid(geo);
       if (Number.isFinite(centroid[0]) && Number.isFinite(centroid[1])) byCode[code] = centroid;
     }
     onReady(byCode);
@@ -75,6 +97,7 @@ function MapBody({
   active,
   height,
   dark,
+  autoZoom = false,
 }: {
   geoData: Record<string, unknown>;
   counts: Record<string, number>;
@@ -83,6 +106,7 @@ function MapBody({
   active?: string | null;
   height: number;
   dark: boolean;
+  autoZoom?: boolean;
 }) {
   const [zoomState, setZoomState] = useState<{ center: [number, number]; zoom: number }>(DEFAULT_VIEW);
   const [tip, setTip] = useState<{ x: number; y: number; code: string } | null>(null);
@@ -92,17 +116,22 @@ function MapBody({
     centroidsRef.current = byCode;
   }, []);
 
-  // Programmatic zoom-to-country: fires whenever the filter changes, not on
+  // Programmatic zoom-to-country — only in the expanded map. The compact
+  // strip is only ~260px tall; there isn't enough vertical room for a 4x
+  // zoom to read as intentional rather than a cropped, oddly-placed cutout,
+  // and the compact view's whole purpose (see CLAUDE.md) is a whole-world
+  // at-a-glance overview anyway. Fires whenever the filter changes, not on
   // every render. A user's own drag/scroll (onMoveEnd below) can move the
   // view away from this afterward — that's expected, this only sets the
   // initial framing for a new selection, it doesn't lock the view to it.
   useEffect(() => {
+    if (!autoZoom) return;
     if (active && centroidsRef.current[active]) {
       setZoomState({ center: centroidsRef.current[active], zoom: 4 });
     } else {
       setZoomState(DEFAULT_VIEW);
     }
-  }, [active]);
+  }, [active, autoZoom]);
 
   return (
     <>
@@ -251,6 +280,7 @@ export function WorldMap({
             active={active}
             height={820}
             dark={dark}
+            autoZoom
           />
         </div>
         {canScrub && <TimeBar trend={trend} scrubIndex={scrubIndex} onScrub={setScrubIndex} onLive={() => setScrubIndex(null)} />}
