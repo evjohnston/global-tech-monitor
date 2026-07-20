@@ -47,14 +47,6 @@ export function EntryModal({ entry, onClose }: { entry: Entry; onClose: () => vo
           {amt && <span className="entry-modal-amt">{amt}</span>}
           {entry.provenance === "seeded" && <span className="seeded">seeded</span>}
           {entry.provenance === "auto" && <span className="seeded auto">auto-classified</span>}
-          {entry.relevanceScore != null && entry.relevanceScore < 1 && (
-            <span
-              className="seeded"
-              title="Coarse per-source relevance heuristic (not a per-entry score) — how much a real classification/text check backs this entry's topical fit"
-            >
-              {Math.round(entry.relevanceScore * 100)}% relevance
-            </span>
-          )}
         </div>
 
         {entry.org && <div className="entry-modal-org">{entry.org}</div>}
