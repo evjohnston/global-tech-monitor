@@ -46,8 +46,7 @@ a { color: inherit; }
 /* ── topbar ─────────────────────────────────────────────────────── */
 .topbar { border-bottom: 1px solid var(--line); padding: 8px 0; background: var(--paper); }
 .topbar-inner { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 14px; }
-.wordmark { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
-.wordmark .gtm { color: var(--red); }
+.wordmark-logo { height: 18px; width: auto; display: block; }
 .topbar-meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--mist); display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
 /* live-dot is still used by NewsTicker's "Latest" label, not the topbar (the topbar's live-refresh state was removed 2026-07-20 with the static-store-only pass) */
 .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #1f9d55; margin-right: 5px; animation: live-pulse 1.8s ease-in-out infinite; }

@@ -25,6 +25,8 @@ import { SmallMultiples } from "./components/SmallMultiples.tsx";
 import { InstitutionConcentration } from "./components/InstitutionConcentration.tsx";
 import { AwardSizeHistogram } from "./components/AwardSizeHistogram.tsx";
 import { TopCitedTicker } from "./components/TopCitedTicker.tsx";
+import logoLightBg from "./assets/logos/logo-light-bg.png";
+import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
 // Static-store-only (2026-07-20): the frontend reads whichever
 // public/data/<vertical>.json the nightly build last wrote and nothing
@@ -253,7 +255,7 @@ export default function App() {
     <>
       <div className="topbar">
         <div className="topbar-inner">
-          <span className="wordmark"><span className="gtm">GTM</span> / Global Tech Monitor</span>
+          <img className="wordmark-logo" src={dark ? logoDarkBg : logoLightBg} alt="Tech Futures Lab" />
           <span className="verticals">
             {VERTICALS.map((v) => (
               <button
@@ -288,7 +290,7 @@ export default function App() {
       <div className="wrap">
         <div className="pagehead">
           <div>
-            <h1>Global Tech Monitor</h1>
+            <h1>{vertical.label}</h1>
             <div className="sub">{vertical.tagline}</div>
           </div>
         </div>

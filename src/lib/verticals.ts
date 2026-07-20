@@ -10,7 +10,7 @@ import type { RssClassifierConfig, RssFeedConfig } from "./sources/rss.ts";
 export interface VerticalConfig {
   id: string; // matches DataFile.technology, and the public/data/<id>.json filename
   number: string; // display order in the topbar, e.g. "01"
-  label: string; // full name, e.g. "Quantum Computing"
+  label: string; // full name, rendered as the pagehead <h1> — e.g. "Quantum Technologies"
   shortLabel: string; // topbar-compact name, e.g. "Quantum"
   tagline: string; // pagehead subtitle
   dataDir: string; // data/<dataDir>/{seed,notes}.ts — shown in the footer's "sources & method" note
@@ -71,7 +71,7 @@ export const VERTICALS: VerticalConfig[] = [
   {
     id: "quantum-computing",
     number: "01",
-    label: "Quantum Computing",
+    label: "Quantum Technologies",
     shortLabel: "Quantum",
     tagline: "Quantum computing · innovation, scaling, adoption, investment",
     dataDir: "quantum",
