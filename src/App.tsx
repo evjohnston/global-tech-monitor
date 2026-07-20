@@ -223,32 +223,47 @@ export default function App() {
 
   const STAGE_PIE_COLOR: Record<Stage, string> = { innovation: "var(--cn)", scaling: "var(--eu)", adoption: "var(--us)", investment: "var(--ink-2)" };
 
-  // Real period-over-period deltas — null (and hidden) when there's no honest baseline.
+  // Real period-over-period deltas — null (and hidden) when there's no honest
+  // baseline. Computed off `shown` (the country-filtered set) rather than the
+  // full `entries`, so the KPI row actually answers "how is the filtered
+  // country doing" once a filter is active, instead of always reporting the
+  // whole vertical regardless of what's selected.
   const totalPeriod = useMemo(() => STAGES.reduce((acc, s) => {
-    const { current, previous } = periodCounts(entries, s.id, WINDOW_DAYS);
+    const { current, previous } = periodCounts(shown, s.id, WINDOW_DAYS);
     return { current: acc.current + current, previous: acc.previous + previous };
-  }, { current: 0, previous: 0 }), [entries]);
-  const innovationPeriod = useMemo(() => periodCounts(entries, "innovation", WINDOW_DAYS), [entries]);
-  const investmentPeriod = useMemo(() => periodCounts(entries, "investment", WINDOW_DAYS), [entries]);
-  const fundingPeriod = useMemo(() => periodFunding(entries, WINDOW_DAYS), [entries]);
+  }, { current: 0, previous: 0 }), [shown]);
+  const innovationPeriod = useMemo(() => periodCounts(shown, "innovation", WINDOW_DAYS), [shown]);
+  const investmentPeriod = useMemo(() => periodCounts(shown, "investment", WINDOW_DAYS), [shown]);
+  const fundingPeriod = useMemo(() => periodFunding(shown, WINDOW_DAYS), [shown]);
+  const filterSuffix = country !== "all" ? ` · ${countryName(country)}` : "";
 
   // The headline comparison is "who leads, and by how much" — computed off
   // whichever two countries actually lead this vertical's innovation output,
   // not hardcoded to US/CN (that was a quantum-specific assumption that
   // doesn't generalize once other verticals with different leaders exist).
+  // `compareCountry` is the second half of that comparison: normally the
+  // runner-up, but if the filter is pointed at some other real country (not
+  // the leader itself, which just collapses back to the runner-up), the
+  // comparison follows the filter instead — "US – India gap" when filtered
+  // to India, "US – Germany gap" for Germany, unchanged for "all"/leader/
+  // runner-up. This intentionally still reads off the full unfiltered
+  // `innovationCounts` (via overallShares/trend21 below) — the two
+  // countries being compared need their real overall shares, which a
+  // country-filtered subset can't provide on its own.
   const top2 = useMemo(() => topCountries(innovationCounts, 2).top, [innovationCounts]);
   const [leadCountry, runnerUp] = [top2[0]?.country, top2[1]?.country];
+  const compareCountry = country !== "all" && country !== leadCountry ? country : runnerUp;
   const overallShares = useMemo(() => countryShares(innovationCounts), [innovationCounts]);
-  const shareGap = leadCountry ? (overallShares[leadCountry] ?? 0) - (runnerUp ? overallShares[runnerUp] ?? 0 : 0) : 0;
+  const shareGap = leadCountry ? (overallShares[leadCountry] ?? 0) - (compareCountry ? overallShares[compareCountry] ?? 0 : 0) : 0;
   const gapTrendLabel = useMemo(() => {
     if (trend21.length < 2 || !leadCountry) return null;
     const gapAt = (i: number) => {
       const s = countryShares(trend21[i].counts);
-      return (s[leadCountry] ?? 0) - (runnerUp ? s[runnerUp] ?? 0 : 0);
+      return (s[leadCountry] ?? 0) - (compareCountry ? s[compareCountry] ?? 0 : 0);
     };
     const diff = gapAt(trend21.length - 1) - gapAt(0);
     return Math.abs(diff) < 0.5 ? "flat" : diff < 0 ? "narrowing" : "widening";
-  }, [trend21, leadCountry, runnerUp]);
+  }, [trend21, leadCountry, compareCountry]);
 
   // Forecast lines: top 5 countries by current innovation volume — always
   // whichever countries actually lead, so the headline comparison never
@@ -354,18 +369,18 @@ export default function App() {
           <KpiCard
             highlight
             label="Total tracked entries"
-            value={String(entries.length)}
+            value={String(shown.length)}
             delta={fmtDelta(pctDelta(totalPeriod.current, totalPeriod.previous))}
-            caption={`across all 4 stages · trailing ${WINDOW_DAYS}d vs prior`}
+            caption={`across all 4 stages · trailing ${WINDOW_DAYS}d vs prior${filterSuffix}`}
           />
           <KpiCard
             label="Innovation velocity"
             value={String(innovationPeriod.current)}
             delta={fmtDelta(pctDelta(innovationPeriod.current, innovationPeriod.previous))}
-            caption={`works + patents, trailing ${WINDOW_DAYS}d`}
+            caption={`works + patents, trailing ${WINDOW_DAYS}d${filterSuffix}`}
           />
           <KpiCard
-            label={runnerUp ? `${countryName(leadCountry)} – ${countryName(runnerUp)} share gap` : "Leader share"}
+            label={compareCountry ? `${countryName(leadCountry)} – ${countryName(compareCountry)} share gap` : "Leader share"}
             value={leadCountry ? `${leadCountry} +${Math.abs(shareGap).toFixed(0)}pt` : "—"}
             delta={gapTrendLabel}
             caption={gapTrendLabel ? `since ${trend21[0]?.date}` : "not enough history yet"}
@@ -374,13 +389,13 @@ export default function App() {
             label="Open funding awards"
             value={String(investmentPeriod.current)}
             delta={fmtDelta(pctDelta(investmentPeriod.current, investmentPeriod.previous))}
-            caption="NSF, disclosed only"
+            caption={`NSF, disclosed only${filterSuffix}`}
           />
           <KpiCard
             label="Disclosed investment"
             value={fmtUsd(fundingPeriod.current)}
             delta={fmtDelta(pctDelta(fundingPeriod.current, fundingPeriod.previous))}
-            caption="US / EU only, no PRC feed"
+            caption={`US / EU only, no PRC feed${filterSuffix}`}
           />
         </div>
 

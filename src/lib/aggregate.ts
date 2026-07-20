@@ -54,9 +54,16 @@ export interface OrgRow {
   org: string;
   country: string | null;
   count: number;
+  citations: number;
 }
 
-// Institution leaderboard — who is publishing most, across a stage.
+// Institution leaderboard — who is publishing most, across a stage. Ranked
+// by count + citations (the same ASPI "high-impact" weighting as
+// weightByCountry above), not raw count alone — a work count tells you
+// volume but not impact, and citations are the one impact signal already on
+// the entry. Real data only (OpenAlex's cited_by_count); patents/grants/news
+// entries carry no citations field, so they fall back to count alone, same
+// as an uncited paper would.
 export function orgLeaderboard(entries: Entry[], stage?: Stage, limit = 8): OrgRow[] {
   const map = new Map<string, OrgRow>();
   for (const e of entries) {
@@ -64,10 +71,11 @@ export function orgLeaderboard(entries: Entry[], stage?: Stage, limit = 8): OrgR
     if (!e.org) continue;
     const key = e.org;
     const cur = map.get(key);
-    if (cur) cur.count++;
-    else map.set(key, { org: e.org, country: e.country, count: 1 });
+    const citations = e.citations ?? 0;
+    if (cur) { cur.count++; cur.citations += citations; }
+    else map.set(key, { org: e.org, country: e.country, count: 1, citations });
   }
-  return [...map.values()].sort((a, b) => b.count - a.count).slice(0, limit);
+  return [...map.values()].sort((a, b) => (b.count + b.citations) - (a.count + a.citations)).slice(0, limit);
 }
 
 

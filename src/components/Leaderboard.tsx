@@ -23,6 +23,7 @@ export function Leaderboard({
           <th>Institution</th>
           <th>Country</th>
           <th className="right">{unit}</th>
+          <th className="right">citations</th>
         </tr>
       </thead>
       <tbody>
@@ -41,6 +42,7 @@ export function Leaderboard({
               </span>
             </td>
             <td className="right count">{r.count}</td>
+            <td className="right count">{r.citations}</td>
           </tr>
         ))}
       </tbody>

@@ -1,9 +1,23 @@
-import { useEffect, useState, type MouseEvent as ReactMouseEvent } from "react";
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
+import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { ComposableMap, Geographies, Geography, useGeographies, ZoomableGroup } from "react-simple-maps";
+import { geoCentroid } from "d3-geo";
 import worldLow from "world-atlas/countries-110m.json";
 import type { TrendPoint } from "../lib/types.ts";
 import { alpha2FromNumeric, countryName } from "../lib/countries.ts";
 import { Tooltip } from "./Tooltip.tsx";
+
+// Default view when no country is selected — a wide-angle look at the whole
+// world, not zoomed into any one place.
+const DEFAULT_VIEW: { center: [number, number]; zoom: number } = { center: [10, 20], zoom: 1 };
+// Flat, uniform tone every non-selected country gets dimmed to once a
+// country is active — deliberately NOT the real heat color at lower
+// opacity (that was the old behavior, and it read as "different countries
+// muted differently" since a high-volume country's dimmed red still looked
+// darker than a low-volume country's dimmed near-white). One tone means
+// every unselected country reads as "not the selection," full stop — real
+// volume is still visible on hover via the tooltip.
+const MUTED_RGB: [number, number, number] = [222, 224, 227];
+const MUTED_RGB_DARK: [number, number, number] = [42, 45, 51];
 
 // Hoover Red, as RGB — the choropleth scale runs from the neutral panel
 // tone to this, so "more activity here" reads as "more of the one brand
@@ -30,6 +44,29 @@ function heatColor(count: number, max: number, dark: boolean): string {
 
 interface GeoFeature { rsmKey: string; id?: string | number }
 
+// Renders nothing — mounted alongside <Geographies> purely to read the same
+// topojson-derived GeoJSON features via the hook react-simple-maps' own
+// <Geographies> uses internally, so a real per-country centroid (from the
+// actual rendered geometry, not a separately-maintained lookup table) is
+// available for the programmatic zoom below. Runs once per geoData load
+// (mount, or hi-res swap on expand) — negligible extra cost next to the
+// parse <Geographies> already does.
+function CentroidCapture({ geoData, onReady }: { geoData: Record<string, unknown>; onReady: (byCode: Record<string, [number, number]>) => void }) {
+  const { geographies } = useGeographies({ geography: geoData });
+  useEffect(() => {
+    if (geographies.length === 0) return;
+    const byCode: Record<string, [number, number]> = {};
+    for (const geo of geographies) {
+      const code = alpha2FromNumeric(String(geo.id ?? ""));
+      if (!code) continue;
+      const centroid = geoCentroid(geo);
+      if (Number.isFinite(centroid[0]) && Number.isFinite(centroid[1])) byCode[code] = centroid;
+    }
+    onReady(byCode);
+  }, [geographies, onReady]);
+  return null;
+}
+
 function MapBody({
   geoData,
   counts,
@@ -47,12 +84,30 @@ function MapBody({
   height: number;
   dark: boolean;
 }) {
-  const [zoomState, setZoomState] = useState<{ center: [number, number]; zoom: number }>({ center: [10, 20], zoom: 1 });
+  const [zoomState, setZoomState] = useState<{ center: [number, number]; zoom: number }>(DEFAULT_VIEW);
   const [tip, setTip] = useState<{ x: number; y: number; code: string } | null>(null);
+  const centroidsRef = useRef<Record<string, [number, number]>>({});
+
+  const handleCentroids = useCallback((byCode: Record<string, [number, number]>) => {
+    centroidsRef.current = byCode;
+  }, []);
+
+  // Programmatic zoom-to-country: fires whenever the filter changes, not on
+  // every render. A user's own drag/scroll (onMoveEnd below) can move the
+  // view away from this afterward — that's expected, this only sets the
+  // initial framing for a new selection, it doesn't lock the view to it.
+  useEffect(() => {
+    if (active && centroidsRef.current[active]) {
+      setZoomState({ center: centroidsRef.current[active], zoom: 4 });
+    } else {
+      setZoomState(DEFAULT_VIEW);
+    }
+  }, [active]);
 
   return (
     <>
       <ComposableMap projection="geoEqualEarth" width={800} height={height} style={{ width: "100%", height: "100%", display: "block" }}>
+        <CentroidCapture geoData={geoData} onReady={handleCentroids} />
         <ZoomableGroup
           center={zoomState.center}
           zoom={zoomState.zoom}
@@ -66,15 +121,16 @@ function MapBody({
                 const code = alpha2FromNumeric(String(geo.id ?? ""));
                 const count = code ? counts[code] ?? 0 : 0;
                 const isActive = Boolean(active) && code === active;
+                const muted = Boolean(active) && !isActive;
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill={heatColor(count, max, dark)}
+                    fill={muted ? `rgb(${(dark ? MUTED_RGB_DARK : MUTED_RGB).join(",")})` : heatColor(count, max, dark)}
                     stroke="var(--line)"
                     strokeWidth={0.5}
                     style={{
-                      default: { outline: "none", opacity: active && !isActive ? 0.45 : 1, transition: "fill 0.2s, opacity 0.15s" },
+                      default: { outline: "none", transition: "fill 0.2s" },
                       hover: { outline: "none", fill: "var(--red)", cursor: code && onSelect ? "pointer" : "default" },
                       pressed: { outline: "none", fill: "var(--red)" },
                     }}
