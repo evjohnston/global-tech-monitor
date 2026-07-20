@@ -182,6 +182,12 @@ export default function App() {
 
   const entries = data?.entries ?? [];
   const trend = data?.trend ?? [];
+  // Every time-based chart (volume trend, country-share forecast, the map's
+  // time scrubber) shows a rolling 21-day window, not the full accumulated
+  // history — same window as the KPI row's trailing-21d deltas, so "trend"
+  // means one consistent thing across the page. The full history stays in
+  // `trend`/the data file itself; this is a display-only slice.
+  const trend21 = useMemo(() => trend.slice(-21), [trend]);
   const shown = country === "all" ? entries : entries.filter((e) => e.country === country);
 
   const byStage = useMemo(() => {
@@ -238,14 +244,14 @@ export default function App() {
   const overallShares = useMemo(() => countryShares(innovationCounts), [innovationCounts]);
   const shareGap = leadCountry ? (overallShares[leadCountry] ?? 0) - (runnerUp ? overallShares[runnerUp] ?? 0 : 0) : 0;
   const gapTrendLabel = useMemo(() => {
-    if (trend.length < 2 || !leadCountry) return null;
+    if (trend21.length < 2 || !leadCountry) return null;
     const gapAt = (i: number) => {
-      const s = countryShares(trend[i].counts);
+      const s = countryShares(trend21[i].counts);
       return (s[leadCountry] ?? 0) - (runnerUp ? s[runnerUp] ?? 0 : 0);
     };
-    const diff = gapAt(trend.length - 1) - gapAt(0);
+    const diff = gapAt(trend21.length - 1) - gapAt(0);
     return Math.abs(diff) < 0.5 ? "flat" : diff < 0 ? "narrowing" : "widening";
-  }, [trend, leadCountry, runnerUp]);
+  }, [trend21, leadCountry, runnerUp]);
 
   // Forecast lines: top 5 countries by current innovation volume — always
   // whichever countries actually lead, so the headline comparison never
@@ -365,7 +371,7 @@ export default function App() {
             label={runnerUp ? `${countryName(leadCountry)} – ${countryName(runnerUp)} share gap` : "Leader share"}
             value={leadCountry ? `${leadCountry} +${Math.abs(shareGap).toFixed(0)}pt` : "—"}
             delta={gapTrendLabel}
-            caption={gapTrendLabel ? `since ${trend[0]?.date}` : "not enough history yet"}
+            caption={gapTrendLabel ? `since ${trend21[0]?.date}` : "not enough history yet"}
           />
           <KpiCard
             label="Open funding awards"
@@ -405,13 +411,13 @@ export default function App() {
             </div>
             <div className="panel">
               <h3>Innovation output over time</h3>
-              <VolumeTrend trend={trend} />
+              <VolumeTrend trend={trend21} />
             </div>
           </div>
           <div className="panel map-panel">
             <h3>Where the work happens</h3>
             <div className="map-fill">
-              <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} trend={trend} dark={dark} />
+              <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} trend={trend21} dark={dark} />
               <div className="trend-empty" style={{ padding: "6px 0 0", fontSize: 10.5 }}>
                 Every country with at least one attributed work is shaded — darker means more output. Click any country to filter the page. Drag the time bar below to see real recorded history; expand for the full interactive map.
               </div>
@@ -464,7 +470,7 @@ export default function App() {
 
         <div className="panel">
           <h3>Country share forecast <span className="fc-tag">Projected to year end — linear trend</span></h3>
-          <TrendChart trend={trend} countries={forecastCountries} projectDays={daysToYearEnd} />
+          <TrendChart trend={trend21} countries={forecastCountries} projectDays={daysToYearEnd} />
         </div>
 
         <section className="section">
