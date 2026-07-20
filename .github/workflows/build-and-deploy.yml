@@ -62,12 +62,42 @@ jobs:
       # real prev file to start from. Skips the commit if nothing changed
       # (a content-only diff, not a timestamp-only one, would be nice here
       # but generatedAt always differs — accept a commit most nights).
+      # `git push` here can lose a race against anything else that pushed to
+      # main since this job's checkout (another queued run, or a human's own
+      # push) — confirmed 2026-07-19 when a rejected push led to a by-hand
+      # conflict resolution that left literal <<<<<<< markers committed into
+      # quantum-computing.json, breaking the live site until caught. This
+      # step self-heals that race instead of failing or leaving markers: if
+      # a plain push is rejected, pull+rebase, and if THAT conflicts (it can
+      # only be public/data/* — nothing else changed in this job), keep this
+      # run's own freshly-regenerated files rather than attempting a
+      # line-level merge of generated JSON. This run's data already
+      # accumulated from whatever prev.entries/trend existed at checkout, so
+      # it's a complete, valid regeneration on its own — never partial,
+      # never marker-laden.
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/data/
-          git diff --staged --quiet && echo "no data changes" || git commit -m "data: nightly fetch $(date -u +%Y-%m-%d) [skip ci]"
+          git diff --staged --quiet && echo "no data changes" && exit 0
+          git commit -m "data: nightly fetch $(date -u +%Y-%m-%d) [skip ci]"
+          for i in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "push rejected, pulling and retrying ($i/3)"
+            # NOTE: git rebase swaps merge terminology — "ours" is upstream
+            # (origin/main), "theirs" is this run's own commit being
+            # replayed. -X theirs / checkout --theirs keep THIS run's data,
+            # not upstream's — confirmed against `man git-rebase` before
+            # writing this, since getting ours/theirs backwards here would
+            # silently reintroduce the exact data-loss bug this fixes.
+            git pull --rebase -X theirs -s recursive origin main || {
+              echo "rebase conflict outside public/data/ — resolving by keeping this run's data"
+              git checkout --theirs -- public/data/
+              git add public/data/
+              git rebase --continue
+            }
+          done
           git push
 
       # Build with the repo name as base path for project Pages.
