@@ -41,6 +41,25 @@ interface OAWork {
   id?: string; doi?: string | null; title?: string | null;
   display_name?: string | null; publication_date?: string | null;
   authorships?: OAAuthorship[];
+  cited_by_count?: number;
+  abstract_inverted_index?: Record<string, number[]>;
+  primary_location?: { source?: { display_name?: string | null } | null };
+}
+
+// OpenAlex returns abstracts as an inverted index (word -> the positions it
+// appears at) rather than plain text — real data, just a different shape,
+// reconstructed here rather than fetched from a second endpoint. The index
+// already gives every word's exact slot, so this places words directly by
+// position (O(n)) instead of collecting pairs and sorting (O(n log n)) —
+// runs per work, on every live refresh as well as the nightly build.
+function reconstructAbstract(inverted?: Record<string, number[]>): string | undefined {
+  if (!inverted) return undefined;
+  let maxPos = -1;
+  for (const positions of Object.values(inverted)) for (const p of positions) if (p > maxPos) maxPos = p;
+  if (maxPos < 0) return undefined;
+  const words = new Array<string>(maxPos + 1);
+  for (const [word, positions] of Object.entries(inverted)) for (const p of positions) words[p] = word;
+  return words.filter(Boolean).join(" ");
 }
 
 // Modal (most-represented) string in a list, breaking ties by first
@@ -93,7 +112,9 @@ export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
     const institutionNames: string[] = [];
     const countries: string[] = [];
     const rawAffiliations: string[] = [];
+    const authorNames: string[] = [];
     for (const a of auths) {
+      if (a.author?.display_name) authorNames.push(a.author.display_name);
       for (const i of a.institutions ?? []) {
         if (i.display_name) institutionNames.push(i.display_name);
         if (i.country_code) countries.push(i.country_code);
@@ -137,6 +158,10 @@ export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
       id: `oa-${oaId}`, stage: "innovation", country, provenance,
       source: "paper", title, org, date: (w.publication_date ?? "").slice(0, 10),
       url: workUrl, countryEvidence: evidence,
+      citations: w.cited_by_count,
+      abstract: reconstructAbstract(w.abstract_inverted_index),
+      authors: authorNames.length > 0 ? authorNames.slice(0, 6) : undefined,
+      venue: w.primary_location?.source?.display_name ?? undefined,
     };
   });
 }

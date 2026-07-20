@@ -19,6 +19,8 @@ import { WorldMap } from "./components/WorldMap.tsx";
 import { Leaderboard } from "./components/Leaderboard.tsx";
 import { RecentEntries } from "./components/RecentEntries.tsx";
 import { PieChart } from "./components/PieChart.tsx";
+import { EntryModal } from "./components/EntryModal.tsx";
+import { fmtUsd } from "./lib/format.ts";
 
 type LiveMode = "loading" | "static" | "refreshed" | "fallback";
 // The EPO/NSF/news proxy — see worker/. Unset in dev until you've deployed
@@ -33,12 +35,6 @@ const TOP_N = 6; // compact-view country count — every real country still gets
 // counted everywhere; this only bounds how many show up in chips/bars/KPIs.
 // The full map has no such cap.
 
-function fmtUsd(n: number): string {
-  if (n >= 1e9) return `$${(n / 1e9).toFixed(1)}B`;
-  if (n >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
-  if (n >= 1e3) return `$${(n / 1e3).toFixed(0)}K`;
-  return `$${n}`;
-}
 function fmtDelta(pct: number | null): string | null {
   if (pct == null) return null;
   if (Math.abs(pct) < 0.05) return "flat";
@@ -119,6 +115,7 @@ export default function App() {
   const [country, setCountry] = useState<string | "all">("all");
   const [mode, setMode] = useState<LiveMode>("loading");
   const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
+  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [dark, setDark] = useState<boolean>(() => {
     const saved = localStorage.getItem("gtm-theme");
     if (saved === "dark" || saved === "light") return saved === "dark";
@@ -330,7 +327,7 @@ export default function App() {
         </div>
       </div>
 
-      <NewsTicker entries={shown} />
+      <NewsTicker entries={shown} onSelect={setSelectedEntry} />
 
       <div className="wrap">
         <div className="pagehead">
@@ -443,7 +440,7 @@ export default function App() {
           </div>
           <div className="panel">
             <h3>Recent entries</h3>
-            <RecentEntries entries={shown} limit={6} />
+            <RecentEntries entries={shown} limit={6} onSelect={setSelectedEntry} />
           </div>
         </div>
 
@@ -488,6 +485,7 @@ export default function App() {
                 entries={byStage[s.id]}
                 note={latestNote[s.id]}
                 highlightOrg={s.id === "innovation" ? highlightOrg : null}
+                onSelectEntry={setSelectedEntry}
               />
             ))}
           </div>
@@ -505,6 +503,8 @@ export default function App() {
           <div className="sig">Ideas Advancing Freedom</div>
         </footer>
       </div>
+
+      {selectedEntry && <EntryModal entry={selectedEntry} onClose={() => setSelectedEntry(null)} />}
     </>
   );
 }

@@ -41,6 +41,17 @@ export interface Entry {
   // (ASPI uses top-10% most-cited); amountUsd powers the funding view.
   citations?: number;
   amountUsd?: number;
+  // Detail-popup enrichment — all pulled from the same response each source
+  // already fetches, never a second request. abstract: OpenAlex paper
+  // abstract (reconstructed from its inverted-index form), EPO patent
+  // abstract, NSF project abstract, or the RSS/Google News item description.
+  // authors: OpenAlex paper authors or EPO patent inventors. venue: OpenAlex
+  // journal/source name or NSF's specific program name. classification: EPO
+  // CPC code(s) for this filing, e.g. "G06N10/20".
+  abstract?: string;
+  authors?: string[];
+  venue?: string;
+  classification?: string;
 }
 
 // One dated observation of country share, appended each nightly run. This is

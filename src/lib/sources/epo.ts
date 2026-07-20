@@ -32,6 +32,46 @@ export async function fetchPatents(key: string, secret: string, n: number, cpcQu
   const docs = asArray(
     data?.["ops:world-patent-data"]?.["ops:biblio-search"]?.["ops:search-result"]?.["exchange-documents"]
   );
+
+  // Applicant/inventor names come in two parallel forms per party — a
+  // normalized "epodoc" form (e.g. "KOREA UNIV RESEARCH AND BUSINESS
+  // FOUNDATION [KR]") and a human-readable "original" form (e.g. "Korea
+  // University Research and Business Foundation") — prefer "original" for
+  // display, checked against a real live sample (2026-07-20) before writing
+  // this rather than guessed from docs, since OPS's schema is fiddly.
+  function partyNames(party: any, nameKey: "applicant-name" | "inventor-name"): string[] {
+    const entries = asArray<any>(party);
+    const original = entries.filter((e) => e?.["@data-format"] === "original");
+    const pool = original.length > 0 ? original : entries;
+    const names = pool.map((e) => e?.[nameKey]?.name?.["$"]).filter((n): n is string => Boolean(n));
+    return [...new Set(names)];
+  }
+
+  // Structured CPC code, e.g. "G06N10/20" — reconstructed from OPS's
+  // section/class/subclass/main-group/subgroup breakdown rather than the
+  // free-text IPCR field, which is a looser classification.
+  function cpcCodes(ex: any): string | undefined {
+    const classes = asArray<any>(ex?.["bibliographic-data"]?.["patent-classifications"]?.["patent-classification"]);
+    const codes = classes
+      .map((c) => {
+        const section = c?.section?.["$"], cls = c?.class?.["$"], sub = c?.subclass?.["$"];
+        const group = c?.["main-group"]?.["$"], subgroup = c?.subgroup?.["$"];
+        if (!section || !cls || !sub || !group) return null;
+        return `${section}${cls}${sub}${group}${subgroup ? `/${subgroup}` : ""}`;
+      })
+      .filter((c): c is string => Boolean(c));
+    return codes.length > 0 ? [...new Set(codes)].join(", ") : undefined;
+  }
+
+  // Publication date (docdb form, YYYYMMDD) — real and always present,
+  // unlike the previously-hardcoded `date: ""`.
+  function publicationDate(ex: any): string {
+    const ids = asArray<any>(ex?.["bibliographic-data"]?.["publication-reference"]?.["document-id"]);
+    const docdb = ids.find((d) => d?.["@document-id-type"] === "docdb");
+    const raw = docdb?.date?.["$"] ?? ids[0]?.date?.["$"] ?? "";
+    return /^\d{8}$/.test(raw) ? `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}` : "";
+  }
+
   return docs.slice(0, n).map((d: any, i: number): Entry => {
     const ex = d?.["exchange-document"] ?? {};
     const country = ex?.["@country"] ?? "";
@@ -40,13 +80,28 @@ export async function fetchPatents(key: string, secret: string, n: number, cpcQu
       ? (titleNode.find((t: any) => t?.["@lang"] === "en")?.["$"] ?? titleNode[0]?.["$"] ?? "")
       : titleNode?.["$"] ?? "Patent filing";
     const num = `${country}${ex?.["@doc-number"] ?? i}`;
+
+    const applicants = partyNames(ex?.["bibliographic-data"]?.parties?.applicants?.applicant, "applicant-name");
+    const inventors = partyNames(ex?.["bibliographic-data"]?.parties?.inventors?.inventor, "inventor-name");
+    const org = applicants[0] ?? `${country} filing`;
+    // OPS's biblio constituent — the same request already made here —
+    // includes the abstract directly on some records; confirmed via a real
+    // live sample (2026-07-20), not assumed from docs.
+    const abstractNode = ex?.abstract;
+    const abstractText = Array.isArray(abstractNode)
+      ? (abstractNode.find((a: any) => a?.["@lang"] === "en") ?? abstractNode[0])?.p?.["$"]
+      : abstractNode?.p?.["$"];
+
     return {
       id: `epo-${num}`, stage: "innovation",
       country: country || null, provenance: "live", source: "patent",
       title: String(title).replace(/\s+/g, " ").trim() || "Quantum computing patent",
-      org: `${country} filing`, date: "",
+      org, date: publicationDate(ex),
       url: `https://worldwide.espacenet.com/patent/search?q=${num}`,
       countryEvidence: country ? `EPO filing country ${country}` : "EPO record has no filing country",
+      authors: inventors.length > 0 ? inventors : undefined,
+      classification: cpcCodes(ex),
+      abstract: typeof abstractText === "string" ? abstractText.trim() : undefined,
     };
   });
 }

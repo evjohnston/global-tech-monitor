@@ -12,7 +12,7 @@ const STAGE_SHORT: Record<Stage, string> = {
 // fabricated feed. Rendered twice back to back so the CSS scroll loop has
 // no visible seam; speed scales with item count so it doesn't race by on a
 // short list or crawl on a long one.
-export function NewsTicker({ entries, limit = 18 }: { entries: Entry[]; limit?: number }) {
+export function NewsTicker({ entries, limit = 18, onSelect }: { entries: Entry[]; limit?: number; onSelect?: (entry: Entry) => void }) {
   const recent = [...entries]
     .filter((e) => e.date)
     .sort((a, b) => (a.date < b.date ? 1 : -1))
@@ -24,7 +24,7 @@ export function NewsTicker({ entries, limit = 18 }: { entries: Entry[]; limit?: 
     recent.map((e, i) => (
       <span className="ticker-item" key={`${key}-${e.id}-${i}`}>
         <span className="ticker-tag" style={{ background: STAGE_TAG_COLOR[e.stage] }}>{STAGE_SHORT[e.stage]}</span>
-        <a href={e.url} target="_blank" rel="noopener noreferrer">{e.title}</a>
+        <button className="ticker-link" onClick={() => onSelect?.(e)}>{e.title}</button>
         {e.country && <span className="ticker-sep">· {countryName(e.country)}</span>}
         <span className="ticker-sep">●</span>
       </span>

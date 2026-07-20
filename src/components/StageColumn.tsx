@@ -65,12 +65,14 @@ export function StageColumn({
   note,
   highlightOrg,
   id,
+  onSelectEntry,
 }: {
   stage: Stage;
   entries: Entry[];
   note?: StageNote;
   highlightOrg?: string | null;
   id?: string;
+  onSelectEntry?: (entry: Entry) => void;
 }) {
   const meta = STAGES.find((s) => s.id === stage)!;
   const typeFilters = TYPE_FILTERS[stage];
@@ -145,7 +147,7 @@ export function StageColumn({
       <div className="stage-body" ref={bodyRef}>
         {display.length === 0
           ? <div className="trend-empty" style={{ padding: "22px 14px", textAlign: "center" }}>no entries for this filter</div>
-          : display.map((e) => <Card key={e.id} entry={e} dim={hasFilter && !matches(e)} />)}
+          : display.map((e) => <Card key={e.id} entry={e} dim={hasFilter && !matches(e)} onSelect={onSelectEntry} />)}
       </div>
     </section>
   );

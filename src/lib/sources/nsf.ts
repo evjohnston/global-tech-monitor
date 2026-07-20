@@ -6,13 +6,14 @@ import type { Entry } from "../types.ts";
 interface NSFAward {
   id?: string; title?: string; awardeeName?: string;
   awardeeCountryCode?: string; fundsObligatedAmt?: string; startDate?: string;
+  abstractText?: string; pdPIName?: string; program?: string;
 }
 
 export async function fetchNSF(n: number, keyword = "quantum"): Promise<Entry[]> {
   const url =
     "https://www.research.gov/awardapi-service/v1/awards.json" +
     `?keyword=${encodeURIComponent(keyword)}` +
-    "&printFields=id,title,awardeeName,awardeeCountryCode,fundsObligatedAmt,startDate" +
+    "&printFields=id,title,awardeeName,awardeeCountryCode,fundsObligatedAmt,startDate,abstractText,pdPIName,program" +
     `&rpp=${n}`;
   const res = await fetch(url, { headers: { "User-Agent": "GlobalTechMonitor/0.3" } });
   if (!res.ok) throw new Error(`NSF HTTP ${res.status}`);
@@ -37,6 +38,9 @@ export async function fetchNSF(n: number, keyword = "quantum"): Promise<Entry[]>
       url: `https://www.nsf.gov/awardsearch/showAward?AWD_ID=${a.id ?? ""}`,
       amountUsd: amt,
       countryEvidence: `NSF awardee country ${country}`,
+      abstract: a.abstractText?.trim() || undefined,
+      authors: a.pdPIName ? [a.pdPIName] : undefined,
+      venue: a.program || undefined,
     };
   });
 }

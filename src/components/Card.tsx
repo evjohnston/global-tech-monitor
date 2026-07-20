@@ -1,18 +1,17 @@
 import type { Entry } from "../lib/types.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
+import { fmtUsd } from "../lib/format.ts";
 
-function fmtAmt(n?: number): string | null {
-  if (!n) return null;
-  if (n >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
-  if (n >= 1e3) return `$${(n / 1e3).toFixed(0)}K`;
-  return `$${n}`;
-}
-
-export function Card({ entry, dim }: { entry: Entry; dim?: boolean }) {
-  const amt = fmtAmt(entry.amountUsd);
+export function Card({ entry, dim, onSelect }: { entry: Entry; dim?: boolean; onSelect?: (entry: Entry) => void }) {
+  const amt = entry.amountUsd ? fmtUsd(entry.amountUsd) : null;
   const color = countryColor(entry.country);
   return (
-    <div className={`ecard${dim ? " dim" : ""}`} style={{ ["--acc" as string]: color }}>
+    <div
+      className={`ecard${dim ? " dim" : ""}${onSelect ? " clickable" : ""}`}
+      style={{ ["--acc" as string]: color }}
+      onClick={onSelect ? () => onSelect(entry) : undefined}
+      title={onSelect ? "Click for details" : undefined}
+    >
       <div className="ecard-meta">
         <span
           className="ecard-badge"
@@ -27,9 +26,7 @@ export function Card({ entry, dim }: { entry: Entry; dim?: boolean }) {
         {entry.provenance === "seeded" && <span className="seeded">seeded</span>}
         {entry.provenance === "auto" && <span className="seeded auto">auto-classified</span>}
       </div>
-      <div className="ecard-title">
-        <a href={entry.url} target="_blank" rel="noopener noreferrer">{entry.title}</a>
-      </div>
+      <div className="ecard-title">{entry.title}</div>
       {entry.org && <div className="ecard-org">{entry.org}</div>}
     </div>
   );

@@ -35,7 +35,7 @@ export interface RssClassifierConfig {
   exclude?: RegExp;
 }
 
-function decodeEntities(s: string): string {
+function decodeEntitiesOnce(s: string): string {
   return s
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
     .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"')
@@ -51,6 +51,22 @@ function decodeEntities(s: string): string {
     .replace(/<[^>]+>/g, " ") // strip any inline markup in description
     .replace(/\s+/g, " ")
     .trim();
+}
+
+// Some feeds double-escape entities (e.g. "&amp;nbsp;" for a plain space) —
+// a single pass leaves a literal "&nbsp;" behind. Loops to a fixed point
+// (capped at 3 passes, since a real feed has never needed more than one
+// extra) rather than hardcoding "twice" — absorbs any escaping depth, and
+// costs nothing extra on the common already-clean case, where it exits
+// after the first pass.
+function decodeEntities(s: string): string {
+  let out = s;
+  for (let i = 0; i < 3; i++) {
+    const next = decodeEntitiesOnce(out);
+    if (next === out) break;
+    out = next;
+  }
+  return out;
 }
 
 function extractTag(block: string, tag: string): string {
@@ -122,6 +138,7 @@ async function fetchOneFeed(feed: RssFeedConfig, cutoffMs: number, classifier: R
       source: stage === "scaling" ? "milestone" : "deployment",
       title: item.title, org: feed.name, date, url: item.link,
       countryEvidence: `${evidence} (auto-classified from ${feed.name} RSS, unverified)`,
+      abstract: item.description || undefined,
     });
   }
   return out;
@@ -234,6 +251,7 @@ export async function fetchInvestmentNews(cfg: InvestmentNewsConfig, sinceDays =
       stage: "investment", country, provenance: "auto", source: "news",
       title, org, date, url: item.link,
       countryEvidence: `${evidence} (auto-classified from Google News RSS, unverified)`,
+      abstract: item.description || undefined,
     });
   }
   const byId = new Map<string, Entry>();
