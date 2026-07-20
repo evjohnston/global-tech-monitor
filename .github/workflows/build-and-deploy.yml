@@ -20,16 +20,14 @@ permissions:
   id-token: write
 
 # cancel-in-progress: false (not GitHub's own template default of true) —
-# this workflow's own "Commit updated data" step pushes back to main on
-# almost every run (live fetches change entries[] most of the time), which
-# fires a new workflow run for the same push event. With cancel-in-progress
-# true, that self-triggered run cancels the very run that's still trying to
-# build/deploy, before it ever reaches actions/deploy-pages — confirmed
-# 2026-07-19 via two human pushes in quick succession both getting cancelled
-# mid-build/mid-deploy (runs #16, #17), and the same mechanism would recur
-# from the bot's own commit even without a human pushing twice. Queuing
-# instead of cancelling means every push's deploy eventually completes,
-# just possibly behind others in the queue rather than one being dropped.
+# originally needed because this workflow's own data commit used to push to
+# main, self-triggering another run of this same workflow; confirmed
+# 2026-07-19 that cancel-in-progress:true let a self-triggered run cancel a
+# still-building one before it reached actions/deploy-pages (runs #16, #17).
+# That specific self-trigger is gone now that data commits go to the `data`
+# branch instead (2026-07-20, see "Commit updated data" below) — but
+# schedule/workflow_dispatch/human-push can still overlap for other reasons,
+# so queuing instead of cancelling stays the right default regardless.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -47,6 +45,25 @@ jobs:
 
       - run: npm ci
 
+      # Accumulated data lives on the `data` branch, not `main` (moved there
+      # 2026-07-20 specifically so this job never has to commit to main —
+      # see .gitignore and CLAUDE.md's "Data lives on its own branch"
+      # section. A human working on main should never have to `git pull`
+      # just because this job ran). public/data/ is gitignored on main, so
+      # this seeds it from the data branch before fetch-data.ts runs —
+      # otherwise readPrevious() would see nothing and every run would
+      # restart trend[]/entries[] accumulation from zero. Falls through to
+      # an empty public/data/ (same as any cold start) if the data branch
+      # doesn't exist yet.
+      - name: Seed public/data/ from the data branch
+        run: |
+          mkdir -p public/data
+          if git fetch origin data --depth=1 2>/dev/null; then
+            git archive origin/data -- public/data | tar -x
+          else
+            echo "no data branch yet — starting cold"
+          fi
+
       # Pull fresh data server-side (no CORS limits here). Loops over every
       # vertical in src/lib/verticals.ts and writes public/data/<id>.json.
       - name: Fetch data
@@ -56,53 +73,53 @@ jobs:
           EPO_KEY: ${{ secrets.EPO_KEY }}
           EPO_SECRET: ${{ secrets.EPO_SECRET }}
 
-      # Commit the updated data files back to main so trend[]/entries[]
-      # accumulation is real infrastructure, not something that only happens
-      # when a human runs fetch-data locally and commits by hand. Found
-      # missing during the multi-vertical build (2026-07-19) — before this,
-      # every nightly run's accumulated result was discarded after that run's
-      # deploy, since nothing ever persisted it back to the repo; the "start
-      # from prev.entries" merge in fetch-data.ts only helps if there's a
-      # real prev file to start from. Skips the commit if nothing changed
-      # (a content-only diff, not a timestamp-only one, would be nice here
-      # but generatedAt always differs — accept a commit most nights).
-      # `git push` here can lose a race against anything else that pushed to
-      # main since this job's checkout (another queued run, or a human's own
-      # push) — confirmed 2026-07-19 when a rejected push led to a by-hand
-      # conflict resolution that left literal <<<<<<< markers committed into
-      # quantum-computing.json, breaking the live site until caught. This
-      # step self-heals that race instead of failing or leaving markers: if
-      # a plain push is rejected, pull+rebase, and if THAT conflicts (it can
-      # only be public/data/* — nothing else changed in this job), keep this
-      # run's own freshly-regenerated files rather than attempting a
-      # line-level merge of generated JSON. This run's data already
-      # accumulated from whatever prev.entries/trend existed at checkout, so
-      # it's a complete, valid regeneration on its own — never partial,
-      # never marker-laden.
-      - name: Commit updated data
+      # Commit the updated data files to the `data` branch — never to
+      # `main` — so trend[]/entries[] accumulation is real infrastructure
+      # without a human ever needing to pull/merge past a bot commit on the
+      # branch they actually work on. This job's own checkout stays on
+      # `main` throughout (the Build step right after this still reads
+      # public/data/ from disk, untouched by any of this); only a separate
+      # worktree pointed at `data` receives the commit. Skips the commit if
+      # nothing changed (a content-only diff, not a timestamp-only one,
+      # would be nice here but generatedAt always differs — accept a commit
+      # most runs, same as before this moved off main).
+      # `git push` here can still lose a race against another run pushing to
+      # `data` at the same time (e.g. a scheduled run overlapping a manual
+      # dispatch) — self-heals the same way the old main-branch version did:
+      # if a plain push is rejected, pull+rebase, and if THAT conflicts (it
+      # can only be public/data/* — nothing else ever touches this branch),
+      # keep this run's own freshly-regenerated files rather than attempting
+      # a line-level merge of generated JSON.
+      - name: Commit updated data to the data branch (not main)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin data --depth=1
+          git worktree add --detach /tmp/data-branch origin/data
+          cd /tmp/data-branch
+          git checkout -B data
+          mkdir -p public/data
+          cp "$GITHUB_WORKSPACE"/public/data/*.json public/data/
           git add public/data/
           git diff --staged --quiet && echo "no data changes" && exit 0
-          git commit -m "data: nightly fetch $(date -u +%Y-%m-%d) [skip ci]"
+          git commit -m "data: fetch $(date -u +"%Y-%m-%dT%H:%M:%SZ") [skip ci]"
           for i in 1 2 3; do
-            if git push; then exit 0; fi
+            if git push origin data; then exit 0; fi
             echo "push rejected, pulling and retrying ($i/3)"
             # NOTE: git rebase swaps merge terminology — "ours" is upstream
-            # (origin/main), "theirs" is this run's own commit being
+            # (origin/data), "theirs" is this run's own commit being
             # replayed. -X theirs / checkout --theirs keep THIS run's data,
             # not upstream's — confirmed against `man git-rebase` before
-            # writing this, since getting ours/theirs backwards here would
-            # silently reintroduce the exact data-loss bug this fixes.
-            git pull --rebase -X theirs -s recursive origin main || {
-              echo "rebase conflict outside public/data/ — resolving by keeping this run's data"
+            # writing this originally, since getting ours/theirs backwards
+            # here would silently reintroduce the data-loss bug this fixes.
+            git pull --rebase -X theirs -s recursive origin data || {
+              echo "rebase conflict — resolving by keeping this run's data"
               git checkout --theirs -- public/data/
               git add public/data/
               git rebase --continue
             }
           done
-          git push
+          git push origin data
 
       # Build with the repo name as base path for project Pages.
       # If deploying to a user/root or custom domain, set GTM_BASE to "/".

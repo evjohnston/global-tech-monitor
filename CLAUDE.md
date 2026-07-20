@@ -91,13 +91,13 @@ needs, checked by hand before it goes in `VERTICALS`:
   ingestion path** (see "Live data" below for what changed 2026-07-20) — the
   frontend never calls OpenAlex/EPO/NSF/RSS itself.
 - **GitHub Action** (`.github/workflows/build-and-deploy.yml`) fetches every 3
-  hours, commits the updated data files back (so trend/entries history
-  accumulates for every vertical), builds, and deploys to Pages. This keeps
-  running — it's the only thing writing `trend[]` (and, since 2026-07-20, the
-  only thing that ever pulls fresh data at all), and nothing below replaces
-  it. Cadence was daily (07:00 UTC) until 2026-07-20; bumped to every 3 hours
-  specifically to compensate for removing the browser's 3-minute live
-  auto-refresh — see "Live data" below.
+  hours, commits the updated data files to the `data` branch — **not
+  `main`**, see "Data lives on its own branch" below — builds, and deploys
+  to Pages. This keeps running — it's the only thing writing `trend[]` (and,
+  since 2026-07-20, the only thing that ever pulls fresh data at all), and
+  nothing below replaces it. Cadence was daily (07:00 UTC) until 2026-07-20;
+  bumped to every 3 hours specifically to compensate for removing the
+  browser's 3-minute live auto-refresh — see "Live data" below.
 - **A Cloudflare Worker** (`worker/`) still exists and is still deployed, but
   as of 2026-07-20 the frontend doesn't call it. It used to add a live layer
   on top of the static base (the browser fetching OpenAlex directly plus the
@@ -313,6 +313,44 @@ however small its count, is actually visible. Don't add a second capped
 view of the map data — if a panel needs to show "the rest," point at the
 map rather than inventing another top-N list.
 
+## Data lives on its own branch, not `main`
+
+Changed 2026-07-20. `public/data/*.json` used to be committed straight to
+`main` by every fetch run — daily, then every 3 hours once the cadence was
+bumped (see "Live data" below) — which meant `origin/main` moved out from
+under anyone working locally that often, forcing a `git pull`/rebase before
+every push even though the bot's commits and a human's commits almost never
+touch the same lines. That's the actual complaint that triggered this: it
+kept happening in practice, including once mid-session while writing this
+file. Fix: `public/data/*.json` is now **gitignored on `main`** and lives
+on a dedicated `data` branch that only the fetch workflow ever touches.
+
+Mechanically, in `build-and-deploy.yml`:
+1. **Seed public/data/ from the data branch** — before `fetch-data.ts` runs,
+   because `readPrevious()` needs a real prior file on disk to accumulate
+   `trend[]`/`entries[]` against, and `main`'s checkout won't have one
+   (gitignored). Uses `git archive origin/data -- public/data | tar -x` —
+   writes the files to disk without touching git's index, so nothing here
+   risks staging a change against `main`.
+2. **Fetch data** — unchanged, writes to `public/data/` on disk exactly like
+   before.
+3. **Commit updated data to the data branch (not main)** — the job's own
+   checkout stays on `main` the entire time; a *separate* git worktree
+   pointed at `origin/data` receives the commit and push. The build step
+   right after still reads `public/data/` from the main checkout's working
+   directory (untouched by the worktree operation), so nothing about the
+   actual build changed.
+
+**Consequence for local dev**: a fresh `git clone` of `main` has no
+`public/data/*.json` at all — `public/data/` is empty until you either (a)
+`git fetch origin data && git archive origin/data -- public/data | tar -x`
+(same one-liner the workflow uses) to pull down the real accumulated
+history, or (b) run `npm run fetch-data` yourself, which works but starts
+`trend[]` from zero since there's no prior file to accumulate against
+locally. Don't try to "fix" this by un-gitignoring the files or pointing
+`readPrevious()` at `main` again — that reintroduces the exact problem this
+section exists to prevent.
+
 ## Live data (Cloudflare Worker) — now dormant, frontend is static-store-only
 
 **Changed 2026-07-20: the frontend no longer live-queries any source.**
@@ -413,7 +451,9 @@ the app to point at it.
   (even though the frontend doesn't call them anymore — the Worker itself
   should still degrade gracefully if it's ever used again).
 - The scheduled commit of `public/data/*.json` (trend AND entries
-  accumulation both depend on it for every vertical). Since 2026-07-20 this
+  accumulation both depend on it for every vertical) — to the `data` branch,
+  not `main` (see "Data lives on its own branch" above; that split happened
+  2026-07-20, don't revert it back onto `main`). Since 2026-07-20 this
   GitHub Action run is the *only* thing that ever pulls fresh data — there
   is no more browser-side live layer on top of it, so don't reason about
   freshness as "static base + live topping" anymore, it's just "however
@@ -457,6 +497,11 @@ padding). Prefer "is/has" over "serves as/features". State the fact, stop.
 
 ```
 npm install
+git fetch origin data && git archive origin/data -- public/data | tar -x
+                          # one-time after a fresh clone: public/data/ is gitignored on
+                          # main and empty until you pull the real accumulated history
+                          # off the `data` branch this way (see "Data lives on its own
+                          # branch"). Skip this if you'd rather start cold with fetch-data.
 npm run fetch-data       # loops over every VERTICALS entry, writes public/data/<id>.json each (watch the source lines it prints)
 npm run backfill-trend -- <vertical-id>   # one-time: reconstructs past trend[] history from real OpenAlex dates (defaults to quantum-computing)
 npm run backfill-entries -- <vertical-id> # one-off top-up: deep OpenAlex/NSF pull merged into entries[] (defaults to quantum-computing)

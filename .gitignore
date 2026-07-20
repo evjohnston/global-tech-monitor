@@ -4,3 +4,11 @@ dist
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+# Accumulated fetch output lives on the `data` branch now, not `main` — see
+# CLAUDE.md's "Data lives on its own branch" section. Untracked here
+# 2026-07-20 specifically so the nightly/every-3h fetch job never has
+# anything to commit to `main` again; a human never needs to `git pull`
+# before pushing just because the bot ran. The files still exist on disk
+# after `npm run fetch-data` — git just stops caring about them here.
+public/data/*.json
