@@ -85,7 +85,7 @@ a { color: inherit; }
    to .wrap (not edge-to-edge like the top ticker), tall enough to read
    next to the KPI row. mask-image fades each edge instead of a hard clip,
    which looked broken on a bordered card shape (fine for plain text). ── */
-.cited-ticker-wrap { margin-top: 4px; }
+.cited-ticker-wrap { margin-bottom: 6px; }
 .cited-ticker-label { font-size: 11.5px; font-weight: 600; margin-bottom: 8px; }
 .cited-ticker-label .drop { font-size: 10px; font-weight: 400; color: var(--mist); margin-left: 4px; }
 .cited-track-wrap {
@@ -105,7 +105,9 @@ a { color: inherit; }
 .cited-card:hover .cited-card-title { color: var(--red); }
 .cited-card-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.03em; color: var(--mist); }
 .cited-card-title { font-size: 12px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.cited-card-meta { font-size: 10px; color: var(--mist); margin-top: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cited-card-meta { display: flex; align-items: center; gap: 5px; margin-top: auto; min-width: 0; }
+.cited-card-badge { flex: none; color: #fff; padding: 1px 4px; font-family: var(--mono); font-size: 8.5px; }
+.cited-card-org { font-size: 10px; color: var(--mist); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 
 /* ── page head ──────────────────────────────────────────────────── */
 .pagehead { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0 10px; gap: 12px; flex-wrap: wrap; }
@@ -144,7 +146,15 @@ a { color: inherit; }
 /* map row: map at 2/3 width, a stacked 1/3 column matching its height */
 .row-map { display: grid; grid-template-columns: 1fr 2fr; gap: 6px; margin-bottom: 6px; }
 .row-map-stack { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.row-map-stack .panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+/* Each panel sizes to its OWN natural content, not an equal third — a
+   forced flex:1 equal-split broke once small-multiples grew from 1 row of
+   mini-charts to 2 (4 countries wrapping at this column's width): squeezed
+   to 1/3 of the stack's height, its real content overflowed downward,
+   visibly overlapping the panel below it. The map (see .map-fill .mapbox
+   below) measures whatever height this stack's natural content sum ends
+   up being and matches it — it doesn't need these panels to divide space
+   evenly, just needs a real total to read. */
+.row-map-stack .panel { flex: 0 0 auto; display: flex; flex-direction: column; }
 .map-panel { display: flex; flex-direction: column; min-width: 0; }
 .map-fill { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 /* WorldMap's own top-level wrapper (.map-wrap) sits between .map-fill and

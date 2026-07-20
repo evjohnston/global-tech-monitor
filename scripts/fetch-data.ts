@@ -47,7 +47,7 @@ import { XMLParser } from "fast-xml-parser";
 config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env.local") });
 import { inferInstitutionCountry } from "../src/lib/institutionCountry.ts";
 import type { DataFile, Entry, StageNote, TrendPoint } from "../src/lib/types.ts";
-import { fetchOpenAlexPages, fetchTopCitedByYear } from "../src/lib/sources/openalex.ts";
+import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
@@ -88,14 +88,11 @@ const OA_N = 200;
 const OA_PAGES = 3; // up to 600 works/run, covers the great majority of a 30-day window
 const NSF_N = 300;
 const EPO_N = 100;
-// Top-cited-per-year: 84+83+83 = 250 across the last 3 real, COMPLETE
-// calendar years (not the current in-progress one — this year's works
-// haven't had time to accrue citations, same reason the rest of this app
-// treats citation counts as sparse/near-zero for anything recent). Years
-// are computed relative to the real current date, not hardcoded, so this
-// keeps advancing on its own every January without a code change.
-const TOP_CITED_PER_YEAR = [84, 83, 83];
-const TOP_CITED_YEARS = TOP_CITED_PER_YEAR.map((_, i) => new Date().getFullYear() - 1 - i);
+// Top 250 most-cited works of the last 5 years, ranked flat by citation
+// count (no per-year grouping — see fetchTopCited's comment for why that
+// changed 2026-07-20).
+const TOP_CITED_SINCE_YEARS = 5;
+const TOP_CITED_TOTAL = 250;
 
 const OA_KEY = process.env.OPENALEX_KEY ?? "";
 const OA_MAILTO = process.env.OPENALEX_MAILTO ?? "gtm@example.com";
@@ -252,21 +249,16 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     console.error("investment news skipped:", (err as Error).message);
   }
 
-  // Top-cited works per year, last 3 complete years — a different question
-  // than the rolling 30-day `live` pull above (recency vs. citation impact),
-  // so a separate query per year rather than folding into it. Soft-fails
-  // per year, same as every other source: one bad year never blocks the
-  // others or the rest of the run.
-  const topCited: Entry[] = [];
-  for (let i = 0; i < TOP_CITED_YEARS.length; i++) {
-    const year = TOP_CITED_YEARS[i];
-    try {
-      const batch = await fetchTopCitedByYear({ filter: v.openAlexFilter, year, n: TOP_CITED_PER_YEAR[i], key: OA_KEY, mailto: OA_MAILTO });
-      topCited.push(...batch);
-      console.log(`OpenAlex top-cited ${year}: ${batch.length} works`);
-    } catch (err) {
-      console.error(`top-cited ${year} skipped:`, (err as Error).message);
-    }
+  // Top-cited works of the last 5 years, ranked flat by citation count —
+  // a different question than the rolling 30-day `live` pull above
+  // (recency vs. citation impact), so its own query rather than folding
+  // into it. Soft-fails same as every other source.
+  let topCited: Entry[] = [];
+  try {
+    topCited = await fetchTopCitedPages({ filter: v.openAlexFilter, sinceYears: TOP_CITED_SINCE_YEARS, total: TOP_CITED_TOTAL, key: OA_KEY, mailto: OA_MAILTO });
+    console.log(`OpenAlex top-cited (last ${TOP_CITED_SINCE_YEARS}y): ${topCited.length} works`);
+  } catch (err) {
+    console.error("top-cited skipped:", (err as Error).message);
   }
 
   // Entries accumulate across runs, the same way trend[] does — each night's

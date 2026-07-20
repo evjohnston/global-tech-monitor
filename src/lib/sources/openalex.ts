@@ -172,23 +172,27 @@ export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
   return works.map(mapWork);
 }
 
-// Top-N most-cited works of one real calendar year — a different question
-// than fetchOpenAlex's rolling recent window, and needs its own query
-// shape: sorted by citations (not recency), bounded to one full year, and
-// restricted to `type:article` specifically. Confirmed by hand
-// (2026-07-20): without that type restriction, OpenAlex's top hit for a
-// quantum 2025 query was a journal-ISSUE-level record ("Communications in
-// Computational Physics," 509 "citations") masquerading as a work, not a
-// real paper — `type:article` excludes it and every result after is a real
-// article. Deliberately queried per-year rather than "top N over 3 years
-// in one query" — citations accrue over time, so an undifferentiated pool
-// would just be dominated by the oldest year; per-year top-N is how the
-// most-cited 2025 work and the most-cited 2023 work both get a fair shot
-// at appearing, not just whichever year has had longest to accumulate.
-export async function fetchTopCitedByYear(opts: {
-  filter: string; year: number; n: number; key?: string; mailto?: string;
+// Top-N most-cited works of the last `sinceYears` real years — a different
+// question than fetchOpenAlex's rolling recent window, and needs its own
+// query shape: sorted by citations (not recency), and restricted to
+// `type:article` specifically. Confirmed by hand (2026-07-20): without
+// that type restriction, OpenAlex's top hit for a quantum query was a
+// journal-ISSUE-level record ("Communications in Computational Physics,"
+// 509 "citations") masquerading as a work, not a real paper — `type:
+// article` excludes it and every result after is a real article.
+//
+// Deliberately no per-year grouping (an earlier version fetched top-N
+// PER year specifically to stop citations-accrue-over-time from letting
+// the oldest year dominate a flat ranking) — removed 2026-07-20 at
+// explicit request: a flat top-N by raw citation count across the whole
+// window, accepting that older years will naturally rank higher. That's
+// how "most cited" rankings work everywhere else too; the per-year
+// grouping was this app's own choice, not a correctness requirement.
+export async function fetchTopCited(opts: {
+  filter: string; sinceYears: number; n: number; key?: string; mailto?: string; page?: number;
 }): Promise<Entry[]> {
-  const { filter, year, n, key = "", mailto = "gtm@example.com" } = opts;
+  const { filter, sinceYears, n, key = "", mailto = "gtm@example.com", page = 1 } = opts;
+  const sinceYear = new Date().getFullYear() - sinceYears;
   const url =
     "https://api.openalex.org/works" +
     "?filter=" +
@@ -196,11 +200,11 @@ export async function fetchTopCitedByYear(opts: {
       filter,
       "primary_location.source.type:journal",
       "type:article",
-      `from_publication_date:${year}-01-01`,
-      `to_publication_date:${year}-12-31`,
+      `from_publication_date:${sinceYear}-01-01`,
     ].join(",") +
     "&sort=cited_by_count:desc" +
     `&per-page=${n}` +
+    `&page=${page}` +
     `&mailto=${encodeURIComponent(mailto)}` +
     (key ? `&api_key=${key}` : "");
 
@@ -209,6 +213,24 @@ export async function fetchTopCitedByYear(opts: {
   const json = (await res.json()) as { results?: OAWork[] };
   const works = json.results ?? [];
   return works.map(mapWork);
+}
+
+// Pages past OpenAlex's 200-per-page cap the same way fetchOpenAlexPages
+// does, but for the citation-sorted query — `total` (e.g. 250) can exceed
+// one page. Per-page size must stay IDENTICAL across pages for the offset
+// math to line up; only the last page is allowed to come back short.
+export async function fetchTopCitedPages(opts: {
+  filter: string; sinceYears: number; total: number; perPage?: number; key?: string; mailto?: string;
+}): Promise<Entry[]> {
+  const { total, perPage = 200, ...rest } = opts;
+  const pages = Math.ceil(total / perPage);
+  const all: Entry[] = [];
+  for (let page = 1; page <= pages; page++) {
+    const batch = await fetchTopCited({ ...rest, n: perPage, page });
+    all.push(...batch);
+    if (batch.length < perPage) break; // fewer results than a full page — nothing more to fetch
+  }
+  return all.slice(0, total);
 }
 
 // Fetches multiple pages and concatenates — OpenAlex caps per-page at 200,
