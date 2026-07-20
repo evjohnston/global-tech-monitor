@@ -255,7 +255,6 @@ export default function App() {
     <>
       <div className="topbar">
         <div className="topbar-inner">
-          <img className="wordmark-logo" src={dark ? logoDarkBg : logoLightBg} alt="Tech Futures Lab" />
           <span className="verticals">
             {VERTICALS.map((v) => (
               <button
@@ -268,6 +267,7 @@ export default function App() {
               </button>
             ))}
           </span>
+          <img className="wordmark-logo" src={dark ? logoDarkBg : logoLightBg} alt="Tech Futures Lab" />
           <span className="topbar-meta">
             <span>● {statusText}</span>
             <span title="Nightly build timestamp — this app reads a static build, it doesn't live-query sources on page load">
