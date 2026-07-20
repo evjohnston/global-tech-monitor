@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-20T07:07:45.314Z",
+  "generatedAt": "2026-07-20T09:50:23.579Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -4193,7 +4193,7 @@
       "org": "Sorbonne Université",
       "date": "2026-07-13",
       "url": "https://doi.org/10.1088/1751-8121/ae8983",
-      "countryEvidence": "institution country codes [FR, FR, FR, FR, FR, FR, CH, FR, FR, FR, FR, FR, FR, FR] → FR",
+      "countryEvidence": "institution country codes [FR, FR, FR, FR, FR, FR, FR, CH, FR, FR, FR, FR, FR, FR, FR, FR] → FR",
       "citations": 0,
       "abstract": "Abstract Szegedy's quantization of a reversible Markov chain provides a quantum walk whose spectral gap is quadratically larger than that of the classical walk. Quantum computers are therefore expected to provide a speedup of Metropolis-Hastings (MH) simulations. Existing generic methods to implement the quantum walk require coherently computing the transition probabilities of the underlying Markov kernel. However, reversible computing methods require a number of qubits that scales with the complexity of the computation. This overhead is undesirable in near-term fault-tolerant quantum computing, where few logical qubits are available. In this work, we present a Szegedy quantum walk construction which follows the classical proposal-acceptance logic, and does not require further reversible computing methods. We also compare this construction with an alternative to Szegedy's approach which also provides a quadratic gap amplification. Since each step of the quantum walks uses a constant number of proposal and acceptance steps, we expect the end-to-end quadratic speedup to hold for MH Markov Chain Monte-Carlo simulations.",
       "authors": [
@@ -24372,6 +24372,193 @@
         "Yingfeng Wang"
       ],
       "venue": "Artificial Intelligence (AI), QUANTUM INFORMATION SCIENCE, Biotechnology, REU SITE-Res Exp for Ugrd Site"
+    },
+    {
+      "id": "oa-W7169714752",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum Federated Learning Framework for Privacy-Preserving Real-Time Consumer Sentiment Analysis",
+      "org": "",
+      "date": "2026-07-19",
+      "url": "https://doi.org/10.6007/ijarbss/v16-i7/28686",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "abstract": "HRMARS - This paper introduces a new Quantum Federated Learning (QFL) system that combines quantum-enhanced transformers and federated learning to make it possible to perform real-time consumer sentiment analysis securely, at scale, and efficiently. The hybrid model proposed overcomes three significant issues: it can be accurate when working with non-IID data, it is communication-efficient, and it can protect data privacy with high security provided by quantum cryptographic protocols. Experimental analyses on IMDB, Sentiment140, Amazon, Yelp, and our own proprietary data showed that QFL is always better in precision, recall, F1 score, and convergence rate than traditional FL-BERT and FL-LSTM models. Further, QFL was able to demonstrate substantial cost and privacy leakage savings in communication at a low cost as well as maintain scalability to one thousand clients. The study fills the gap between concepts in quantum computing and federated learning and provides a practical route to privacy-sensitive distributed intelligence on a practical scale applied to e-commerce and social media analytics.",
+      "authors": [
+        "Hong Zhen Yu",
+        "Hazirah Bee Binti Yusof Ali",
+        "M. Kazem Chamran"
+      ],
+      "venue": "International Journal of Academic Research in Business and Social Sciences"
+    },
+    {
+      "id": "oa-W7169723703",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "The Bridge to the Quantum Fortress: How Do Hybrid Cloud Attacks Exploit the Quantum Core?",
+      "org": "",
+      "date": "2026-07-19",
+      "url": "https://doi.org/10.1007/978-3-032-32764-2_25",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Prabin Lamichhane",
+        "Kyu Hyung Lee"
+      ],
+      "venue": "Lecture notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering"
+    },
+    {
+      "id": "oa-W4391710066",
+      "stage": "innovation",
+      "country": "JP",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Complexity of graph-state preparation by Clifford circuits",
+      "org": "CyberAgent (Japan)",
+      "date": "2026-07-18",
+      "url": "https://doi.org/10.22331/q-2026-07-18-2165",
+      "countryEvidence": "institution country codes [JP, JP, RU] → JP",
+      "citations": 1,
+      "abstract": "In this work, we study the complexity of graph-state preparation in a general model of quantum algorithms that allows measurements in the computational basis, single-qubit Clifford operations, and two-qubit Clifford operations. We define the CZ-complexity of a graph state <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow class=\"MJX-TeXAtom-ORD\"> <mml:mo stretchy=\"false\">|</mml:mo> </mml:mrow> <mml:mi>G</mml:mi> <mml:mo fence=\"false\" stretchy=\"false\">&amp;#x27E9;</mml:mo> </mml:math> as the minimum number of two-qubit Clifford operations required to generate <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow class=\"MJX-TeXAtom-ORD\"> <mml:mo stretchy=\"false\">|</mml:mo> </mml:mrow> <mml:mi>G</mml:mi> <mml:mo fence=\"false\" stretchy=\"false\">&amp;#x27E9;</mml:mo> </mml:math> from <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow class=\"MJX-TeXAtom-ORD\"> <mml:mo stretchy=\"false\">|</mml:mo> </mml:mrow> <mml:mn>0</mml:mn> <mml:msup> <mml:mo fence=\"false\" stretchy=\"false\">&amp;#x27E9;</mml:mo> <mml:mrow class=\"MJX-TeXAtom-ORD\"> <mml:mo>&amp;#x2297;</mml:mo> <mml:mo stretchy=\"false\">(</mml:mo> <mml:mi>n</mml:mi> <mml:mo>+</mml:mo> <mml:mi>s</mml:mi> <mml:mo stretchy=\"false\">)</mml:mo> </mml:mrow> </mml:msup> </mml:math> for some <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>s</mml:mi> <mml:mo>&amp;#x2265;</mml:mo> <mml:mn>0</mml:mn> </mml:math> . Equivalently, every optimal algorithm can be taken to use only controlled-Z (CZ) gates as its two-qubit Clifford operations. We then give a combinatorial characterization of graph-state transformations. Specifically, <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow class=\"MJX-TeXAtom-ORD\"> <mml:mo stretchy=\"false\">|</mml:mo> </mml:mrow> <mml:mi>G</mml:mi> <mml:mo fence=\"false\" stretchy=\"false\">&amp;#x27E9;</mml:mo> </mml:math> can be generated from another graph state <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow class=\"MJX-TeXAtom-ORD\"> <mml:mo stretchy=\"false\">|</mml:mo> </mml:mrow> <mml:mi>H</mml:mi> <mml:mo fence=\"false\" stretchy=\"false\">&amp;#x27E9;</mml:mo> </mml:math> by an algorithm of CZ-complexity at most <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>t</mml:mi> </mml:math> if and only if <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>G</mml:mi> </mml:math> can be obtained from <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>H</mml:mi> </mml:math> by vertex deletions, local complementations and at most <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>t</mml:mi> </mml:math> elementary edge-complementations. Here, an elementary edge-complementation toggles either a single edge, all edges between one vertex and the neighborhood of another, or all edges between the neighborhoods of two non-adjacent vertices. Using this characterization, we relate CZ-complexity to rank-width. For any graph <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>G</mml:mi> </mml:math> with <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>n</mml:mi> </mml:math> vertices and rank-width <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>r</mml:mi> </mml:math> , the CZ-complexity is <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>O</mml:mi> <mml:mo stretchy=\"false\">(</mml:mo> <mml:mi>r</mml:mi> <mml:mi>n</mml:mi> <mml:mo stretchy=\"false\">)</mml:mo> </mml:math> , and if <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>G</mml:mi> </mml:math> is connected then it is at least <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>n</mml:mi> <mml:mo>+</mml:mo> <mml:mi>r</mml:mi> <mml:mo>&amp;#x2212;</mml:mo> <mml:mn>2</mml:mn> </mml:math> . We also show that these bounds are close to optimal. Finally, for interval graphs and circle graphs, whose rank-width is unbounded, we present preparation algorithms with CZ-complexity <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>O</mml:mi> <mml:mo stretchy=\"false\">(</mml:mo> <mml:mi>n</mml:mi> <mml:mo stretchy=\"false\">)</mml:mo> </mml:math> and <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mi>O</mml:mi> <mml:mo stretchy=\"false\">(</mml:mo> <mml:mi>n</mml:mi> <mml:mi>log</mml:mi> <mml:mo>&amp;#x2061;</mml:mo> <mml:mi>n</mml:mi> <mml:mo stretchy=\"false\">)</mml:mo> </mml:math> , respectively.",
+      "authors": [
+        "Soh Kumabe",
+        "Ryuhei Mori",
+        "Yusei Yoshimura"
+      ],
+      "venue": "Quantum"
+    },
+    {
+      "id": "oa-W4416236480",
+      "stage": "innovation",
+      "country": "ZA",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Multipolar and nonlocal effects in plasmon-mediated entanglement generation",
+      "org": "Stellenbosch University",
+      "date": "2026-07-18",
+      "url": "https://doi.org/10.1007/s11128-026-05281-3",
+      "countryEvidence": "institution country codes [ZA, ZA, ZA, ZA] → ZA",
+      "citations": 0,
+      "abstract": "Abstract The generation of quantum entanglement is important for a wide range of quantum technology protocols. In nanophotonics, a promising platform for quantum technologies, entanglement generation via plasmon-mediated coupling in quantum dot qubits is often modeled within the dipole limit, where only dipolar plasmons of the mediating nanoparticle are considered, and the local response approximation, where nonlocal corrections are ignored. However, multipolar effects manifest strongly at coupling distances less than the nanoparticle size, while nonlocal optical effects stem from a size-induced dielectric response. We investigated these two important effects in the generation of two-qubit entanglement mediated by plasmonic coupling. A cavity quantum electrodynamic approach is employed, where the induced plasmonic effects lead to modified transition rates in the dynamics of the coupled quantum dot qubits. We find that multipolar modes and size-dependent damping lead to entanglement decay at small coupling distances and limit mediated entanglement with certain particle sizes. We discuss potential implications of multipolar modes in entanglement-based quantum sensing.",
+      "authors": [
+        "Luke C. Ugwuoke",
+        "Tjaart P. J. Krüger",
+        "Mark Tame"
+      ],
+      "venue": "Quantum Information Processing"
+    },
+    {
+      "id": "oa-W4417143725",
+      "stage": "innovation",
+      "country": "DE",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Resolving Abrikosov vortex entry in superconducting nanostring resonators via displacement-noise spectroscopy in cavity optomechanics",
+      "org": "Bavarian Academy of Sciences and Humanities",
+      "date": "2026-07-18",
+      "url": "https://doi.org/10.1038/s41467-026-75676-4",
+      "countryEvidence": "institution country codes [DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE] → DE",
+      "citations": 0,
+      "abstract": "Abrikosov vortices in type-II superconductors influence current flow, dissipation and coherence, thereby limiting superconducting quantum technologies. In mesoscopic circuit elements, the entry and pinning of a single vortex can shift resonant frequencies, redistribute flux and degrade device performance. Here, we use a flux-mediated cavity-optomechanical platform, in which a suspended superconducting aluminum nanostring forms one arm of a SQUID terminating a microwave resonator, to investigate vortex-entry processes through nanomechanical elastic signatures. Operating at T ≈ 85 mK with 0.25 mT in-plane-field resolution, we resolve discrete jumps of the mechanical resonance frequency consistent with the stochastic entry of one or a few singly quantized Abrikosov vortices. Their field positions vary between thermal cycles, indicating disorder-mediated nucleation through a quenched pinning landscape. These events are superimposed on a smooth power-law stiffening background identified with the collective Campbell–Labusch elastic response. Recasting the jumps as equivalent force signatures yields attonewton-scale forces and, within a single-event pinning model, characteristic vortex-pinning energies of 0.09 − 0.44 eV. The smooth background gives a collective Labusch parameter of order 1014 N m−4. Our results establish cavity-optomechanical sensing as an in situ probe of vortex matter and identify vortex entry as a quantitative design constraint for flux-mediated superconducting quantum circuits. Abrikosov vortices can disrupt superconducting circuits, yet their entry into mesoscopic elements is hard to detect in situ. Here, the authors use a cavity-optomechanical SQUID nanostring to resolve stochastic vortex-entry events and quantify single-vortex pinning and collective vortex elasticity.",
+      "authors": [
+        "Thomas Luschmann",
+        "Tahereh Sadat Parvini",
+        "Lukas L. Niekamp",
+        "Achim Marx",
+        "Rudolf Groß",
+        "Hans Huebl"
+      ],
+      "venue": "Nature Communications"
+    },
+    {
+      "id": "oa-W4417487422",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Ground and excited-state energies with analytic errors and short time evolution on a quantum computer",
+      "org": "",
+      "date": "2026-07-16",
+      "url": "https://doi.org/10.1103/zy63-92c4",
+      "countryEvidence": "no institution country on record",
+      "citations": 1,
+      "abstract": "Accurately solving the Schrödinger equation remains a central challenge in computational physics, chemistry, and materials science. Here, we propose an alternative eigenvalue problem based on a system's autocorrelation function, avoiding direct reference to a wave function. In particular, we develop a rigorous approximation framework that enables precise frequency estimation from a finite number of signal samples. Our analysis builds on new results involving prolate spheroidal wave functions and yields error bounds that reveal a sharp accuracy transition governed by the observation time and spectral density of the signal. These results are very general and thus carry far. As one important example application we consider the quantum computation for molecular systems. By combining our spectral method with a quantum subroutine for signal generation, we define quantum prolate diagonalization (QPD) - a hybrid classical-quantum algorithm. QPD simultaneously estimates ground and excited state energies within chemical accuracy at the Heisenberg limit. An analysis of different input states demonstrates the robustness of the method, showing that high precision can be retained even under imperfect state preparation.",
+      "authors": [
+        "Timothy Stroschein"
+      ],
+      "venue": "Physical Review Research"
+    },
+    {
+      "id": "oa-W4392934673",
+      "stage": "innovation",
+      "country": "IT",
+      "provenance": "live",
+      "source": "paper",
+      "title": "A short review on the maximum clique problem algorithms with classical, AI, and quantum methods",
+      "org": "University of Florence",
+      "date": "2026-07-16",
+      "url": "https://doi.org/10.1038/s42005-026-02606-7",
+      "countryEvidence": "institution country codes [IT, IT, HU] → IT",
+      "citations": 1,
+      "abstract": "Abstract This manuscript provides a comprehensive review of the Maximum Clique Problem, a computational problem that involves finding subsets of vertices in a graph that are all pairwise adjacent to each other. As such, this review is a continuation of the series of previous reviews from 1994, 1999 and 2014. The manuscript covers in a simple way classical algorithms and includes a review of recent developments in graph neural networks and quantum algorithms.",
+      "authors": [
+        "Raffaele Marino",
+        "Lorenzo Buffoni",
+        "Bogdán Zaválnij"
+      ],
+      "venue": "Communications Physics"
+    },
+    {
+      "id": "oa-W4416067965",
+      "stage": "innovation",
+      "country": "TW",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Measuring the non-Abelian Quantum Phase with the Algorithm of Quantum Phase Estimation",
+      "org": "University of Taipei",
+      "date": "2026-07-01",
+      "url": "https://doi.org/10.1016/j.physleta.2026.132019",
+      "countryEvidence": "institution country codes [TW, TW, TW, TW, TW, TW, TW, TW, TW, TW, TW] → TW",
+      "citations": 0,
+      "authors": [
+        "S. G. Tan",
+        "Son-Hsien Chen",
+        "Yaocheng Yang",
+        "Yen‐Fu Chen",
+        "Yen‐Lin Chen",
+        "Chia-Hsiu Hsieh"
+      ],
+      "venue": "Physics Letters A"
+    },
+    {
+      "id": "rss-lan-after-shareholders-increase-authorized-stock-to-450-million-shares",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Quantum Computing Inc. Expands Equity Plan After Shareholders Increase Authorized Stock to 450 Million Shares",
+      "org": "The Quantum Insider",
+      "date": "2026-07-20",
+      "url": "https://thequantuminsider.com/2026/07/20/quantum-computing-inc-expands-equity-plan-after-shareholders-increase-authorized-stock-to-450-million-shares/",
+      "countryEvidence": "no location match (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief Quantum Computing Inc. has filed a registration statement with the U.S. Securities and Exchange Commission to register an additional 13.5 million shares of common stock for issuance under its employee equity compensation plan, expanding the number of shares available for future stock-based awards. The filing, submitted on Form S-8, registers 13,544,946 additional shares […]"
+    },
+    {
+      "id": "rss-rate-quantum-algorithm-for-railway-scheduling-on-real-operational-data",
+      "stage": "scaling",
+      "country": "FI",
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "IQM and Deutsche Bahn Demonstrate Quantum Algorithm For Railway Scheduling on Real Operational Data",
+      "org": "The Quantum Insider",
+      "date": "2026-07-20",
+      "url": "https://thequantuminsider.com/2026/07/20/iqm-and-deutsche-bahn-demonstrate-quantum-algorithm-for-railway-scheduling-on-real-operational-data/",
+      "countryEvidence": "matched \"IQM\" (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief PRESS RELEASE — IQM Quantum Computers (Nasdaq: IQMX), a global leader in full-stack superconducting quantum computers, today published the results of a research collaboration with Deutsche Bahn, Europe’s largest rail operator, exploring how quantum computing can improve railway scheduling. Using a real operational dataset from Deutsche Bahn, a schedule of 190 trips across […]"
     }
   ],
   "trend": [
@@ -26507,18 +26694,19 @@
     {
       "date": "2026-07-20",
       "counts": {
+        "JP": 19,
         "US": 57,
-        "CN": 92,
+        "ZA": 1,
+        "DE": 18,
+        "CN": 91,
         "KR": 7,
         "IN": 41,
-        "DE": 17,
-        "IT": 11,
-        "TW": 2,
+        "IT": 12,
+        "TW": 3,
         "GB": 4,
         "SG": 3,
-        "JP": 18,
         "MX": 2,
-        "IR": 8,
+        "IR": 7,
         "FR": 14,
         "RO": 1,
         "CA": 10,
@@ -26549,7 +26737,7 @@
         "AR": 1,
         "SI": 1,
         "CO": 1,
-        "EG": 2,
+        "EG": 1,
         "BG": 1,
         "NO": 1,
         "MT": 1,
@@ -26559,11 +26747,10 @@
         "EC": 1,
         "MA": 2,
         "NG": 1,
-        "PE": 1,
         "MY": 1,
+        "PE": 1,
         "DZ": 1,
-        "KZ": 1,
-        "BE": 1
+        "KZ": 1
       }
     }
   ],
