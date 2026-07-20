@@ -29,23 +29,22 @@ export function TopCitedTicker({ entries, years, onSelect }: { entries: Entry[];
 
   if (ranked.length === 0) return null;
 
-  const items = (key: "a" | "b") =>
+  const cards = (key: "a" | "b") =>
     ranked.map((e, i) => (
-      <span className="ticker-item" key={`${key}-${e.id}-${i}`}>
-        <span className="ticker-tag cited-tag">{e.date.slice(0, 4)} · {e.citations} cit.</span>
-        <button className="ticker-link" onClick={() => onSelect?.(e)}>{e.title}</button>
-        {e.country && <span className="ticker-sep">· {countryName(e.country)}</span>}
-        <span className="ticker-sep">●</span>
-      </span>
+      <button className="cited-card" key={`${key}-${e.id}-${i}`} onClick={() => onSelect?.(e)} title={e.title}>
+        <span className="cited-card-tag">{e.date.slice(0, 4)} · {e.citations} cit.</span>
+        <span className="cited-card-title">{e.title}</span>
+        <span className="cited-card-meta">{e.org}{e.country ? ` · ${countryName(e.country)}` : ""}</span>
+      </button>
     ));
 
   return (
-    <div className="ticker cited-ticker">
-      <span className="ticker-label">Most cited · {years.slice().sort((a, b) => b - a).join("/")}</span>
-      <div className="ticker-track-wrap">
-        <div className="ticker-track" style={{ animationDuration: `${Math.max(30, ranked.length * 3)}s` }}>
-          {items("a")}
-          {items("b")}
+    <div className="wrap cited-ticker-wrap">
+      <div className="cited-ticker-label">Most cited <span className="drop">{years.slice().sort((a, b) => b - a).join("/")}</span></div>
+      <div className="cited-track-wrap">
+        <div className="cited-track" style={{ animationDuration: `${Math.max(40, ranked.length * 4)}s` }}>
+          {cards("a")}
+          {cards("b")}
         </div>
       </div>
     </div>

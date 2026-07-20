@@ -201,6 +201,20 @@ export default function App() {
   // silently drops off the chart it anchors.
   const forecastCountries = useMemo(() => topCountries(innovationCounts, 5).top.map((c) => c.country), [innovationCounts]);
 
+  // Small multiples get a fixed anchor instead of "top 5 by volume" — US
+  // and China always, since that's the comparison the rest of this page
+  // (the innovation-gap card, the recorded-share chart's usual leaders)
+  // already centers on, plus whichever 2 other real countries actually
+  // rank highest. Not just "top 4" — if US or China ever fell out of the
+  // top 4 by volume, silently dropping them here while every other panel
+  // still names them would read as inconsistent.
+  const smallMultCountries = useMemo(() => {
+    const ranked = topCountries(innovationCounts, 10).top.map((c) => c.country);
+    const anchors = ["US", "CN"].filter((c) => (innovationCounts[c] ?? 0) > 0);
+    const others = ranked.filter((c) => !anchors.includes(c)).slice(0, 2);
+    return [...anchors, ...others];
+  }, [innovationCounts]);
+
   // Real history depth, not just "trend[] is non-empty" — one point per
   // real day (see fetch-data.ts), so filtering to points that actually
   // carry the newer per-stage/funding fields (added 2026-07-20) doubles as
@@ -352,7 +366,7 @@ export default function App() {
             </div>
             <div className="panel">
               <h3>Innovation output, by country <span className="drop">trailing {trend21.length}d</span></h3>
-              <SmallMultiples trend={trend21} countries={forecastCountries} onSelectCountry={toggleCountry} active={country === "all" ? null : country} />
+              <SmallMultiples trend={trend21} countries={smallMultCountries} onSelectCountry={toggleCountry} active={country === "all" ? null : country} />
             </div>
           </div>
           <div className="panel map-panel">

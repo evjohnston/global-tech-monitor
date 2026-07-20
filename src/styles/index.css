@@ -77,11 +77,35 @@ a { color: inherit; }
 .ticker-link { font: inherit; border: none; background: none; padding: 0; color: inherit; cursor: pointer; }
 .ticker-link:hover { color: var(--red); }
 .ticker-tag { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; padding: 1px 4px; }
-.cited-tag { background: var(--ink-2); }
-.cited-ticker { border-top: 1px solid var(--line); border-bottom: none; }
 .ticker-sep { color: var(--line-2); }
 @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } .live-dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } .live-dot { animation: none; } .cited-track { animation: none; } }
+
+/* ── most-cited ticker: a row of cards, not a text line — width-matched
+   to .wrap (not edge-to-edge like the top ticker), tall enough to read
+   next to the KPI row. mask-image fades each edge instead of a hard clip,
+   which looked broken on a bordered card shape (fine for plain text). ── */
+.cited-ticker-wrap { margin-top: 4px; }
+.cited-ticker-label { font-size: 11.5px; font-weight: 600; margin-bottom: 8px; }
+.cited-ticker-label .drop { font-size: 10px; font-weight: 400; color: var(--mist); margin-left: 4px; }
+.cited-track-wrap {
+  overflow: hidden; position: relative;
+  mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+}
+.cited-track { display: inline-flex; gap: 8px; animation: ticker-scroll linear infinite; }
+.cited-track-wrap:hover .cited-track { animation-play-state: paused; }
+.cited-card {
+  flex: none; width: 240px; height: 128px; text-align: left; cursor: pointer;
+  display: flex; flex-direction: column; gap: 5px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px;
+  font-family: var(--sans); color: inherit;
+}
+.cited-card:hover { border-color: var(--red); }
+.cited-card:hover .cited-card-title { color: var(--red); }
+.cited-card-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.03em; color: var(--mist); }
+.cited-card-title { font-size: 12px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.cited-card-meta { font-size: 10px; color: var(--mist); margin-top: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ── page head ──────────────────────────────────────────────────── */
 .pagehead { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0 10px; gap: 12px; flex-wrap: wrap; }
