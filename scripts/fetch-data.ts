@@ -312,13 +312,23 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   // real incident (2026-07-20): a corrupted quantum-computing.json made
   // readPrevious() return null, and the run that followed happily wrote
   // ~280 fewer entries and 30 fewer trend points with no error anywhere.
+  // Zero tolerance, not a percentage threshold — the byId merge above can
+  // only ever preserve or add ids, never drop one, so entries.length is
+  // mathematically incapable of decreasing on a correct run regardless of
+  // scale. (A percentage cutoff here — originally 20% — missed the real
+  // incident this guards against: the actual drop was ~18.5%, "close
+  // enough" to look legitimate against a threshold, but still exactly the
+  // failure mode described above.) This is a secondary check; the
+  // authoritative one lives in build-and-deploy.yml's commit step, which
+  // compares against origin/data's current state instead of this run's own
+  // (possibly stale) seed — see that workflow file for why both exist.
   const prevCount = prev?.entries.length ?? 0;
-  if (prevCount > 50 && out.entries.length < prevCount * 0.8) {
+  if (prev && out.entries.length < prevCount) {
     throw new Error(
-      `refusing to write ${outPath}: ${out.entries.length} entries is a suspicious drop from the previous ` +
-      `${prevCount} (more than 20% smaller). This almost always means readPrevious() couldn't read real prior ` +
-      `history — check the log line above for a parse error, or that public/data/ was seeded correctly before ` +
-      `this ran. Fix the actual cause; don't raise this threshold to make the error go away.`
+      `refusing to write ${outPath}: ${out.entries.length} entries is fewer than the previous ${prevCount} — ` +
+      `this can only mean readPrevious() couldn't read real prior history (check the log line above for a ` +
+      `parse error, or that public/data/ was seeded correctly before this ran). Fix the actual cause; don't add ` +
+      `a tolerance here to make the error go away.`
     );
   }
 

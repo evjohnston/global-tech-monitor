@@ -90,6 +90,24 @@ jobs:
       # can only be public/data/* — nothing else ever touches this branch),
       # keep this run's own freshly-regenerated files rather than attempting
       # a line-level merge of generated JSON.
+      #
+      # fetch-data.ts's own regression guard compares against whatever it
+      # read at ITS seed step, which can be stale by the time THIS step
+      # actually commits — a long-running fetch (OpenAlex+EPO+NSF+RSS across
+      # every vertical, a few minutes) that started before another run's fix
+      # landed will still finish with a smaller, stale-based result, and
+      # naively overwriting origin/data with it discards real newer history.
+      # Confirmed live 2026-07-20: a run's own regression check passed (its
+      # drop was under its 20% threshold vs ITS seed) while still shrinking
+      # origin/data's real entries[] by ~270 at commit time. The guard
+      # belongs here instead — immediately before overwriting, compare
+      # against origin/data's CURRENT file (already sitting in this
+      # worktree, fetched seconds ago). Zero tolerance, not a percentage
+      # threshold: entries[] only ever accumulates by design (the byId merge
+      # never removes an id), so ANY decrease at this exact comparison point
+      # means something's wrong, never a legitimate day's fluctuation — a
+      # percentage cutoff here already missed the real incident once
+      # (18.5% under an 80%-of-previous threshold looked "close enough").
       - name: Commit updated data to the data branch (not main)
         run: |
           git config user.name "github-actions[bot]"
@@ -99,7 +117,30 @@ jobs:
           cd /tmp/data-branch
           git checkout -B data
           mkdir -p public/data
-          cp "$GITHUB_WORKSPACE"/public/data/*.json public/data/
+          node -e '
+            const fs = require("fs");
+            const path = require("path");
+            const freshDir = process.env.GITHUB_WORKSPACE + "/public/data";
+            const liveDir = "public/data";
+            for (const file of fs.readdirSync(freshDir)) {
+              if (!file.endsWith(".json")) continue;
+              const fresh = JSON.parse(fs.readFileSync(path.join(freshDir, file), "utf8"));
+              const livePath = path.join(liveDir, file);
+              let keep = fresh;
+              if (fs.existsSync(livePath)) {
+                const live = JSON.parse(fs.readFileSync(livePath, "utf8"));
+                if (fresh.entries.length < live.entries.length) {
+                  console.error(
+                    "REFUSING regression for " + file + ": this run built " + fresh.entries.length +
+                    " entries, fewer than origin/data's current " + live.entries.length +
+                    " — keeping origin/data, not overwriting"
+                  );
+                  keep = live;
+                }
+              }
+              fs.writeFileSync(livePath, JSON.stringify(keep, null, 2));
+            }
+          '
           git add public/data/
           git diff --staged --quiet && echo "no data changes" && exit 0
           git commit -m "data: fetch $(date -u +"%Y-%m-%dT%H:%M:%SZ") [skip ci]"

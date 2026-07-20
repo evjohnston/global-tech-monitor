@@ -169,23 +169,27 @@ export default function App() {
   );
   const filterSuffix = country !== "all" ? ` · ${countryName(country)}` : "";
 
-  // Card 1 is a fixed China–US innovation-share comparison, not filter-
-  // reactive like the other four cards — it's the one macro fact the whole
-  // page anchors on ("where do the two frontier leaders stand today"), not
-  // a number that means anything different once you've filtered to, say,
-  // Germany. Point-in-time only: no direction word, no delta. An earlier
-  // version tried to make this card follow the filter (compare "leader" to
-  // "whichever country is filtered") and separately tried to show whether
-  // the gap was "widening"/"narrowing" — dropped both 2026-07-20: the
-  // directional read flipped between builds on ~6 days of real history
-  // (one build read "CN +3pt narrowing," the next read "US +4pt widening" —
-  // same underlying metric, opposite story), which is a worse failure mode
-  // for this audience than just not claiming a trend at all. See
-  // gtm-claude-code-spec.md Part 0.2.
+  // Card 1 anchors on the US and compares it to whichever country is
+  // actually relevant: the filtered country when one's selected (US vs.
+  // India when filtered to India, US vs. Germany for Germany), else the
+  // top non-US rival by volume (US vs. China today, but derived from real
+  // data rather than hardcoded — see CLAUDE.md on not reintroducing a
+  // US/CN-bucket assumption). Restored filter-reactivity 2026-07-21 after
+  // a first pass made this card fixed; kept from THAT pass: point-in-time
+  // only, no direction word, no delta — an earlier build flip-flopped
+  // between "CN +3pt narrowing" and "US +4pt widening" off ~6 days of real
+  // history, same underlying metric telling opposite stories. The VALUE
+  // still names whichever of the two actually leads (not always "US"), so
+  // a filter where the US trails still reads honestly.
   const hasInnovationData = Object.keys(innovationCounts).length > 0;
   const overallShares = useMemo(() => countryShares(innovationCounts), [innovationCounts]);
-  const chinaUsGap = Math.abs((overallShares.CN ?? 0) - (overallShares.US ?? 0));
-  const chinaUsLeader = (overallShares.CN ?? 0) >= (overallShares.US ?? 0) ? "CN" : "US";
+  const rankedByVolume = useMemo(() => topCountries(innovationCounts, 5).top, [innovationCounts]);
+  const topRival = rankedByVolume.find((c) => c.country !== "US")?.country;
+  const compareCountry = country !== "all" && country !== "US" ? country : topRival;
+  const usShare = overallShares.US ?? 0;
+  const compareShare = compareCountry ? overallShares[compareCountry] ?? 0 : 0;
+  const gapLeader = usShare >= compareShare ? "US" : compareCountry;
+  const gap = Math.abs(usShare - compareShare);
 
   // Forecast lines: top 5 countries by current innovation volume — always
   // whichever countries actually lead, so the headline comparison never
@@ -288,8 +292,8 @@ export default function App() {
         <div className="kpirow">
           <KpiCard
             highlight
-            label={`${countryName(chinaUsLeader)} – ${countryName(chinaUsLeader === "CN" ? "US" : "CN")} innovation gap`}
-            value={hasInnovationData ? `${chinaUsLeader} +${chinaUsGap.toFixed(0)}pt` : "—"}
+            label={compareCountry ? `${countryName("US")} – ${countryName(compareCountry)} innovation gap` : "Leader share"}
+            value={hasInnovationData && gapLeader ? `${gapLeader} +${gap.toFixed(0)}pt` : "—"}
             caption={`innovation share · as of ${generated} · point-in-time`}
           />
           <KpiCard
