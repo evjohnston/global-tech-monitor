@@ -46,7 +46,13 @@ a { color: inherit; }
 /* ── topbar ─────────────────────────────────────────────────────── */
 .topbar { border-bottom: 1px solid var(--line); padding: 8px 0; background: var(--paper); }
 .topbar-inner { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 14px; }
-.wordmark-logo { height: 18px; width: auto; display: block; }
+/* Matches .theme-toggle's fixed 24px (below) so the logo lines up with
+   every other fixed-height element in this row, not a guessed value that
+   only happens to look right at one size — width is intentionally
+   unset/auto so the browser scales it off the image's real aspect ratio
+   rather than a hardcoded width that would distort it if the logo file
+   is ever swapped for one with different proportions. */
+.wordmark-logo { height: 24px; width: auto; display: block; }
 .topbar-meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--mist); display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
 /* live-dot is still used by NewsTicker's "Latest" label, not the topbar (the topbar's live-refresh state was removed 2026-07-20 with the static-store-only pass) */
 .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #1f9d55; margin-right: 5px; animation: live-pulse 1.8s ease-in-out infinite; }
@@ -57,7 +63,7 @@ a { color: inherit; }
   display: flex; align-items: center; justify-content: center; line-height: 1;
 }
 .theme-toggle:hover { border-color: var(--red); color: var(--red); }
-.verticals { display: flex; gap: 4px; }
+.verticals { display: flex; gap: 4px; margin-left: 20px; }
 .vtab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 9px; border: 1px solid var(--line-2); background: var(--paper); color: var(--mist); cursor: pointer; border-radius: 0; }
 .vtab:hover { border-color: var(--slate); color: var(--ink); }
 .vtab[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
