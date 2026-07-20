@@ -121,6 +121,13 @@ a { color: inherit; }
 .row-map-stack .panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .map-panel { display: flex; flex-direction: column; min-width: 0; }
 .map-fill { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+/* WorldMap's own top-level wrapper (.map-wrap) sits between .map-fill and
+   .mapbox — it needs flex:1 too, or .mapbox's flex:1 has nothing to grow
+   into (a plain unstyled div breaks the chain, which is exactly what left
+   .mapbox stuck at its hardcoded 260px while .row-map-stack grew taller
+   with a 3rd panel and the map panel just... didn't, leaving dead space
+   below it). */
+.map-fill .map-wrap { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .map-fill .mapbox { flex: 1; height: auto; min-height: 0; }
 
 .legend { display: flex; gap: 10px; font-size: 10px; color: var(--mist); margin-bottom: 8px; }
@@ -141,6 +148,7 @@ a { color: inherit; }
 /* ── histogram: NSF award-size distribution ────────────────────────── */
 .histogram { display: flex; align-items: flex-end; gap: 10px; height: 140px; padding-top: 8px; }
 .histogram-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; }
+.histogram-col:hover .histogram-bar { background: var(--red); }
 .histogram-count { font-size: 11px; color: var(--ink-2); margin-bottom: 3px; }
 .histogram-bar-track { width: 100%; flex: 1; display: flex; align-items: flex-end; }
 .histogram-bar { width: 100%; background: var(--eu); min-height: 2px; }
@@ -150,12 +158,18 @@ a { color: inherit; }
 .smallmults { display: flex; gap: 10px; flex-wrap: wrap; }
 .smallmult-panel { flex: 1 1 140px; min-width: 120px; }
 .smallmult-panel svg { display: block; width: 100%; height: auto; }
+.smallmult-panel.clickable { cursor: pointer; }
+.smallmult-panel.clickable:hover .smallmult-label { color: var(--red); }
+.smallmult-panel.active .smallmult-label { color: var(--red); font-weight: 600; }
 .smallmult-label { font-size: 10.5px; color: var(--ink-2); text-align: center; margin-top: 2px; }
 .smallmult-value { font-size: 13px; font-weight: 600; color: var(--ink); text-align: center; }
 
 /* ── stage composition: normalized stacked bar per country ────────── */
 .stagecomp-row { display: grid; grid-template-columns: 108px 1fr 40px; align-items: center; gap: 6px; padding: 4px 0; border-top: 1px solid var(--line); }
 .stagecomp-row:first-child { border-top: none; }
+.stagecomp-row.clickable { cursor: pointer; }
+.stagecomp-row.clickable:hover .stagecomp-name { color: var(--red); }
+.stagecomp-row.active .stagecomp-name { color: var(--red); font-weight: 600; }
 .stagecomp-name { font-size: 11px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .stagecomp-track { height: 12px; background: var(--panel); border-radius: 0; overflow: hidden; display: flex; }
 .stagecomp-seg { height: 100%; }

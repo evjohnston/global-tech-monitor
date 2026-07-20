@@ -347,7 +347,7 @@ export default function App() {
             </div>
             <div className="panel">
               <h3>Innovation output, by country <span className="drop">trailing {trend21.length}d</span></h3>
-              <SmallMultiples trend={trend21} countries={forecastCountries} />
+              <SmallMultiples trend={trend21} countries={forecastCountries} onSelectCountry={toggleCountry} active={country === "all" ? null : country} />
             </div>
           </div>
           <div className="panel map-panel">
@@ -364,7 +364,7 @@ export default function App() {
         <div className="panel">
           <h3>Where each country's activity sits</h3>
           <div className="trend-note" style={{ marginBottom: 8 }}>share of tracked entries by stage · composition, not flow</div>
-          <StageComposition entries={shown} />
+          <StageComposition entries={entries} onSelectCountry={toggleCountry} active={country === "all" ? null : country} />
         </div>
 
         <div className="row3">
@@ -392,7 +392,7 @@ export default function App() {
         <div className="panel">
           <h3>Who's producing the work</h3>
           <div className="trend-note" style={{ marginBottom: 8 }}>institutions by tracked output · colored by country</div>
-          <InstitutionConcentration rows={orgRows20} />
+          <InstitutionConcentration rows={orgRows20} onSelect={selectOrg} activeOrg={highlightOrg} />
         </div>
 
         <div className="panel">

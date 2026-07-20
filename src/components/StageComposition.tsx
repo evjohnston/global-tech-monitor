@@ -16,7 +16,17 @@ import { Tooltip } from "./Tooltip.tsx";
 // would claim a real-world link this data doesn't support. See
 // gtm-claude-code-spec.md Part 2 and CLAUDE.md's "country attribution is
 // a lead, not a verdict."
-export function StageComposition({ entries, topN = 6 }: { entries: Entry[]; topN?: number }) {
+export function StageComposition({
+  entries,
+  topN = 6,
+  onSelectCountry,
+  active,
+}: {
+  entries: Entry[];
+  topN?: number;
+  onSelectCountry?: (country: string) => void;
+  active?: string | null;
+}) {
   const [tip, setTip] = useState<{ x: number; y: number; label: string } | null>(null);
   const byCountry = countByCountryAndStage(entries);
   const rows = Object.entries(byCountry)
@@ -36,7 +46,12 @@ export function StageComposition({ entries, topN = 6 }: { entries: Entry[]; topN
   return (
     <div>
       {rows.map((r) => (
-        <div key={r.country} className="stagecomp-row">
+        <div
+          key={r.country}
+          className={`stagecomp-row${onSelectCountry ? " clickable" : ""}${active === r.country ? " active" : ""}`}
+          onClick={() => onSelectCountry?.(r.country)}
+          title={onSelectCountry ? `Click to filter to ${countryName(r.country)}` : undefined}
+        >
           <span className="stagecomp-name">{countryName(r.country)}</span>
           <div className="stagecomp-track">
             {STAGES.map((s) => {
@@ -52,7 +67,7 @@ export function StageComposition({ entries, topN = 6 }: { entries: Entry[]; topN
                     setTip({
                       x: e.clientX,
                       y: e.clientY,
-                      label: `${countryName(r.country)} · ${s.label} · ${count} entries · ${pct.toFixed(0)}% of that country's tracked activity`,
+                      label: `${countryName(r.country)} · ${s.label} · ${count} entries · ${pct.toFixed(0)}% of that country's tracked activity · click row to filter`,
                     })
                   }
                   onMouseLeave={() => setTip(null)}

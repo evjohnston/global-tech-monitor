@@ -18,7 +18,15 @@ import { BarRow } from "./BarRow.tsx";
 // row read 0, because OpenAlex citation counts take months to accrue and
 // this corpus is days old. A metric that's currently indistinguishable
 // from zero reads as broken, not as "not yet available."
-export function InstitutionConcentration({ rows }: { rows: OrgRow[] }) {
+export function InstitutionConcentration({
+  rows,
+  onSelect,
+  activeOrg,
+}: {
+  rows: OrgRow[];
+  onSelect?: (org: string) => void;
+  activeOrg?: string | null;
+}) {
   if (rows.length === 0) {
     return <div className="trend-empty">No institution data yet — populated on the next scheduled build.</div>;
   }
@@ -32,7 +40,9 @@ export function InstitutionConcentration({ rows }: { rows: OrgRow[] }) {
           pct={(r.count / max) * 100}
           color={countryColor(r.country)}
           valueLabel={String(r.count)}
-          detail={`${r.org} · ${countryName(r.country)} · ${r.count} tracked works`}
+          detail={`${r.org} · ${countryName(r.country)} · ${r.count} tracked works · click to highlight in the pipeline`}
+          onClick={onSelect ? () => onSelect(r.org) : undefined}
+          active={activeOrg === r.org}
         />
       ))}
     </div>

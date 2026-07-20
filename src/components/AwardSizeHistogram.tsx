@@ -1,4 +1,7 @@
+import { useState } from "react";
 import type { Entry } from "../lib/types.ts";
+import { fmtUsd } from "../lib/format.ts";
+import { Tooltip } from "./Tooltip.tsx";
 
 interface Bucket { label: string; test: (amt: number) => boolean }
 
@@ -18,6 +21,7 @@ const BUCKETS: Bucket[] = [
 // to a real disclosed figure, not a bar in this histogram (see
 // gtm-claude-code-spec.md Part 5).
 export function AwardSizeHistogram({ entries }: { entries: Entry[] }) {
+  const [tip, setTip] = useState<{ x: number; y: number; label: string } | null>(null);
   const amounts = entries
     .filter((e) => e.source === "grant" && typeof e.amountUsd === "number")
     .map((e) => e.amountUsd as number);
@@ -27,12 +31,24 @@ export function AwardSizeHistogram({ entries }: { entries: Entry[] }) {
   }
 
   const counts = BUCKETS.map((b) => amounts.filter(b.test).length);
+  const sums = BUCKETS.map((b) => amounts.filter(b.test).reduce((s, a) => s + a, 0));
   const max = Math.max(1, ...counts);
 
   return (
     <div className="histogram">
       {BUCKETS.map((b, i) => (
-        <div key={b.label} className="histogram-col">
+        <div
+          key={b.label}
+          className="histogram-col"
+          onMouseMove={(e) =>
+            setTip({
+              x: e.clientX,
+              y: e.clientY,
+              label: `${b.label} · ${counts[i]} ${counts[i] === 1 ? "award" : "awards"} · ${fmtUsd(sums[i])} disclosed`,
+            })
+          }
+          onMouseLeave={() => setTip(null)}
+        >
           <div className="histogram-count num">{counts[i]}</div>
           <div className="histogram-bar-track">
             <div className="histogram-bar" style={{ height: `${(counts[i] / max) * 100}%` }} />
@@ -40,6 +56,7 @@ export function AwardSizeHistogram({ entries }: { entries: Entry[] }) {
           <div className="histogram-label">{b.label}</div>
         </div>
       ))}
+      {tip && <Tooltip x={tip.x} y={tip.y}>{tip.label}</Tooltip>}
     </div>
   );
 }
