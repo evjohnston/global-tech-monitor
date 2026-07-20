@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-07-20T20:26:30.329Z",
+  "generatedAt": "2026-07-20T20:29:57.748Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -46048,9 +46048,9 @@
         "TH": 3,
         "AU": 5,
         "HK": 3,
-        "CA": 10,
+        "CA": 9,
         "KR": 9,
-        "CN": 147,
+        "CN": 148,
         "TW": 8,
         "BR": 6,
         "CH": 3,
@@ -46074,7 +46074,7 @@
         "SY": 1,
         "ES": 3,
         "JO": 2,
-        "MY": 3,
+        "MY": 4,
         "YE": 1,
         "VN": 1,
         "UZ": 1,
@@ -46089,8 +46089,8 @@
         "PH": 1,
         "NL": 1,
         "UG": 3,
-        "AR": 3,
         "SE": 1,
+        "AR": 3,
         "UY": 1,
         "CZ": 2,
         "EG": 3,
@@ -46147,7 +46147,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-20T20:26:30.329Z",
+      "lastSuccessfulPull": "2026-07-20T20:29:57.748Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -46168,28 +46168,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-20T20:26:30.329Z",
+      "lastSuccessfulPull": "2026-07-20T20:29:57.748Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-20T20:26:30.329Z",
+      "lastSuccessfulPull": "2026-07-20T20:29:57.748Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-20T20:26:30.329Z",
+      "lastSuccessfulPull": "2026-07-20T20:29:57.748Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-20T20:26:30.329Z",
+      "lastSuccessfulPull": "2026-07-20T20:29:57.748Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
