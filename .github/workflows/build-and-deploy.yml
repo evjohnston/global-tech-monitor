@@ -15,9 +15,20 @@ permissions:
   pages: write
   id-token: write
 
+# cancel-in-progress: false (not GitHub's own template default of true) —
+# this workflow's own "Commit updated data" step pushes back to main on
+# almost every run (live fetches change entries[] most of the time), which
+# fires a new workflow run for the same push event. With cancel-in-progress
+# true, that self-triggered run cancels the very run that's still trying to
+# build/deploy, before it ever reaches actions/deploy-pages — confirmed
+# 2026-07-19 via two human pushes in quick succession both getting cancelled
+# mid-build/mid-deploy (runs #16, #17), and the same mechanism would recur
+# from the bot's own commit even without a human pushing twice. Queuing
+# instead of cancelling means every push's deploy eventually completes,
+# just possibly behind others in the queue rather than one being dropped.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
