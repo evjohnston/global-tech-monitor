@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-21T13:19:24.344Z",
+  "generatedAt": "2026-07-21T16:17:16.631Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -41316,6 +41316,54 @@
       "ingestedAt": "2026-07-21T13:19:24.344Z",
       "orgId": "quantum computing report",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-inet-level-as-dsit-is-dissolved-raising-questions-for-quantum-strategy",
+      "stage": "adoption",
+      "country": "GB",
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "UK Government Puts AI at Cabinet Level as DSIT Is Dissolved, Raising Questions For Quantum Strategy",
+      "org": "The Quantum Insider",
+      "date": "2026-07-21",
+      "url": "https://thequantuminsider.com/2026/07/21/uk-government-puts-ai-at-cabinet-level-as-dsit-is-dissolved-raising-questions-for-quantum-strategy/",
+      "countryEvidence": "matched \"UK\" (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief The U.K. government has elevated artificial intelligence to the center of policymaking by giving its AI minister a seat in Cabinet while abolishing the Department for Science, Innovation and Technology, a restructuring that could have important implications for Britain’s quantum technology ambitions. According to the BBC, Prime Minister Andy Burnham has dismantled the […]",
+      "ingestedAt": "2026-07-21T16:17:16.631Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-6-07-21-singapore-defence-agencies-ibm-quantum-computing-collaboration",
+      "stage": "adoption",
+      "country": "US",
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Singapore Defence Agencies Partner With IBM to Explore Quantum Computing Applications",
+      "org": "The Quantum Insider",
+      "date": "2026-07-21",
+      "url": "https://thequantuminsider.com/2026/07/21/singapore-defence-agencies-ibm-quantum-computing-collaboration/",
+      "countryEvidence": "matched \"IBM\" (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief Press release – The Singapore Armed Forces (SAF) Digital and Intelligence Service (DIS) and Defence Science and Technology Agency (DSTA) have partnered IBM to explore the use of quantum computing for complex mission planning, such as logistics optimisation use cases. Mission planning often requires balancing numerous operational constraints, resources and timelines, and quantum […]",
+      "ingestedAt": "2026-07-21T16:17:16.631Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-ucting-circuit-design-that-could-advance-topological-quantum-computing",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Researchers Demonstrate New Superconducting Circuit Design That Could Advance Topological Quantum Computing",
+      "org": "The Quantum Insider",
+      "date": "2026-07-21",
+      "url": "https://thequantuminsider.com/2026/07/21/researchers-demonstrate-new-superconducting-circuit-design-that-could-advance-topological-quantum-computing/",
+      "countryEvidence": "no location match (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief Researchers have experimentally demonstrated a new type of superconducting quantum circuit that reproduces a long-predicted gauge symmetry believed to be a key ingredient for future topological quantum computers, according to a recent study. The researchers report this marks an early but significant step toward hardware designed to protect quantum information through its underlying […]",
+      "ingestedAt": "2026-07-21T16:17:16.631Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -43581,12 +43629,12 @@
       },
       "stageCounts": {
         "innovation": 611,
-        "scaling": 49,
-        "adoption": 30,
+        "scaling": 50,
+        "adoption": 32,
         "investment": 116
       },
       "fundingUsd": 89751712,
-      "totalEntries": 1995
+      "totalEntries": 1998
     }
   ],
   "notes": [
@@ -43622,7 +43670,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
+      "lastSuccessfulPull": "2026-07-21T16:17:16.631Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -43643,28 +43691,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
+      "lastSuccessfulPull": "2026-07-21T16:17:16.631Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
+      "lastSuccessfulPull": "2026-07-21T16:17:16.631Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
+      "lastSuccessfulPull": "2026-07-21T16:17:16.631Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
+      "lastSuccessfulPull": "2026-07-21T16:17:16.631Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
