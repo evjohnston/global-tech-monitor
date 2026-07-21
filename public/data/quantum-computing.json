@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-21T10:57:55.160Z",
+  "generatedAt": "2026-07-21T13:19:24.344Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -41300,6 +41300,22 @@
       "ingestedAt": "2026-07-21T10:57:55.160Z",
       "orgId": "ibm research thomas j watson research center",
       "relevanceScore": 0.6
+    },
+    {
+      "id": "rss-o-awards-1-2m-to-expand-state-quantum-cluster-across-six-tech-startups",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "New Mexico Awards $1.2M to Expand State Quantum Cluster Across Six Tech Startups",
+      "org": "Quantum Computing Report",
+      "date": "2026-07-21",
+      "url": "https://quantumcomputingreport.com/new-mexico-awards-1-2m-to-expand-state-quantum-cluster-across-six-tech-startups/",
+      "countryEvidence": "no location match (auto-classified from Quantum Computing Report RSS, unverified)",
+      "abstract": "The Technology & Innovation Office (TIO) of Economic Development New Mexico has awarded $1.2 million in non-dilutive capital through the inaugural New Mexico Quantum Technologies Award. Divided into competitive $200,000 grants, the program funds early-stage hardware, optics, and software developers committed to expanding or establishing operational hubs in the state. All six awardees are required [...] The post New Mexico Awards $1.2M to Expand State Quantum Cluster Across Six Tech Startups appeared first on Quantum Computing Report .",
+      "ingestedAt": "2026-07-21T13:19:24.344Z",
+      "orgId": "quantum computing report",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -43566,11 +43582,11 @@
       "stageCounts": {
         "innovation": 611,
         "scaling": 49,
-        "adoption": 29,
+        "adoption": 30,
         "investment": 116
       },
       "fundingUsd": 89751712,
-      "totalEntries": 1994
+      "totalEntries": 1995
     }
   ],
   "notes": [
@@ -43606,7 +43622,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-21T10:57:55.160Z",
+      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -43627,28 +43643,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-21T10:57:55.160Z",
+      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-21T10:57:55.160Z",
+      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-21T10:57:55.160Z",
+      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-21T10:57:55.160Z",
+      "lastSuccessfulPull": "2026-07-21T13:19:24.344Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
