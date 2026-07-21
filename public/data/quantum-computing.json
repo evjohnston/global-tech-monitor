@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-20T21:55:57.626Z",
+  "generatedAt": "2026-07-21T01:51:00.992Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -40133,6 +40133,22 @@
       "ingestedAt": "2026-07-20T21:55:57.626Z",
       "orgId": "crain s chicago business",
       "relevanceScore": 0.7
+    },
+    {
+      "id": "gnews-0xKR2dtZEhOWFMzLTFKX0N5clk3Zk45cVJYdnpMU2ZGS2ZoOVpkUmR0VVcxcExrQQ-oc-5",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "auto",
+      "source": "news",
+      "title": "IBM Ventures: Leading the quantum investment landscape",
+      "org": "IBM",
+      "date": "2026-07-20",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNOFdQZUM3NDVHRklkNEZGbWhERTFNQU9hU1RJWHowLWhFYlNKYVJ6VFFwdmt4OVhqZXlBN2NSSGxhNjU4WDlXelpKaGI2dGU3NTM0Y0Z6WnFILWF4a01BS3RLc0xKR2dtZEhOWFMzLTFKX0N5clk3Zk45cVJYdnpMU2ZGS2ZoOVpkUmR0VVcxcExrQQ?oc=5",
+      "countryEvidence": "matched \"IBM\" (auto-classified from Google News RSS, unverified)",
+      "abstract": "IBM Ventures: Leading the quantum investment landscape IBM",
+      "ingestedAt": "2026-07-21T01:51:00.992Z",
+      "orgId": "ibm",
+      "relevanceScore": 0.7
     }
   ],
   "trend": [
@@ -42334,6 +42350,76 @@
       },
       "fundingUsd": 107483877,
       "totalEntries": 1941
+    },
+    {
+      "date": "2026-07-21",
+      "counts": {
+        "JP": 19,
+        "US": 57,
+        "ZA": 1,
+        "DE": 18,
+        "CN": 91,
+        "KR": 7,
+        "IN": 41,
+        "IT": 12,
+        "TW": 3,
+        "GB": 4,
+        "SG": 3,
+        "MX": 2,
+        "IR": 7,
+        "FR": 14,
+        "RO": 1,
+        "CA": 10,
+        "VN": 2,
+        "BR": 3,
+        "ES": 6,
+        "AU": 6,
+        "HU": 1,
+        "RU": 15,
+        "SE": 4,
+        "TR": 5,
+        "AT": 6,
+        "NL": 3,
+        "PL": 5,
+        "DK": 4,
+        "ID": 3,
+        "BD": 5,
+        "IL": 3,
+        "CH": 4,
+        "GR": 1,
+        "HK": 3,
+        "SA": 6,
+        "IQ": 1,
+        "PK": 1,
+        "SK": 1,
+        "FI": 1,
+        "UA": 1,
+        "AR": 1,
+        "SI": 1,
+        "CO": 1,
+        "EG": 1,
+        "BG": 1,
+        "NO": 1,
+        "MT": 1,
+        "KP": 1,
+        "PT": 1,
+        "AE": 1,
+        "EC": 1,
+        "MA": 2,
+        "NG": 1,
+        "MY": 1,
+        "PE": 1,
+        "DZ": 1,
+        "KZ": 1
+      },
+      "stageCounts": {
+        "innovation": 569,
+        "scaling": 49,
+        "adoption": 28,
+        "investment": 108
+      },
+      "fundingUsd": 86775231,
+      "totalEntries": 1942
     }
   ],
   "notes": [
@@ -42369,7 +42455,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-20T21:55:57.626Z",
+      "lastSuccessfulPull": "2026-07-21T01:51:00.992Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -42390,28 +42476,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-20T21:55:57.626Z",
+      "lastSuccessfulPull": "2026-07-21T01:51:00.992Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-20T21:55:57.626Z",
+      "lastSuccessfulPull": "2026-07-21T01:51:00.992Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-20T21:55:57.626Z",
+      "lastSuccessfulPull": "2026-07-21T01:51:00.992Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-20T21:55:57.626Z",
+      "lastSuccessfulPull": "2026-07-21T01:51:00.992Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
