@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-07-21T05:41:51.517Z",
+  "generatedAt": "2026-07-21T08:10:37.211Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -31853,7 +31853,7 @@
       "source": "news",
       "title": "Micron CEO Sanjay Mehrotra Announces $250 Billion Investment for Expanded Artificial Intelligence (AI) Memory Chip Development",
       "org": "Yahoo Finance",
-      "date": "2026-07-11",
+      "date": "2026-07-10",
       "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQdjNGb19FOGwxUFRYUUU5MW5pX3duLWZ3MS02Q0pIUTNXVEtSZ1ZDb0xDMUFkcTRwQ1dlak1wdm1RbExYdFBMRy0yLXFTd3ZmanhVMkw4U0dCWnVTQ1drSWstNHpIcW5ZalBEUEtBSkkzbjVuX0tPamZsbkt0eVhWUFdhcE16RjNURHZwVm5qNUF6TzQweXJPX1lEQks5N01BeWc?oc=5",
       "countryEvidence": "no location match (auto-classified from Google News RSS, unverified)",
       "abstract": "Micron CEO Sanjay Mehrotra Announces $250 Billion Investment for Expanded Artificial Intelligence (AI) Memory Chip Development Yahoo Finance",
@@ -45606,6 +45606,38 @@
       "ingestedAt": "2026-07-20T19:44:39.983Z",
       "orgId": "shaanxi university of science and technology",
       "relevanceScore": 0.6
+    },
+    {
+      "id": "rss-icialintelligence-news-com-news-chinese-open-weight-models-policy-risk",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Chinese open-weight models are cheap. Washington is deciding what that costs.",
+      "org": "AI News",
+      "date": "2026-07-21",
+      "url": "https://www.artificialintelligence-news.com/news/chinese-open-weight-models-policy-risk/",
+      "countryEvidence": "no location match (auto-classified from AI News RSS, unverified)",
+      "abstract": "Enterprises evaluating Chinese open-weight models this month face a question that has nothing to do with benchmarks: whether using one will still be straightforward in a year. Moonshot AI’s Kimi K3 arrived on July 16 as the largest open-weight model yet released, and within days it had reopened a policy argument in Washington that had […] The post Chinese open-weight models are cheap. Washington is deciding what that costs. appeared first on AI News .",
+      "ingestedAt": "2026-07-21T08:10:37.211Z",
+      "orgId": "ai news",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-er-open-world-model-that-reasons-and-generates-robot-actions-on-device",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "NVIDIA Releases Cosmos 3 Edge: A 4B-Parameter Open World Model That Reasons and Generates Robot Actions On-Device",
+      "org": "MarkTechPost",
+      "date": "2026-07-21",
+      "url": "https://www.marktechpost.com/2026/07/21/nvidia-releases-cosmos-3-edge-a-4b-parameter-open-world-model-that-reasons-and-generates-robot-actions-on-device/",
+      "countryEvidence": "no location match (auto-classified from MarkTechPost RSS, unverified)",
+      "abstract": "NVIDIA has released Cosmos 3 Edge, a 4-billion-parameter open world model built to run on-device. It helps robots and vision AI agents understand surroundings, reason in real time, and generate robot actions locally. The Cosmos 3 family included Cosmos 3 Nano (16B) and Cosmos 3 Super (64B) shipped on May 31, 2026 at GTC Taipei. […] The post NVIDIA Releases Cosmos 3 Edge: A 4B-Parameter Open World Model That Reasons and Generates Robot Actions On-Device appeared first on MarkTechPost .",
+      "ingestedAt": "2026-07-21T08:10:37.211Z",
+      "orgId": "marktechpost",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -46164,8 +46196,8 @@
         "PH": 1,
         "NL": 1,
         "UG": 3,
-        "SE": 1,
         "AR": 3,
+        "SE": 1,
         "UY": 1,
         "CZ": 2,
         "EG": 3,
@@ -46181,12 +46213,12 @@
       },
       "stageCounts": {
         "innovation": 1256,
-        "scaling": 13,
-        "adoption": 18,
+        "scaling": 14,
+        "adoption": 19,
         "investment": 156
       },
       "fundingUsd": 98123742,
-      "totalEntries": 2222
+      "totalEntries": 2224
     }
   ],
   "notes": [
@@ -46222,7 +46254,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-21T05:41:51.517Z",
+      "lastSuccessfulPull": "2026-07-21T08:10:37.211Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -46243,28 +46275,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-21T05:41:51.517Z",
+      "lastSuccessfulPull": "2026-07-21T08:10:37.211Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-21T05:41:51.517Z",
+      "lastSuccessfulPull": "2026-07-21T08:10:37.211Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-21T05:41:51.517Z",
+      "lastSuccessfulPull": "2026-07-21T08:10:37.211Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-21T05:41:51.517Z",
+      "lastSuccessfulPull": "2026-07-21T08:10:37.211Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
