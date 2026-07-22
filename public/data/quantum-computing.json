@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-22T05:40:51.611Z",
+  "generatedAt": "2026-07-22T08:10:18.678Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -44557,6 +44557,22 @@
       "ingestedAt": "2026-07-22T01:50:09.007Z",
       "orgId": "quantum computing report",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-zeitgeist-com-university-college-london-quantum-thermodynamic-sampling",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "QuEra’s 78-Site Graphene System Validates Quantum Thermodynamic Sampling",
+      "org": "Quantum Zeitgeist",
+      "date": "2026-07-22",
+      "url": "https://quantumzeitgeist.com/university-college-london-quantum-thermodynamic-sampling/",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Neutral-atom quantum hardware is a promising platform for programmable many-body physics, and this work develops and validates a framework for extracting thermodynamic properties of materials using such hardware. As a test case, researchers consider nitrogen-doped graphene and map material energetics onto a Rydberg-atom Hamiltonian suitable for quantum annealing, utilizing a 78-site system with Monte Carlo sampling.",
+      "ingestedAt": "2026-07-22T08:10:18.678Z",
+      "orgId": "quantum zeitgeist",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -46837,12 +46853,12 @@
       },
       "stageCounts": {
         "innovation": 687,
-        "scaling": 58,
+        "scaling": 59,
         "adoption": 33,
         "investment": 100
       },
       "fundingUsd": 82502867,
-      "totalEntries": 2210
+      "totalEntries": 2211
     }
   ],
   "notes": [
@@ -46878,7 +46894,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-22T05:40:51.611Z",
+      "lastSuccessfulPull": "2026-07-22T08:10:18.678Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -46899,28 +46915,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-22T05:40:51.611Z",
+      "lastSuccessfulPull": "2026-07-22T08:10:18.678Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-22T05:40:51.611Z",
+      "lastSuccessfulPull": "2026-07-22T08:10:18.678Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-22T05:40:51.611Z",
+      "lastSuccessfulPull": "2026-07-22T08:10:18.678Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-22T05:40:51.611Z",
+      "lastSuccessfulPull": "2026-07-22T08:10:18.678Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
