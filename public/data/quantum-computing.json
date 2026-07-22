@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-21T21:57:02.071Z",
+  "generatedAt": "2026-07-22T01:50:09.007Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -44525,6 +44525,38 @@
       "ingestedAt": "2026-07-21T21:57:02.071Z",
       "orgId": "jonas berx et al",
       "relevanceScore": 0.65
+    },
+    {
+      "id": "rss-ank-publish-framework-linking-quantum-hardware-to-enterprise-use-cases",
+      "stage": "scaling",
+      "country": "JP",
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Quantinuum and SoftBank Publish Framework Linking Quantum Hardware to Enterprise Use Cases",
+      "org": "Quantum Computing Report",
+      "date": "2026-07-22",
+      "url": "https://quantumcomputingreport.com/quantinuum-and-softbank-publish-framework-linking-quantum-hardware-to-enterprise-use-cases/",
+      "countryEvidence": "matched \"Japan\" (auto-classified from Quantum Computing Report RSS, unverified)",
+      "abstract": "In a joint white paper published today, Quantinuum (NASDAQ: QNT) and Japan-based telecommunications conglomerate SoftBank Corp. have outlined a strategic timeline mapping industrial quantum chemistry and graph analytics workloads directly onto Quantinuum’s multi-generational hardware roadmap. The publication, titled \"Quantum Computing Frontiers,\" establishes a framework to evaluate when specific problem classes transition from classical simulation into [...] The post Quantinuum and SoftBank Publish Framework Linking Quantum Hardware to Enterprise Use Cases appeared first on Quantum Computing Report .",
+      "ingestedAt": "2026-07-22T01:50:09.007Z",
+      "orgId": "quantum computing report",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-ybell-quantum-deploys-dilution-refrigerators-at-roadrunner-quantum-lab",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Maybell Quantum Deploys Dilution Refrigerators at Roadrunner Quantum Lab",
+      "org": "Quantum Computing Report",
+      "date": "2026-07-22",
+      "url": "https://quantumcomputingreport.com/maybell-quantum-deploys-dilution-refrigerators-at-roadrunner-quantum-lab/",
+      "countryEvidence": "no location match (auto-classified from Quantum Computing Report RSS, unverified)",
+      "abstract": "Cryogenic infrastructure provider Maybell Quantum has announced a hardware and operational expansion into New Mexico, becoming the third major quantum equipment manufacturer to anchor the state's Roadrunner Quantum Lab (RQL). Headquartered in Denver, Colorado, Maybell will deploy a fleet of four dilution refrigerators at the Albuquerque-based facility, providing the ultra-low millikelvin temperatures essential for running [...] The post Maybell Quantum Deploys Dilution Refrigerators at Roadrunner Quantum Lab appeared first on Quantum Computing Report .",
+      "ingestedAt": "2026-07-22T01:50:09.007Z",
+      "orgId": "quantum computing report",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -46741,6 +46773,76 @@
       },
       "fundingUsd": 89751712,
       "totalEntries": 2208
+    },
+    {
+      "date": "2026-07-22",
+      "counts": {
+        "RU": 20,
+        "IT": 12,
+        "FR": 15,
+        "US": 56,
+        "BD": 6,
+        "CN": 93,
+        "JP": 18,
+        "ZA": 1,
+        "DE": 16,
+        "KR": 7,
+        "IN": 35,
+        "TW": 3,
+        "GB": 5,
+        "PL": 6,
+        "SG": 3,
+        "PE": 1,
+        "AU": 6,
+        "MX": 2,
+        "IR": 6,
+        "RO": 1,
+        "CA": 8,
+        "VN": 2,
+        "BR": 3,
+        "ES": 5,
+        "HU": 1,
+        "SE": 4,
+        "TR": 5,
+        "AT": 3,
+        "NL": 3,
+        "DK": 3,
+        "ID": 3,
+        "IL": 3,
+        "HK": 4,
+        "CH": 3,
+        "GR": 1,
+        "SA": 6,
+        "IQ": 1,
+        "PK": 1,
+        "FI": 1,
+        "UA": 1,
+        "AR": 1,
+        "SI": 1,
+        "CO": 1,
+        "EG": 1,
+        "BG": 1,
+        "NO": 1,
+        "MT": 1,
+        "KP": 1,
+        "PT": 2,
+        "AE": 1,
+        "CM": 1,
+        "EC": 1,
+        "MA": 2,
+        "NG": 1,
+        "MY": 1,
+        "DZ": 1,
+        "KZ": 1
+      },
+      "stageCounts": {
+        "innovation": 687,
+        "scaling": 58,
+        "adoption": 33,
+        "investment": 100
+      },
+      "fundingUsd": 82502867,
+      "totalEntries": 2210
     }
   ],
   "notes": [
@@ -46776,7 +46878,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-21T19:05:28.793Z",
+      "lastSuccessfulPull": "2026-07-22T01:50:09.007Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -46797,28 +46899,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-21T21:57:02.071Z",
+      "lastSuccessfulPull": "2026-07-22T01:50:09.007Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-21T21:57:02.071Z",
+      "lastSuccessfulPull": "2026-07-22T01:50:09.007Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-21T21:57:02.071Z",
+      "lastSuccessfulPull": "2026-07-22T01:50:09.007Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-21T21:57:02.071Z",
+      "lastSuccessfulPull": "2026-07-22T01:50:09.007Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
