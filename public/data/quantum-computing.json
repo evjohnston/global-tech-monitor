@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-23T11:01:45.188Z",
+  "generatedAt": "2026-07-23T13:26:52.346Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -46060,6 +46060,38 @@
       "ingestedAt": "2026-07-23T11:01:45.188Z",
       "orgId": "quantum zeitgeist",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-der-com-2026-07-23-qedma-error-mitigation-software-quantinuum-platform",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Qedma Integrates Quantum Error Mitigation Software with Quantinuum Platform",
+      "org": "The Quantum Insider",
+      "date": "2026-07-23",
+      "url": "https://thequantuminsider.com/2026/07/23/qedma-error-mitigation-software-quantinuum-platform/",
+      "countryEvidence": "no location match (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief Press release – Qedma today announced an integration with Quantinuum’s platform that will allow customers to use its advanced error mitigation on industry-leading quantum computing hardware. Qedma developed this technical integration over the past year as a founding member of the Quantinuum Startup Partner Program. In many applications, Qedma’s Quantum Error Suppression and […]",
+      "ingestedAt": "2026-07-23T13:26:52.346Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-6-07-23-ibm-to-acquire-hrl-laboratories-to-power-the-future-of-quantum",
+      "stage": "adoption",
+      "country": "US",
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "IBM to Acquire HRL Laboratories to Expand Quantum Computing Research",
+      "org": "The Quantum Insider",
+      "date": "2026-07-23",
+      "url": "https://thequantuminsider.com/2026/07/23/ibm-to-acquire-hrl-laboratories-to-power-the-future-of-quantum/",
+      "countryEvidence": "matched \"IBM\" (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief Press release – IBM (NYSE: IBM) today announced it has signed a definitive agreement to acquire HRL Laboratories, LLC (HRL), a flagship research and development institution. HRL is a private company jointly owned by Boeing and General Motors. Both Boeing and GM will continue to partner with IBM on quantum applications and advanced technology […]",
+      "ingestedAt": "2026-07-23T13:26:52.346Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -48409,11 +48441,11 @@
       "stageCounts": {
         "innovation": 678,
         "scaling": 66,
-        "adoption": 38,
+        "adoption": 40,
         "investment": 109
       },
       "fundingUsd": 87110066,
-      "totalEntries": 2282
+      "totalEntries": 2284
     }
   ],
   "notes": [
@@ -48449,7 +48481,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-23T11:01:45.188Z",
+      "lastSuccessfulPull": "2026-07-23T13:26:52.346Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -48470,28 +48502,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-23T11:01:45.188Z",
+      "lastSuccessfulPull": "2026-07-23T13:26:52.346Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-23T11:01:45.188Z",
+      "lastSuccessfulPull": "2026-07-23T13:26:52.346Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-23T11:01:45.188Z",
+      "lastSuccessfulPull": "2026-07-23T13:26:52.346Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-23T11:01:45.188Z",
+      "lastSuccessfulPull": "2026-07-23T13:26:52.346Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
