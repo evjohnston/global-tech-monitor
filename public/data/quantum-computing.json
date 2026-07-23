@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-23T05:45:34.622Z",
+  "generatedAt": "2026-07-23T08:14:00.637Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -45754,6 +45754,22 @@
       "ingestedAt": "2026-07-23T05:45:34.622Z",
       "orgId": "quantum computing report",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-galaxy-digital-launches-5-million-bitcoin-quantum-readiness-initiative",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Galaxy Digital Launches $5 Million Bitcoin Quantum Readiness Initiative",
+      "org": "Quantum Computing Report",
+      "date": "2026-07-23",
+      "url": "https://quantumcomputingreport.com/galaxy-digital-launches-5-million-bitcoin-quantum-readiness-initiative/",
+      "countryEvidence": "no location match (auto-classified from Quantum Computing Report RSS, unverified)",
+      "abstract": "Digital asset and data center infrastructure firm Galaxy Digital Inc. (Nasdaq: GLXY) has announced the launch of the Galaxy Bitcoin Quantum Readiness Initiative. The multi-pillar program is designed to prepare the Bitcoin network for long-term security threats posed by advancements in quantum computing. The program focuses on bridging the gap between quantum physics research and [...] The post Galaxy Digital Launches $5 Million Bitcoin Quantum Readiness Initiative appeared first on Quantum Computing Report .",
+      "ingestedAt": "2026-07-23T08:14:00.637Z",
+      "orgId": "quantum computing report",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -48103,11 +48119,11 @@
       "stageCounts": {
         "innovation": 678,
         "scaling": 62,
-        "adoption": 36,
+        "adoption": 37,
         "investment": 99
       },
       "fundingUsd": 82564390,
-      "totalEntries": 2266
+      "totalEntries": 2267
     }
   ],
   "notes": [
@@ -48143,7 +48159,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-23T05:45:34.622Z",
+      "lastSuccessfulPull": "2026-07-23T08:14:00.637Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -48164,28 +48180,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-23T05:45:34.622Z",
+      "lastSuccessfulPull": "2026-07-23T08:14:00.637Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-23T05:45:34.622Z",
+      "lastSuccessfulPull": "2026-07-23T08:14:00.637Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-23T05:45:34.622Z",
+      "lastSuccessfulPull": "2026-07-23T08:14:00.637Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-23T05:45:34.622Z",
+      "lastSuccessfulPull": "2026-07-23T08:14:00.637Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
