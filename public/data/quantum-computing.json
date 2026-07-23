@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-22T21:58:43.728Z",
+  "generatedAt": "2026-07-23T01:57:11.156Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -48007,6 +48007,75 @@
       },
       "fundingUsd": 108414389,
       "totalEntries": 2264
+    },
+    {
+      "date": "2026-07-23",
+      "counts": {
+        "AU": 8,
+        "CN": 98,
+        "BR": 4,
+        "IN": 35,
+        "US": 57,
+        "GB": 7,
+        "CH": 4,
+        "ID": 3,
+        "IT": 13,
+        "PL": 7,
+        "PT": 2,
+        "DE": 16,
+        "LY": 1,
+        "RU": 19,
+        "ZA": 2,
+        "JP": 19,
+        "HK": 5,
+        "FR": 15,
+        "BD": 6,
+        "KR": 6,
+        "TW": 3,
+        "SG": 3,
+        "PE": 1,
+        "MX": 2,
+        "IR": 5,
+        "RO": 1,
+        "CA": 8,
+        "VN": 2,
+        "ES": 5,
+        "HU": 1,
+        "SE": 4,
+        "TR": 5,
+        "AT": 2,
+        "NL": 3,
+        "DK": 3,
+        "IL": 3,
+        "GR": 1,
+        "SA": 6,
+        "IQ": 1,
+        "PK": 1,
+        "FI": 1,
+        "UA": 1,
+        "AR": 1,
+        "SI": 1,
+        "CO": 1,
+        "EG": 1,
+        "BG": 1,
+        "NO": 1,
+        "MT": 1,
+        "KP": 1,
+        "VE": 1,
+        "AE": 1,
+        "CM": 1,
+        "EC": 1,
+        "MA": 1,
+        "NG": 1
+      },
+      "stageCounts": {
+        "innovation": 678,
+        "scaling": 62,
+        "adoption": 34,
+        "investment": 99
+      },
+      "fundingUsd": 82564390,
+      "totalEntries": 2264
     }
   ],
   "notes": [
@@ -48042,7 +48111,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-22T21:58:43.728Z",
+      "lastSuccessfulPull": "2026-07-23T01:57:11.156Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -48063,28 +48132,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-22T21:58:43.728Z",
+      "lastSuccessfulPull": "2026-07-23T01:57:11.156Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-22T21:58:43.728Z",
+      "lastSuccessfulPull": "2026-07-23T01:57:11.156Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-22T21:58:43.728Z",
+      "lastSuccessfulPull": "2026-07-23T01:57:11.156Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-22T21:58:43.728Z",
+      "lastSuccessfulPull": "2026-07-23T01:57:11.156Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
