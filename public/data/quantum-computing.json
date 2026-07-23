@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-23T19:01:14.671Z",
+  "generatedAt": "2026-07-23T21:58:11.411Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -47293,6 +47293,22 @@
       "ingestedAt": "2026-07-23T19:01:14.671Z",
       "orgId": "quantum zeitgeist",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-re-hrl-laboratories-to-expand-quantum-roadmap-with-silicon-spin-qubits",
+      "stage": "scaling",
+      "country": "US",
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "IBM to Acquire HRL Laboratories to Expand Quantum Roadmap with Silicon-Spin Qubits",
+      "org": "Quantum Computing Report",
+      "date": "2026-07-23",
+      "url": "https://quantumcomputingreport.com/ibm-to-acquire-hrl-laboratories-to-expand-quantum-roadmap-with-silicon-spin-qubits/",
+      "countryEvidence": "matched \"IBM\" (auto-classified from Quantum Computing Report RSS, unverified)",
+      "abstract": "IBM (NYSE: IBM) has signed a definitive agreement to acquire HRL Laboratories, LLC (HRL), the Malibu-based research and development institution jointly owned by Boeing and General Motors. The acquisition expands IBM’s quantum hardware strategy, adding HRL’s expertise in silicon-spin qubits alongside its core superconducting qubit program. Following the transaction, both Boeing and GM will continue [...] The post IBM to Acquire HRL Laboratories to Expand Quantum Roadmap with Silicon-Spin Qubits appeared first on Quantum Computing Report .",
+      "ingestedAt": "2026-07-23T21:58:11.411Z",
+      "orgId": "quantum computing report",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -49640,12 +49656,12 @@
       },
       "stageCounts": {
         "innovation": 728,
-        "scaling": 70,
+        "scaling": 71,
         "adoption": 41,
         "investment": 109
       },
       "fundingUsd": 87110066,
-      "totalEntries": 2340
+      "totalEntries": 2341
     }
   ],
   "notes": [
@@ -49681,7 +49697,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-23T19:01:14.671Z",
+      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -49702,28 +49718,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-23T19:01:14.671Z",
+      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-23T19:01:14.671Z",
+      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-23T19:01:14.671Z",
+      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-23T19:01:14.671Z",
+      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
