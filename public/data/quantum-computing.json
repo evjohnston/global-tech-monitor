@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-24T08:09:53.781Z",
+  "generatedAt": "2026-07-24T10:55:20.722Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -47383,6 +47383,38 @@
       "ingestedAt": "2026-07-24T08:09:53.781Z",
       "orgId": "quantum zeitgeist",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-m-2026-07-24-digital-catapult-nqcc-quantum-technology-access-programme",
+      "stage": "adoption",
+      "country": "GB",
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Digital Catapult and NQCC Select 11 Organisations for Quantum Technology Access Programme",
+      "org": "The Quantum Insider",
+      "date": "2026-07-24",
+      "url": "https://thequantuminsider.com/2026/07/24/digital-catapult-nqcc-quantum-technology-access-programme/",
+      "countryEvidence": "matched \"NQCC\" (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief Press release – Digital Catapult has today welcomed eleven leading organisations to the third cohort of its Quantum Technology Access Programme (QTAP), delivered in collaboration with the National Quantum Computing Centre’s (NQCC) SparQ programme. Designed to accelerate the practical application of quantum innovation in industry, the cohort includes NatWest, the Rail Safety and […]",
+      "ingestedAt": "2026-07-24T10:55:20.722Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-ee-buddha-college-of-engineering-to-establish-a-quantum-technology-hub",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Bloq Quantum Partners With Sree Buddha College of Engineering to Establish a Quantum Technology Hub",
+      "org": "The Quantum Insider",
+      "date": "2026-07-24",
+      "url": "https://thequantuminsider.com/2026/07/24/bloq-quantum-partners-with-sree-buddha-college-of-engineering-to-establish-a-quantum-technology-hub/",
+      "countryEvidence": "no location match (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief PRESS RELEASE — Bloq Quantum, a leading provider of enterprise quantum software infrastructure, today announced a strategic partnership with the Department of Electronics and Communication Engineering at Sree Buddha College of Engineering (SBCE). Through this collaboration, formalized via a Memorandum of Understanding (MoU) signed by Dr. K. Krishnakumar, Principal of SBCE, and Sreekuttan […]",
+      "ingestedAt": "2026-07-24T10:55:20.722Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -49799,11 +49831,11 @@
       "stageCounts": {
         "innovation": 702,
         "scaling": 71,
-        "adoption": 42,
+        "adoption": 44,
         "investment": 112
       },
       "fundingUsd": 88338579,
-      "totalEntries": 2345
+      "totalEntries": 2347
     }
   ],
   "notes": [
@@ -49839,7 +49871,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
+      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -49860,28 +49892,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
+      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
+      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
+      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
+      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
