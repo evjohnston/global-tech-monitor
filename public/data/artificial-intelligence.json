@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-07-24T23:25:56.430Z",
+  "generatedAt": "2026-07-24T23:40:53.879Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -80841,7 +80841,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-24T23:25:56.430Z",
+      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -80862,28 +80862,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-24T23:25:56.430Z",
+      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-24T23:25:56.430Z",
+      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-24T23:25:56.430Z",
+      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-24T23:25:56.430Z",
+      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
@@ -80897,14 +80897,14 @@
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-07-24T23:25:56.430Z",
+      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-24T23:25:56.430Z",
+      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -80915,42 +80915,42 @@
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5056375960000,
-      "asOf": "2026-07-24T23:24:35.753Z",
+      "asOf": "2026-07-24T23:39:31.729Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 2834542114352.32,
-      "asOf": "2026-07-24T23:24:50.836Z",
+      "asOf": "2026-07-24T23:39:46.939Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3885327996460.39,
-      "asOf": "2026-07-24T23:25:05.885Z",
+      "asOf": "2026-07-24T23:40:02.159Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "META",
       "name": "Meta Platforms, Inc. Class A Common Stock",
       "marketCapUsd": 1538538364554.4001,
-      "asOf": "2026-07-24T23:25:20.971Z",
+      "asOf": "2026-07-24T23:40:17.361Z",
       "url": "https://about.meta.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2513506190815.76,
-      "asOf": "2026-07-24T23:25:36.089Z",
+      "asOf": "2026-07-24T23:40:32.546Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "PLTR",
       "name": "Palantir Technologies Inc. Class A Common Stock",
       "marketCapUsd": 295756378602.49,
-      "asOf": "2026-07-24T23:25:51.143Z",
+      "asOf": "2026-07-24T23:40:47.758Z",
       "url": "https://www.palantir.com"
     }
   ],
