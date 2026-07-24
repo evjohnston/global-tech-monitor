@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-24T10:55:20.722Z",
+  "generatedAt": "2026-07-24T13:19:23.330Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -47415,6 +47415,38 @@
       "ingestedAt": "2026-07-24T10:55:20.722Z",
       "orgId": "the quantum insider",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "rss--24-quantum-materials-engineering-the-atoms-powering-quantum-computing",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Quantum Materials Engineering – The Atoms Powering Quantum Computing",
+      "org": "The Quantum Insider",
+      "date": "2026-07-24",
+      "url": "https://thequantuminsider.com/2026/07/24/quantum-materials-engineering-the-atoms-powering-quantum-computing/",
+      "countryEvidence": "no location match (auto-classified from The Quantum Insider RSS, unverified)",
+      "abstract": "Insider Brief Quantum computing is often portrayed as a race to build better qubits, but this is just part of the bigger challenge. Beneath every qubit is an endeavor to find the right material that can make quantum behavior possible. Researchers are exploring superconducting metals, ultra-pure silicon, engineered crystal defects, and topological compounds. They seek […]",
+      "ingestedAt": "2026-07-24T13:19:23.330Z",
+      "orgId": "the quantum insider",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-https-quantumzeitgeist-com-bloq-quantum-sbce-first-lab",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Bloq Quantum & SBCE Launch First Quantum Lab at Private Kerala College",
+      "org": "Quantum Zeitgeist",
+      "date": "2026-07-24",
+      "url": "https://quantumzeitgeist.com/bloq-quantum-sbce-first-lab/",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Bloq Quantum and the Department of Electronics and Communication Engineering at Sree Buddha College of Engineering (SBCE) formalized a partnership via a Memorandum of Understanding signed by Dr. K. Krishnakumar and Sreekuttan L S on July 22, 2026. SBCE will establish a premier undergraduate hub for quantum technology, including a state-of-the-art Undergraduate Quantum Computing Lab with access to Bloq Quantum’s cloud-based platform.",
+      "ingestedAt": "2026-07-24T13:19:23.330Z",
+      "orgId": "quantum zeitgeist",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -49830,12 +49862,12 @@
       },
       "stageCounts": {
         "innovation": 702,
-        "scaling": 71,
-        "adoption": 44,
+        "scaling": 72,
+        "adoption": 45,
         "investment": 112
       },
       "fundingUsd": 88338579,
-      "totalEntries": 2347
+      "totalEntries": 2349
     }
   ],
   "notes": [
@@ -49871,7 +49903,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
+      "lastSuccessfulPull": "2026-07-24T13:19:23.330Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -49892,28 +49924,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
+      "lastSuccessfulPull": "2026-07-24T13:19:23.330Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
+      "lastSuccessfulPull": "2026-07-24T13:19:23.330Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
+      "lastSuccessfulPull": "2026-07-24T13:19:23.330Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-24T10:55:20.722Z",
+      "lastSuccessfulPull": "2026-07-24T13:19:23.330Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
