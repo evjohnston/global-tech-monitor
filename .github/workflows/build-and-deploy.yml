@@ -72,6 +72,7 @@ jobs:
           OPENALEX_KEY: ${{ secrets.OPENALEX_KEY }}
           EPO_KEY: ${{ secrets.EPO_KEY }}
           EPO_SECRET: ${{ secrets.EPO_SECRET }}
+          MASSIVE_KEY: ${{ secrets.MASSIVE_KEY }}
 
       # Commit the updated data files to the `data` branch — never to
       # `main` — so trend[]/entries[] accumulation is real infrastructure

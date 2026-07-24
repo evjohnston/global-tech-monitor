@@ -159,6 +159,78 @@ needs, checked by hand before it goes in `VERTICALS`:
 Every external source fails soft — a missing key or down endpoint drops that
 one source without breaking the build.
 
+## Talent vertical — Innovation stage is a statistic, not a paper corpus
+
+Added 2026-07-24. `talent`'s `openAlexFilter` is `""` — a live sample
+against the closest OpenAlex Topics for "human capital"/"STEM talent"
+(Human Resource and Talent Management, Labor market dynamics, STEM
+Education, Labour Market and Migration) came back a grab-bag of generic
+HR-management and vocational-education papers, not a coherent research
+corpus the way T10682 is coherently quantum computing (checked by hand,
+only 16/25 sampled works even had institution data, and most of those were
+off-topic). `fetch-data.ts` skips OpenAlex/arXiv/top-cited entirely when
+`openAlexFilter` is empty, and instead calls `src/lib/sources/oecd.ts`
+(`researcherStatsSince` in `verticals.ts`) — real, official per-country
+researcher-headcount statistics (full-time-equivalent) from the OECD's
+Main Science and Technology Indicators (SDMX REST API, `sdmx.oecd.org`, no
+key needed), one Entry per country per reported year, `provenance: "live"`,
+`source: "statistic"`. Covers 44 countries including China, but not India or
+most of Africa/South America (OECD members + a handful of key partners,
+not global) — disclosed in `sourceMeta.ts`'s `oecd` entry.
+
+**Known tension, not yet resolved**: the map/bar-chart "count by country"
+convention (`countByCountry` in `aggregate.ts`) counts *entries*, which is
+the right signal for papers/patents/grants (more entries = more real
+activity) but not for this vertical — a country's Innovation-stage entry
+count here reflects how many years of OECD data exist for it, not its
+actual researcher headcount (which is the real, meaningful number, and is
+right there in each entry's `title` and drill-down modal, just not fed into
+the count-based aggregate). Fixing this properly needs a weighted-count
+variant of `countByCountry` (`weightByCountry` already exists for citations
+— same idea, different field) threaded through WorldMap/BarRow. Flagged
+here rather than silently working around it; don't read the Talent tab's
+map shading as researcher-magnitude until this is addressed.
+
+Patents are skipped too (`epoCpcQuery: ""` — `fetchPatents` throws
+intentionally on an empty query, see `epo.ts`): the closest real CPC code,
+G06Q10/1053, is about HR/hiring *software*, not the scientist/engineer
+pipeline, and forcing that fit would misattribute patents to "talent"
+Innovation. Investment uses NSF's real CFDA code 47.076 (Education & Human
+Resources directorate — GRFP, S-STEM, Robert Noyce, IUSE, Advanced
+Technological Education) via `fundingQueryParam: "cfdaNumber"` on
+`fetchNSF`, not a free-text keyword — checked by hand (2026-07-24): a
+"STEM workforce" keyword search matched 281 of 300 sampled NSF awards,
+because nearly every NSF grant's boilerplate broader-impacts language
+mentions training students, so a text regex can't isolate this topic the
+way "quantum" or "artificial intelligence" can. `tickers: []` — no real
+public company maps cleanly onto "STEM talent" the way IonQ maps onto
+quantum, so the public-markets panel just doesn't render for this vertical.
+
+## Public markets panel (Massive) — not part of the 4-stage pipeline
+
+Added 2026-07-24. Each `VerticalConfig` carries a `tickers: string[]` — a
+hand-picked list of real, publicly-traded companies materially exposed to
+that vertical (quantum: IONQ/RGTI/QBTS/IBM/GOOGL/HON; AI:
+NVDA/MSFT/GOOGL/META/AMZN/PLTR). `scripts/fetch-data.ts` fetches each
+ticker's market cap and today's price move via the Massive REST API
+(`src/lib/sources/massive.ts`, `api.massive.com` — confirmed by hand against
+the real docs before writing this, not guessed: `GET
+/v3/reference/tickers/{ticker}` for market cap/name/homepage,
+`GET /v2/snapshot/locale/us/markets/stocks/tickers/{ticker}` for price/day
+change, auth via `?apiKey=` or `Authorization: Bearer`), and stores the
+result in `DataFile.companies` — a new top-level field, deliberately NOT an
+`Entry`. A stock price is a standing fact about a company, not a dated
+research/scaling/adoption/investment event, so it renders as its own panel
+(`CompanyMarketPanel.tsx`, right below the KPI row) rather than living
+inside a pipeline stage or being forced into the `Entry` shape. Needs
+`MASSIVE_KEY` (repo secret + `.env.local`, same pattern as `EPO_KEY`) —
+soft-fails like every other source here if unset, and on a transient
+failure `fetch-data.ts` carries the previous run's snapshot forward rather
+than blanking the panel (a stale market cap is still real, just not today's).
+No red/green color for the day's move, only a +/- sign — this app's color
+budget is the Hoover accent and country hues only (see "Design system"
+below), don't add a third semantic color use here.
+
 ## Country attribution
 
 v4 change: there is no `Actor` bucket type anymore (`us`/`cn`/`eu`/`other`

@@ -19,17 +19,36 @@ interface NSFAward {
 // grants, just not about AI). `keyword` alone can't be trusted as a
 // relevance filter; this re-checks every result against real title/abstract
 // text before it's allowed into an Entry.
-export async function fetchNSF(n: number, keyword = "quantum", relevant?: RegExp): Promise<Entry[]> {
+// `queryParam` lets a vertical search by something more precise than free-
+// text `keyword` when the topic itself is too generic-sounding to survive a
+// text match — e.g. Talent's "workforce"/"STEM" match almost every NSF
+// abstract's boilerplate broader-impacts language (checked by hand
+// 2026-07-24: 281/300 "workforce"-queried awards matched a workforce-topic
+// regex, since nearly every NSF grant mentions training students). NSF's
+// own `cfdaNumber` field sidesteps that: 47.076 is the real, official CFDA
+// code for NSF's Education & Human Resources directorate, so filtering on
+// it selects grants that ARE workforce/education programs by NSF's own
+// funding classification, not ones that merely mention the word.
+export async function fetchNSF(
+  n: number,
+  keyword = "quantum",
+  relevant?: RegExp,
+  queryParam: "keyword" | "cfdaNumber" = "keyword"
+): Promise<Entry[]> {
   const url =
     "https://www.research.gov/awardapi-service/v1/awards.json" +
-    `?keyword=${encodeURIComponent(keyword)}` +
+    `?${queryParam}=${encodeURIComponent(keyword)}` +
     "&printFields=id,title,awardeeName,awardeeCountryCode,fundsObligatedAmt,date,startDate,abstractText,pdPIName,program" +
     `&rpp=${n}`;
   const res = await fetch(url, { headers: { "User-Agent": "GlobalTechMonitor/0.3" } });
   if (!res.ok) throw new Error(`NSF HTTP ${res.status}`);
   const json = (await res.json()) as { response?: { award?: NSFAward[] } };
   const rawAwards = json.response?.award ?? [];
-  const awards = relevant
+  // The text re-check only makes sense for `keyword` queries — a
+  // `cfdaNumber` query is already reliably on-topic by NSF's own funding
+  // classification, and re-filtering it against a topical regex would just
+  // drop real matches that don't happen to repeat the exact vocabulary.
+  const awards = relevant && queryParam === "keyword"
     ? rawAwards.filter((a) => relevant.test(a.title ?? "") || relevant.test(a.abstractText ?? ""))
     : rawAwards;
   return awards.map((a): Entry => {

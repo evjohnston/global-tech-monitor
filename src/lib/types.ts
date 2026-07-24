@@ -18,7 +18,8 @@ export type SourceKind =
   | "milestone" // hardware / scaling announcement (scaling)
   | "deployment" // commercial or govt adoption (adoption)
   | "grant" // research funding award (investment) — NSF, real awardee data
-  | "news"; // funding/investment news, auto-classified (investment) — Google News RSS, keyword-guessed
+  | "news" // funding/investment news, auto-classified (investment) — Google News RSS, keyword-guessed
+  | "statistic"; // official government/international-org statistic (innovation) — OECD, real reported data, no institution
 
 export interface Entry {
   id: string; // stable, dedupe key
@@ -123,6 +124,23 @@ export interface StageNote {
   body: string; // 2-4 sentences of interpretation
 }
 
+// A real-market snapshot for one hand-picked public company exposed to this
+// vertical (see verticals.ts's `tickers` field) — market cap + latest price/
+// day-change from the Massive REST API (api.massive.com, /v3/reference/
+// tickers/{ticker} + /v2/snapshot/.../tickers/{ticker}). Deliberately NOT an
+// Entry: it's a standing fact about a company, not a discrete dated event,
+// and it sits outside the 4-stage pipeline as its own panel (see CLAUDE.md
+// if this section still describes it that way, or App.tsx's company panel).
+export interface CompanySnapshot {
+  symbol: string; // exchange ticker, e.g. "NVDA"
+  name: string; // company name as Massive returns it
+  marketCapUsd?: number;
+  price?: number;
+  changePercent?: number; // today's % change, real from Massive's snapshot endpoint
+  asOf: string; // ISO timestamp this snapshot was fetched
+  url: string; // company homepage, from Massive's reference data
+}
+
 // The shape of the committed data file the app reads at load.
 export interface DataFile {
   technology: string; // vertical id — see src/lib/verticals.ts, e.g. "quantum-computing"
@@ -131,13 +149,16 @@ export interface DataFile {
   trend: TrendPoint[]; // accumulated country-share history
   notes: StageNote[]; // analyst interpretation per stage
   sourceMeta: SourceMeta[]; // per-source freshness/cadence/lag/coverage facts
+  // Optional: absent entirely on data files built before this existed, or
+  // when MASSIVE_KEY isn't set (soft-fails like every other source here).
+  companies?: CompanySnapshot[];
 }
 
 export const STAGES: { id: Stage; label: string; blurb: string }[] = [
   {
     id: "innovation",
     label: "Innovation",
-    blurb: "Research and invention. Papers and patents. What is being discovered.",
+    blurb: "Research and invention. Papers and patents — or, for a human-capital vertical, the researcher base itself. What is being discovered, and by how many people.",
   },
   {
     id: "scaling",

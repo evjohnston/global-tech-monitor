@@ -48,6 +48,20 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
     coverageGaps: "keyword-classified, provenance \"auto\"; personal/non-commercial use license only",
   },
   {
+    key: "massive",
+    sourceName: "Massive (public markets)",
+    pollCadence: "nightly (GitHub Actions)",
+    structuralLag: "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
+    coverageGaps: "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space",
+  },
+  {
+    key: "oecd",
+    sourceName: "OECD (researcher headcount)",
+    pollCadence: "nightly (GitHub Actions) — only used by verticals with no cohesive paper-corpus topic (see verticals.ts's researcherStatsSince)",
+    structuralLag: "OECD member states typically report 6-18 months behind the current year",
+    coverageGaps: "OECD members + a handful of key partners (incl. China) — not full global coverage; no India, no most of Africa/South America",
+  },
+  {
     key: "seed",
     sourceName: "Hand-verified seed",
     pollCadence: "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",

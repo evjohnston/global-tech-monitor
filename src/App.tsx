@@ -25,6 +25,7 @@ import { SmallMultiples } from "./components/SmallMultiples.tsx";
 import { InstitutionConcentration } from "./components/InstitutionConcentration.tsx";
 import { AwardSizeHistogram } from "./components/AwardSizeHistogram.tsx";
 import { TopCitedTicker } from "./components/TopCitedTicker.tsx";
+import { CompanyMarketPanel } from "./components/CompanyMarketPanel.tsx";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
@@ -337,6 +338,8 @@ export default function App() {
         </div>
 
         <TopCitedTicker entries={entries} onSelect={setSelectedEntry} />
+
+        {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} />}
 
         <div className="row-map">
           <div className="row-map-stack">

@@ -10,6 +10,11 @@ import { asArray } from "./util.ts";
 // cpc=G06N20" for AI/ML (neural networks + machine learning, since AI has no
 // single CPC code the way quantum's G06N10 does — see verticals.ts).
 export async function fetchPatents(key: string, secret: string, n: number, cpcQuery: string): Promise<Entry[]> {
+  // An empty cpcQuery means this vertical has no real CPC classification to
+  // search (e.g. Talent/human-capital — "employment software" patents
+  // aren't meaningfully about the STEM workforce) — skip rather than force
+  // a tangential query, same soft-fail path as a missing key.
+  if (!cpcQuery) throw new Error("no CPC query configured for this vertical — patents intentionally skipped");
   if (!key || !secret) throw new Error("EPO key/secret not set");
   const tokenRes = await fetch("https://ops.epo.org/3.2/auth/accesstoken", {
     method: "POST",

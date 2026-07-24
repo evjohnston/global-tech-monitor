@@ -50,6 +50,8 @@ import type { DataFile, Entry, StageNote, TrendPoint } from "../src/lib/types.ts
 import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
+import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
+import { fetchResearcherStats } from "../src/lib/sources/oecd.ts";
 import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
 import { asArray } from "../src/lib/sources/util.ts";
 import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
@@ -61,16 +63,20 @@ import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
 import { NOTES as QUANTUM_NOTES } from "../data/quantum/notes.ts";
 import { SEED as AI_SEED } from "../data/ai/seed.ts";
 import { NOTES as AI_NOTES } from "../data/ai/notes.ts";
+import { SEED as TALENT_SEED } from "../data/talent/seed.ts";
+import { NOTES as TALENT_NOTES } from "../data/talent/notes.ts";
 
 // Static imports rather than a dynamic-import registry — fine at this scale
 // (a handful of verticals); revisit if this list grows large.
 const SEED_BY_VERTICAL: Record<string, Entry[]> = {
   "quantum-computing": QUANTUM_SEED,
   "artificial-intelligence": AI_SEED,
+  talent: TALENT_SEED,
 };
 const NOTES_BY_VERTICAL: Record<string, StageNote[]> = {
   "quantum-computing": QUANTUM_NOTES,
   "artificial-intelligence": AI_NOTES,
+  talent: TALENT_NOTES,
 };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -98,6 +104,7 @@ const OA_KEY = process.env.OPENALEX_KEY ?? "";
 const OA_MAILTO = process.env.OPENALEX_MAILTO ?? "gtm@example.com";
 const EPO_KEY = process.env.EPO_KEY ?? "";
 const EPO_SECRET = process.env.EPO_SECRET ?? "";
+const MASSIVE_KEY = process.env.MASSIVE_KEY ?? "";
 
 // ── arXiv fallback (no country codes → keyword inference) — only reached if
 // OpenAlex itself is unreachable, not a fresher alternate feed. ───────────
@@ -160,6 +167,21 @@ function readPrevious(outPath: string): DataFile | null {
 // in the last TREND_WINDOW_DAYS as of this run, not a cumulative-forever
 // total (which would just monotonically grow and never show a real trend).
 const TREND_WINDOW_DAYS = 21;
+// For a vertical with no rolling-window `live` pull (Talent: OECD stats
+// instead of a fresh-papers-since-last-run query), there's no natural
+// "this run's new items" set to feed trendPoint's per-country counts. Using
+// each country's most recent reported year is the honest equivalent — a
+// real current snapshot, not a fabricated rate.
+function latestPerCountry(entries: Entry[]): Entry[] {
+  const byCountry = new Map<string, Entry>();
+  for (const e of entries) {
+    if (!e.country) continue;
+    const prior = byCountry.get(e.country);
+    if (!prior || e.date > prior.date) byCountry.set(e.country, e);
+  }
+  return [...byCountry.values()];
+}
+
 function trendPoint(live: Entry[], allEntries: Entry[]): TrendPoint {
   const counts: Record<string, number> = {};
   for (const e of live) {
@@ -189,22 +211,32 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   let sourceUsed = "openalex";
   let openalexOk = false;
   let arxivOk = false;
-  try {
-    live = await fetchOpenAlexPages({
-      filter: v.openAlexFilter, key: OA_KEY, mailto: OA_MAILTO, sinceDays: 30, n: OA_N, pages: OA_PAGES,
-    });
-    openalexOk = true;
-    console.log(`OpenAlex: ${live.length} works with country attribution`);
-  } catch (err) {
-    console.error("OpenAlex failed:", (err as Error).message);
+  // An empty openAlexFilter means this vertical's Innovation stage isn't a
+  // paper corpus at all (Talent: OECD researcher-headcount statistics
+  // instead — see the researcherStatsSince block below and CLAUDE.md's
+  // "Public markets panel" — no, "Talent vertical" section for why) —
+  // skip OpenAlex/arXiv entirely rather than run a query with nothing to
+  // filter on.
+  if (!v.openAlexFilter) {
+    sourceUsed = "oecd-stats";
+  } else {
     try {
-      live = await fetchArxiv(v.arxivCategory);
-      sourceUsed = "arxiv-fallback";
-      arxivOk = true;
-      console.log(`arXiv fallback: ${live.length} works (no country data)`);
-    } catch (err2) {
-      console.error("arXiv also failed:", (err2 as Error).message);
-      sourceUsed = "seed-only";
+      live = await fetchOpenAlexPages({
+        filter: v.openAlexFilter, key: OA_KEY, mailto: OA_MAILTO, sinceDays: 30, n: OA_N, pages: OA_PAGES,
+      });
+      openalexOk = true;
+      console.log(`OpenAlex: ${live.length} works with country attribution`);
+    } catch (err) {
+      console.error("OpenAlex failed:", (err as Error).message);
+      try {
+        live = await fetchArxiv(v.arxivCategory);
+        sourceUsed = "arxiv-fallback";
+        arxivOk = true;
+        console.log(`arXiv fallback: ${live.length} works (no country data)`);
+      } catch (err2) {
+        console.error("arXiv also failed:", (err2 as Error).message);
+        sourceUsed = "seed-only";
+      }
     }
   }
 
@@ -224,11 +256,40 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   let funding: Entry[] = [];
   let nsfOk = false;
   try {
-    funding = await fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant);
+    funding = await fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant, v.fundingQueryParam);
     nsfOk = true;
     console.log(`NSF: ${funding.length} grants`);
   } catch (err) {
     console.error("funding skipped:", (err as Error).message);
+  }
+  // Not part of entries[]/the byId merge below — a market snapshot isn't a
+  // discrete dated event, it's a standing fact about a company. On a
+  // transient failure, carry the previous run's snapshot forward rather
+  // than blanking the panel (same reasoning as sourceMeta's
+  // lastSuccessfulPull), since a stale market cap is still a real number,
+  // just not today's.
+  let companies = prev?.companies ?? [];
+  let massiveOk = false;
+  try {
+    companies = await fetchCompanySnapshots(v.tickers, MASSIVE_KEY);
+    massiveOk = true;
+    console.log(`Massive: ${companies.length} companies`);
+  } catch (err) {
+    console.error("companies skipped:", (err as Error).message);
+  }
+  // OECD researcher-headcount statistics — Talent's stand-in for a paper
+  // corpus (see the openAlexFilter guard above). Only fetched when
+  // researcherStatsSince is set; every other vertical leaves it unset.
+  let researcherStats: Entry[] = [];
+  let oecdOk = false;
+  if (v.researcherStatsSince) {
+    try {
+      researcherStats = await fetchResearcherStats(v.researcherStatsSince);
+      oecdOk = true;
+      console.log(`OECD: ${researcherStats.length} researcher-headcount statistics`);
+    } catch (err) {
+      console.error("OECD stats skipped:", (err as Error).message);
+    }
   }
   let news: Entry[] = [];
   let rssNewsOk = false;
@@ -254,11 +315,13 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   // (recency vs. citation impact), so its own query rather than folding
   // into it. Soft-fails same as every other source.
   let topCited: Entry[] = [];
-  try {
-    topCited = await fetchTopCitedPages({ filter: v.openAlexFilter, sinceYears: TOP_CITED_SINCE_YEARS, total: TOP_CITED_TOTAL, key: OA_KEY, mailto: OA_MAILTO });
-    console.log(`OpenAlex top-cited (last ${TOP_CITED_SINCE_YEARS}y): ${topCited.length} works`);
-  } catch (err) {
-    console.error("top-cited skipped:", (err as Error).message);
+  if (v.openAlexFilter) {
+    try {
+      topCited = await fetchTopCitedPages({ filter: v.openAlexFilter, sinceYears: TOP_CITED_SINCE_YEARS, total: TOP_CITED_TOTAL, key: OA_KEY, mailto: OA_MAILTO });
+      console.log(`OpenAlex top-cited (last ${TOP_CITED_SINCE_YEARS}y): ${topCited.length} works`);
+    } catch (err) {
+      console.error("top-cited skipped:", (err as Error).message);
+    }
   }
 
   // Entries accumulate across runs, the same way trend[] does — each night's
@@ -272,7 +335,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const now = new Date().toISOString();
   const byId = new Map<string, Entry>();
   for (const e of prev?.entries ?? []) byId.set(e.id, e);
-  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews, ...topCited]) {
+  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews, ...topCited, ...researcherStats]) {
     // ingestedAt is stamped once, at first sight, and preserved on every
     // later re-fetch of the same id — it must never reset to "now" just
     // because a source returned the same entry again.
@@ -299,13 +362,16 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     (p) => p.date !== today && !Object.keys(p.counts).some((k) => ["us", "cn", "eu", "other"].includes(k))
   );
   const allEntries = [...byId.values()];
-  const trend = live.length > 0 ? [...history, trendPoint(live, allEntries)] : history;
+  const countsSource = live.length > 0 ? live : latestPerCountry(researcherStats);
+  const trend = countsSource.length > 0 ? [...history, trendPoint(countsSource, allEntries)] : history;
 
   const sourceMeta = buildSourceMeta(prev?.sourceMeta, {
     openalex: openalexOk,
     "arxiv-fallback": arxivOk,
     epo: epoOk,
     nsf: nsfOk,
+    massive: massiveOk,
+    oecd: oecdOk,
     "rss-news": rssNewsOk,
     "rss-investment": rssInvestmentOk,
     seed: seed.length > 0, // a static import, not a fetch — always "succeeds" when configured
@@ -318,6 +384,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     trend,
     notes,
     sourceMeta,
+    companies,
   };
 
   // entries[]/trend[] only ever accumulate by design (see the byId merge
