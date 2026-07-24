@@ -26,6 +26,8 @@ import { InstitutionConcentration } from "./components/InstitutionConcentration.
 import { AwardSizeHistogram } from "./components/AwardSizeHistogram.tsx";
 import { TopCitedTicker } from "./components/TopCitedTicker.tsx";
 import { CompanyMarketPanel } from "./components/CompanyMarketPanel.tsx";
+import { FundingTrend } from "./components/FundingTrend.tsx";
+import { RdSpendTrend } from "./components/RdSpendTrend.tsx";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
@@ -437,6 +439,18 @@ export default function App() {
             </div>
           )}
         </div>
+
+        <div className="panel">
+          <h3>Public investment over time <span className="drop">NSF, trailing 21d, recorded daily</span></h3>
+          <FundingTrend trend={trend21} />
+        </div>
+
+        {data?.rdSpend && data.rdSpend.length > 0 && (
+          <div className="panel">
+            <h3>Private investment over time <span className="drop">corporate R&D spend, SEC filings</span></h3>
+            <RdSpendTrend points={data.rdSpend} />
+          </div>
+        )}
 
         <div className="panel">
           <h3>Disclosed award sizes</h3>

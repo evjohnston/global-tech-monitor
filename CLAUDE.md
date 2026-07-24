@@ -231,6 +231,56 @@ No red/green color for the day's move, only a +/- sign — this app's color
 budget is the Hoover accent and country hues only (see "Design system"
 below), don't add a third semantic color use here.
 
+`fetchCompanySnapshots` fetches tickers one at a time with a 15-second gap
+between them, not all in parallel — confirmed by hand that firing a
+vertical's whole ticker list at once trips a 429 partway through on a
+5-calls/minute-shaped plan tier. It also only overwrites the carried-
+forward snapshot when at least one ticker actually succeeded (or the
+vertical has no tickers at all) — an all-failed batch used to silently
+blank a good prior snapshot instead of falling back to it. Separately, the
+snapshot (price/change) endpoint can return `403 NOT_AUTHORIZED` on a plan
+tier that only covers reference data (`ticker-overview`) — that's now
+logged explicitly rather than silently swallowed; market cap still comes
+through fine from the overview call either way.
+
+## Public vs. private investment over time
+
+Added 2026-07-24. Two real trend charts sit below "Funding by country,"
+deliberately kept as separate signals rather than merged into one number:
+
+- **Public investment** (`FundingTrend.tsx`) reads the NSF-based
+  `trend[].fundingUsd` that's been recording once per day since
+  2026-07-20 (see "Data lives on its own branch" — this field existed
+  before but had no chart of its own until now). Same US/EU-only caveat as
+  everywhere else this app touches NSF.
+- **Private investment** (`RdSpendTrend.tsx`, `DataFile.rdSpend`) is real
+  disclosed corporate R&D spend, summed across a vertical's `tickers`,
+  sourced from SEC EDGAR's XBRL API (`src/lib/sources/secEdgar.ts`,
+  `data.sec.gov` — free, no key, confirmed by hand: Nvidia's real R&D went
+  $8.68B → $12.91B → $18.50B FY2024-26). Unlike the NSF chart, full
+  multi-year history arrives on the very first successful fetch — no
+  daily accumulation needed, since SEC's API already returns a company's
+  whole filing history in one call.
+
+Two things `fetchRdSpendByYear` handles that would otherwise silently
+misrepresent the number: (1) a company that doesn't tag a standalone
+`ResearchAndDevelopmentExpense` XBRL concept — Amazon folds R&D into a
+broader "technology and infrastructure" line that mixes in non-R&D costs —
+is skipped entirely rather than force-fit with a mismatched figure; (2) a
+trailing fiscal year where not every already-covered company has filed yet
+(a company with a January fiscal-year-end, like Nvidia, reports "FY2026"
+while calendar-year-end peers are still on "FY2025") is trimmed from the
+end of the series rather than shown as a total that looks like spending
+collapsed. This only trims the *tail* — earlier years legitimately having
+fewer companies (IonQ/Rigetti/D-Wave didn't exist as public filers before
+2021-2022) are real history and are kept as-is.
+
+Never merge `rdSpend`'s totals into `fundingByCountry`/the Investment
+stage's `amountUsd` aggregate — `STAGES` defines Investment as "public
+research funding, where governments are placing money," and corporate R&D
+is a different, private thing. Keep the two charted side by side, not
+summed into one misleading "total investment" figure.
+
 ## Country attribution
 
 v4 change: there is no `Actor` bucket type anymore (`us`/`cn`/`eu`/`other`

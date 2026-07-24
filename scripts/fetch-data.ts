@@ -52,6 +52,7 @@ import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
 import { fetchResearcherStats } from "../src/lib/sources/oecd.ts";
+import { fetchRdSpendByYear } from "../src/lib/sources/secEdgar.ts";
 import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
 import { asArray } from "../src/lib/sources/util.ts";
 import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
@@ -286,6 +287,20 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   } catch (err) {
     console.error("companies skipped:", (err as Error).message);
   }
+  // Corporate R&D spend, free/no-key straight from SEC filings — a real
+  // multi-year history in one pass, no daily accumulation needed (unlike
+  // the NSF funding trend). See secEdgar.ts and DataFile.rdSpend for why
+  // this is kept separate from the NSF-based investment aggregate.
+  let rdSpend = prev?.rdSpend ?? [];
+  let secEdgarOk = false;
+  try {
+    const fetched = await fetchRdSpendByYear(v.tickers);
+    secEdgarOk = true;
+    if (fetched.length > 0 || v.tickers.length === 0) rdSpend = fetched;
+    console.log(`SEC EDGAR: R&D spend for ${fetched.length} fiscal years`);
+  } catch (err) {
+    console.error("R&D spend skipped:", (err as Error).message);
+  }
   // OECD researcher-headcount statistics — Talent's stand-in for a paper
   // corpus (see the openAlexFilter guard above). Only fetched when
   // researcherStatsSince is set; every other vertical leaves it unset.
@@ -380,6 +395,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     epo: epoOk,
     nsf: nsfOk,
     massive: massiveOk,
+    "sec-edgar": secEdgarOk,
     oecd: oecdOk,
     "rss-news": rssNewsOk,
     "rss-investment": rssInvestmentOk,
@@ -394,6 +410,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     notes,
     sourceMeta,
     companies,
+    rdSpend,
   };
 
   // entries[]/trend[] only ever accumulate by design (see the byId merge

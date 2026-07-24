@@ -62,6 +62,13 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
     coverageGaps: "OECD members + a handful of key partners (incl. China) — not full global coverage; no India, no most of Africa/South America",
   },
   {
+    key: "sec-edgar",
+    sourceName: "SEC EDGAR (corporate R&D spend)",
+    pollCadence: "nightly (GitHub Actions) — free, no key",
+    structuralLag: "10-K filings post annually, weeks after fiscal year end",
+    coverageGaps: "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit",
+  },
+  {
     key: "seed",
     sourceName: "Hand-verified seed",
     pollCadence: "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",

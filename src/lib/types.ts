@@ -141,6 +141,23 @@ export interface CompanySnapshot {
   url: string; // company homepage, from Massive's reference data
 }
 
+// One fiscal year's total disclosed corporate R&D spend, summed across a
+// vertical's tickers (see verticals.ts), sourced from real SEC EDGAR XBRL
+// filings (src/lib/sources/secEdgar.ts) — no key needed. Deliberately kept
+// separate from Entry/fundingByCountry's amountUsd aggregate: that number is
+// specifically PUBLIC research funding (NSF), matching STAGES' own
+// "Where governments are placing money" framing — corporate R&D is private
+// capital, a different thing, and mixing the two into one total would
+// misrepresent both. `companies` lists which tickers actually contributed
+// (a company with no clean XBRL R&D concept, e.g. Amazon folds R&D into a
+// broader "technology and infrastructure" line with no standalone tag, is
+// skipped rather than force-fit — see secEdgar.ts).
+export interface RdSpendPoint {
+  fiscalYear: number; // calendar year of the fiscal-period end date
+  totalUsd: number;
+  companies: { symbol: string; amountUsd: number }[];
+}
+
 // The shape of the committed data file the app reads at load.
 export interface DataFile {
   technology: string; // vertical id — see src/lib/verticals.ts, e.g. "quantum-computing"
@@ -152,6 +169,9 @@ export interface DataFile {
   // Optional: absent entirely on data files built before this existed, or
   // when MASSIVE_KEY isn't set (soft-fails like every other source here).
   companies?: CompanySnapshot[];
+  // Optional: absent when no ticker in this vertical has a usable SEC XBRL
+  // R&D concept, or on data files built before this existed.
+  rdSpend?: RdSpendPoint[];
 }
 
 export const STAGES: { id: Stage; label: string; blurb: string }[] = [
