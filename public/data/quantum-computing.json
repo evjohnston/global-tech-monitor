@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-24T05:41:44.059Z",
+  "generatedAt": "2026-07-24T08:09:53.781Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -47325,6 +47325,64 @@
       "ingestedAt": "2026-07-24T01:52:31.760Z",
       "orgId": "the worcester guardian",
       "relevanceScore": 0.7
+    },
+    {
+      "id": "nsf-2617356",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "AF: Quantum algorithms for finding versus detecting",
+      "org": "University of Maryland, College Park",
+      "date": "2026-07-23",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2617356",
+      "amountUsd": 988344,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Computers that operate according to the principles of quantum mechanics have the potential to dramatically outperform conventional computers at solving certain problems. This capability could have wide-ranging technological and social impact, such as through the simulation of chemistry and materials. However, the types of problems for which quantum computers can provide an advantage, and the extent of the possible speedup, are not well understood. A crucial aspect of the power of quantum computers that remains unclear is the relationship between the difficulty of determining whether a solution exists and the difficulty of actually finding such a solution. This project will explore the interplay between these two tasks, seeking to develop quantum algorithms for finding solutions and to understand cases where finding a solution is much harder than detecting one. By investigating the power of quantum computers through this lens, the project has the potential to significantly advance our understanding of what quantum algorithms are good at, how to design them, and what problems are challenging even for quantum computers. The project will also support development of the quantum workforce through the training of students.\r\n\r\nThis project will explore quantum algorithms for detecting and finding solutions to computational problems through three main research threads. First, it will study the task of finding paths in graphs. It will address the longstanding open question of whether a quantum computer can efficiently find a path through the so-called welded tree graph, a setting where a quantum algorithm can navigate a graph exponentially faster than any classical algorithm, without recording its route. It will also explore path-finding problems more generally, aiming to establish the fastest possible algorithms for finding paths between designated vertices in arbitrary graphs and to compare this task with merely detecting whether such a path exists. Second, the project will explore the relative difficulty of finding and detecting solutions in more general settings. Intuitively, finding a solution is easier for problems that have small certificates, meaning that the solution can be identified by looking at only a small part of the input. The project will investigate whether large separations between finding and detecting are possible even for problems with small certificates. In addition, the project will explore the power of divide-and-conquer strategies for quantum algorithms, aiming to generalize recent advances for search problems and apply them to develop new algorithms. Third, the project will explore the ability of quantum computers to answer questions about random oracles. While Yamakawa and Zhandry showed that random oracles permit an exponential quantum speedup for search problems, it is a longstanding conjecture that such a separation is not possible for decision problems. The project will aim to make progress on this conjecture from two directions: ruling out such speedups for particular classes of algorithms and trying to identify the largest possible polynomial separation.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Andrew M Childs"
+      ],
+      "venue": "ALGORITHMS, QUANTUM COMPUTING",
+      "ingestedAt": "2026-07-24T08:09:53.781Z",
+      "orgId": "university of maryland college park",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2629828",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "EAGER: Quantum-inspired Electronic Structure",
+      "org": "Indiana University",
+      "date": "2026-07-23",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2629828",
+      "amountUsd": 240169,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Nick Mayhall of Virginia Tech is supported by an award from the Chemical Theory, Models and Computational Methods program in the Division of Chemistry to develop quantum-inspired electronic structure theory methods. Computational chemistry has become an invaluable resource for predicting and understanding the microscopic origins of chemical reactivity and structure. While both computer hardware and simulation algorithms have witnessed continued improvements over the years, many chemistry problems remain unanswered due to insurmountable computational costs, a situation which has fueled intense interest in leveraging quantum computation for solving chemistry problems. However, because of the fundamental differences between quantum and classical computers, chemistry simulation methods can’t simply be ported from classical over to quantum devices, making it necessary to design altogether new algorithms for deployment on quantum devices. In this project, Nick Mayhall and his research group will leverage ideas and components found in these new quantum algorithms to develop novel classical algorithms for chemistry simulation on currently available classical computers. The goal is to find ways to make use of these quantum algorithmic advances now, instead of waiting until reliable and accurate quantum computers become available. This work will provide publicly available, open-source software, while also addressing our nation’s need for quantum workforce development. \r\n\r\nNick Mayhall and his research group will adapt techniques developed for ‘noisy intermediate-scale quantum’ (NISQ) circuit simulations to make them suitable for accelerating electronic structure calculations on classical computers. This project is divided into 3 main objectives: 1) the development of efficient algorithms and open-source software to compute Heisenberg picture expectation values to accelerate the computation of relevant observables like molecular energy, 2) the development electronic structure methods that exploit the unique aspects of the Heisenberg picture computations, and 3) the application of NISQ error mitigation techniques to improve the classical methods developed. The methods developed in this project will be implemented into open-source software, while providing QIS training to chemistry students and postdocs to continue our efforts to help strengthen the quantum workforce.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Nicholas J Mayhall"
+      ],
+      "venue": "QUANTUM INFORMATION SCIENCE, EAGER",
+      "ingestedAt": "2026-07-24T08:09:53.781Z",
+      "orgId": "indiana university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "rss-palsberg-colleagues-presents-language-classification-framework-quantum",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Palsberg and Colleagues Presents Language Classification Framework for Quantum Programming",
+      "org": "Quantum Zeitgeist",
+      "date": "2026-07-24",
+      "url": "https://quantumzeitgeist.com/palsberg-colleagues-presents-language-classification-framework-quantum/",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Fifty benchmark programs now have concrete implementations across ten quantum programming languages, a level of detail previously absent from field surveys. This work moves beyond theoretical language features by measuring program size, compilation time and correctness with an automated testing harness. Such comparative analysis guides future development and highlights areas for improvement in quantum language design.",
+      "ingestedAt": "2026-07-24T08:09:53.781Z",
+      "orgId": "quantum zeitgeist",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -49741,11 +49799,11 @@
       "stageCounts": {
         "innovation": 702,
         "scaling": 71,
-        "adoption": 41,
-        "investment": 110
+        "adoption": 42,
+        "investment": 112
       },
-      "fundingUsd": 87110066,
-      "totalEntries": 2342
+      "fundingUsd": 88338579,
+      "totalEntries": 2345
     }
   ],
   "notes": [
@@ -49781,7 +49839,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-24T05:41:44.059Z",
+      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -49802,28 +49860,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-24T05:41:44.059Z",
+      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-24T05:41:44.059Z",
+      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-24T05:41:44.059Z",
+      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-24T05:41:44.059Z",
+      "lastSuccessfulPull": "2026-07-24T08:09:53.781Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
