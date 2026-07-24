@@ -271,8 +271,17 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   let companies = prev?.companies ?? [];
   let massiveOk = false;
   try {
-    companies = await fetchCompanySnapshots(v.tickers, MASSIVE_KEY);
+    const fetched = await fetchCompanySnapshots(v.tickers, MASSIVE_KEY);
     massiveOk = true;
+    // fetchCompanySnapshots resolves (doesn't throw) even when every
+    // individual ticker in the batch failed — e.g. a rate limit hit
+    // mid-run — so an empty result here isn't reliably "nothing to show,"
+    // it's often "this run failed entirely." Only overwrite the
+    // carried-forward snapshot when something real came back, or when the
+    // vertical genuinely has no tickers configured (Talent) — otherwise a
+    // rate limit would blank an otherwise-good panel instead of just
+    // leaving yesterday's real numbers in place.
+    if (fetched.length > 0 || v.tickers.length === 0) companies = fetched;
     console.log(`Massive: ${companies.length} companies`);
   } catch (err) {
     console.error("companies skipped:", (err as Error).message);

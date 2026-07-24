@@ -40,7 +40,17 @@ async function fetchOne(symbol: string, apiKey: string): Promise<CompanySnapshot
     if (!ovRes.ok) throw new Error(`overview HTTP ${ovRes.status}`);
     const ov = ((await ovRes.json()) as { results?: TickerOverviewResult }).results ?? {};
     let snap: SnapshotTicker = {};
-    if (snapRes.ok) snap = ((await snapRes.json()) as { ticker?: SnapshotTicker }).ticker ?? {};
+    if (snapRes.ok) {
+      snap = ((await snapRes.json()) as { ticker?: SnapshotTicker }).ticker ?? {};
+    } else {
+      // Logged, not thrown — market cap (from the overview call above) is
+      // still real and worth keeping even when the snapshot call fails on
+      // its own (seen in practice: a plan tier with reference-data access
+      // but not real-time quotes returns 403 NOT_AUTHORIZED here). Silently
+      // swallowing this would hide a real, ongoing gap in the price/
+      // change fields rather than a one-off transient failure.
+      console.error(`massive: ${symbol} snapshot HTTP ${snapRes.status} (market cap only, no price/change)`);
+    }
     return {
       symbol,
       name: ov.name ?? symbol,
@@ -56,8 +66,23 @@ async function fetchOne(symbol: string, apiKey: string): Promise<CompanySnapshot
   }
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Fetched one ticker at a time with a gap between each, not all in
+// parallel — confirmed by hand (2026-07-24) that firing every ticker's pair
+// of calls at once trips a 429 partway through a 6-ticker vertical (each
+// ticker costs 2 calls; a common free-tier stock-API budget is ~5
+// calls/minute). This is a background job on a 3-hour cadence, so the
+// extra runtime (a few tickers/minute) costs nothing real; a 429 mid-batch
+// would otherwise drop companies that had nothing wrong with them.
+const TICKER_GAP_MS = 15000;
+
 export async function fetchCompanySnapshots(symbols: string[], apiKey: string): Promise<CompanySnapshot[]> {
   if (!apiKey) throw new Error("MASSIVE_KEY not set");
-  const results = await Promise.all(symbols.map((s) => fetchOne(s, apiKey)));
+  const results: (CompanySnapshot | null)[] = [];
+  for (let i = 0; i < symbols.length; i++) {
+    if (i > 0) await sleep(TICKER_GAP_MS);
+    results.push(await fetchOne(symbols[i], apiKey));
+  }
   return results.filter((r): r is CompanySnapshot => r !== null);
 }
