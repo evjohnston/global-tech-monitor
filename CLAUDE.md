@@ -281,6 +281,40 @@ research funding, where governments are placing money," and corporate R&D
 is a different, private thing. Keep the two charted side by side, not
 summed into one misleading "total investment" figure.
 
+## Private funding rounds — a third `SourceKind` in the Investment stage
+
+Added 2026-07-24. There's no free, reliable API for this (Crunchbase's full
+API needs a paid Enterprise/Applications license, no free tier; SEC Form D
+filings are real and free but too noisy — searching "Anthropic" turns up
+109 hits, nearly all secondary-market SPVs referencing the name rather than
+Anthropic's own primary rounds). So this is hand-curated, same pattern as
+`data/<vertical>/seed.ts`'s scaling/adoption milestones: real private
+capital raises, `source: "funding-round"`, `stage: "investment"`,
+individually verified against the announcement before being added (15
+quantum rounds, 17 AI rounds, built via two parallel research passes then
+spot-checked by hand against three of the largest/most surprising figures —
+Anthropic's Series H, OpenAI's round, PsiQuantum's Series E — before
+trusting the rest). Excludes already-public companies in each vertical's
+`tickers` list — their capital story is the public-markets panel and the
+R&D-spend chart instead, not a seeded entry here.
+
+**This is why `fundingByCountry` and `periodFunding` in `aggregate.ts` now
+filter to `source === "grant"` explicitly, not just `stage === "investment"`
+— they used to assume the stage was NSF-only by construction.** Without
+that filter, a single Anthropic round would swamp the "Disclosed
+investment" KPI, the "Funding by country" bar chart, and the "Public
+investment over time" trend line, all three of which are specifically
+supposed to read as the NSF/public number (confirmed the failure mode is
+real before shipping the fix: AI's actual data had $267B of private rounds
+against $230M of real NSF grants — a 1000x distortion if merged).
+`AwardSizeHistogram` already filtered to `source === "grant"` before this
+change and needed no fix. Funding-round entries still show up everywhere
+else Entry-shaped data normally does — RecentEntries, the map, the
+Investment stage's pipeline column (with its own "Funding round" filter
+chip in `StageColumn.tsx`), EntryModal drill-down — since browsing them
+individually is exactly the point; only the dollar *aggregates* need the
+NSF-only guard.
+
 ## Country attribution
 
 v4 change: there is no `Actor` bucket type anymore (`us`/`cn`/`eu`/`other`

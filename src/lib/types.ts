@@ -19,7 +19,8 @@ export type SourceKind =
   | "deployment" // commercial or govt adoption (adoption)
   | "grant" // research funding award (investment) — NSF, real awardee data
   | "news" // funding/investment news, auto-classified (investment) — Google News RSS, keyword-guessed
-  | "statistic"; // official government/international-org statistic (innovation) — OECD, real reported data, no institution
+  | "statistic" // official government/international-org statistic (innovation) — OECD, real reported data, no institution
+  | "funding-round"; // private capital raise (investment) — hand-verified seed data, NOT public funding; kept out of fundingByCountry/periodFunding's NSF-only sum, see aggregate.ts
 
 export interface Entry {
   id: string; // stable, dedupe key

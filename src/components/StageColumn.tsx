@@ -29,7 +29,8 @@ interface SortOption {
 // `provenance` (seeded = hand-verified milestone, "Verified"; auto = RSS-
 // classified, "News" — same framing as the badges Card.tsx already shows).
 // Investment splits on `source` too (grant = NSF live award, news =
-// Google-News auto-classified funding story).
+// Google-News auto-classified funding story, funding-round = hand-verified
+// private capital raise — see data/<vertical>/seed.ts).
 const TYPE_FILTERS: Record<Stage, TypeFilterOption[]> = {
   innovation: [
     { key: "paper", label: "Paper", test: (e) => e.source === "paper" || e.source === "arxiv" },
@@ -45,6 +46,7 @@ const TYPE_FILTERS: Record<Stage, TypeFilterOption[]> = {
   ],
   investment: [
     { key: "grant", label: "Grant", test: (e) => e.source === "grant" },
+    { key: "round", label: "Funding round", test: (e) => e.source === "funding-round" },
     { key: "news", label: "News", test: (e) => e.source === "news" },
   ],
 };

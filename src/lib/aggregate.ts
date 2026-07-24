@@ -29,10 +29,21 @@ export function weightByCountry(entries: Entry[], stage?: Stage): Record<string,
 }
 
 // Sum funding amounts by country (investment stage).
+// NSF grants only (source === "grant"), same restriction as
+// AwardSizeHistogram — a hand-verified private funding-round entry
+// (source: "funding-round", data/<vertical>/seed.ts) is real money into a
+// company, but it's private capital, not "public research funding, where
+// governments are placing money" (STAGES' own definition of this stage).
+// Mixing the two into this sum would misrepresent both the public-funding
+// figure this feeds (the KPI row, this bar chart, the trend chart) and the
+// private-investment data itself, which is better read in its own right —
+// see RecentEntries/StageColumn/the map, which show every investment-stage
+// entry regardless of source and are the right place to browse funding
+// rounds individually.
 export function fundingByCountry(entries: Entry[]): Record<string, number> {
   const out: Record<string, number> = {};
   for (const e of entries) {
-    if (e.stage !== "investment" || !e.country) continue;
+    if (e.stage !== "investment" || e.source !== "grant" || !e.country) continue;
     out[e.country] = (out[e.country] ?? 0) + (e.amountUsd ?? 0);
   }
   return out;
@@ -120,6 +131,10 @@ export function periodCounts(
   return { current, previous };
 }
 
+// Same NSF-only restriction as fundingByCountry above, and for the same
+// reason — this feeds the "Disclosed investment" KPI and the "Public
+// investment over time" trend chart, both explicitly the public-funding
+// number, not a blend with private funding-round entries.
 export function periodFunding(
   entries: Entry[],
   windowDays: number,
@@ -132,7 +147,7 @@ export function periodFunding(
   let current = 0;
   let previous = 0;
   for (const e of entries) {
-    if (e.stage !== "investment" || !e.date) continue;
+    if (e.stage !== "investment" || e.source !== "grant" || !e.date) continue;
     const d = new Date(e.date).getTime();
     if (Number.isNaN(d)) continue;
     const amt = e.amountUsd ?? 0;
