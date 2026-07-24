@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-23T21:58:11.411Z",
+  "generatedAt": "2026-07-24T01:52:31.760Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -47309,6 +47309,22 @@
       "ingestedAt": "2026-07-23T21:58:11.411Z",
       "orgId": "quantum computing report",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "gnews-WUyTkNkUjk1UUt4dVBjWjJpUHpWUk54VmdqNlc5ckk4cDhhUURHWHJUejZZVWdURw-oc-5",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "auto",
+      "source": "news",
+      "title": "WPI lands $600K NSF grant to help high school teachers bring quantum computing into classrooms",
+      "org": "The Worcester Guardian",
+      "date": "2026-07-23",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTUpNNDBTdFVOSWxjQnpnTlNEcTZpQ0NXOU5FMDFnV2pqaklGbjlqRXBiU182cEFBd1FNcGp6b3VOS2d6ZlFCelR1R3VraC0xcV9qNTlkTE1QOGZhMm85alpwMXE0SGwzWkh2ckE1MFVMakJ2d09HRjB0azU1LWZibmNGdTBySElRWlY4V3YtTzU4MjgtTlZCSWUyTkNkUjk1UUt4dVBjWjJpUHpWUk54VmdqNlc5ckk4cDhhUURHWHJUejZZVWdURw?oc=5",
+      "countryEvidence": "matched \"NSF\" (auto-classified from Google News RSS, unverified)",
+      "abstract": "WPI lands $600K NSF grant to help high school teachers bring quantum computing into classrooms The Worcester Guardian",
+      "ingestedAt": "2026-07-24T01:52:31.760Z",
+      "orgId": "the worcester guardian",
+      "relevanceScore": 0.7
     }
   ],
   "trend": [
@@ -49662,6 +49678,74 @@
       },
       "fundingUsd": 87110066,
       "totalEntries": 2341
+    },
+    {
+      "date": "2026-07-24",
+      "counts": {
+        "CN": 101,
+        "IR": 6,
+        "IN": 38,
+        "DE": 20,
+        "JP": 22,
+        "LB": 1,
+        "CA": 8,
+        "US": 52,
+        "RU": 16,
+        "AU": 7,
+        "BR": 4,
+        "CL": 2,
+        "GB": 7,
+        "CH": 4,
+        "ID": 4,
+        "IT": 12,
+        "PL": 7,
+        "PT": 2,
+        "TH": 1,
+        "LY": 1,
+        "VE": 1,
+        "ZA": 2,
+        "HK": 5,
+        "FR": 12,
+        "BD": 6,
+        "KR": 6,
+        "TW": 2,
+        "SG": 3,
+        "PE": 1,
+        "MX": 2,
+        "RO": 1,
+        "VN": 2,
+        "ES": 3,
+        "HU": 1,
+        "SE": 4,
+        "TR": 4,
+        "AT": 2,
+        "NL": 2,
+        "DK": 3,
+        "IL": 3,
+        "GR": 1,
+        "SA": 6,
+        "IQ": 1,
+        "PK": 1,
+        "FI": 1,
+        "UA": 1,
+        "AR": 1,
+        "SI": 1,
+        "CO": 1,
+        "EG": 1,
+        "BG": 1,
+        "NO": 1,
+        "MT": 1,
+        "KP": 1,
+        "AE": 1
+      },
+      "stageCounts": {
+        "innovation": 702,
+        "scaling": 71,
+        "adoption": 41,
+        "investment": 110
+      },
+      "fundingUsd": 87110066,
+      "totalEntries": 2342
     }
   ],
   "notes": [
@@ -49697,7 +49781,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
+      "lastSuccessfulPull": "2026-07-24T01:52:31.760Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -49718,28 +49802,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
+      "lastSuccessfulPull": "2026-07-24T01:52:31.760Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
+      "lastSuccessfulPull": "2026-07-24T01:52:31.760Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
+      "lastSuccessfulPull": "2026-07-24T01:52:31.760Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-23T21:58:11.411Z",
+      "lastSuccessfulPull": "2026-07-24T01:52:31.760Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
