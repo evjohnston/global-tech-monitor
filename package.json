@@ -12,9 +12,11 @@
     "backfill-trend": "tsx scripts/backfill-trend.ts",
     "backfill-entries": "tsx scripts/backfill-entries.ts",
     "gen-continent-map": "tsx scripts/gen-continent-map.ts",
+    "form-d-sector-tracker": "tsx scripts/form-d-sector-tracker.ts",
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
+    "adm-zip": "^0.6.0",
     "d3-geo": "^3.1.1",
     "i18n-iso-countries": "^7.14.0",
     "react": "^18.3.1",
@@ -23,6 +25,7 @@
     "world-atlas": "^2.0.2"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.8",
     "@types/node": "^26.1.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

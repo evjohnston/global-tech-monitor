@@ -662,6 +662,14 @@ npm run fetch-data       # loops over every VERTICALS entry, writes public/data/
 npm run backfill-trend -- <vertical-id>   # one-time: reconstructs past trend[] history from real OpenAlex dates (defaults to quantum-computing)
 npm run backfill-entries -- <vertical-id> # one-off top-up: deep OpenAlex/NSF pull merged into entries[] (defaults to quantum-computing)
 npm run gen-continent-map # regenerate src/lib/continentMap.ts (only if the ISO list changes)
+npm run form-d-sector-tracker -- <n>  # standalone research script (NOT part of the app's data
+                          # pipeline) — pulls the n most recent SEC Form D bulk quarterly
+                          # datasets, dedupes D/A amendments, excludes pooled-investment-fund
+                          # filings, and writes output/form-d-by-sector.csv (gitignored, real
+                          # generated data). Edit SECTORS_OF_INTEREST at the top of
+                          # scripts/form-d-sector-tracker.ts to change which of EDGAR's real
+                          # INDUSTRYGROUPTYPE values get included — the full real taxonomy
+                          # prints to the console on every run.
 npm run dev
 npm run build
 npm run typecheck

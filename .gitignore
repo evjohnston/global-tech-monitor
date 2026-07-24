@@ -12,3 +12,8 @@ dist
 # before pushing just because the bot ran. The files still exist on disk
 # after `npm run fetch-data` — git just stops caring about them here.
 public/data/*.json
+
+# Generated output from one-off research scripts (e.g. form-d-sector-
+# tracker.ts) — real data, but it's a local analysis artifact regenerated
+# on demand, not something the app or CI reads.
+output/
