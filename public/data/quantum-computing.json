@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-24T22:17:06.841Z",
+  "generatedAt": "2026-07-24T22:51:38.473Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -52948,8 +52948,61 @@
     {
       "date": "2026-07-24",
       "counts": {
-        "US": 2,
-        "CH": 1
+        "CN": 101,
+        "IR": 6,
+        "IN": 38,
+        "DE": 20,
+        "JP": 22,
+        "LB": 1,
+        "CA": 8,
+        "US": 52,
+        "RU": 16,
+        "AU": 7,
+        "BR": 4,
+        "CL": 2,
+        "GB": 7,
+        "CH": 4,
+        "ID": 4,
+        "IT": 12,
+        "PL": 7,
+        "PT": 2,
+        "TH": 1,
+        "LY": 1,
+        "VE": 1,
+        "ZA": 2,
+        "HK": 5,
+        "FR": 12,
+        "BD": 6,
+        "KR": 6,
+        "TW": 2,
+        "SG": 3,
+        "PE": 1,
+        "MX": 2,
+        "RO": 1,
+        "VN": 2,
+        "ES": 3,
+        "HU": 1,
+        "SE": 4,
+        "TR": 4,
+        "AT": 2,
+        "NL": 2,
+        "DK": 3,
+        "IL": 3,
+        "GR": 1,
+        "SA": 6,
+        "IQ": 1,
+        "PK": 1,
+        "FI": 1,
+        "UA": 1,
+        "AR": 1,
+        "SI": 1,
+        "CO": 1,
+        "EG": 1,
+        "BG": 1,
+        "NO": 1,
+        "MT": 1,
+        "KP": 1,
+        "AE": 1
       },
       "stageCounts": {
         "innovation": 902,
@@ -52994,7 +53047,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-24T22:07:05.104Z",
+      "lastSuccessfulPull": "2026-07-24T22:51:38.473Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -53015,28 +53068,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-24T22:17:06.841Z",
+      "lastSuccessfulPull": "2026-07-24T22:51:38.473Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-24T22:17:06.841Z",
+      "lastSuccessfulPull": "2026-07-24T22:51:38.473Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-24T22:17:06.841Z",
+      "lastSuccessfulPull": "2026-07-24T22:51:38.473Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-24T22:17:06.841Z",
+      "lastSuccessfulPull": "2026-07-24T22:51:38.473Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
@@ -53049,8 +53102,15 @@
       "coverageGaps": "OECD members + a handful of key partners (incl. China) — not full global coverage; no India, no most of Africa/South America"
     },
     {
+      "sourceName": "SEC EDGAR (corporate R&D spend)",
+      "lastSuccessfulPull": "2026-07-24T22:51:38.473Z",
+      "pollCadence": "nightly (GitHub Actions) — free, no key",
+      "structuralLag": "10-K filings post annually, weeks after fiscal year end",
+      "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
+    },
+    {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-24T22:17:06.841Z",
+      "lastSuccessfulPull": "2026-07-24T22:51:38.473Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -53061,43 +53121,427 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 12717307128.36,
-      "asOf": "2026-07-24T22:15:45.262Z",
+      "asOf": "2026-07-24T22:50:18.934Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 4936122283.95,
-      "asOf": "2026-07-24T22:16:00.485Z",
+      "asOf": "2026-07-24T22:50:33.992Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc.",
       "marketCapUsd": 6334612407.000001,
-      "asOf": "2026-07-24T22:16:15.736Z",
+      "asOf": "2026-07-24T22:50:49.037Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 194692071693.5,
-      "asOf": "2026-07-24T22:16:30.950Z",
+      "asOf": "2026-07-24T22:51:04.095Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3885327996460.39,
-      "asOf": "2026-07-24T22:16:46.172Z",
+      "asOf": "2026-07-24T22:51:19.290Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 78024876684.93001,
-      "asOf": "2026-07-24T22:17:01.392Z",
+      "asOf": "2026-07-24T22:51:34.343Z",
       "url": "https://www.honeywell.com"
+    }
+  ],
+  "rdSpend": [
+    {
+      "fiscalYear": 2007,
+      "totalUsd": 6153000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 6153000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2008,
+      "totalUsd": 7880000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 6337000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1543000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2009,
+      "totalUsd": 7141000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5820000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1321000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2010,
+      "totalUsd": 7476000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 6026000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1450000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2011,
+      "totalUsd": 8057000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 6258000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1799000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2012,
+      "totalUsd": 7663000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5816000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1847000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2013,
+      "totalUsd": 14684000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5743000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 7137000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1804000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2014,
+      "totalUsd": 17161000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5437000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 9832000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1892000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2015,
+      "totalUsd": 19385000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5247000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 12282000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1856000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2016,
+      "totalUsd": 21538000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5726000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 13948000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1864000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2017,
+      "totalUsd": 24050000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5590000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 16625000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1835000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2018,
+      "totalUsd": 28607000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5379000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 21419000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1809000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2019,
+      "totalUsd": 33484000000,
+      "companies": [
+        {
+          "symbol": "IBM",
+          "amountUsd": 5910000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 26018000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1556000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2020,
+      "totalUsd": 35199568000,
+      "companies": [
+        {
+          "symbol": "IONQ",
+          "amountUsd": 10157000
+        },
+        {
+          "symbol": "QBTS",
+          "amountUsd": 20411000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6262000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 27573000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1334000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2021,
+      "totalUsd": 39455557000,
+      "companies": [
+        {
+          "symbol": "IONQ",
+          "amountUsd": 20228000
+        },
+        {
+          "symbol": "RGTI",
+          "amountUsd": 26928000
+        },
+        {
+          "symbol": "QBTS",
+          "amountUsd": 25401000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6488000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 31562000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1333000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2022,
+      "totalUsd": 47681031000,
+      "companies": [
+        {
+          "symbol": "IONQ",
+          "amountUsd": 43978000
+        },
+        {
+          "symbol": "RGTI",
+          "amountUsd": 59952000
+        },
+        {
+          "symbol": "QBTS",
+          "amountUsd": 32101000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6567000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 39500000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1478000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2023,
+      "totalUsd": 53759967000,
+      "companies": [
+        {
+          "symbol": "IONQ",
+          "amountUsd": 92321000
+        },
+        {
+          "symbol": "RGTI",
+          "amountUsd": 52768000
+        },
+        {
+          "symbol": "QBTS",
+          "amountUsd": 37878000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6775000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 45427000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1375000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2024,
+      "totalUsd": 58480877000,
+      "companies": [
+        {
+          "symbol": "IONQ",
+          "amountUsd": 136827000
+        },
+        {
+          "symbol": "RGTI",
+          "amountUsd": 49750000
+        },
+        {
+          "symbol": "QBTS",
+          "amountUsd": 35300000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 7479000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 49326000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1454000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2025,
+      "totalUsd": 71632784000,
+      "companies": [
+        {
+          "symbol": "IONQ",
+          "amountUsd": 305705000
+        },
+        {
+          "symbol": "RGTI",
+          "amountUsd": 61345000
+        },
+        {
+          "symbol": "QBTS",
+          "amountUsd": 50734000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 8316000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 61087000000
+        },
+        {
+          "symbol": "HON",
+          "amountUsd": 1812000000
+        }
+      ]
     }
   ]
 }

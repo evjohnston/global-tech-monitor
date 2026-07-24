@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-07-24T22:18:29.617Z",
+  "generatedAt": "2026-07-24T22:53:02.553Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -80485,7 +80485,64 @@
     },
     {
       "date": "2026-07-24",
-      "counts": {},
+      "counts": {
+        "US": 110,
+        "DE": 13,
+        "PL": 11,
+        "FR": 9,
+        "TH": 3,
+        "AU": 5,
+        "HK": 2,
+        "CA": 13,
+        "KR": 16,
+        "CN": 124,
+        "TW": 5,
+        "BR": 1,
+        "CH": 1,
+        "AE": 2,
+        "JO": 2,
+        "IN": 34,
+        "IR": 3,
+        "GB": 5,
+        "OM": 1,
+        "SA": 7,
+        "ID": 10,
+        "TR": 5,
+        "MA": 3,
+        "LB": 1,
+        "GR": 4,
+        "IT": 7,
+        "JP": 3,
+        "VN": 6,
+        "SE": 1,
+        "BG": 1,
+        "RU": 4,
+        "IQ": 2,
+        "ES": 10,
+        "NG": 1,
+        "NO": 1,
+        "PK": 4,
+        "SK": 1,
+        "HR": 1,
+        "IL": 2,
+        "PT": 2,
+        "CL": 3,
+        "MK": 1,
+        "LK": 1,
+        "MO": 2,
+        "FI": 1,
+        "MX": 1,
+        "IE": 1,
+        "RO": 1,
+        "AT": 1,
+        "SG": 3,
+        "TN": 1,
+        "MY": 3,
+        "SI": 1,
+        "EG": 1,
+        "EC": 1,
+        "BE": 1
+      },
       "stageCounts": {
         "innovation": 2794,
         "scaling": 16,
@@ -80529,7 +80586,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-24T22:07:18.733Z",
+      "lastSuccessfulPull": "2026-07-24T22:53:02.553Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -80550,28 +80607,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-24T22:18:29.617Z",
+      "lastSuccessfulPull": "2026-07-24T22:53:02.553Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-24T22:18:29.617Z",
+      "lastSuccessfulPull": "2026-07-24T22:53:02.553Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-24T22:18:29.617Z",
+      "lastSuccessfulPull": "2026-07-24T22:53:02.553Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-24T22:18:29.617Z",
+      "lastSuccessfulPull": "2026-07-24T22:53:02.553Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
@@ -80584,8 +80641,15 @@
       "coverageGaps": "OECD members + a handful of key partners (incl. China) — not full global coverage; no India, no most of Africa/South America"
     },
     {
+      "sourceName": "SEC EDGAR (corporate R&D spend)",
+      "lastSuccessfulPull": "2026-07-24T22:53:02.553Z",
+      "pollCadence": "nightly (GitHub Actions) — free, no key",
+      "structuralLag": "10-K filings post annually, weeks after fiscal year end",
+      "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
+    },
+    {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-24T22:18:29.617Z",
+      "lastSuccessfulPull": "2026-07-24T22:53:02.553Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -80596,43 +80660,445 @@
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5056375960000,
-      "asOf": "2026-07-24T22:17:11.302Z",
+      "asOf": "2026-07-24T22:51:42.068Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 2834542114352.32,
-      "asOf": "2026-07-24T22:17:26.549Z",
+      "asOf": "2026-07-24T22:51:57.122Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3885327996460.39,
-      "asOf": "2026-07-24T22:17:41.769Z",
+      "asOf": "2026-07-24T22:52:12.173Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "META",
       "name": "Meta Platforms, Inc. Class A Common Stock",
       "marketCapUsd": 1538538364554.4001,
-      "asOf": "2026-07-24T22:17:57.070Z",
+      "asOf": "2026-07-24T22:52:27.220Z",
       "url": "https://about.meta.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2513506190815.76,
-      "asOf": "2026-07-24T22:18:12.313Z",
+      "asOf": "2026-07-24T22:52:42.264Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "PLTR",
       "name": "Palantir Technologies Inc. Class A Common Stock",
       "marketCapUsd": 295756378602.49,
-      "asOf": "2026-07-24T22:18:27.564Z",
+      "asOf": "2026-07-24T22:52:57.308Z",
       "url": "https://www.palantir.com"
+    }
+  ],
+  "rdSpend": [
+    {
+      "fiscalYear": 2008,
+      "totalUsd": 8855637000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 691637000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 8164000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2009,
+      "totalUsd": 9865879000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 855879000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 9010000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2010,
+      "totalUsd": 9766851000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 908851000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 8714000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 144000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2011,
+      "totalUsd": 10279830000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 848830000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 9043000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 388000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2012,
+      "totalUsd": 12212605000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 1002605000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 9811000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 1399000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2013,
+      "totalUsd": 20110282000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 1147282000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 10411000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 7137000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 1415000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2014,
+      "totalUsd": 25215000000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 1336000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 11381000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 9832000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 2666000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2015,
+      "totalUsd": 30504000000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 1360000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 12046000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 12282000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 4816000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2016,
+      "totalUsd": 33186000000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 1331000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 11988000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 13948000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 5919000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2017,
+      "totalUsd": 38879000000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 1463000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 13037000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 16625000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 7754000000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2018,
+      "totalUsd": 48500451000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 1797000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 14726000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 21419000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 10273000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 285451000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2019,
+      "totalUsd": 59175563000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 2376000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 16876000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 26018000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 13600000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 305563000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2020,
+      "totalUsd": 68678660000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 2829000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 19269000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 27573000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 18447000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 560660000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2021,
+      "totalUsd": 81244487000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 3924000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 20716000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 31562000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 24655000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 387487000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2022,
+      "totalUsd": 104977679000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 5268000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 24512000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 39500000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 35338000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 359679000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2023,
+      "totalUsd": 118848624000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 7339000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 27195000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 45427000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 38483000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 404624000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2024,
+      "totalUsd": 131891878000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 8675000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 29510000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 49326000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 43873000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 507878000
+        }
+      ]
+    },
+    {
+      "fiscalYear": 2025,
+      "totalUsd": 164418677000,
+      "companies": [
+        {
+          "symbol": "NVDA",
+          "amountUsd": 12914000000
+        },
+        {
+          "symbol": "MSFT",
+          "amountUsd": 32488000000
+        },
+        {
+          "symbol": "GOOGL",
+          "amountUsd": 61087000000
+        },
+        {
+          "symbol": "META",
+          "amountUsd": 57372000000
+        },
+        {
+          "symbol": "PLTR",
+          "amountUsd": 557677000
+        }
+      ]
     }
   ]
 }
