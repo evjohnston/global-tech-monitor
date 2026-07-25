@@ -28,7 +28,10 @@ import { TopCitedTicker } from "./components/TopCitedTicker.tsx";
 import { CompanyMarketPanel } from "./components/CompanyMarketPanel.tsx";
 import { FundingTrend } from "./components/FundingTrend.tsx";
 import { RdSpendTrend } from "./components/RdSpendTrend.tsx";
+import { RdSpendBreakdown } from "./components/RdSpendBreakdown.tsx";
 import { VcFundingLeaderboard } from "./components/VcFundingLeaderboard.tsx";
+import { InvestorLeaderboard } from "./components/InvestorLeaderboard.tsx";
+import { buildOrgFinancialIndex, lookupOrgFinancials } from "./lib/orgFinancials.ts";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
@@ -165,6 +168,19 @@ export default function App() {
   // outright (gtm-claude-code-spec.md Part 1).
   const innovationPeriod = useMemo(() => periodCounts(shown, "innovation", WINDOW_DAYS), [shown]);
   const fundingPeriod = useMemo(() => periodFunding(shown, WINDOW_DAYS), [shown]);
+
+  // Cross-source org join (public markets / VC funding / R&D spend) — see
+  // src/lib/orgFinancials.ts. Built once per data load, looked up per
+  // selected entry when the modal opens.
+  const orgFinancialIndex = useMemo(() => buildOrgFinancialIndex(data ?? {}), [data]);
+
+  // Real, un-summed totals for the capital-cluster KPI strip — each stays
+  // its own distinct pool (never blended into one figure), same discipline
+  // fundingByCountry/periodFunding already apply to NSF vs. funding-round
+  // entries (see aggregate.ts).
+  const vcTotalUsd = useMemo(() => data?.vcFunding?.reduce((s, c) => s + c.totalRaisedUsd, 0) ?? 0, [data]);
+  const latestRdSpend = data?.rdSpend?.[data.rdSpend.length - 1];
+  const marketCapTotalUsd = useMemo(() => data?.companies?.reduce((s, c) => s + (c.marketCapUsd ?? 0), 0) ?? 0, [data]);
   // Card 3 — verified milestones only (hand-checked against a source URL,
   // not RSS-classified), across the two stages where "seeded" actually
   // means something distinct from "live": innovation's seeded/live split
@@ -342,8 +358,6 @@ export default function App() {
 
         <TopCitedTicker entries={entries} onSelect={setSelectedEntry} />
 
-        {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} />}
-
         <div className="row-map">
           <div className="row-map-stack">
             <div className="panel">
@@ -420,6 +434,22 @@ export default function App() {
           <InstitutionConcentration rows={orgRows20} onSelect={selectOrg} activeOrg={highlightOrg} />
         </div>
 
+        <div className="finrow">
+          <KpiCard label="Public grants" value={fmtUsd(fundingPeriod.current)} caption="NSF, trailing 21d · US/EU only" />
+          {data?.vcFunding && data.vcFunding.length > 0 && (
+            <KpiCard label="Private VC disclosed" value={fmtUsd(vcTotalUsd)} caption="S&P Capital IQ · all-time, this vertical" />
+          )}
+          {latestRdSpend && (
+            <KpiCard label="Corporate R&D" value={fmtUsd(latestRdSpend.totalUsd)} caption={`FY${latestRdSpend.fiscalYear} · SEC + CapIQ`} />
+          )}
+          {data?.companies && data.companies.length > 0 && (
+            <KpiCard label="Market cap tracked" value={fmtUsd(marketCapTotalUsd)} caption={`${data.companies.length} tickers · Massive`} />
+          )}
+        </div>
+        <div className="trend-note" style={{ marginBottom: 8 }}>four distinct real pools, not summed into one figure — see each panel below for detail</div>
+
+        {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} />}
+
         <div className="panel">
           <h3>Funding by country <span className="drop">investment</span></h3>
           {fundingTop.top.length === 0
@@ -453,7 +483,11 @@ export default function App() {
           </div>
         )}
 
+        {data?.rdSpend && data.rdSpend.length > 0 && <RdSpendBreakdown points={data.rdSpend} />}
+
         {data?.vcFunding && data.vcFunding.length > 0 && <VcFundingLeaderboard companies={data.vcFunding} />}
+
+        {data?.vcFunding && data.vcFunding.length > 0 && <InvestorLeaderboard companies={data.vcFunding} />}
 
         <div className="panel">
           <h3>Disclosed award sizes</h3>
@@ -511,7 +545,13 @@ export default function App() {
         </footer>
       </div>
 
-      {selectedEntry && <EntryModal entry={selectedEntry} onClose={() => setSelectedEntry(null)} />}
+      {selectedEntry && (
+        <EntryModal
+          entry={selectedEntry}
+          orgFinancials={lookupOrgFinancials(orgFinancialIndex, selectedEntry.org)}
+          onClose={() => setSelectedEntry(null)}
+        />
+      )}
     </>
   );
 }

@@ -29,3 +29,20 @@ output/
 # missed a manually-renamed "AI-S&P.xlsx"/"Quantum-S&P.xlsx" pair once).
 SPGlobal_Export_*.xlsx
 /*.xlsx
+# Same rule, folder form: ciq_data/ holds raw multi-field Transactions
+# exports for the Python classification pipeline (scripts/ciq_pipeline/) —
+# never commit these either.
+ciq_data/
+
+# Python venv for the CapIQ classification pipeline (pandas/openpyxl/
+# sentence-transformers) — separate from the Node toolchain the rest of
+# this repo uses, kept local like node_modules.
+.venv-ciq/
+__pycache__/
+
+# Pipeline output (per-field tagged xlsx, combined parquet, summary.md) —
+# real derived data, but large (10 fields, full deal text + embeddings)
+# and not yet decided whether/how it feeds the app. Local-only for now,
+# same treatment as output/ (form-d-sector-tracker.ts).
+ciq_output/
+.embed_cache/

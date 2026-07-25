@@ -3,6 +3,7 @@ import type { Entry } from "../lib/types.ts";
 import { STAGES } from "../lib/types.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
 import { fmtUsd } from "../lib/format.ts";
+import type { OrgFinancialProfile } from "../lib/orgFinancials.ts";
 
 // EntryModal is one shared display for every source (OpenAlex/EPO/NSF/RSS
 // now, more as verticals grow — see CLAUDE.md). Per-source label wording
@@ -17,7 +18,15 @@ const VENUE_LABEL: Partial<Record<Entry["source"], string>> = { grant: "Program"
 // each source already fetches (see src/lib/sources/*), never a generated
 // summary. Escape/backdrop-click closes, same pattern as WorldMap's
 // fullscreen overlay.
-export function EntryModal({ entry, onClose }: { entry: Entry; onClose: () => void }) {
+export function EntryModal({
+  entry,
+  orgFinancials,
+  onClose,
+}: {
+  entry: Entry;
+  orgFinancials?: OrgFinancialProfile | null;
+  onClose: () => void;
+}) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
@@ -50,6 +59,25 @@ export function EntryModal({ entry, onClose }: { entry: Entry; onClose: () => vo
         </div>
 
         {entry.org && <div className="entry-modal-org">{entry.org}</div>}
+
+        {orgFinancials && (
+          <div className="entry-modal-facts">
+            <div><span className="lbl">Financial profile</span></div>
+            {orgFinancials.ticker && (
+              <div>
+                {orgFinancials.ticker.symbol}
+                {orgFinancials.ticker.marketCapUsd != null && ` · ${fmtUsd(orgFinancials.ticker.marketCapUsd)} market cap`}
+                {orgFinancials.ticker.price != null && ` · $${orgFinancials.ticker.price.toFixed(2)}/share`}
+              </div>
+            )}
+            {orgFinancials.vc && (
+              <div>{fmtUsd(orgFinancials.vc.totalRaisedUsd)} disclosed VC/growth capital raised across {orgFinancials.vc.dealCount} deal{orgFinancials.vc.dealCount === 1 ? "" : "s"}</div>
+            )}
+            {orgFinancials.rd && (
+              <div>{fmtUsd(orgFinancials.rd.amountUsd)} R&D spend, FY{orgFinancials.rd.fiscalYear} <span className="seeded">{orgFinancials.rd.source === "capiq" ? "S&P Capital IQ" : "SEC filing"}</span></div>
+            )}
+          </div>
+        )}
 
         {(entry.venue || entry.classification || entry.citations != null) && (
           <div className="entry-modal-facts">

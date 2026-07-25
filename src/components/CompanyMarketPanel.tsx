@@ -26,6 +26,7 @@ export function CompanyMarketPanel({ companies }: { companies: CompanySnapshot[]
               <th className="rank">#</th>
               <th>Ticker</th>
               <th>Company</th>
+              <th className="right">Price</th>
               <th className="right">Market cap</th>
               <th className="right">Today</th>
             </tr>
@@ -36,6 +37,7 @@ export function CompanyMarketPanel({ companies }: { companies: CompanySnapshot[]
                 <td className="rank">{i + 1}</td>
                 <td className="org-name" style={{ fontFamily: "var(--mono)", fontSize: 10.5 }}>{c.symbol}</td>
                 <td className="org-name" style={{ maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name}</td>
+                <td className="right count">{c.price != null ? `$${c.price.toFixed(2)}` : "—"}</td>
                 <td className="right count">{c.marketCapUsd != null ? fmtUsd(c.marketCapUsd) : "—"}</td>
                 <td className="right count">
                   {c.changePercent != null ? `${c.changePercent >= 0 ? "+" : ""}${c.changePercent.toFixed(2)}%` : "—"}

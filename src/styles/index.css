@@ -167,6 +167,11 @@ a { color: inherit; }
 .panel h3 .drop { font-size: 10px; font-weight: 400; color: var(--mist); }
 
 .kpirow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 6px; }
+/* Capital-cluster snapshot row — same KpiCard visual language as .kpirow,
+   but a variable 2-4 chip count depending on which financial sources this
+   vertical actually has (e.g. talent has no tickers/vcFunding at all), so
+   auto-fit rather than a fixed column count. */
+.finrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 6px; margin-bottom: 4px; }
 .kpi.hi { background: var(--red); border-color: var(--red); color: #fff; }
 .kpi .label { font-size: 10.5px; font-weight: 500; color: var(--mist); }
 .kpi.hi .label { color: rgba(255,255,255,.75); }
