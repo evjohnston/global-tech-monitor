@@ -1,6 +1,6 @@
 {
   "technology": "talent",
-  "generatedAt": "2026-07-25T08:11:01.906Z",
+  "generatedAt": "2026-07-25T10:39:25.911Z",
   "entries": [
     {
       "id": "seed-cyberaicorps-2023",
@@ -12800,42 +12800,42 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-25T08:11:01.906Z",
+      "lastSuccessfulPull": "2026-07-25T10:39:25.911Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-25T08:11:01.906Z",
+      "lastSuccessfulPull": "2026-07-25T10:39:25.911Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-25T08:11:01.906Z",
+      "lastSuccessfulPull": "2026-07-25T10:39:25.911Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-25T08:11:01.906Z",
+      "lastSuccessfulPull": "2026-07-25T10:39:25.911Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "OECD (researcher headcount)",
-      "lastSuccessfulPull": "2026-07-25T08:11:01.906Z",
+      "lastSuccessfulPull": "2026-07-25T10:39:25.911Z",
       "pollCadence": "nightly (GitHub Actions) — only used by verticals with no cohesive paper-corpus topic (see verticals.ts's researcherStatsSince)",
       "structuralLag": "OECD member states typically report 6-18 months behind the current year",
       "coverageGaps": "OECD members + a handful of key partners (incl. China) — not full global coverage; no India, no most of Africa/South America"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-07-25T08:11:01.906Z",
+      "lastSuccessfulPull": "2026-07-25T10:39:25.911Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
@@ -12856,7 +12856,7 @@
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-25T08:11:01.906Z",
+      "lastSuccessfulPull": "2026-07-25T10:39:25.911Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
