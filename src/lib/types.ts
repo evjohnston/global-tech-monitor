@@ -156,7 +156,47 @@ export interface CompanySnapshot {
 export interface RdSpendPoint {
   fiscalYear: number; // calendar year of the fiscal-period end date
   totalUsd: number;
-  companies: { symbol: string; amountUsd: number }[];
+  // `source` distinguishes SEC EDGAR's live XBRL pull from a hand-imported
+  // S&P Capital IQ export (data/capiq/rd-spend.ts, scripts/import-capiq-rd-
+  // export.ts) — added for foreign 20-F filers (Samsung, SoftBank, Tencent,
+  // NTT, Fujitsu, etc.) that SEC EDGAR structurally can't cover, since they
+  // don't file 10-Ks. CapIQ entries are a manual, periodic import, not a
+  // live fetch — re-run the import script after a fresh export if this
+  // data goes stale. See CLAUDE.md.
+  companies: { symbol: string; amountUsd: number; source: "sec" | "capiq" }[];
+}
+
+// One real VC/growth financing round, from S&P Capital IQ's Transactions
+// screener (data/capiq/vc-funding.ts, scripts/import-capiq-transactions.ts)
+// — a much deeper source than the ~15-17 hand-curated `funding-round`
+// seed entries per vertical, but a manual/periodic import like rdSpend
+// above, not a live fetch. `type` and `status` are CapIQ's own real
+// labels, kept as-is rather than reinterpreted (e.g. "ROF - Venture -
+// Series A", "Completed"). `amountUsd` is null when CapIQ itself has no
+// disclosed figure ("NA" in the export) — an undisclosed round is real
+// information (the deal happened), not a zero.
+export interface VcDeal {
+  dealId: string; // CapIQ's SPTR_MI_TRANSACTION_ID — the real dedup key when
+  // the same vertical gets imported from more than one tag search (e.g.
+  // "Machine Learning" merged into "artificial-intelligence") and the same
+  // real transaction shows up in both exports.
+  date: string; // ISO, from the export's announcement date
+  type: string;
+  status: string;
+  amountUsd: number | null;
+  investors: string[];
+}
+
+// One company's real, entity-consolidated VC funding history within a
+// vertical — canonicalizeOrg() (entityResolution.ts) merges CapIQ's
+// separate legal-entity-name rows (e.g. "OpenAI, L.L.C." / "OpenAI OpCo,
+// LLC" / "The OpenAI Deployment Company, LLC") into one real company.
+export interface VcCompanyFunding {
+  orgId: string;
+  name: string;
+  totalRaisedUsd: number; // sum of deals with a disclosed amountUsd only
+  dealCount: number; // includes undisclosed-amount deals — a real count of activity, not just disclosed dollars
+  deals: VcDeal[];
 }
 
 // The shape of the committed data file the app reads at load.
@@ -173,6 +213,9 @@ export interface DataFile {
   // Optional: absent when no ticker in this vertical has a usable SEC XBRL
   // R&D concept, or on data files built before this existed.
   rdSpend?: RdSpendPoint[];
+  // Optional: absent until a CapIQ Transactions export has been imported
+  // for this vertical. See VcCompanyFunding above.
+  vcFunding?: VcCompanyFunding[];
 }
 
 export const STAGES: { id: Stage; label: string; blurb: string }[] = [

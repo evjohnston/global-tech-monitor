@@ -13,6 +13,8 @@
     "backfill-entries": "tsx scripts/backfill-entries.ts",
     "gen-continent-map": "tsx scripts/gen-continent-map.ts",
     "form-d-sector-tracker": "tsx scripts/form-d-sector-tracker.ts",
+    "import-capiq-rd-export": "tsx scripts/import-capiq-rd-export.ts",
+    "import-capiq-transactions": "tsx scripts/import-capiq-transactions.ts",
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {

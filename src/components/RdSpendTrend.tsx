@@ -64,6 +64,10 @@ export function RdSpendTrend({ points }: { points: RdSpendPoint[] }) {
       {hover && (
         <Tooltip x={hover.x} y={hover.y}>
           FY{points[hover.i].fiscalYear} · {fmtUsd(values[hover.i])} · {points[hover.i].companies.length} companies
+          {(() => {
+            const capiqCount = points[hover.i].companies.filter((c) => c.source === "capiq").length;
+            return capiqCount > 0 ? ` (${capiqCount} via S&P Capital IQ)` : "";
+          })()}
         </Tooltip>
       )}
     </>

@@ -69,6 +69,20 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
     coverageGaps: "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit",
   },
   {
+    key: "capiq",
+    sourceName: "S&P Capital IQ (foreign R&D spend)",
+    pollCadence: "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
+    structuralLag: "however current the last manual export was — this can go stale between imports, unlike every live source here",
+    coverageGaps: "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed",
+  },
+  {
+    key: "capiq-transactions",
+    sourceName: "S&P Capital IQ (VC funding)",
+    pollCadence: "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
+    structuralLag: "however current the last manual export was — this can go stale between imports, unlike every live source here",
+    coverageGaps: "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history",
+  },
+  {
     key: "seed",
     sourceName: "Hand-verified seed",
     pollCadence: "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",

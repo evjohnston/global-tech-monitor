@@ -17,3 +17,15 @@ public/data/*.json
 # tracker.ts) — real data, but it's a local analysis artifact regenerated
 # on demand, not something the app or CI reads.
 output/
+
+# Raw S&P Capital IQ Pro exports — never commit these. S&P's data
+# licensing does not permit redistributing raw platform exports, unlike
+# the free public-source data (SEC/NSF/OECD) this repo otherwise commits.
+# The import scripts (scripts/import-capiq-*.ts) read one of these locally
+# and write only the derived, restated figures into the committed
+# data/capiq/*.ts files — those are fine to commit, this pattern is not.
+# Broad on purpose (any .xlsx at the repo root, whatever the export
+# happens to be named that day — "SPGlobal_Export_*.xlsx" alone already
+# missed a manually-renamed "AI-S&P.xlsx"/"Quantum-S&P.xlsx" pair once).
+SPGlobal_Export_*.xlsx
+/*.xlsx

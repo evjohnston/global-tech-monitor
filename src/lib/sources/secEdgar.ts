@@ -79,7 +79,7 @@ export async function fetchRdSpendByYear(symbols: string[]): Promise<RdSpendPoin
       for (const [year, amountUsd] of history) {
         const point = byYear.get(year) ?? { fiscalYear: year, totalUsd: 0, companies: [] };
         point.totalUsd += amountUsd;
-        point.companies.push({ symbol, amountUsd });
+        point.companies.push({ symbol, amountUsd, source: "sec" });
         byYear.set(year, point);
       }
     } catch (err) {

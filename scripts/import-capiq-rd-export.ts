@@ -1,0 +1,118 @@
+// One-time/periodic importer — NOT part of the automated fetch pipeline.
+// Parses a manually-exported S&P Capital IQ Pro Excel screen (Companies
+// screener, IQ_RD_EXP_FN field, per-company FY columns) and writes the
+// derived figures into data/capiq/rd-spend.ts, a plain committed TS file.
+//
+// Why manual, not automated: Capital IQ's Excel plugin is Windows-only
+// (COM add-in), so a Mac user has to use the web-app screener and download
+// an .xlsx by hand — there's no key or endpoint this script can call on a
+// schedule. Re-run this after a fresh export if the data goes stale.
+//
+// Why derived-only, not the raw file: S&P's data licensing does not permit
+// redistributing raw platform exports (see .gitignore's SPGlobal_Export_*
+// pattern) — only the restated numbers below are committed, matching the
+// same standard applied to every other real source in this app (only
+// facts, never a redistributed proprietary feed).
+//
+// Confirmed by hand against a real export (2026-07-24): values come back
+// in thousands of USD (Samsung's real ~$26-28B/year R&D spend matches the
+// raw cell value of ~26,578,187 read as thousands) — multiplied by 1,000
+// below to store raw USD, consistent with every other dollar figure in
+// this app.
+import { writeFileSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { loadCapiqSheet, type XlsxRow } from "./lib/capiqXlsx.ts";
+
+const OUT_PATH = resolve(dirname(fileURLToPath(import.meta.url)), "../data/capiq/rd-spend.ts");
+
+// CapIQ identifies companies as "Name (EXCHANGE:TICKER)" using its own
+// exchange codes, not the US OTC ADR tickers this app's verticals.ts uses
+// elsewhere (Massive doesn't recognize CapIQ's native-exchange codes for
+// these foreign issuers) — mapped by hand against the real export's
+// company list, confirmed against each company's known real ADR ticker.
+const CAPIQ_TO_TICKER: Record<string, { symbol: string; name: string }> = {
+  "ENXTPA:AIR": { symbol: "EADSY", name: "Airbus SE" },
+  "ASX:AXE": { symbol: "ARRXF", name: "Archer Materials Limited" },
+  "LSE:BA.": { symbol: "BAESY", name: "BAE Systems plc" },
+  "TSE:6702": { symbol: "FJTSY", name: "Fujitsu Limited" },
+  "TSE:6503": { symbol: "MIELY", name: "Mitsubishi Electric Corporation" },
+  "TSE:6701": { symbol: "NIPNF", name: "NEC Corporation" },
+  "TSE:9432": { symbol: "NTTYY", name: "NTT, Inc." },
+  "KOSE:A005930": { symbol: "SSNLF", name: "Samsung Electronics Co., Ltd." },
+  "TSE:9984": { symbol: "SFTBY", name: "SoftBank Group Corp." },
+  "SEHK:700": { symbol: "TCEHY", name: "Tencent Holdings Limited" },
+  "ENXTPA:HO": { symbol: "THLLY", name: "Thales S.A." },
+};
+
+function main() {
+  const inputPath = process.argv[2];
+  if (!inputPath) {
+    console.error("usage: tsx scripts/import-capiq-rd-export.ts <path-to-xlsx>");
+    process.exit(1);
+  }
+  const rows: XlsxRow[] = loadCapiqSheet(inputPath);
+
+  const headerRowIdx = rows.findIndex((r) => Object.values(r).includes("SP_ENTITY_NAME"));
+  if (headerRowIdx === -1) throw new Error("SP_ENTITY_NAME header row not found — export layout may have changed");
+  const fyRow = rows[headerRowIdx + 1];
+  const yearByCol = new Map<string, number>();
+  for (const [col, val] of Object.entries(fyRow)) {
+    const m = val?.match(/^FY(\d{4})$/);
+    if (m) yearByCol.set(col, Number(m[1]));
+  }
+  console.log(`found ${yearByCol.size} fiscal-year columns`);
+
+  const nameCol = Object.entries(rows[headerRowIdx]).find(([, v]) => v === "SP_ENTITY_NAME")?.[0];
+  if (!nameCol) throw new Error("SP_ENTITY_NAME column letter not found");
+
+  const out: { symbol: string; name: string; fiscalYear: number; amountUsd: number }[] = [];
+  let matched = 0;
+  for (const row of rows.slice(headerRowIdx + 2)) {
+    const entityName = row[nameCol];
+    if (!entityName) continue;
+    const exchangeMatch = entityName.match(/\(([^)]+)\)\s*$/);
+    const exchangeTicker = exchangeMatch?.[1];
+    const mapped = exchangeTicker ? CAPIQ_TO_TICKER[exchangeTicker] : undefined;
+    if (!mapped) {
+      console.error(`no ticker mapping for "${entityName}" — add it to CAPIQ_TO_TICKER if this should be included`);
+      continue;
+    }
+    matched++;
+    for (const [col, year] of yearByCol) {
+      const raw = row[col];
+      if (!raw || raw === "NA") continue;
+      const thousands = Number(raw);
+      if (!Number.isFinite(thousands)) continue;
+      out.push({ symbol: mapped.symbol, name: mapped.name, fiscalYear: year, amountUsd: Math.round(thousands * 1000) });
+    }
+  }
+  console.log(`matched ${matched} companies, ${out.length} (company, year) data points`);
+
+  out.sort((a, b) => (a.symbol === b.symbol ? a.fiscalYear - b.fiscalYear : a.symbol < b.symbol ? -1 : 1));
+  const body = out
+    .map((e) => `  { symbol: "${e.symbol}", name: "${e.name.replace(/"/g, '\\"')}", fiscalYear: ${e.fiscalYear}, amountUsd: ${e.amountUsd} },`)
+    .join("\n");
+  const file = `// Generated by scripts/import-capiq-rd-export.ts from a real S&P Capital IQ
+// Pro export (Companies screener, IQ_RD_EXP_FN field) — re-run that script
+// against a fresh export to update this file, don't hand-edit it. See
+// CLAUDE.md's "Foreign R&D spend (S&P Capital IQ)" section for why this
+// exists: these are 20-F filers SEC EDGAR structurally can't reach.
+// Values are real disclosed R&D expense in USD, restated from the
+// export's native thousands-of-USD unit. Last generated: ${new Date().toISOString()}
+export interface CapiqRdSpendEntry {
+  symbol: string;
+  name: string;
+  fiscalYear: number;
+  amountUsd: number;
+}
+
+export const CAPIQ_RD_SPEND: CapiqRdSpendEntry[] = [
+${body}
+];
+`;
+  writeFileSync(OUT_PATH, file);
+  console.log(`wrote ${out.length} entries to ${OUT_PATH}`);
+}
+
+main();

@@ -26,7 +26,7 @@
 // unrelated organizations that happened to have no ASCII characters at all.
 // Confirmed against real data before shipping: the fix separates every
 // previously-colliding non-Latin name back out correctly.
-const LEGAL_SUFFIX = /,?\s*(?:Inc\.?|LLC\.?|Ltd\.?|Co\.,?\s*Ltd\.?|Corporation|Corp\.?|PBC|N\.A\.|PLC)\.?$/i;
+const LEGAL_SUFFIX = /,?\s*(?:Inc\.?|LLC\.?|L\.L\.C\.?|Ltd\.?|Co\.,?\s*Ltd\.?|Corporation|Corp\.?|PBC|N\.A\.|PLC)\.?$/i;
 
 // Keys here are the POST-normalization form — i.e. what normalizeKey()
 // produces after it already strips a legal suffix, so "International
@@ -43,6 +43,14 @@ const ALIASES: Record<string, string> = {
   "ibm united states": "IBM",
   "ibm research zurich": "IBM",
   "ibm research almaden": "IBM",
+  // OpenAI's real corporate structure spans multiple named legal entities
+  // that show up as separate "targets" in S&P Capital IQ's Transactions
+  // data (confirmed by hand, 2026-07-25) — mechanical suffix-stripping
+  // can't merge these since the names genuinely differ, not just their
+  // legal suffix. "OpenAI, L.L.C." itself needs no alias — it already
+  // normalizes to "openai" once LEGAL_SUFFIX strips "L.L.C.".
+  "openai opco": "OpenAI",
+  "the openai deployment company": "OpenAI",
 };
 
 function normalizeKey(raw: string): string {

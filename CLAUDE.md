@@ -307,6 +307,143 @@ research funding, where governments are placing money," and corporate R&D
 is a different, private thing. Keep the two charted side by side, not
 summed into one misleading "total investment" figure.
 
+## Foreign R&D spend (S&P Capital IQ) — a second, manual source for rdSpend
+
+Added 2026-07-25. 11 real, verified companies across both verticals'
+ticker lists (Samsung, SoftBank, Tencent, NTT, Fujitsu, Mitsubishi
+Electric, NEC, BAE Systems, Airbus, Thales, Archer Materials) are foreign
+20-F filers — SEC EDGAR's XBRL API structurally can't reach them (see
+"Public markets panel," they resolve on Massive's reference endpoint but
+carry no market-cap data either). Stanford's S&P Capital IQ Pro access
+covers exactly this gap: real R&D expense (`IQ_RD_EXP_FN` field), verified
+by hand against a live export (2026-07-24 — Samsung's real ~$26-28B/year
+figure matched the raw cell value read as thousands of USD).
+
+This is **manual, not automated** — Capital IQ's Excel plugin is
+Windows-only (a COM add-in), so there's no key or endpoint to call on a
+schedule from a Mac. The real workflow: export a Companies-screener report
+from the CapIQ Pro web app (`Screener Home → Companies`, add the target
+companies via "Add Companies," add the `IQ_RD_EXP_FN` display column,
+`Run Screen`, export to Excel), then run `npm run import-capiq-rd-export
+-- <path-to-xlsx>`, which parses the real export (`scripts/import-capiq-
+rd-export.ts`, using `adm-zip`+`fast-xml-parser` to read the raw XML
+inside the .xlsx, not a new heavy Excel-parsing dependency) and writes the
+derived figures to the committed `data/capiq/rd-spend.ts`. **Never commit
+the raw .xlsx** — S&P's data licensing doesn't permit redistributing raw
+platform exports, unlike the free public sources (SEC/NSF/OECD) this repo
+otherwise commits; `.gitignore`'s `SPGlobal_Export_*.xlsx` pattern exists
+specifically to catch this. Re-run the import after a fresh export if this
+data goes stale — there's no automated freshness check the way live
+sources get one via `sourceMeta.ts`'s `lastSuccessfulPull`.
+
+`fetch-data.ts`'s `mergeCapiqRdSpend` layers `CAPIQ_RD_SPEND` (filtered by
+`CAPIQ_TICKERS_BY_VERTICAL`, a small hand-maintained map — deliberately
+NOT reusing `verticals.ts`'s `tickers`, since these companies are
+correctly excluded from the market panel but still relevant to R&D spend)
+onto SEC EDGAR's already fiscal-year-trimmed `rdSpend` array, additively
+per year. Each company entry in `RdSpendPoint.companies` now carries a
+`source: "sec" | "capiq"` tag for exactly this kind of provenance
+auditing — `RdSpendTrend.tsx`'s tooltip surfaces the CapIQ count when
+nonzero rather than presenting a blended figure as if it were one
+uniform, live-fetched number.
+
+## VC funding tracking (S&P Capital IQ Transactions) — a second, much deeper source
+
+Added 2026-07-25. Same access as the R&D-spend import (Stanford's S&P
+Capital IQ Pro, web app + bulk export — confirmed by hand, checking the
+platform's own full nav, that there is no SQL console, API, or developer
+section anywhere in this account's access; a SQL-looking snippet floated
+mid-session turned out not to be runnable against anything, it was
+reference material, not a live connection). Different screener from the
+R&D pull, though: **Transactions**, not Companies.
+
+`data/capiq/vc-funding.ts` is real, current data for `artificial-
+intelligence` (21,484 companies, 5-year history 2021-2026, merged from
+both an "Artificial Intelligence"-tagged and a "Machine Learning"-tagged
+export — see dedup below), `quantum-computing` (101 companies — see the
+topic-tag story below), plus **prep data for two verticals that don't
+exist in the app yet**, `defense-tech` (999 companies) and `biotechnology`
+(3,916 companies) — imported at the user's request as groundwork for
+future full verticals, not wired into `VERTICALS`/rendered anywhere yet.
+`talent` has none — same reasoning as its missing `tickers` list, no real
+public/private-company concept maps onto "STEM talent" as an investable
+entity.
+
+Four real problems this data has that the import (`scripts/import-capiq-
+transactions.ts`) has to handle, not paper over:
+
+- **Mixed transaction types.** Every export includes M&A, stock buybacks,
+  debt issuance (`DCM - *`), and follow-on public offerings (`ECM - *`)
+  alongside real financing rounds. `VC_TYPE_PREFIXES` (`ROF - Venture -`,
+  `ROF - Early Stage -`, `ROF - Mature -`) is the filter isolating genuine
+  VC/growth rounds from the rest.
+- **Entity fragmentation, mostly solved by a real ID field.** A first AI
+  export had no entity-ID column at all — OpenAI showed up as three
+  separate legal-entity names (`OpenAI, L.L.C.`, `OpenAI OpCo, LLC`, `The
+  OpenAI Deployment Company, LLC`) with nothing to join on, handled via
+  `entityResolution.ts`'s `canonicalizeOrg()` (a fixed `LEGAL_SUFFIX`
+  regex that didn't handle "L.L.C." with periods, plus a hand-verified
+  alias for OpenAI's variants). A later 5-year re-export added a real
+  `SPTR_TARGET_ID` field, confirmed to correctly merge those same three
+  names onto one id — the importer now prefers that id when present,
+  falling back to the name-heuristic only when it's absent (quantum's
+  export, for one, has the id but not `SPTR_ANN_DATE` at all — confirmed
+  by hand; not every export includes every optional column). Even the
+  real id isn't perfectly clean — Quantinuum still splits across two ids
+  in the current data, a known minor gap, not a crash.
+- **CapIQ has no "Quantum Computing" or "Biotechnology" topic tag —
+  confirmed directly by the user checking the platform.** Quantum's real
+  tag options are only "Encryption" and "Post-Quantum Cryptography";
+  "Encryption" alone swept in mainstream cybersecurity companies with zero
+  quantum relevance (Netskope, Lookout, Crypto.com topped the leaderboard
+  purely for that tag) while every actual quantum computing company
+  (PsiQuantum, IQM, Pasqal, Xanadu, Atom Computing, Rigetti, Multiverse)
+  was entirely absent. Fixed by filtering to rows also tagged
+  specifically "Post-Quantum Cryptography" (the `requireTag` CLI arg) —
+  the resulting 101 companies (Quantinuum, QuEra, Alice & Bob, IonQ,
+  Classiq, ID Quantique, Zapata...) are genuinely quantum-adjacent.
+  "Biotech" had the same problem worse: the export actually covered five
+  tags (`Biomedical Engineering`, `Bio-based and Renewable Materials`,
+  `Biomass Energy`, `Biofuel`, `Biometrics`) from what was clearly a
+  keyword search on "Bio" — the unfiltered result was topped by water
+  utilities and Chinese renewable-energy companies. Filtered to
+  `requireTag: "Biomedical Engineering"` only. **Don't trust an export's
+  topic-tag scoping just because the filename matches the vertical you
+  asked for — check the real tag breakdown by hand before importing.**
+- **Deal-level double-counting across multiple tag searches.** Merging
+  Machine Learning into the existing `artificial-intelligence` data is
+  the case that forced this: the two tag searches share enormous real
+  overlap (of 31,206 ML-tagged VC rows, 30,459 were already present from
+  the AI-tagged export). `VcDeal.dealId` (CapIQ's own
+  `SPTR_MI_TRANSACTION_ID`) is the real dedup key — the importer's merge
+  step adds a fresh export's deals into whatever a vertical already has,
+  skipping any `dealId` already seen, rather than either replacing the
+  vertical's data outright or blindly re-summing potentially-duplicate
+  rows.
+
+Rendered as `VcFundingLeaderboard.tsx`, a real entity-consolidated "who's
+getting the money" table (top 25 by disclosed total raised, click a row
+to expand its individual rounds) — deliberately separate from the
+hand-curated `funding-round` seed Entries elsewhere in this doc, which
+stay as the small, individually-verified set that shows up in the
+pipeline/map/EntryModal. The CapIQ data is far larger and real, but
+entity-resolved by heuristic/id rather than hand-verified line by line, so
+it gets its own panel rather than being merged into the same Entry-shaped
+list.
+
+`VC_FUNDING_CAP` (`fetch-data.ts`, currently 200) caps what actually lands
+in the browser-facing `public/data/<id>.json` — the real, full,
+entity-consolidated dataset (tens of thousands of companies once biotech/
+defense-tech are this deep) lives in the committed `data/capiq/vc-
+funding.ts` regardless, since `VcFundingLeaderboard.tsx` only ever renders
+a top-25 table anyway. Don't remove this cap without reconsidering payload
+size — an uncapped AI export alone generated an 8.9MB source file.
+
+**Known gap, not yet resolved**: even the AI/ML data's 5-year span is
+recent-heavy by construction (most VC activity in any dataset skews to
+the last 1-2 years) — real multi-year forecasting on top of this is still
+a separate, not-yet-built piece of work.
+
 ## Private funding rounds — a third `SourceKind` in the Investment stage
 
 Added 2026-07-24. There's no free, reliable API for this (Crunchbase's full
@@ -696,6 +833,23 @@ npm run form-d-sector-tracker -- <n>  # standalone research script (NOT part of 
                           # scripts/form-d-sector-tracker.ts to change which of EDGAR's real
                           # INDUSTRYGROUPTYPE values get included — the full real taxonomy
                           # prints to the console on every run.
+npm run import-capiq-rd-export -- <path-to-xlsx>  # one-off/periodic: parses a manually-exported
+                          # S&P Capital IQ Pro Companies-screener report (IQ_RD_EXP_FN field) and
+                          # writes data/capiq/rd-spend.ts — see "Foreign R&D spend (S&P Capital IQ)"
+                          # above. Re-run after a fresh export; never commit the raw .xlsx itself.
+npm run import-capiq-transactions -- <path-to-xlsx> <vertical-id> [required-topic-tag]  # one-off/
+                          # periodic: parses a manually-exported S&P Capital IQ Pro Transactions-
+                          # screener report and writes data/capiq/vc-funding.ts — see "VC funding
+                          # tracking (S&P Capital IQ Transactions)" above. <vertical-id> tags which
+                          # vertical this export's rows belong to (e.g. "artificial-intelligence") —
+                          # re-importing one vertical merges into, rather than erasing, another
+                          # vertical's already-imported data (and dedupes overlapping deals within
+                          # the same vertical too, by CapIQ's own transaction id). The optional 3rd
+                          # arg requires the export's own Topic Tags column to contain that exact
+                          # substring — necessary when CapIQ's tag search was broader than the real
+                          # target (e.g. quantum computing has no dedicated tag, only "Encryption"/
+                          # "Post-Quantum Cryptography" — pass the latter to exclude unrelated
+                          # cybersecurity companies the broader tag swept in).
 npm run dev
 npm run build
 npm run typecheck

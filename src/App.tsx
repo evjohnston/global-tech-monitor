@@ -28,6 +28,7 @@ import { TopCitedTicker } from "./components/TopCitedTicker.tsx";
 import { CompanyMarketPanel } from "./components/CompanyMarketPanel.tsx";
 import { FundingTrend } from "./components/FundingTrend.tsx";
 import { RdSpendTrend } from "./components/RdSpendTrend.tsx";
+import { VcFundingLeaderboard } from "./components/VcFundingLeaderboard.tsx";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
@@ -451,6 +452,8 @@ export default function App() {
             <RdSpendTrend points={data.rdSpend} />
           </div>
         )}
+
+        {data?.vcFunding && data.vcFunding.length > 0 && <VcFundingLeaderboard companies={data.vcFunding} />}
 
         <div className="panel">
           <h3>Disclosed award sizes</h3>

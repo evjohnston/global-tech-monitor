@@ -46,13 +46,15 @@ import { XMLParser } from "fast-xml-parser";
 // Actions workflow's `env:` block does in CI.
 config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env.local") });
 import { inferInstitutionCountry } from "../src/lib/institutionCountry.ts";
-import type { DataFile, Entry, StageNote, TrendPoint } from "../src/lib/types.ts";
+import type { DataFile, Entry, StageNote, TrendPoint, RdSpendPoint } from "../src/lib/types.ts";
 import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
 import { fetchResearcherStats } from "../src/lib/sources/oecd.ts";
 import { fetchRdSpendByYear } from "../src/lib/sources/secEdgar.ts";
+import { CAPIQ_RD_SPEND } from "../data/capiq/rd-spend.ts";
+import { CAPIQ_VC_FUNDING } from "../data/capiq/vc-funding.ts";
 import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
 import { asArray } from "../src/lib/sources/util.ts";
 import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
@@ -78,6 +80,19 @@ const NOTES_BY_VERTICAL: Record<string, StageNote[]> = {
   "quantum-computing": QUANTUM_NOTES,
   "artificial-intelligence": AI_NOTES,
   talent: TALENT_NOTES,
+};
+
+// Which of data/capiq/rd-spend.ts's foreign companies (real, named quantum/
+// AI programs, but 20-F filers SEC EDGAR can't reach — see CLAUDE.md)
+// count toward each vertical's R&D-spend chart. Deliberately separate
+// from verticals.ts's `tickers` (Massive/market-panel list) — these 11
+// resolve on Massive's reference endpoint but carry no market-cap data on
+// the current plan tier, so they're excluded from the market panel but
+// still real, disclosed, individually-verified companies worth counting
+// here.
+const CAPIQ_TICKERS_BY_VERTICAL: Record<string, string[]> = {
+  "quantum-computing": ["ARRXF", "BAESY", "FJTSY", "NTTYY", "NIPNF", "MIELY", "EADSY", "THLLY", "SSNLF"],
+  "artificial-intelligence": ["TCEHY", "SFTBY", "SSNLF"],
 };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -168,6 +183,16 @@ function readPrevious(outPath: string): DataFile | null {
 // in the last TREND_WINDOW_DAYS as of this run, not a cumulative-forever
 // total (which would just monotonically grow and never show a real trend).
 const TREND_WINDOW_DAYS = 21;
+// CAPIQ_VC_FUNDING can carry tens of thousands of companies with full
+// deal-level detail (a 5-year AI export produced 21,001) — shipping all
+// of that into the browser-facing public/data/<id>.json would blow up
+// what's supposed to be a small, "static, instant" payload (see CLAUDE.md
+// on the app's whole design premise) for no real benefit, since
+// VcFundingLeaderboard.tsx only ever renders a top-N table anyway. The
+// full, real, unlimited dataset still lives in the committed data/capiq/
+// vc-funding.ts for anyone auditing it directly — only the public JSON
+// gets capped, and the drop is logged, not silent.
+const VC_FUNDING_CAP = 200;
 // For a vertical with no rolling-window `live` pull (Talent: OECD stats
 // instead of a fresh-papers-since-last-run query), there's no natural
 // "this run's new items" set to feed trendPoint's per-country counts. Using
@@ -181,6 +206,24 @@ function latestPerCountry(entries: Entry[]): Entry[] {
     if (!prior || e.date > prior.date) byCountry.set(e.country, e);
   }
   return [...byCountry.values()];
+}
+
+// Layers hand-imported CapIQ R&D figures (foreign 20-F filers) onto SEC
+// EDGAR's already fiscal-year-trimmed rdSpend series. Additive per year —
+// creates a new year bucket if CapIQ has one SEC's tail-trim didn't keep
+// (CapIQ's own figures are a static export, not subject to the "some
+// filer hasn't reported yet" problem that trim exists for).
+function mergeCapiqRdSpend(rdSpend: RdSpendPoint[], tickers: string[]): RdSpendPoint[] {
+  const relevant = new Set(tickers);
+  const byYear = new Map(rdSpend.map((p) => [p.fiscalYear, { ...p, companies: [...p.companies] }]));
+  for (const e of CAPIQ_RD_SPEND) {
+    if (!relevant.has(e.symbol)) continue;
+    const point = byYear.get(e.fiscalYear) ?? { fiscalYear: e.fiscalYear, totalUsd: 0, companies: [] };
+    point.totalUsd += e.amountUsd;
+    point.companies.push({ symbol: e.symbol, amountUsd: e.amountUsd, source: "capiq" });
+    byYear.set(e.fiscalYear, point);
+  }
+  return [...byYear.values()].sort((a, b) => a.fiscalYear - b.fiscalYear);
 }
 
 function trendPoint(live: Entry[], allEntries: Entry[]): TrendPoint {
@@ -301,6 +344,11 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   } catch (err) {
     console.error("R&D spend skipped:", (err as Error).message);
   }
+  const capiqTickers = CAPIQ_TICKERS_BY_VERTICAL[v.id] ?? [];
+  if (capiqTickers.length > 0) {
+    rdSpend = mergeCapiqRdSpend(rdSpend, capiqTickers);
+    console.log(`CapIQ: merged R&D spend for ${capiqTickers.length} foreign tickers`);
+  }
   // OECD researcher-headcount statistics — Talent's stand-in for a paper
   // corpus (see the openAlexFilter guard above). Only fetched when
   // researcherStatsSince is set; every other vertical leaves it unset.
@@ -389,6 +437,12 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const countsSource = live.length > 0 ? live : latestPerCountry(researcherStats);
   const trend = countsSource.length > 0 ? [...history, trendPoint(countsSource, allEntries)] : history;
 
+  const vcFundingAll = CAPIQ_VC_FUNDING.filter((c) => c.vertical === v.id).map(({ vertical: _vertical, ...rest }) => rest);
+  const vcFundingForVertical = vcFundingAll.slice(0, VC_FUNDING_CAP);
+  if (vcFundingAll.length > VC_FUNDING_CAP) {
+    console.log(`CapIQ VC funding: capped ${vcFundingAll.length} companies to top ${VC_FUNDING_CAP} for the public data file`);
+  }
+
   const sourceMeta = buildSourceMeta(prev?.sourceMeta, {
     openalex: openalexOk,
     "arxiv-fallback": arxivOk,
@@ -396,6 +450,8 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     nsf: nsfOk,
     massive: massiveOk,
     "sec-edgar": secEdgarOk,
+    capiq: capiqTickers.length > 0, // a static hand-imported file, not a live fetch — see data/capiq/rd-spend.ts
+    "capiq-transactions": CAPIQ_VC_FUNDING.some((c) => c.vertical === v.id), // see data/capiq/vc-funding.ts
     oecd: oecdOk,
     "rss-news": rssNewsOk,
     "rss-investment": rssInvestmentOk,
@@ -411,6 +467,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     sourceMeta,
     companies,
     rdSpend,
+    vcFunding: vcFundingForVertical,
   };
 
   // entries[]/trend[] only ever accumulate by design (see the byId merge

@@ -132,6 +132,18 @@ a { color: inherit; }
 .marketpanel-scroll { max-height: 320px; overflow-y: auto; }
 .marketpanel .cap { font-size: 10px; color: var(--mist); margin-top: 8px; }
 
+/* ── VC funding leaderboard: real, entity-consolidated Capital IQ
+   transaction data — click a company row to expand its individual rounds
+   inline, no separate modal needed for what's already a compact list. */
+.vcpanel .cap { font-size: 10px; color: var(--mist); margin-top: 8px; }
+.vc-deals { display: flex; flex-direction: column; gap: 4px; padding: 6px 0; }
+.vc-deal-row {
+  display: grid; grid-template-columns: 80px 1fr 90px 90px 90px; gap: 8px;
+  font-size: 10.5px; color: var(--ink-2); align-items: center;
+}
+.vc-deal-status { color: var(--mist); }
+.vc-deal-investors { color: var(--mist); text-align: right; cursor: help; }
+
 /* ── page head ──────────────────────────────────────────────────── */
 .pagehead { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0 10px; gap: 12px; flex-wrap: wrap; }
 .pagehead h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
