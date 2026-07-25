@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-07-24T23:40:53.879Z",
+  "generatedAt": "2026-07-25T01:41:15.070Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -80078,6 +80078,22 @@
       "ingestedAt": "2026-07-24T23:25:56.430Z",
       "orgId": "together ai",
       "relevanceScore": 1
+    },
+    {
+      "id": "gnews-ndIWGJkTHZ3Mmx2S2NQWk54a2xBMUc0bDViWG4wMzg3SVBHUjZpQmJYTjI2OENObA-oc-5",
+      "stage": "investment",
+      "country": null,
+      "provenance": "auto",
+      "source": "news",
+      "title": "Grant Lee on AI Pace and Gamma's Vision",
+      "org": "StartupHub.ai",
+      "date": "2026-07-24",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPR2Qxd3dqaUJXRWNmV2lBaXdXX0RxVE5jcUJlckJnSkdrc0lZOU9Ka2tVamE5cW9ldXVEWlNzcENIcXZpR0V4RFZ3UmR5UV92N2ZWSFk4VTkxTVRsUzFuN3FZVTBYTWRzVFNkc3AtMUlJWHUwbndIWGJkTHZ3Mmx2S2NQWk54a2xBMUc0bDViWG4wMzg3SVBHUjZpQmJYTjI2OENObA?oc=5",
+      "countryEvidence": "no location match (auto-classified from Google News RSS, unverified)",
+      "abstract": "Grant Lee on AI Pace and Gamma's Vision StartupHub.ai",
+      "ingestedAt": "2026-07-25T01:41:15.070Z",
+      "orgId": "startuphub ai",
+      "relevanceScore": 0.7
     }
   ],
   "trend": [
@@ -80806,6 +80822,75 @@
       },
       "fundingUsd": 132774101,
       "totalEntries": 3876
+    },
+    {
+      "date": "2026-07-25",
+      "counts": {
+        "US": 110,
+        "DE": 13,
+        "PL": 11,
+        "FR": 9,
+        "TH": 3,
+        "AU": 5,
+        "HK": 2,
+        "CA": 13,
+        "KR": 16,
+        "CN": 124,
+        "TW": 5,
+        "BR": 1,
+        "CH": 1,
+        "AE": 2,
+        "JO": 2,
+        "IN": 34,
+        "IR": 3,
+        "GB": 5,
+        "OM": 1,
+        "SA": 7,
+        "ID": 10,
+        "TR": 5,
+        "MA": 3,
+        "LB": 1,
+        "GR": 4,
+        "IT": 7,
+        "JP": 3,
+        "VN": 6,
+        "SE": 1,
+        "BG": 1,
+        "RU": 4,
+        "IQ": 2,
+        "ES": 10,
+        "NG": 1,
+        "NO": 1,
+        "PK": 4,
+        "SK": 1,
+        "HR": 1,
+        "IL": 2,
+        "PT": 2,
+        "CL": 3,
+        "MK": 1,
+        "LK": 1,
+        "MO": 2,
+        "FI": 1,
+        "MX": 1,
+        "IE": 1,
+        "RO": 1,
+        "AT": 1,
+        "SG": 3,
+        "TN": 1,
+        "MY": 3,
+        "SI": 1,
+        "EG": 1,
+        "EC": 1,
+        "BE": 1
+      },
+      "stageCounts": {
+        "innovation": 2794,
+        "scaling": 16,
+        "adoption": 26,
+        "investment": 229
+      },
+      "fundingUsd": 132774101,
+      "totalEntries": 3877
     }
   ],
   "notes": [
@@ -80841,7 +80926,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
+      "lastSuccessfulPull": "2026-07-25T01:41:15.070Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -80862,28 +80947,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
+      "lastSuccessfulPull": "2026-07-25T01:41:15.070Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
+      "lastSuccessfulPull": "2026-07-25T01:41:15.070Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
+      "lastSuccessfulPull": "2026-07-25T01:41:15.070Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
+      "lastSuccessfulPull": "2026-07-25T01:41:15.070Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
@@ -80897,14 +80982,14 @@
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
+      "lastSuccessfulPull": "2026-07-25T01:41:15.070Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-24T23:40:53.879Z",
+      "lastSuccessfulPull": "2026-07-25T01:41:15.070Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -80915,81 +81000,458 @@
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5056375960000,
-      "asOf": "2026-07-24T23:39:31.729Z",
+      "asOf": "2026-07-25T01:29:24.542Z",
       "url": "https://www.nvidia.com"
+    },
+    {
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing Company Ltd.",
+      "marketCapUsd": 2155394870322.54,
+      "asOf": "2026-07-25T01:29:39.744Z",
+      "url": "https://www.tsmc.com"
+    },
+    {
+      "symbol": "AVGO",
+      "name": "Broadcom Inc. Common Stock",
+      "marketCapUsd": 1867207500309.06,
+      "asOf": "2026-07-25T01:29:54.933Z",
+      "url": "https://www.broadcom.com"
+    },
+    {
+      "symbol": "AMD",
+      "name": "Advanced Micro Devices",
+      "marketCapUsd": 880018858861.91,
+      "asOf": "2026-07-25T01:30:10.070Z",
+      "url": "https://www.amd.com"
+    },
+    {
+      "symbol": "ASML",
+      "name": "ASML Holding NV",
+      "marketCapUsd": 692532300000,
+      "asOf": "2026-07-25T01:30:25.236Z",
+      "url": "https://www.asml.com"
+    },
+    {
+      "symbol": "ARM",
+      "name": "Arm Holdings plc American Depositary Shares",
+      "marketCapUsd": 302309012230.4,
+      "asOf": "2026-07-25T01:30:40.420Z",
+      "url": "https://www.arm.com"
+    },
+    {
+      "symbol": "MRVL",
+      "name": "Marvell Technology, Inc. Common Stock",
+      "marketCapUsd": 187873998622.36,
+      "asOf": "2026-07-25T01:30:55.691Z",
+      "url": "https://www.marvell.com"
+    },
+    {
+      "symbol": "QCOM",
+      "name": "Qualcomm Inc",
+      "marketCapUsd": 180349940000,
+      "asOf": "2026-07-25T01:31:10.839Z",
+      "url": "https://www.qualcomm.com"
+    },
+    {
+      "symbol": "MU",
+      "name": "Micron Technology, Inc.",
+      "marketCapUsd": 1118336392051.71,
+      "asOf": "2026-07-25T01:31:26.050Z",
+      "url": "https://www.micron.com"
+    },
+    {
+      "symbol": "SMCI",
+      "name": "Super Micro Computer, Inc. Common Stock",
+      "marketCapUsd": 20182438442.399998,
+      "asOf": "2026-07-25T01:31:41.203Z",
+      "url": "https://www.supermicro.com"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 2834542114352.32,
-      "asOf": "2026-07-24T23:39:46.939Z",
+      "asOf": "2026-07-25T01:31:56.502Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3885327996460.39,
-      "asOf": "2026-07-24T23:40:02.159Z",
+      "asOf": "2026-07-25T01:32:11.724Z",
       "url": "https://www.abc.xyz"
-    },
-    {
-      "symbol": "META",
-      "name": "Meta Platforms, Inc. Class A Common Stock",
-      "marketCapUsd": 1538538364554.4001,
-      "asOf": "2026-07-24T23:40:17.361Z",
-      "url": "https://about.meta.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2513506190815.76,
-      "asOf": "2026-07-24T23:40:32.546Z",
+      "asOf": "2026-07-25T01:32:27.025Z",
       "url": "https://www.amazon.com"
+    },
+    {
+      "symbol": "META",
+      "name": "Meta Platforms, Inc. Class A Common Stock",
+      "marketCapUsd": 1538538364554.4001,
+      "asOf": "2026-07-25T01:32:42.233Z",
+      "url": "https://about.meta.com"
+    },
+    {
+      "symbol": "CRWV",
+      "name": "CoreWeave, Inc. Class A Common Stock",
+      "marketCapUsd": 44245755060.6,
+      "asOf": "2026-07-25T01:32:57.510Z",
+      "url": "https://www.coreweave.com"
+    },
+    {
+      "symbol": "NBIS",
+      "name": "Nebius Group N.V. Class A Ordinary Shares",
+      "marketCapUsd": 56103883928.18,
+      "asOf": "2026-07-25T01:33:12.655Z",
+      "url": "https://www.group.nebius.com"
+    },
+    {
+      "symbol": "ORCL",
+      "name": "Oracle Corp",
+      "marketCapUsd": 345771738840,
+      "asOf": "2026-07-25T01:33:27.799Z",
+      "url": "https://www.oracle.com"
     },
     {
       "symbol": "PLTR",
       "name": "Palantir Technologies Inc. Class A Common Stock",
       "marketCapUsd": 295756378602.49,
-      "asOf": "2026-07-24T23:40:47.758Z",
+      "asOf": "2026-07-25T01:33:43.023Z",
       "url": "https://www.palantir.com"
+    },
+    {
+      "symbol": "AI",
+      "name": "C3.ai, Inc.",
+      "marketCapUsd": 1266911607.55,
+      "asOf": "2026-07-25T01:33:58.286Z",
+      "url": "https://www.c3.ai"
+    },
+    {
+      "symbol": "SOUN",
+      "name": "SoundHound AI, Inc. Class A Common Stock",
+      "marketCapUsd": 2709893399.6,
+      "asOf": "2026-07-25T01:34:13.471Z",
+      "url": "https://www.soundhound.com"
+    },
+    {
+      "symbol": "BBAI",
+      "name": "BigBear.ai Holdings, Inc.",
+      "marketCapUsd": 1365005932.5,
+      "asOf": "2026-07-25T01:34:28.619Z",
+      "url": "https://www.bigbear.ai"
+    },
+    {
+      "symbol": "INOD",
+      "name": "Innodata Inc.",
+      "marketCapUsd": 1959648033.58,
+      "asOf": "2026-07-25T01:34:43.847Z",
+      "url": "https://www.innodata.com"
+    },
+    {
+      "symbol": "PATH",
+      "name": "UiPath, Inc.",
+      "marketCapUsd": 5284826713.2,
+      "asOf": "2026-07-25T01:34:59.117Z",
+      "url": "https://www.uipath.com"
+    },
+    {
+      "symbol": "APP",
+      "name": "Applovin Corporation Class A Common Stock",
+      "marketCapUsd": 133992837346.06,
+      "asOf": "2026-07-25T01:35:14.302Z",
+      "url": "https://www.applovin.com"
+    },
+    {
+      "symbol": "CRM",
+      "name": "Salesforce, Inc.",
+      "marketCapUsd": 128525670000,
+      "asOf": "2026-07-25T01:35:29.452Z",
+      "url": "https://www.salesforce.com"
+    },
+    {
+      "symbol": "NOW",
+      "name": "SERVICENOW, INC.",
+      "marketCapUsd": 95053272280,
+      "asOf": "2026-07-25T01:35:44.599Z",
+      "url": "https://www.servicenow.com"
+    },
+    {
+      "symbol": "ADBE",
+      "name": "Adobe Inc.",
+      "marketCapUsd": 84337575000,
+      "asOf": "2026-07-25T01:35:59.796Z",
+      "url": "https://www.adobe.com"
+    },
+    {
+      "symbol": "SNOW",
+      "name": "Snowflake Inc.",
+      "marketCapUsd": 91894058000,
+      "asOf": "2026-07-25T01:36:14.991Z",
+      "url": "https://www.snowflake.com"
+    },
+    {
+      "symbol": "SAP",
+      "name": "SAP SE",
+      "marketCapUsd": 170907293446.24,
+      "asOf": "2026-07-25T01:36:30.307Z",
+      "url": "https://www.sap.com"
+    },
+    {
+      "symbol": "IBM",
+      "name": "International Business Machines Corporation",
+      "marketCapUsd": 194692071693.5,
+      "asOf": "2026-07-25T01:36:45.503Z",
+      "url": "https://www.ibm.com"
+    },
+    {
+      "symbol": "MDB",
+      "name": "MongoDB, Inc. Class A",
+      "marketCapUsd": 24060406642.78,
+      "asOf": "2026-07-25T01:37:00.677Z",
+      "url": "https://www.mongodb.com"
+    },
+    {
+      "symbol": "WDAY",
+      "name": "Workday, Inc. Class A Common Stock",
+      "marketCapUsd": 31580498759.73,
+      "asOf": "2026-07-25T01:37:15.807Z",
+      "url": "https://www.workday.com"
+    },
+    {
+      "symbol": "CRWD",
+      "name": "CrowdStrike Holdings, Inc. Class A Common Stock",
+      "marketCapUsd": 186769117137.59998,
+      "asOf": "2026-07-25T01:37:30.963Z",
+      "url": "https://www.crowdstrike.com"
+    },
+    {
+      "symbol": "PANW",
+      "name": "Palo Alto Networks, Inc. Common Stock",
+      "marketCapUsd": 265388450000,
+      "asOf": "2026-07-25T01:37:46.097Z",
+      "url": "https://www.paloaltonetworks.com"
+    },
+    {
+      "symbol": "DDOG",
+      "name": "Datadog, Inc. Class A Common Stock",
+      "marketCapUsd": 86993110589.70999,
+      "asOf": "2026-07-25T01:38:01.305Z",
+      "url": "https://www.datadog.com"
+    },
+    {
+      "symbol": "BABA",
+      "name": "Alibaba Group Holding Limited American Depositary Shares, each represents eight Ordinary Shares",
+      "marketCapUsd": 273387246781.92,
+      "asOf": "2026-07-25T01:38:16.543Z",
+      "url": "https://www.alibabagroup.com"
+    },
+    {
+      "symbol": "BIDU",
+      "name": "Baidu, Inc.",
+      "marketCapUsd": 36539733050.01,
+      "asOf": "2026-07-25T01:38:31.772Z",
+      "url": "https://ir.baidu.com"
+    },
+    {
+      "symbol": "VRT",
+      "name": "Vertiv Holdings Co Class A Common Stock",
+      "marketCapUsd": 116784444416.64001,
+      "asOf": "2026-07-25T01:38:47.028Z",
+      "url": "https://www.vertiv.com"
+    },
+    {
+      "symbol": "DELL",
+      "name": "Dell Technologies Inc.",
+      "marketCapUsd": 283876214317.51996,
+      "asOf": "2026-07-25T01:39:02.185Z",
+      "url": "https://www.dell.com"
+    },
+    {
+      "symbol": "HPE",
+      "name": "Hewlett Packard Enterprise Company",
+      "marketCapUsd": 63085055740.44,
+      "asOf": "2026-07-25T01:39:17.370Z",
+      "url": "https://www.hpe.com"
+    },
+    {
+      "symbol": "ANET",
+      "name": "Arista Networks",
+      "marketCapUsd": 222381914445.18002,
+      "asOf": "2026-07-25T01:39:32.513Z",
+      "url": "https://www.arista.com"
+    },
+    {
+      "symbol": "CRDO",
+      "name": "Credo Technology Group Holding Ltd Ordinary Shares",
+      "marketCapUsd": 44102022877,
+      "asOf": "2026-07-25T01:39:47.787Z",
+      "url": "https://www.credosemi.com"
+    },
+    {
+      "symbol": "ALAB",
+      "name": "Astera Labs, Inc. Common Stock",
+      "marketCapUsd": 56045253814.83,
+      "asOf": "2026-07-25T01:40:02.986Z",
+      "url": "https://www.asteralabs.com"
+    },
+    {
+      "symbol": "LRCX",
+      "name": "Lam Research Corp",
+      "marketCapUsd": 399907594379.99994,
+      "asOf": "2026-07-25T01:40:18.212Z",
+      "url": "https://www.lamresearch.com"
+    },
+    {
+      "symbol": "KLAC",
+      "name": "KLA Corporation Common Stock",
+      "marketCapUsd": 285721576683.3,
+      "asOf": "2026-07-25T01:40:33.434Z",
+      "url": "https://www.kla.com"
+    },
+    {
+      "symbol": "AMAT",
+      "name": "Applied Materials Inc",
+      "marketCapUsd": 446840367203.99994,
+      "asOf": "2026-07-25T01:40:48.633Z",
+      "url": "https://www.appliedmaterials.com"
+    },
+    {
+      "symbol": "TER",
+      "name": "Teradyne, Inc. Common Stock",
+      "marketCapUsd": 58507633047.5,
+      "asOf": "2026-07-25T01:41:03.791Z",
+      "url": "https://www.teradyne.com"
     }
   ],
   "rdSpend": [
     {
+      "fiscalYear": 2007,
+      "totalUsd": 9124073000,
+      "companies": [
+        {
+          "symbol": "QCOM",
+          "amountUsd": 1829000000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6153000000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1142073000
+        }
+      ]
+    },
+    {
       "fiscalYear": 2008,
-      "totalUsd": 8855637000,
+      "totalUsd": 20489571000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 691637000
         },
         {
+          "symbol": "AMD",
+          "amountUsd": 1848000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 2281000000
+        },
+        {
           "symbol": "MSFT",
           "amountUsd": 8164000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 63812000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6337000000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1104122000
         }
       ]
     },
     {
       "fiscalYear": 2009,
-      "totalUsd": 9865879000,
+      "totalUsd": 24859141000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 855879000
         },
         {
+          "symbol": "AMD",
+          "amountUsd": 1721000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 2345000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 647000000
+        },
+        {
           "symbol": "MSFT",
           "amountUsd": 9010000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 2767000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 99530000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5820000000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 288269000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 371463000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 934000000
         }
       ]
     },
     {
       "fiscalYear": 2010,
-      "totalUsd": 9766851000,
+      "totalUsd": 24478482000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 908851000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 352000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 2451000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 624000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 37382000
         },
         {
           "symbol": "MSFT",
@@ -80998,16 +81460,64 @@
         {
           "symbol": "META",
           "amountUsd": 144000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 3254000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 131897000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 2758000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6026000000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 39175000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 320859000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 329560000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1143000000
         }
       ]
     },
     {
       "fiscalYear": 2011,
-      "totalUsd": 10279830000,
+      "totalUsd": 27333121000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 848830000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 358000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 2995000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 791000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 48108000
         },
         {
           "symbol": "MSFT",
@@ -81016,16 +81526,68 @@
         {
           "symbol": "META",
           "amountUsd": 388000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 4519000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 187887000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 7030000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6258000000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 3962000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 7848000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 373293000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 386163000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1118000000
         }
       ]
     },
     {
       "fiscalYear": 2012,
-      "totalUsd": 12212605000,
+      "totalUsd": 30361485000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 1002605000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 313000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 3915000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 918000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 64223000
         },
         {
           "symbol": "MSFT",
@@ -81034,16 +81596,72 @@
         {
           "symbol": "META",
           "amountUsd": 1399000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 4523000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 295347000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 39333000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5816000000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 62014000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 13312000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 55155000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 444559000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 452937000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1237000000
         }
       ]
     },
     {
       "fiscalYear": 2013,
-      "totalUsd": 20110282000,
+      "totalUsd": 42146312000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 1147282000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 293000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 4967000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 931000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 75208000
         },
         {
           "symbol": "MSFT",
@@ -81056,16 +81674,76 @@
         {
           "symbol": "META",
           "amountUsd": 1415000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 4850000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 429479000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 78678000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5743000000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 102665000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 19893000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 1956000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 98587000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 683688000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 487832000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1320000000
         }
       ]
     },
     {
       "fiscalYear": 2014,
-      "totalUsd": 25215000000,
+      "totalUsd": 48890013000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 1336000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 238000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 5477000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 1371000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 84257000
         },
         {
           "symbol": "MSFT",
@@ -81078,16 +81756,76 @@
         {
           "symbol": "META",
           "amountUsd": 2666000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 5151000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 623798000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 148258000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5437000000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 182116000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 37300000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 2197000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 44344000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 716471000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 539469000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1428000000
         }
       ]
     },
     {
       "fiscalYear": 2015,
-      "totalUsd": 30504000000,
+      "totalUsd": 55482547000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 1360000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 229000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 5490000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 1540000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 101402000
         },
         {
           "symbol": "MSFT",
@@ -81100,16 +81838,84 @@
         {
           "symbol": "META",
           "amountUsd": 4816000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 5524000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 792917000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 217389000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5247000000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 316868000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 59700000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 920000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 1676000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 57413000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 825242000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 530616000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1451000000
         }
       ]
     },
     {
       "fiscalYear": 2016,
-      "totalUsd": 33186000000,
+      "totalUsd": 62129739000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 1331000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 2674000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 264000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 5151000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 1617000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 124223000
         },
         {
           "symbol": "MSFT",
@@ -81122,16 +81928,88 @@
         {
           "symbol": "META",
           "amountUsd": 5919000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 5787000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 946300000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 285239000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5726000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 43465000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 469944000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 84200000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 1051000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 1714000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 71398000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 913712000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 481258000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1540000000
         }
       ]
     },
     {
       "fiscalYear": 2017,
-      "totalUsd": 38879000000,
+      "totalUsd": 70582357000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 1463000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 3302000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 320000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 5485000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 1824000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 143992000
         },
         {
           "symbol": "MSFT",
@@ -81144,16 +82022,92 @@
         {
           "symbol": "META",
           "amountUsd": 7754000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 6153000000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 1208000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 377518000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5590000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 51772000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 680531000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 94200000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 24734000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 2636000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 364000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 107180000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1033742000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 526688000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 1781000000
         }
       ]
     },
     {
       "fiscalYear": 2018,
-      "totalUsd": 48500451000,
+      "totalUsd": 84276089000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 1797000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 3768000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 371000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 5625000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 2141000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 165104000
         },
         {
           "symbol": "MSFT",
@@ -81168,18 +82122,102 @@
           "amountUsd": 10273000000
         },
         {
+          "symbol": "ORCL",
+          "amountUsd": 6084000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 285451000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 1553000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 529501000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5379000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 62202000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 910584000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 58887000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 113400000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 55176000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 198300000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 4384000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 439000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 118439000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1189514000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 608531000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 2022000000
         }
       ]
     },
     {
       "fiscalYear": 2019,
-      "totalUsd": 59175563000,
+      "totalUsd": 99417520000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 2376000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 4696000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 395000000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 5398000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 2441000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 179907000
         },
         {
           "symbol": "MSFT",
@@ -81194,18 +82232,122 @@
           "amountUsd": 13600000000
         },
         {
+          "symbol": "ORCL",
+          "amountUsd": 6026000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 305563000
+        },
+        {
+          "symbol": "AI",
+          "amountUsd": 37318000
+        },
+        {
+          "symbol": "BBAI",
+          "amountUsd": 110000
+        },
+        {
+          "symbol": "APP",
+          "amountUsd": 44966000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 1886000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 749000000
+        },
+        {
+          "symbol": "SNOW",
+          "amountUsd": 68681000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 5910000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 89854000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 1211832000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 84551000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 170500000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 111425000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 229400000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 4604000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 1842000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 110063000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1191320000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 711030000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 2054000000
         }
       ]
     },
     {
       "fiscalYear": 2020,
-      "totalUsd": 68678660000,
+      "totalUsd": 112021425000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 2829000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 4968000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 573000000
+        },
+        {
+          "symbol": "MRVL",
+          "amountUsd": 1080391000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 5975000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 2600000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 221478000
         },
         {
           "symbol": "MSFT",
@@ -81220,18 +82362,130 @@
           "amountUsd": 18447000000
         },
         {
+          "symbol": "ORCL",
+          "amountUsd": 6067000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 560660000
+        },
+        {
+          "symbol": "AI",
+          "amountUsd": 64548000
+        },
+        {
+          "symbol": "BBAI",
+          "amountUsd": 530000
+        },
+        {
+          "symbol": "PATH",
+          "amountUsd": 131066000
+        },
+        {
+          "symbol": "APP",
+          "amountUsd": 180652000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 2766000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 1024000000
+        },
+        {
+          "symbol": "SNOW",
+          "amountUsd": 105160000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6262000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 149033000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 1549906000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 130188000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 215900000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 210626000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 228600000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 2454000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 1874000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 133847000
+        },
+        {
+          "symbol": "CRDO",
+          "amountUsd": 27564000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1252412000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 863864000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 2234000000
         }
       ]
     },
     {
       "fiscalYear": 2021,
-      "totalUsd": 81244487000,
+      "totalUsd": 132868005000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 3924000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 4854000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 2845000000
+        },
+        {
+          "symbol": "MRVL",
+          "amountUsd": 1072700000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 7176000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 2663000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 224369000
         },
         {
           "symbol": "MSFT",
@@ -81246,18 +82500,134 @@
           "amountUsd": 24655000000
         },
         {
+          "symbol": "ORCL",
+          "amountUsd": 6527000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 387487000
+        },
+        {
+          "symbol": "AI",
+          "amountUsd": 68856000
+        },
+        {
+          "symbol": "SOUN",
+          "amountUsd": 59178000
+        },
+        {
+          "symbol": "BBAI",
+          "amountUsd": 6033000
+        },
+        {
+          "symbol": "PATH",
+          "amountUsd": 109920000
+        },
+        {
+          "symbol": "APP",
+          "amountUsd": 366402000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 3598000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 1397000000
+        },
+        {
+          "symbol": "SNOW",
+          "amountUsd": 237946000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6488000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 205161000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 1721222000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 214670000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 1140400000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 419769000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 266400000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 2455000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 1979000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 586752000
+        },
+        {
+          "symbol": "CRDO",
+          "amountUsd": 34845000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1493408000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 928487000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 2485000000
         }
       ]
     },
     {
       "fiscalYear": 2022,
-      "totalUsd": 104977679000,
+      "totalUsd": 165377387000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 5268000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 4919000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 5005000000
+        },
+        {
+          "symbol": "MRVL",
+          "amountUsd": 1424200000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 8194000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 3116000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 272273000
         },
         {
           "symbol": "MSFT",
@@ -81272,18 +82642,138 @@
           "amountUsd": 35338000000
         },
         {
+          "symbol": "ORCL",
+          "amountUsd": 7219000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 359679000
+        },
+        {
+          "symbol": "AI",
+          "amountUsd": 150544000
+        },
+        {
+          "symbol": "SOUN",
+          "amountUsd": 76392000
+        },
+        {
+          "symbol": "BBAI",
+          "amountUsd": 8393000
+        },
+        {
+          "symbol": "PATH",
+          "amountUsd": 276657000
+        },
+        {
+          "symbol": "APP",
+          "amountUsd": 507607000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 4465000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 1768000000
+        },
+        {
+          "symbol": "SNOW",
+          "amountUsd": 466932000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6567000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 308820000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 1879000000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 371283000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 1417700000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 752351000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 282000000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 2577000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 2045000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 728394000
+        },
+        {
+          "symbol": "CRDO",
+          "amountUsd": 47949000
+        },
+        {
+          "symbol": "ALAB",
+          "amountUsd": 73711000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1604248000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 1105254000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 2771000000
         }
       ]
     },
     {
       "fiscalYear": 2023,
-      "totalUsd": 118848624000,
+      "totalUsd": 186675880000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 7339000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 5253000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 5872000000
+        },
+        {
+          "symbol": "MRVL",
+          "amountUsd": 1784300000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 8818000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 3114000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 307260000
         },
         {
           "symbol": "MSFT",
@@ -81298,18 +82788,142 @@
           "amountUsd": 38483000000
         },
         {
+          "symbol": "CRWV",
+          "amountUsd": 21000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 8623000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 404624000
+        },
+        {
+          "symbol": "AI",
+          "amountUsd": 210660000
+        },
+        {
+          "symbol": "SOUN",
+          "amountUsd": 51439000
+        },
+        {
+          "symbol": "BBAI",
+          "amountUsd": 5035000
+        },
+        {
+          "symbol": "PATH",
+          "amountUsd": 285750000
+        },
+        {
+          "symbol": "APP",
+          "amountUsd": 333781000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 5055000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 2124000000
+        },
+        {
+          "symbol": "SNOW",
+          "amountUsd": 788058000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 6775000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 421692000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 2247000000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 608364000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 1604000000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 962447000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 303500000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 2779000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 2349000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 854900000
+        },
+        {
+          "symbol": "CRDO",
+          "amountUsd": 76774000
+        },
+        {
+          "symbol": "ALAB",
+          "amountUsd": 73407000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1727162000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 1296727000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 3102000000
         }
       ]
     },
     {
       "fiscalYear": 2024,
-      "totalUsd": 131891878000,
+      "totalUsd": 208362382000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 8675000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 9310000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 6456000000
+        },
+        {
+          "symbol": "MRVL",
+          "amountUsd": 1896200000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 8893000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 3430000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 463548000
         },
         {
           "symbol": "MSFT",
@@ -81324,18 +82938,142 @@
           "amountUsd": 43873000000
         },
         {
+          "symbol": "CRWV",
+          "amountUsd": 56000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 8915000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 507878000
+        },
+        {
+          "symbol": "AI",
+          "amountUsd": 201365000
+        },
+        {
+          "symbol": "SOUN",
+          "amountUsd": 70555000
+        },
+        {
+          "symbol": "BBAI",
+          "amountUsd": 10863000
+        },
+        {
+          "symbol": "PATH",
+          "amountUsd": 332101000
+        },
+        {
+          "symbol": "APP",
+          "amountUsd": 374710000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 4906000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 2543000000
+        },
+        {
+          "symbol": "SNOW",
+          "amountUsd": 1287949000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 7479000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 515940000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 2464000000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 780319000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 1809400000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 1152703000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 367600000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 2801000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 2246000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 996700000
+        },
+        {
+          "symbol": "CRDO",
+          "amountUsd": 96296000
+        },
+        {
+          "symbol": "ALAB",
+          "amountUsd": 200830000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 1902444000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 1278981000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 3233000000
         }
       ]
     },
     {
       "fiscalYear": 2025,
-      "totalUsd": 164418677000,
+      "totalUsd": 251193152000,
       "companies": [
         {
           "symbol": "NVDA",
           "amountUsd": 12914000000
+        },
+        {
+          "symbol": "AVGO",
+          "amountUsd": 10977000000
+        },
+        {
+          "symbol": "AMD",
+          "amountUsd": 8091000000
+        },
+        {
+          "symbol": "MRVL",
+          "amountUsd": 1950400000
+        },
+        {
+          "symbol": "QCOM",
+          "amountUsd": 9042000000
+        },
+        {
+          "symbol": "MU",
+          "amountUsd": 3798000000
+        },
+        {
+          "symbol": "SMCI",
+          "amountUsd": 636550000
         },
         {
           "symbol": "MSFT",
@@ -81350,8 +83088,108 @@
           "amountUsd": 57372000000
         },
         {
+          "symbol": "CRWV",
+          "amountUsd": 352000000
+        },
+        {
+          "symbol": "ORCL",
+          "amountUsd": 9860000000
+        },
+        {
           "symbol": "PLTR",
           "amountUsd": 557677000
+        },
+        {
+          "symbol": "AI",
+          "amountUsd": 226391000
+        },
+        {
+          "symbol": "SOUN",
+          "amountUsd": 98250000
+        },
+        {
+          "symbol": "BBAI",
+          "amountUsd": 16752000
+        },
+        {
+          "symbol": "PATH",
+          "amountUsd": 380682000
+        },
+        {
+          "symbol": "APP",
+          "amountUsd": 226510000
+        },
+        {
+          "symbol": "CRM",
+          "amountUsd": 5493000000
+        },
+        {
+          "symbol": "NOW",
+          "amountUsd": 2960000000
+        },
+        {
+          "symbol": "SNOW",
+          "amountUsd": 1783379000
+        },
+        {
+          "symbol": "IBM",
+          "amountUsd": 8316000000
+        },
+        {
+          "symbol": "MDB",
+          "amountUsd": 596837000
+        },
+        {
+          "symbol": "WDAY",
+          "amountUsd": 2626000000
+        },
+        {
+          "symbol": "CRWD",
+          "amountUsd": 1075587000
+        },
+        {
+          "symbol": "PANW",
+          "amountUsd": 1984100000
+        },
+        {
+          "symbol": "DDOG",
+          "amountUsd": 1548451000
+        },
+        {
+          "symbol": "VRT",
+          "amountUsd": 441700000
+        },
+        {
+          "symbol": "DELL",
+          "amountUsd": 3061000000
+        },
+        {
+          "symbol": "HPE",
+          "amountUsd": 2518000000
+        },
+        {
+          "symbol": "ANET",
+          "amountUsd": 1237300000
+        },
+        {
+          "symbol": "CRDO",
+          "amountUsd": 146867000
+        },
+        {
+          "symbol": "ALAB",
+          "amountUsd": 303998000
+        },
+        {
+          "symbol": "LRCX",
+          "amountUsd": 2096387000
+        },
+        {
+          "symbol": "KLAC",
+          "amountUsd": 1360334000
+        },
+        {
+          "symbol": "AMAT",
+          "amountUsd": 3570000000
         }
       ]
     }
