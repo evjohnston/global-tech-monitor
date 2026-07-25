@@ -122,21 +122,14 @@ a { color: inherit; }
 
 /* ── public markets panel: real per-company market data (Massive), a
    standing fact about a company rather than a dated pipeline event, so it
-   gets its own row rather than living inside a stage column. No red/green
-   for the day's move — this app's color budget is accent + country only. */
+   gets its own row rather than living inside a stage column. A scrollable
+   table (reuses .lb, see Leaderboard.tsx), not cards — a 20-50 row list
+   from the broadened ticker lists (2026-07-24) needs a dense, scannable
+   shape, not a wrapped grid. Capped height so a 47-row AI list doesn't
+   push the rest of the page down. No red/green for the day's move — this
+   app's color budget is accent + country only. */
 .marketpanel { margin-bottom: 6px; }
-.marketrow { display: flex; gap: 8px; flex-wrap: wrap; }
-.marketcard {
-  flex: 1 1 140px; min-width: 120px; text-align: left; cursor: pointer;
-  display: flex; flex-direction: column; gap: 2px;
-  background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 8px 10px;
-  font-family: var(--sans); color: inherit; text-decoration: none;
-}
-.marketcard:hover { border-color: var(--red); }
-.marketcard-sym { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.03em; }
-.marketcard-name { font-size: 10px; color: var(--mist); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.marketcard-cap { font-size: 15px; font-weight: 600; margin-top: 2px; }
-.marketcard-chg { font-size: 10.5px; color: var(--mist); }
+.marketpanel-scroll { max-height: 320px; overflow-y: auto; }
 .marketpanel .cap { font-size: 10px; color: var(--mist); margin-top: 8px; }
 
 /* ── page head ──────────────────────────────────────────────────── */

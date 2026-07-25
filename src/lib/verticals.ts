@@ -141,10 +141,32 @@ export const VERTICALS: VerticalConfig[] = [
     // stock-ticker/investor-advice noise a bare "quantum funding" query
     // pulls in filtered by rss.ts's FUNDING_RELEVANT/STOCK_NOISE_WORDS gates.
     investmentNewsQuery: '"quantum computing" (grant OR funding OR investment OR "national quantum" OR NSF)',
-    // Pure-play public quantum companies (IonQ, Rigetti, D-Wave) plus the
-    // large-cap incumbents with named quantum programs (IBM Quantum, Google
-    // Quantum AI, Honeywell — majority owner of Quantinuum).
-    tickers: ["IONQ", "RGTI", "QBTS", "IBM", "GOOGL", "HON"],
+    // Broadened 2026-07-24 from an original hand-picked 6 (pure-plays +
+    // large-cap incumbents) to 26 — built via a real research pass across
+    // pure-play hardware/software, large incumbents with named quantum
+    // programs, defense/aerospace contractors with documented quantum
+    // sensing/computing programs, and semiconductor/fab-equipment makers
+    // with real quantum-hardware R&D, each individually verified to have a
+    // specific, named quantum initiative (not just "big company, probably
+    // does quantum somewhere"). Every ticker here also confirmed live
+    // against Massive's reference endpoint to actually carry market-cap
+    // data — 11 more real, defensible candidates (Archer Materials, BAE
+    // Systems, Airbus, Fujitsu, NTT, NEC, Mitsubishi Electric, Thales,
+    // Samsung — foreign OTC ADRs) resolve on Massive but carry no market
+    // cap on this plan tier, and 2 (Toshiba's TOSYY, Quantum eMotion's
+    // QNCCF) don't resolve at all — all excluded rather than shown as
+    // empty rows. Since all of these except the 3 pure-plays are large
+    // diversified companies, their SEC-EDGAR R&D-spend figure (see
+    // secEdgar.ts) is total corporate R&D, not quantum-specific R&D —
+    // Lockheed Martin's real R&D spend is overwhelmingly not about
+    // quantum computing. Disclosed in CLAUDE.md; don't read the R&D chart
+    // as "R&D spent on quantum" for anything past the 3 pure-plays.
+    tickers: [
+      "IONQ", "RGTI", "QBTS", "QUBT", "ARQQ", "LAES", // pure-play quantum hardware/software
+      "IBM", "GOOGL", "MSFT", "AMZN", "HON", "INTC", "NVDA", // large incumbents, named quantum programs
+      "LMT", "NOC", "RTX", "GD", "LHX", "LDOS", "BAH", // defense/aerospace, documented quantum programs
+      "AMAT", "ASML", "HPE", "CSCO", "NOK", "SKM", // semiconductor/fab equipment + quantum networking
+    ],
   },
   {
     id: "artificial-intelligence",
@@ -197,10 +219,30 @@ export const VERTICALS: VerticalConfig[] = [
     // cleaned up by the same shared FUNDING_RELEVANT/STOCK_NOISE_WORDS gates.
     investmentNewsQuery:
       '"artificial intelligence" (grant OR funding OR investment OR "national ai" OR "ai strategy" OR NSF)',
-    // Large-cap compute/model incumbents (Nvidia hardware; Microsoft,
-    // Alphabet, Meta, Amazon frontier labs + cloud AI) plus Palantir as the
-    // largest pure-play public AI-application company.
-    tickers: ["NVDA", "MSFT", "GOOGL", "META", "AMZN", "PLTR"],
+    // Broadened 2026-07-24 from an original hand-picked 6 to 47 — built via
+    // a real research pass across AI chip/hardware, frontier-lab
+    // incumbents, AI-native application software, enterprise software with
+    // named AI products, and AI-infrastructure/data-center names, each
+    // individually verified to have a specific, named AI program or
+    // product. Every ticker confirmed live against Massive's reference
+    // endpoint to actually carry market-cap data — 3 candidates (Tencent,
+    // SoftBank, Samsung — foreign OTC ADRs) resolve on Massive but carry no
+    // market cap on this plan tier and are excluded rather than shown as
+    // empty rows (Alibaba and Baidu, both real ADR-listed on a US
+    // exchange, DO carry market cap and are kept). Same caveat as
+    // quantum's list: for the semiconductor-equipment and general
+    // data-center-infrastructure names (LRCX/KLAC/AMAT/TER, VRT/DELL/HPE/
+    // ANET), SEC-EDGAR R&D spend (secEdgar.ts) is total corporate R&D, not
+    // AI-specific spend — see CLAUDE.md.
+    tickers: [
+      "NVDA", "TSM", "AVGO", "AMD", "ASML", "ARM", "MRVL", "QCOM", "MU", "SMCI", // AI chips/hardware
+      "MSFT", "GOOGL", "AMZN", "META", "CRWV", "NBIS", "ORCL", // frontier labs / AI cloud infra incumbents
+      "PLTR", "AI", "SOUN", "BBAI", "INOD", "PATH", "APP", // AI-native application software
+      "CRM", "NOW", "ADBE", "SNOW", "SAP", "IBM", "MDB", "WDAY", "CRWD", "PANW", "DDOG", // enterprise software, named AI products
+      "BABA", "BIDU", // foreign AI labs with real US-tradable ADRs
+      "VRT", "DELL", "HPE", "ANET", "CRDO", "ALAB", // AI data-center infrastructure
+      "LRCX", "KLAC", "AMAT", "TER", // AI-chip fabrication equipment
+    ],
   },
   {
     id: "talent",

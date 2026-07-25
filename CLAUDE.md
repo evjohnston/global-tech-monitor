@@ -210,8 +210,34 @@ quantum, so the public-markets panel just doesn't render for this vertical.
 
 Added 2026-07-24. Each `VerticalConfig` carries a `tickers: string[]` — a
 hand-picked list of real, publicly-traded companies materially exposed to
-that vertical (quantum: IONQ/RGTI/QBTS/IBM/GOOGL/HON; AI:
-NVDA/MSFT/GOOGL/META/AMZN/PLTR). `scripts/fetch-data.ts` fetches each
+that vertical. Started at 6 per vertical, broadened the same day to 26
+(quantum) and 47 (AI) via a real research pass per vertical (see
+`verticals.ts`'s own comments for the category breakdown — pure-plays,
+large incumbents, defense contractors with documented programs,
+fab-equipment makers, etc.) — every candidate ticker was then confirmed
+live against Massive's own reference endpoint before being kept; 2 didn't
+resolve at all (Toshiba's `TOSYY`, Quantum eMotion's `QNCCF`) and 14 more
+resolved but carry no market-cap data on this plan tier (mostly foreign
+OTC ADRs — Samsung, SoftBank, Tencent, NTT, Fujitsu, BAE Systems, Airbus,
+Thales, Mitsubishi Electric, NEC, Archer Materials) — all excluded rather
+than shown as empty rows. `CompanyMarketPanel.tsx` renders this as a
+scrollable table (reusing the `.lb` leaderboard table styling), not cards
+— a 20-50 row list needs a dense, scannable shape, not a wrapped card grid.
+
+**Known tension, not yet resolved**: past the handful of pure-plays
+(IonQ/Rigetti/D-Wave/Quantum Computing Inc./Arqit/SEALSQ for quantum),
+most of these tickers are large diversified companies (Lockheed Martin,
+IBM, Adobe, chip-fab-equipment makers) whose total SEC-EDGAR R&D spend
+(`secEdgar.ts`, feeding `RdSpendTrend.tsx`) is NOT specifically quantum or
+AI R&D — it's their whole company's R&D budget, of which the vertical in
+question is one line among many. Broadening the ticker list from 6 to
+26/47 made this tension worse, not better: the "Private investment over
+time" chart now reads more like "total R&D of companies with some
+exposure to this vertical" than "R&D spent on this vertical" specifically.
+Flagged here rather than silently worked around — a real fix would need a
+per-company weighting or a pure-play-only mode, not yet built.
+
+`scripts/fetch-data.ts` fetches each
 ticker's market cap and today's price move via the Massive REST API
 (`src/lib/sources/massive.ts`, `api.massive.com` — confirmed by hand against
 the real docs before writing this, not guessed: `GET
