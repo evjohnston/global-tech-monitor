@@ -18,6 +18,10 @@ import { MoneyFlowRankedBars } from "../components/MoneyFlowRankedBars.tsx";
 import { MoneyFlowMatrix } from "../components/MoneyFlowMatrix.tsx";
 import { MethodNote } from "../components/MethodNote.tsx";
 import { SectionHeader } from "../components/ChartFrame.tsx";
+import { FindingsPanel } from "../components/FindingsPanel.tsx";
+import { computeDashboardFindings } from "../lib/findingsEngine.ts";
+import { tickerProfile, RD_SECTOR_LABEL, type RdSector } from "../lib/companyCategory.ts";
+import type { MoneyFlowView } from "../lib/urlState.ts";
 
 type Route = "grants" | "private" | "rd" | "public";
 const ROUTES: { key: Route; label: string }[] = [
@@ -27,11 +31,13 @@ const ROUTES: { key: Route; label: string }[] = [
   { key: "public", label: "Public companies" },
 ];
 
+const RD_SECTORS: RdSector[] = ["all", "pure-play", "semiconductors", "software-platforms", "defense-aerospace"];
+
 // Money flow default is "Attributable amount — ranked bars," never the
 // Sankey — the deal-count Sankey stays available as a secondary,
-// explicitly-chosen view, not the first thing a reader sees.
-type FlowView = "amount-bars" | "count" | "amount-matrix";
-const FLOW_VIEWS: { key: FlowView; label: string }[] = [
+// explicitly-chosen view, not the first thing a reader sees. Persisted in
+// the URL (ctx.moneyFlowView) so a shared link reopens on the same view.
+const FLOW_VIEWS: { key: MoneyFlowView; label: string }[] = [
   { key: "amount-bars", label: "Attributable amount (ranked bars)" },
   { key: "count", label: "Deal count (flow)" },
   { key: "amount-matrix", label: "Attributable amount (matrix)" },
@@ -43,29 +49,53 @@ const FLOW_VIEWS: { key: FlowView; label: string }[] = [
 // with different sources, coverage, and meaning (see CLAUDE.md's standing
 // rule against blending them into one figure).
 export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
-  const { data, entries, shown, trend21, country, compareCountries, openOrgDrawer, openOrgDrawerBySymbol, openTarget } = ctx;
+  const { data, entries, shown, trend21, country, compareCountries, vertical, openOrgDrawer, openOrgDrawerBySymbol, openTarget, moneyFlowView: flowView, setMoneyFlowView: setFlowView } = ctx;
   const [route, setRoute] = useState<Route>("grants");
-  const [flowView, setFlowView] = useState<FlowView>("amount-bars");
+  const [rdSector, setRdSector] = useState<RdSector>("all");
 
-  const fundingTop = useMemo(() => topCountries(fundingByCountry(entries), 8), [entries]);
+  const fundingByCountryMap = useMemo(() => fundingByCountry(entries), [entries]);
+  const fundingTop = useMemo(() => topCountries(fundingByCountryMap, 8), [fundingByCountryMap]);
   const fundingGrandTotal = fundingTop.top.reduce((s, c) => s + c.count, 0) + fundingTop.rest.reduce((s, c) => s + c.count, 0) || 1;
   const latestRdSpend = data?.rdSpend?.[data.rdSpend.length - 1];
   const vcTotalUsd = useMemo(() => data?.vcFunding?.reduce((s, c) => s + c.totalRaisedUsd, 0) ?? 0, [data]);
   const marketCapTotalUsd = useMemo(() => data?.companies?.reduce((s, c) => s + (c.marketCapUsd ?? 0), 0) ?? 0, [data]);
 
   const countryHasNoGrantCoverage = country !== "all" && fundingTop.top.every((c) => c.country !== country) && fundingTop.rest.every((c) => c.country !== country);
+  // A country filter genuinely applies to Public grants (NSF entries carry
+  // a real country) but NOT to the other three pools — VcCompanyFunding,
+  // RdSpendPoint, and CompanySnapshot are all company-level records with
+  // no country field at all (see CLAUDE.md). Silently leaving those three
+  // cards showing the unfiltered global total while the grants card
+  // changes would read as if all four pools respected the filter equally,
+  // which isn't true — say so explicitly instead.
+  const isFiltered = country !== "all";
+  const countryGrantTotal = fundingByCountryMap[country] ?? 0;
+  const findings = useMemo(() => computeDashboardFindings(entries, "money", country), [entries, country]);
 
   return (
     <div>
       <div className="kpirow">
-        <KpiCard label="Public grants" value={fmtUsd(fundingTop.top.reduce((s, c) => s + c.count, 0) + fundingTop.rest.reduce((s, c) => s + c.count, 0))} caption="NSF, all time · US/EU only, no PRC feed" />
-        {data?.vcFunding && data.vcFunding.length > 0 && <KpiCard label="Private funding disclosed" value={fmtUsd(vcTotalUsd)} caption="S&P Capital IQ · all-time" />}
-        {latestRdSpend && <KpiCard label="Total company R&D" value={fmtUsd(latestRdSpend.totalUsd)} caption={`FY${latestRdSpend.fiscalYear} · not field-specific spending`} />}
-        {data?.companies && data.companies.length > 0 && <KpiCard label="Public companies tracked" value={String(data.companies.length)} caption={`${fmtUsd(marketCapTotalUsd)} combined market cap`} />}
+        <KpiCard
+          label={isFiltered ? `${countryName(country)} public grants` : "Public grants"}
+          value={isFiltered ? (countryGrantTotal > 0 ? fmtUsd(countryGrantTotal) : "—") : fmtUsd(fundingGrandTotal)}
+          caption={isFiltered ? (countryGrantTotal > 0 ? "NSF, all time — this country only" : "No comparable grant feed for this country") : "NSF, all time · US/EU only, no PRC feed"}
+        />
+        {data?.vcFunding && data.vcFunding.length > 0 && (
+          <KpiCard label="Private funding disclosed" value={fmtUsd(vcTotalUsd)} caption={isFiltered ? "Global total — no per-company country field, filter doesn't apply" : "S&P Capital IQ · all-time"} />
+        )}
+        {latestRdSpend && (
+          <KpiCard label="Total company R&D" value={fmtUsd(latestRdSpend.totalUsd)} caption={isFiltered ? `FY${latestRdSpend.fiscalYear} · global, filter doesn't apply` : `FY${latestRdSpend.fiscalYear} · not field-specific spending`} />
+        )}
+        {data?.companies && data.companies.length > 0 && (
+          <KpiCard label="Public companies tracked" value={String(data.companies.length)} caption={isFiltered ? `${fmtUsd(marketCapTotalUsd)} global, filter doesn't apply` : `${fmtUsd(marketCapTotalUsd)} combined market cap`} />
+        )}
       </div>
       <div className="trend-note" style={{ marginBottom: 10 }}>
         Four distinct real pools, never summed into one figure — each has its own coverage, source, and definition below.
+        {isFiltered && " A country filter only changes the Public grants card — the other three pools have no per-company country field to filter by."}
       </div>
+
+      <FindingsPanel findings={findings} onOpenTarget={openTarget} />
 
       <div className="tab-bar" style={{ marginBottom: 14 }}>
         {ROUTES.map((r) => <button key={r.key} className="chip" aria-pressed={route === r.key} onClick={() => setRoute(r.key)}>{r.label}</button>)}
@@ -115,8 +145,6 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
                   </div>
                 );
               })()}
-              <VcFundingLeaderboard companies={data.vcFunding} onSelect={openOrgDrawer} />
-              <InvestorLeaderboard companies={data.vcFunding} onSelectInvestor={(name) => openTarget({ kind: "investor", name })} onSelectCompany={openOrgDrawer} />
               <div className="panel">
                 <SectionHeader
                   title="How does money flow from investors to companies?"
@@ -138,6 +166,8 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
                 {flowView === "amount-bars" && <MoneyFlowRankedBars companies={data.vcFunding} onSelectLink={(investor, companyId) => openTarget({ kind: "sankeyLink", investor, companyId })} />}
                 {flowView === "amount-matrix" && <MoneyFlowMatrix companies={data.vcFunding} />}
               </div>
+              <VcFundingLeaderboard companies={data.vcFunding} onSelect={openOrgDrawer} />
+              <InvestorLeaderboard companies={data.vcFunding} onSelectInvestor={(name) => openTarget({ kind: "investor", name })} onSelectCompany={openOrgDrawer} />
             </>
           ) : (
             <div className="trend-empty">No private funding data imported for this vertical yet.</div>
@@ -158,9 +188,16 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
               </div>
               <div className="panel">
                 <SectionHeader title="Which companies report the most R&D spend?" />
+                <div className="tab-bar" style={{ marginBottom: 8 }}>
+                  {RD_SECTORS.map((s) => (
+                    <button key={s} className="chip" aria-pressed={rdSector === s} onClick={() => setRdSector(s)}>{RD_SECTOR_LABEL[s]}</button>
+                  ))}
+                </div>
                 {(() => {
                   const latest = data.rdSpend[data.rdSpend.length - 1];
-                  const sorted = [...latest.companies].sort((a, b) => b.amountUsd - a.amountUsd);
+                  const filtered = rdSector === "all" ? latest.companies : latest.companies.filter((c) => tickerProfile(vertical.id, c.symbol).sector === rdSector);
+                  const sorted = [...filtered].sort((a, b) => b.amountUsd - a.amountUsd);
+                  if (sorted.length === 0) return <div className="trend-empty">No tracked companies in this sector for {vertical.shortLabel}.</div>;
                   const max = Math.max(1, ...sorted.map((c) => c.amountUsd));
                   return sorted.map((c) => (
                     <BarRow
@@ -192,7 +229,7 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
             <strong>Public companies with tracked activity in this field.</strong> Market capitalization is a standing fact about a company, not capital flowing into the technology — this is an exposure list, not an investment total.
           </div>
           {data?.companies && data.companies.length > 0 ? (
-            <CompanyMarketPanel companies={data.companies} onSelect={openOrgDrawer} />
+            <CompanyMarketPanel companies={data.companies} verticalId={vertical.id} onSelect={openOrgDrawer} />
           ) : (
             <div className="trend-empty">No public-market data available for this vertical's tracked tickers.</div>
           )}

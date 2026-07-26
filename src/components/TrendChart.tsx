@@ -65,10 +65,13 @@ export function TrendChart({
   // with 4-6 countries splitting the pie, no single share usually gets
   // anywhere near 100%, so a fixed full-scale axis reads as flat lines
   // hugging the bottom. Round up to the nearest 10 and add 5pt headroom
-  // above the highest real recorded point.
+  // above the highest real recorded point — but never past 100%, since
+  // this is a share of a real total and can't honestly exceed it (a plain
+  // +5pt headroom on a rawMax near 100 used to round up to a 110% top
+  // gridline, which isn't a real value this chart could ever show).
   const allVals = shares.flatMap((s) => order.map((c) => s.pct[c]));
   const rawMax = Math.max(1, ...allVals);
-  const yMax = Math.ceil((rawMax + 5) / 10) * 10;
+  const yMax = Math.min(100, Math.ceil((rawMax + 5) / 10) * 10);
 
   const x = (i: number) => padL + (i / Math.max(1, nHist - 1)) * plotW;
   const y = (pct: number) => padT + (1 - pct / yMax) * plotH;

@@ -52,9 +52,29 @@
   --fs-card-value: 27px; --fs-card-label: 11px; --fs-body: 14px; --fs-methods: 12.5px;
   --r: 0px;
 }
-/* Dark theme — same tokens, same rules (zero radius, borders not shadows,
-   same restrained color budget), just the ink/paper/line axis inverted
-   and every named color lifted so it still reads against a dark panel. */
+/* Semantic surface/text/border tokens — used for the specific spots the
+   plain --paper/--panel/--ink axis doesn't cover safely: anything that
+   means "selected/active" needs its OWN token, because reusing --ink for
+   an inverted "dark pill, white text" treatment (as several pressed
+   states here used to) breaks the moment --ink itself flips to a LIGHT
+   value in dark mode — that pattern was rendering the selected technology
+   tab, selected chip, and selected dashboard tab as a white block sitting
+   in an otherwise dark UI. Light-mode values map onto the existing
+   palette; dark-mode values are real, hand-picked tones — never a plain
+   inversion of the light set. */
+:root {
+  --page-bg: var(--panel); --header-bg: var(--paper);
+  --surface-1: var(--paper); --surface-2: var(--panel-2); --surface-3: #e4e7ea;
+  --surface-selected: #14181d; --surface-hover: var(--panel);
+  --border-subtle: var(--line); --border-default: var(--line-2); --border-strong: var(--slate);
+  --text-primary: var(--ink); --text-secondary: var(--ink-2); --text-muted: var(--mist); --text-disabled: #a7afb8;
+  --on-selected: #ffffff;
+  --gridline: var(--line); --track-bg: var(--panel); --focus-ring: var(--red);
+  color-scheme: light;
+}
+/* Dark theme — same rules (zero radius, borders not shadows, same
+   restrained color budget), just the ink/paper/line axis inverted and
+   every named color lifted so it still reads against a dark panel. */
 :root[data-theme="dark"] {
   --red: #c8395c;
   --us: #5b82b0; --cn: #c8395c; --eu: #c99a5c; --other: #6b7480;
@@ -63,6 +83,15 @@
   --status-verified: #5fae82; --status-reported: #8b95a3; --status-uncertain: #d1a35c; --status-missing: #4a5058;
   --ink: #e8eaed; --ink-2: #b8c0cb; --slate: #8b95a3; --mist: #6b7480;
   --line: #2a2f37; --line-2: #3a4049; --panel: #1a1d22; --panel-2: #20242b; --paper: #14161a;
+
+  --page-bg: #101217; --header-bg: #11141a;
+  --surface-1: #15181e; --surface-2: #1a1e25; --surface-3: #20252e;
+  --surface-selected: #29313d; --surface-hover: #242a34;
+  --border-subtle: #2a303a; --border-default: #353d49; --border-strong: #4a5564;
+  --text-primary: #f1f3f5; --text-secondary: #b6bec9; --text-muted: #818c9b; --text-disabled: #626c79;
+  --on-selected: #f1f3f5;
+  --gridline: #2c323c; --track-bg: #1e2229; --focus-ring: #88b5eb;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -100,25 +129,40 @@ a { color: inherit; }
 .verticals { display: flex; gap: 4px; }
 .vtab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 9px; border: 1px solid var(--line-2); background: var(--paper); color: var(--mist); cursor: pointer; border-radius: 0; }
 .vtab:hover { border-color: var(--slate); color: var(--ink); }
-.vtab[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.vtab[aria-pressed="true"] { background: var(--surface-selected); border-color: var(--surface-selected); color: var(--on-selected); }
 
-/* ── news ticker — real recent entries, auto-scrolling ─────────────── */
-.ticker { border-bottom: 1px solid var(--line); background: var(--panel-2); overflow: hidden; white-space: nowrap; display: flex; align-items: stretch; }
+/* ── breaking-news tracker — real news-shaped entries only, continuously
+   scrolling by default (the motion is deliberate — this reads as a live
+   "breaking news" strip, not a static list). Pauses on hover/focus/
+   explicit pause; prev/next nudge a paused track by roughly one story via
+   an inline transform override, layered on top of the same CSS-driven
+   loop rather than replacing it with a second scroll mechanism. ──────── */
+.ticker { border-bottom: 1px solid var(--line); background: var(--panel-2); overflow: hidden; white-space: nowrap; display: flex; align-items: stretch; min-height: 30px; }
 .ticker-label {
   flex: none; display: flex; align-items: center; gap: 5px; padding: 0 12px;
   font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
   background: var(--red); color: #fff;
 }
-.ticker-track-wrap { flex: 1; overflow: hidden; position: relative; }
+.ticker-track-wrap { flex: 1; overflow: hidden; position: relative; min-width: 0; }
 .ticker-track { display: inline-flex; align-items: center; animation: ticker-scroll linear infinite; }
-.ticker-track-wrap:hover .ticker-track { animation-play-state: paused; }
+.ticker-track.paused { animation-play-state: paused; }
 .ticker-item { display: inline-flex; align-items: center; gap: 6px; padding: 0 22px; font-size: 11px; color: var(--ink-2); }
 .ticker-link { font: inherit; border: none; background: none; padding: 0; color: inherit; cursor: pointer; }
 .ticker-link:hover { color: var(--red); }
-.ticker-tag { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; padding: 1px 4px; }
-.ticker-sep { color: var(--line-2); }
+.ticker-tag { flex: none; font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; padding: 1px 4px; }
+.ticker-sep { flex: none; color: var(--line-2); }
+.ticker-also { flex: none; font-size: 10px; color: var(--mist); font-style: italic; }
 @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } .live-dot { animation: none; } .cited-track { animation: none; } }
+.ticker-ctrl {
+  flex: none; border: none; border-left: 1px solid var(--line); background: none; color: var(--ink-2);
+  cursor: pointer; padding: 0 10px; font-size: 13px;
+}
+.ticker-ctrl:hover { color: var(--red); background: var(--panel); }
+.ticker-fallback-note { flex: none; font-size: 9.5px; color: var(--mist); padding: 0 10px; display: flex; align-items: center; border-left: 1px solid var(--line); text-transform: uppercase; letter-spacing: 0.04em; }
+.ticker-empty { flex: 1; padding: 6px 12px; font-size: 11px; color: var(--mist); }
+.ticker-static-list { flex: 1; overflow-x: auto; display: flex; }
+.ticker-static-list .ticker-item { border-right: 1px solid var(--line); }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
 
 /* ── most-cited ticker: a row of cards, not a text line — width-matched
    to .wrap (not edge-to-edge like the top ticker), tall enough to read
@@ -183,7 +227,7 @@ a { color: inherit; }
 .pill { cursor: default; }
 .pill.primary { background: var(--red); color: #fff; border-color: var(--red); font-weight: 600; }
 .chip:hover, .ghost-btn:hover { border-color: var(--slate); color: var(--ink); }
-.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.chip[aria-pressed="true"] { background: var(--surface-selected); border-color: var(--surface-selected); color: var(--on-selected); }
 .ghost-btn:hover { border-color: var(--red); color: var(--red); }
 .controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; padding: 8px 0 10px; }
 .controls .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mist); margin-right: 4px; }
@@ -213,14 +257,28 @@ a { color: inherit; }
    vertical actually has (a vertical can genuinely have no tickers/
    vcFunding at all), so auto-fit rather than a fixed column count. */
 .finrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--sp-1); margin-bottom: var(--sp-1); }
-.kpi { padding: var(--sp-2); }
+.kpi { padding: var(--sp-2); min-width: 0; }
+/* Country-filtered metric row: 3 one-unit cards + 1 two-unit institution/
+   organization card = 5 units total, same width as the unfiltered
+   5-card row — the row's total width never jumps when a filter is
+   applied. A long institution name wraps rather than forcing overflow. */
+.kpi-span2 { grid-column: span 2; }
 .kpi.hi { background: var(--red); border-color: var(--red); color: #fff; }
-.kpi .label { font-size: var(--fs-card-label); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
+.kpi .label { font-size: var(--fs-card-label); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); overflow-wrap: break-word; }
 .kpi.hi .label { color: rgba(255,255,255,.8); }
-.kpi .val { font-size: var(--fs-card-value); font-weight: 700; margin-top: 7px; line-height: 1.1; }
+/* Deliberately smaller than --fs-card-value (27px, kept for LeaderCard's
+   pure-percentage display) — a KpiCard's value is often a real institution/
+   organization/country name (e.g. "United States Air Force Research
+   Laboratory"), not just a number, and 27px bold with no wrap forced that
+   text out of the card's own bounds into its neighbors. 22px + wrapping
+   keeps the "big number" emphasis for short values while giving long
+   names real room to wrap onto a second or third line instead of
+   overflowing. */
+.kpi .val { font-size: 22px; font-weight: 700; margin-top: 7px; line-height: 1.25; overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
+.kpi-span2 .val { font-size: 22px; }
 .kpi .delta { font-size: 11px; font-weight: 600; margin-left: 5px; color: var(--ink-2); }
 .kpi.hi .delta { color: rgba(255,255,255,.85); }
-.kpi .cap { font-size: 11px; color: var(--ink-2); margin-top: 4px; line-height: 1.4; }
+.kpi .cap { font-size: 11px; color: var(--ink-2); margin-top: 4px; line-height: 1.4; overflow-wrap: break-word; }
 .kpi.hi .cap { color: rgba(255,255,255,.75); }
 
 .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 6px; }
@@ -302,6 +360,15 @@ a { color: inherit; }
 .lb .count { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink-2); }
 .lb .right { text-align: right; }
 .actor-tag { display: inline-block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.03em; padding: 1px 5px; border-radius: 0; color: #fff; white-space: nowrap; }
+/* Dark-mode country tokens (--country-us/-cn/-in/-eu) are deliberately
+   LIGHTENED from their light-mode values so they still read as chart
+   lines against a dark panel — the same tokens .actor-tag uses as a
+   BADGE BACKGROUND with white text on top, and a medium-light badge with
+   white text fails WCAG AA contrast (confirmed by hand: ~2.5-3:1, not the
+   4.5:1 floor). Dark text on the same lightened badge clears it easily,
+   so the badge and the chart-line use of the same token stay in sync
+   without needing a second color per country. */
+:root[data-theme="dark"] .actor-tag { color: #12141a; }
 .viewall { font-size: 10.5px; color: var(--red); font-weight: 600; margin-top: 6px; display: inline-block; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 
 /* ── map ────────────────────────────────────────────────────────── */
@@ -387,8 +454,14 @@ a { color: inherit; }
 .drawer-field-value { color: var(--ink); text-align: right; }
 .drawer-note { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; margin: 4px 0 8px; }
 .drawer-link-btn {
-  background: none; border: none; padding: 0; font: inherit; color: var(--red); font-weight: 600;
-  cursor: pointer; text-decoration: none;
+  /* Browsers default <button> to text-align: center — invisible for a
+     one-line label, but it visibly center-wraps a long entry title spanning
+     multiple lines inside a drawer-list <li>. Left it is, like any other
+     link. Left as inline-block (its real default) rather than forced
+     block/full-width, since this class is also used inline mid-sentence
+     (Field values, "· {count}" suffixes) where block layout would break. */
+  background: none; border: none; padding: 0; font: inherit;
+  color: var(--red); font-weight: 600; text-align: left; cursor: pointer; text-decoration: none;
 }
 .drawer-link-btn:hover { text-decoration: underline; }
 
@@ -409,6 +482,7 @@ a { color: inherit; }
 .country-filter-select {
   font-family: var(--sans); font-size: 11px; border: 1px solid var(--line-2); background: var(--paper);
   color: var(--ink-2); padding: 3px 6px; border-radius: var(--r); max-width: 160px;
+  text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
 }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
@@ -438,11 +512,13 @@ a { color: inherit; }
 }
 .dashboard-nav { display: flex; gap: 4px; flex-wrap: wrap; margin: 0 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
 .dashboard-nav-btn {
-  font-family: var(--sans); font-size: 13px; font-weight: 700; border: 1px solid var(--line-2);
-  background: var(--paper); color: var(--ink-2); padding: 7px 14px; border-radius: var(--r); cursor: pointer;
+  font-family: var(--sans); font-size: 13px; font-weight: 700; border: 1px solid var(--line-2); border-bottom: 3px solid var(--line-2);
+  background: var(--paper); color: var(--ink-2); padding: 7px 14px 5px; border-radius: var(--r); cursor: pointer;
 }
 .dashboard-nav-btn:hover { border-color: var(--slate); color: var(--ink); }
-.dashboard-nav-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.dashboard-nav-btn[aria-pressed="true"] {
+  background: var(--surface-selected); border-color: var(--surface-selected); border-bottom-color: var(--red); color: var(--on-selected);
+}
 
 /* ── LeaderCard — one of the Overview's four "who leads" cards ────── */
 .leader-card {
@@ -497,8 +573,13 @@ a { color: inherit; }
 
 /* ── Overview: research-minus-adoption diverging bar chart ────────── */
 .gap-chart { display: flex; flex-direction: column; gap: 6px; }
-.gap-chart-row { display: grid; grid-template-columns: 100px 1fr 56px; gap: var(--sp-2); align-items: center; }
-.gap-chart-label { font-size: 12px; color: var(--ink); text-align: left; }
+.gap-chart-row { display: grid; grid-template-columns: minmax(90px, 150px) 1fr 56px; gap: var(--sp-2); align-items: center; }
+/* A real country name can run to 30+ characters ("Islamic Republic of
+   Iran," "Democratic People's Republic of Korea") — a fixed 100px column
+   with no wrap forced long names past the row into the bar track next to
+   it. Wraps onto a second line instead; the row still reads fine since
+   each row has real vertical room between it and its neighbors. */
+.gap-chart-label { font-size: 12px; color: var(--ink); text-align: left; overflow-wrap: break-word; line-height: 1.3; }
 .gap-chart-track { position: relative; height: 14px; }
 .gap-chart-zero { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-2); }
 .gap-chart-bar { position: absolute; top: 1px; bottom: 1px; }
@@ -635,6 +716,16 @@ a { color: inherit; }
 .finding-label { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mist); }
 .finding-value { font-size: 16px; font-weight: 700; }
 .finding-delta { font-size: 10.5px; font-weight: 600; color: var(--red); }
+
+/* ── FindingsPanel — 2-4 real, threshold-gated findings, always placed
+   after the metric row and before the first chart (section 6). ───────── */
+.findings-panel { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.finding-item { padding: var(--sp-2) var(--sp-3); background: var(--panel-2); border-left: 3px solid var(--red); }
+.finding-text { font-size: var(--fs-body); color: var(--ink); line-height: 1.5; text-align: left; }
+.finding-meta { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.finding-period, .finding-quality { font-size: 10.5px; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.03em; }
+.finding-link { font: inherit; font-size: 11.5px; font-weight: 600; color: var(--red); background: none; border: none; padding: 0; cursor: pointer; }
+.finding-link:hover { text-decoration: underline; }
 .finding-context { font-size: 11px; color: var(--ink-2); line-height: 1.4; margin-top: 2px; }
 
 /* ── tooltip ────────────────────────────────────────────────────── */
@@ -666,7 +757,7 @@ a { color: inherit; }
   padding: 2px 7px; border-radius: var(--r); cursor: pointer;
 }
 .stage-chip:hover { border-color: var(--stage,var(--slate)); color: var(--ink); }
-.stage-chip[aria-pressed="true"] { background: var(--stage,var(--ink)); border-color: var(--stage,var(--ink)); color: #fff; }
+.stage-chip[aria-pressed="true"] { background: var(--stage,var(--surface-selected)); border-color: var(--stage,var(--surface-selected)); color: var(--on-selected); }
 /* No internal scroll — StageColumn caps its inline list to INLINE_LIMIT
    real records and links to RecordExplorer for the rest, so four columns
    never carry four permanently-visible nested scrollbars. */
@@ -754,8 +845,11 @@ a { color: inherit; }
 .lb tbody tr.clickable:focus-visible,
 .barrow.clickable:focus-visible,
 .stagecomp-row.clickable:focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
-.map-geography:focus-visible { outline: 3px solid var(--red) !important; outline-offset: -2px; }
-svg [role="button"]:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; }
+.map-geography:focus-visible { outline: 3px solid var(--focus-ring) !important; outline-offset: -2px; }
+svg [role="button"]:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+input:focus-visible, select:focus-visible, button:focus-visible {
+  outline: 2px solid var(--focus-ring); outline-offset: 2px;
+}

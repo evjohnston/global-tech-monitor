@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { DashboardContext } from "./types.ts";
-import { countByCountry, orgLeaderboard, topCountries } from "../lib/aggregate.ts";
+import { countByCountry, orgLeaderboard, rankOf, topCountries } from "../lib/aggregate.ts";
 import { entriesAsOf, daysAgo } from "../lib/history.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
 import { innovationByCountryClaim } from "../lib/claims.ts";
@@ -12,8 +12,11 @@ import { TrendChart } from "../components/TrendChart.tsx";
 import { Leaderboard } from "../components/Leaderboard.tsx";
 import { InstitutionConcentration } from "../components/InstitutionConcentration.tsx";
 import { CollaborationNetwork } from "../components/CollaborationNetwork.tsx";
+import { ResearchFlowSankey } from "../components/ResearchFlowSankey.tsx";
 import { MethodNote } from "../components/MethodNote.tsx";
 import { SectionHeader } from "../components/ChartFrame.tsx";
+import { FindingsPanel } from "../components/FindingsPanel.tsx";
+import { computeDashboardFindings } from "../lib/findingsEngine.ts";
 
 const CHANGE_WINDOW_DAYS = 42;
 
@@ -52,20 +55,47 @@ export function TrackResearch({ ctx }: { ctx: DashboardContext }) {
     return best;
   }, [innovationCounts, pastCounts]);
   const topOrg = orgRows[0];
+  const findings = useMemo(() => computeDashboardFindings(entries, "research", country), [entries, country]);
+
+  // Country-filtered metric row (section 5.2): every card recalculates for
+  // the selected country, not just the institution card — "Top country"
+  // and "Fastest-growing" drop out (they're global-comparison concepts
+  // that don't mean anything once one country is the whole view), replaced
+  // by that country's own share/rank. shown/orgRows already reflect the
+  // active country filter (ctx filters shown by country before this
+  // component ever sees it), so the institution card needs no new logic —
+  // only the three record-count cards and the share/rank card do.
+  const isFiltered = country !== "all";
+  const countryInnovationEntries = useMemo(() => shown.filter((e) => e.stage === "innovation"), [shown]);
+  const countryPublications = countryInnovationEntries.filter((e) => e.source !== "patent").length;
+  const countryPatents = countryInnovationEntries.filter((e) => e.source === "patent").length;
+  const countryRank = isFiltered ? rankOf(innovationCounts, country) : null;
+  const countryShare = isFiltered ? ((innovationCounts[country] ?? 0) / innovationTotal) * 100 : null;
 
   return (
     <div>
-      <div className="kpirow">
-        <KpiCard label="Tracked research records" value={String(innovationEntries.length)} caption="papers, patents, and research statistics · all time" />
-        <KpiCard label="Publications" value={String(publications)} caption="papers + arXiv preprints" />
-        <KpiCard label="Patents" value={String(patents)} caption="EPO-filed patents" />
-        <KpiCard label="Top country" value={topCountry ? countryName(topCountry.country) : "—"} caption={topCountry ? `${topCountry.count} records, ${((topCountry.count / innovationTotal) * 100).toFixed(0)}% of tracked total` : "no data yet"} />
-        <KpiCard label="Fastest-growing" value={fastestGrowing ? countryName(fastestGrowing.country) : "—"} caption={fastestGrowing ? `+${fastestGrowing.gain} entries over ${CHANGE_WINDOW_DAYS}d` : "not enough history yet"} />
-        <KpiCard label="Top institution" value={topOrg ? topOrg.org : "—"} caption={topOrg ? `${topOrg.count} tracked works` : "no data yet"} />
-      </div>
+      {isFiltered ? (
+        <div className="kpirow">
+          <KpiCard label={`${countryName(country)} research records`} value={String(countryInnovationEntries.length)} caption="papers, patents, and research statistics · all time" />
+          <KpiCard label="Publications" value={String(countryPublications)} caption="papers + arXiv preprints" />
+          <KpiCard label="Patents" value={String(countryPatents)} caption="EPO-filed patents" />
+          <KpiCard label="Share / rank" value={countryRank != null ? `#${countryRank}` : "—"} caption={countryShare != null ? `${countryShare.toFixed(0)}% of tracked global output` : "no tracked output yet"} />
+          <KpiCard span2 label="Top institution" value={topOrg ? topOrg.org : "—"} caption={topOrg ? `${topOrg.count} tracked works in ${countryName(country)}` : "no data yet"} />
+        </div>
+      ) : (
+        <div className="kpirow">
+          <KpiCard label="Tracked research records" value={String(innovationEntries.length)} caption="papers, patents, and research statistics · all time" />
+          <KpiCard label="Publications" value={String(publications)} caption="papers + arXiv preprints" />
+          <KpiCard label="Patents" value={String(patents)} caption="EPO-filed patents" />
+          <KpiCard label="Top country" value={topCountry ? countryName(topCountry.country) : "—"} caption={topCountry ? `${topCountry.count} records, ${((topCountry.count / innovationTotal) * 100).toFixed(0)}% of tracked total` : "no data yet"} />
+          <KpiCard label="Fastest-growing" value={fastestGrowing ? countryName(fastestGrowing.country) : "—"} caption={fastestGrowing ? `+${fastestGrowing.gain} entries over ${CHANGE_WINDOW_DAYS}d` : "not enough history yet"} />
+        </div>
+      )}
       <div className="trend-note" style={{ marginBottom: 14 }}>
         Coverage: OpenAlex (institution-attributed papers), EPO patents, with an arXiv fallback when OpenAlex is unreachable. Institution country is a lead, not a verdict.
       </div>
+
+      <FindingsPanel findings={findings} onOpenTarget={openTarget} />
 
       <div className="panel" id="research-leadership">
         <SectionHeader
@@ -138,6 +168,16 @@ export function TrackResearch({ ctx }: { ctx: DashboardContext }) {
               render: () => <InstitutionConcentration rows={orgRows20} onSelect={openOrgDrawer} activeOrg={highlightOrg} />,
             },
           ]}
+        />
+      </div>
+
+      <div className="panel" id="research-flow">
+        <SectionHeader title="How does a country's research turn into publications and patents?" />
+        <ResearchFlowSankey
+          entries={entries}
+          onSelectCountry={openCountryProfile}
+          onSelectOrg={openOrgDrawer}
+          onSelectLink={(source, target) => openTarget({ kind: "researchFlowLink", source, target })}
         />
       </div>
 

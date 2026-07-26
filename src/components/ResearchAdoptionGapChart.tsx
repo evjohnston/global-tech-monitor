@@ -28,7 +28,7 @@ export function ResearchAdoptionGapChart({ entries, countries }: { entries: Entr
                 <div className="gap-chart-bar gap-chart-bar-neg" style={{ width: `${widthPct}%`, background: countryColor(r.country) }} />
               )}
             </div>
-            <div className="gap-chart-value num">{r.gapPct > 0 ? "+" : ""}{r.gapPct.toFixed(0)}pt</div>
+            <div className="gap-chart-value num">{(() => { const rounded = r.gapPct.toFixed(0); return `${rounded === "0" ? "" : r.gapPct > 0 ? "+" : ""}${rounded}pt`; })()}</div>
           </div>
         );
       })}

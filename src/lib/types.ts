@@ -36,6 +36,13 @@ export interface Entry {
   org: string; // affiliation, lab, or vendor
   date: string; // ISO date (YYYY-MM-DD) or YYYY-MM for coarse milestones
   url: string;
+  // Real outlet name for provenance:"auto" (RSS/Google News) entries — the
+  // trade-press feed or outlet that reported the story, kept in its OWN
+  // field rather than in `org` (which used to default to the feed name;
+  // fixed 2026-07-25, see rss.ts, since that let a publisher outrank every
+  // real scaling org/adopter on the leaderboards). Undefined for
+  // hand-verified/live entries, which have no "publisher" concept.
+  publisher?: string;
   // How the country was decided, so misclassification is auditable rather
   // than silent. Empty for hand-curated entries where it's simply known.
   countryEvidence?: string;

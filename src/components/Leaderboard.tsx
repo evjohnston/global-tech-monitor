@@ -34,7 +34,7 @@ export function Leaderboard({
             title={onSelect ? "Click to highlight this institution's entries in the pipeline" : undefined}
           >
             <td className="rank">{i + 1}</td>
-            <td className="org-name" style={{ maxWidth: 190, overflow: "hidden", textOverflow: "ellipsis" }}>{r.org}</td>
+            <td className="org-name" style={{ maxWidth: 190, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.org}</td>
             <td style={{ whiteSpace: "nowrap" }}>
               <span className="actor-tag" style={{ background: countryColor(r.country) }}>
                 {countryName(r.country)}

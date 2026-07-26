@@ -2,7 +2,7 @@ import type { DataFile, Entry, Stage, StageNote, TrendPoint } from "../lib/types
 import type { VerticalConfig } from "../lib/verticals.ts";
 import type { OrgFinancialIndex } from "../lib/orgFinancials.ts";
 import type { DrawerTarget } from "../lib/drawerTarget.ts";
-import type { Dashboard } from "../lib/urlState.ts";
+import type { Dashboard, MoneyFlowView, OverviewMapMetric } from "../lib/urlState.ts";
 import type { ChangeLogItem } from "../lib/changeLog.ts";
 import type { FindingCard } from "../lib/findings.ts";
 
@@ -57,7 +57,11 @@ export interface DashboardContext {
   clearAllSelections: () => void;
   copySelectionLink: () => void;
 
-  // Track Money specific, lifted here since the Overview matrix also reads it
-  sankeyMeasure: "count" | "amount";
-  setSankeyMeasure: (m: "count" | "amount") => void;
+  // Persisted in the URL so a shared link reopens on the same view (section
+  // 2.3/13.5 of the brief) — moneyFlowView belongs to Track Money's Sankey/
+  // ranked-bars/matrix picker, mapMetric to the Overview's map metric tabs.
+  moneyFlowView: MoneyFlowView;
+  setMoneyFlowView: (m: MoneyFlowView) => void;
+  mapMetric: OverviewMapMetric;
+  setMapMetric: (m: OverviewMapMetric) => void;
 }

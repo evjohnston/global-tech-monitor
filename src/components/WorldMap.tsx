@@ -137,7 +137,14 @@ function MapBody({
 
   return (
     <>
-      <ComposableMap projection="geoEqualEarth" width={800} height={height} style={{ width: "100%", height: "100%", display: "block" }}>
+      <ComposableMap
+        projection="geoEqualEarth"
+        width={800}
+        height={height}
+        style={{ width: "100%", height: "100%", display: "block" }}
+        role="img"
+        aria-label="World map of tracked activity by country — each country is individually labeled with its real count, keyboard-navigable"
+      >
         <CentroidCapture geoData={geoData} onReady={handleCentroids} />
         <ZoomableGroup
           center={zoomState.center}

@@ -10,9 +10,11 @@ import { countryColor, countryName } from "../lib/countries.ts";
 import { investorLeaderboard } from "../lib/vcInvestors.ts";
 import { entriesForCollaboration, topPartnersFor, collaborationEdges } from "../lib/collaboration.ts";
 import { dealsForLink } from "../lib/moneyFlow.ts";
+import { entriesForResearchFlowLink, OUTPUT_PUBLICATIONS, OUTPUT_PATENTS } from "../lib/researchFlow.ts";
 import { lookupOrgFinancials, type OrgFinancialIndex } from "../lib/orgFinancials.ts";
 import { fmtUsd } from "../lib/format.ts";
 import { downloadCsv } from "../lib/csvExport.ts";
+import { isNewsEntry, newsCategory, newsFreshnessLabel } from "../lib/news.ts";
 
 const RANK_CHANGE_WINDOW_DAYS = 42;
 
@@ -80,6 +82,9 @@ function DrawerBody(props: MetadataDrawerProps & { copyLink: () => void }) {
   }
   if (target.kind === "collaboration") {
     return <CollaborationBody a={target.a} b={target.b} entries={entries} onOpenTarget={onOpenTarget} copyLink={copyLink} />;
+  }
+  if (target.kind === "researchFlowLink") {
+    return <ResearchFlowLinkBody source={target.source} target={target.target} entries={entries} onOpenTarget={onOpenTarget} copyLink={copyLink} />;
   }
   return <SankeyLinkBody investor={target.investor} companyId={target.companyId} vcFunding={data.vcFunding ?? []} onOpenTarget={onOpenTarget} copyLink={copyLink} />;
 }
@@ -325,7 +330,24 @@ function EntryBody({ id, entries, orgFinancialIndex, onOpenTarget, copyLink }: {
   if (!entry) return <><h2>Record not found</h2><p className="drawer-note">This record id isn't in the currently loaded data — it may be from a different vertical's shared link.</p></>;
   const meta = STAGES.find((s) => s.id === entry.stage)!;
   const financials = entry.org ? lookupOrgFinancials(orgFinancialIndex, entry.org) : null;
-  const related = entry.orgId ? entries.filter((e) => e.id !== entry.id && e.orgId === entry.orgId).slice(0, 4) : [];
+
+  // Three real, non-overlapping lenses to continue the story from — same
+  // organization, same country, same pipeline stage — rather than one flat
+  // list. Each lens draws from the same real entries[] (no fabricated
+  // grouping), sorted newest-first so it reads as "what happened next,"
+  // and excludes anything already surfaced by a higher-priority lens so a
+  // record never shows up twice under different headings.
+  const seenRelatedIds = new Set([entry.id]);
+  const recentFirst = (a: Entry, b: Entry) => (b.date ?? "").localeCompare(a.date ?? "");
+  const relatedByOrg = entry.orgId
+    ? entries.filter((e) => e.orgId === entry.orgId && !seenRelatedIds.has(e.id)).sort(recentFirst).slice(0, 4)
+    : [];
+  relatedByOrg.forEach((e) => seenRelatedIds.add(e.id));
+  const relatedByCountry = entry.country
+    ? entries.filter((e) => e.country === entry.country && !seenRelatedIds.has(e.id)).sort(recentFirst).slice(0, 4)
+    : [];
+  relatedByCountry.forEach((e) => seenRelatedIds.add(e.id));
+  const relatedByStage = entries.filter((e) => e.stage === entry.stage && !seenRelatedIds.has(e.id)).sort(recentFirst).slice(0, 4);
 
   return (
     <>
@@ -338,6 +360,13 @@ function EntryBody({ id, entries, orgFinancialIndex, onOpenTarget, copyLink }: {
       {entry.amountUsd != null && <Field label="Amount" value={fmtUsd(entry.amountUsd)} />}
       <Field label="Organization" value={entry.org ? <button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "org", orgId: entry.orgId ?? entry.org })}>{entry.org}</button> : null} />
       <Field label="Provenance" value={entry.provenance === "live" ? "Live — institution/awardee-attributed" : entry.provenance === "seeded" ? "Hand-verified against source" : "Auto-classified (RSS/keyword), weakest tier"} />
+      {isNewsEntry(entry) && (
+        <>
+          <Field label="Publisher" value={entry.publisher ?? "Unknown"} />
+          <Field label="Category" value={`${newsCategory(entry)} (auto-classified)`} />
+          <Field label="Why it appears" value={`Real ${STAGES.find((s) => s.id === entry.stage)!.label.toLowerCase()}-track news, ${newsFreshnessLabel(entry.date)} old.`} />
+        </>
+      )}
       <Field label={VENUE_LABEL[entry.source] ?? "Venue"} value={entry.venue} />
       <Field label="CPC classification" value={entry.classification} />
       <Field label="Citations" value={entry.citations} />
@@ -355,10 +384,22 @@ function EntryBody({ id, entries, orgFinancialIndex, onOpenTarget, copyLink }: {
           </ul>
         </>
       )}
-      {related.length > 0 && (
+      {relatedByOrg.length > 0 && (
         <>
-          <div className="drawer-label">Related records ({entry.org})</div>
-          <ul className="drawer-list">{related.map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button></li>)}</ul>
+          <div className="drawer-label">More from {entry.org}</div>
+          <ul className="drawer-list">{relatedByOrg.map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button></li>)}</ul>
+        </>
+      )}
+      {relatedByCountry.length > 0 && (
+        <>
+          <div className="drawer-label">More from {countryName(entry.country)}</div>
+          <ul className="drawer-list">{relatedByCountry.map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button></li>)}</ul>
+        </>
+      )}
+      {relatedByStage.length > 0 && (
+        <>
+          <div className="drawer-label">More {meta.label.toLowerCase()} records</div>
+          <ul className="drawer-list">{relatedByStage.map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button></li>)}</ul>
         </>
       )}
       <Actions>
@@ -426,6 +467,35 @@ function SankeyLinkBody({ investor, companyId, vcFunding, onOpenTarget, copyLink
       <p className="drawer-note">A disclosed amount is the whole round's total, not this investor's specific contribution — a syndicated round's full amount can't be honestly split per co-investor.</p>
       <Actions>
         <button className="chip" onClick={() => downloadCsv(`${investor}-${company.name}-deals.csv`, deals.map((d) => ({ date: d.date, type: d.type, status: d.status, amountUsd: d.amountUsd ?? "", investorCount: d.investors.length })))}>Download these rows ({deals.length})</button>
+        <button className="chip" onClick={copyLink}>Copy link to this view</button>
+      </Actions>
+    </>
+  );
+}
+
+// ── Research flow: country -> institution -> output-type link ─────────
+function ResearchFlowLinkBody({ source, target, entries, onOpenTarget, copyLink }: { source: string; target: string; entries: Entry[]; onOpenTarget: (t: DrawerTarget) => void; copyLink: () => void }) {
+  const rows = useMemo(() => entriesForResearchFlowLink(entries, source, target), [entries, source, target]);
+  const isOutputTarget = target === OUTPUT_PUBLICATIONS || target === OUTPUT_PATENTS;
+  const sourceLabel = isOutputTarget ? (rows[0]?.org ?? source) : countryName(source);
+  const targetLabel = isOutputTarget ? (target === OUTPUT_PATENTS ? "Patents" : "Publications") : (rows[0]?.org ?? target);
+  const dates = rows.map((e) => e.date).filter(Boolean).sort();
+
+  if (rows.length === 0) {
+    return <><h2>{sourceLabel} → {targetLabel}</h2><p className="drawer-note">No tracked records found for this pair.</p></>;
+  }
+
+  return (
+    <>
+      <h2>{sourceLabel} → {targetLabel}</h2>
+      <div className="drawer-type">Research flow link</div>
+      <Field label="Tracked records" value={rows.length} />
+      <Field label="Date range" value={dates.length > 0 ? `${dates[0]} – ${dates[dates.length - 1]}` : null} />
+      <div className="drawer-label">Records on this link</div>
+      <ul className="drawer-list">{rows.slice(0, 12).map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button> · {e.date || "undated"}</li>)}</ul>
+      <p className="drawer-note">An institution is placed under the one real country it's headquartered in; output type is drawn from each record's own source field (patent filing vs. paper/preprint).</p>
+      <Actions>
+        <button className="chip" onClick={() => downloadCsv(`${sourceLabel}-${targetLabel}-records.csv`, rows.map((e) => ({ id: e.id, title: e.title, date: e.date, org: e.org, country: e.country ?? "", url: e.url })))}>Download these rows ({rows.length})</button>
         <button className="chip" onClick={copyLink}>Copy link to this view</button>
       </Actions>
     </>

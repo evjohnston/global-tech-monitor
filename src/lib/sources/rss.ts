@@ -145,7 +145,7 @@ async function fetchOneFeed(feed: RssFeedConfig, cutoffMs: number, classifier: R
       // (see the OpenAlex fallback in openalex.ts) — the publisher is still
       // fully auditable via countryEvidence below, just never treated as
       // the acting organization.
-      title: item.title, org: "", date, url: item.link,
+      title: item.title, org: "", date, url: item.link, publisher: feed.name,
       countryEvidence: `${evidence} (auto-classified from ${feed.name} RSS, unverified)`,
       abstract: item.description || undefined,
     });
@@ -252,13 +252,19 @@ export async function fetchInvestmentNews(cfg: InvestmentNewsConfig, sinceDays =
     if (!FUNDING_RELEVANT.test(text)) continue;
     if (DEFAULT_EXCLUDE_WORDS.test(text)) continue;
     if (STOCK_NOISE_WORDS.test(text)) continue;
-    const { title, org } = splitGoogleNewsTitle(item.title);
+    // splitGoogleNewsTitle's trailing "- Outlet" segment is the PUBLISHER
+    // that ran the story (how Google News formats every title), not the
+    // company/investor the story is about — the same class of bug fixed
+    // 2026-07-25 for the RSS scaling/adoption path (org used to default to
+    // the publisher there too). org stays blank; the outlet goes in the
+    // dedicated publisher field instead.
+    const { title, org: publisher } = splitGoogleNewsTitle(item.title);
     const { country, evidence } = inferInstitutionCountry(text);
     const idSlug = item.link.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").slice(-70);
     out.push({
       id: `gnews-${idSlug}`,
       stage: "investment", country, provenance: "auto", source: "news",
-      title, org, date, url: item.link,
+      title, org: "", date, url: item.link, publisher: publisher || undefined,
       countryEvidence: `${evidence} (auto-classified from Google News RSS, unverified)`,
       abstract: item.description || undefined,
     });

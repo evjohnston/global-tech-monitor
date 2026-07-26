@@ -4,6 +4,7 @@ import { countByCountry, topCountries } from "../lib/aggregate.ts";
 import { overviewHeadline } from "../lib/findings.ts";
 import { computeDashboardSummaryCards } from "../lib/dashboardSummaryCards.ts";
 import { computeCountryProfile } from "../lib/countryProfile.ts";
+import { computeDashboardFindings } from "../lib/findingsEngine.ts";
 import { countryName } from "../lib/countries.ts";
 import { WorldMap } from "../components/WorldMap.tsx";
 import { EcosystemMatrix } from "../components/EcosystemMatrix.tsx";
@@ -12,6 +13,7 @@ import { LeadershipStackChart } from "../components/LeadershipStackChart.tsx";
 import { ResearchAdoptionGapChart } from "../components/ResearchAdoptionGapChart.tsx";
 import { ChangeLog } from "../components/ChangeLog.tsx";
 import { CompareRibbon } from "../components/CompareRibbon.tsx";
+import { FindingsPanel } from "../components/FindingsPanel.tsx";
 import { SectionHeader, ChartFrame } from "../components/ChartFrame.tsx";
 import { MethodNote } from "../components/MethodNote.tsx";
 import type { Dashboard } from "../lib/urlState.ts";
@@ -30,12 +32,12 @@ const MAP_METRICS: { key: "research" | "scaling" | "adoption" | "money" | "combi
 // from the 4 Track dashboards, just the cross-cutting comparison those
 // dashboards can't show on their own.
 export function Overview({ ctx }: { ctx: DashboardContext }) {
-  const { entries, trend21, compareCountries, dark, generated, updatedAgo, navigate, openCountryProfile, toggleCompareCountry, activateChangeLogItem } = ctx;
-  const [mapMetric, setMapMetric] = useState<(typeof MAP_METRICS)[number]["key"]>("research");
+  const { entries, trend21, country, compareCountries, dark, generated, updatedAgo, navigate, openCountryProfile, openTarget, toggleCompareCountry, activateChangeLogItem, mapMetric, setMapMetric } = ctx;
   const [profileCountry, setProfileCountry] = useState<string | null>(null);
 
   const headline = useMemo(() => overviewHeadline(entries), [entries]);
   const cards = useMemo(() => computeDashboardSummaryCards(entries), [entries]);
+  const findings = useMemo(() => computeDashboardFindings(entries, "overview", country), [entries, country]);
 
   const mapCounts = useMemo(() => {
     const metric = MAP_METRICS.find((m) => m.key === mapMetric)!;
@@ -81,6 +83,8 @@ export function Overview({ ctx }: { ctx: DashboardContext }) {
           ))}
         </div>
       )}
+
+      <FindingsPanel findings={findings} onOpenTarget={openTarget} />
 
       <div className="panel" id="overview-matrix">
         <SectionHeader

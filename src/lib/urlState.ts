@@ -19,6 +19,9 @@ export function verticalIdFromSlug(slug: string): string | null {
   return v?.id ?? null;
 }
 
+export type MoneyFlowView = "count" | "amount-bars" | "amount-matrix";
+export type OverviewMapMetric = "research" | "scaling" | "adoption" | "money" | "combined";
+
 export interface UrlState {
   technology: string | null; // resolved vertical id, or null to use the default
   dashboard: Dashboard;
@@ -28,7 +31,9 @@ export interface UrlState {
   from: string | null; // ISO date
   to: string | null; // ISO date
   record: DrawerTarget | null;
-  sankeyMeasure: "count" | "amount";
+  moneyFlowView: MoneyFlowView;
+  mapMetric: OverviewMapMetric;
+  org: string | null; // highlighted/pinned organization, e.g. from a leaderboard row
 }
 
 const VALID_STAGES = new Set<Stage>(["innovation", "scaling", "adoption", "investment"]);
@@ -56,7 +61,10 @@ function parseCountryList(raw: string | null): string[] {
 function resolveDashboard(p: URLSearchParams): Dashboard {
   const explicit = p.get("dashboard") as Dashboard | null;
   if (explicit && VALID_DASHBOARDS.has(explicit)) return explicit;
-  if (p.has("sankeyMeasure") || p.get("stage") === "investment") return "money";
+  // "sankeyMeasure" is the pre-rename param name (kept here only so an old
+  // shared link still resolves to Money) — writeUrlState never writes it
+  // again once a real dashboard is known, see below.
+  if (p.has("sankeyMeasure") || p.has("moneyFlowView") || p.get("stage") === "investment") return "money";
   const stageRaw = p.get("stage") as Stage | null;
   if (stageRaw && VALID_STAGES.has(stageRaw)) return STAGE_TO_DASHBOARD[stageRaw];
   return "overview";
@@ -75,8 +83,24 @@ export function readUrlState(): UrlState {
   const from = p.get("from");
   const to = p.get("to");
   const record = parseDrawerTarget(p.get("record"));
-  const sankeyMeasure = p.get("sankeyMeasure") === "amount" ? "amount" : "count";
-  return { technology, dashboard, compareCountries, country, stage, from, to, record, sankeyMeasure };
+  const flowRaw = p.get("moneyFlowView");
+  const legacySankeyMeasure = p.get("sankeyMeasure");
+  // Old param/value shape (sankeyMeasure=count|amount) maps onto the
+  // closest new one so a previously-shared link still lands somewhere
+  // sensible; with neither param present, default to "amount-bars" — the
+  // Sankey (moneyFlowView="count") is a secondary view a reader opts into,
+  // never the first thing shown.
+  const moneyFlowView: MoneyFlowView =
+    flowRaw === "count" || flowRaw === "amount-bars" || flowRaw === "amount-matrix"
+      ? flowRaw
+      : legacySankeyMeasure === "amount" ? "amount-bars" : legacySankeyMeasure === "count" ? "count" : "amount-bars";
+  const mapMetricRaw = p.get("mapMetric");
+  const mapMetric: OverviewMapMetric =
+    mapMetricRaw === "research" || mapMetricRaw === "scaling" || mapMetricRaw === "adoption" || mapMetricRaw === "money" || mapMetricRaw === "combined"
+      ? mapMetricRaw
+      : "research";
+  const org = p.get("org");
+  return { technology, dashboard, compareCountries, country, stage, from, to, record, moneyFlowView, mapMetric, org };
 }
 
 // Writes only the keys present in `patch` — every other real query param
@@ -108,7 +132,12 @@ export function writeUrlState(patch: Partial<UrlState>, opts: { push?: boolean }
   if ("from" in patch) set("from", patch.from ?? null);
   if ("to" in patch) set("to", patch.to ?? null);
   if ("record" in patch) set("record", serializeDrawerTarget(patch.record));
-  if ("sankeyMeasure" in patch) set("sankeyMeasure", patch.sankeyMeasure === "amount" ? "amount" : null);
+  if ("moneyFlowView" in patch) {
+    p.delete("sankeyMeasure"); // never write the old param name back
+    set("moneyFlowView", patch.moneyFlowView && patch.moneyFlowView !== "amount-bars" ? patch.moneyFlowView : null);
+  }
+  if ("mapMetric" in patch) set("mapMetric", patch.mapMetric && patch.mapMetric !== "research" ? patch.mapMetric : null);
+  if ("org" in patch) set("org", patch.org ?? null);
   const query = p.toString();
   const url = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
   if (opts.push) window.history.pushState(null, "", url);

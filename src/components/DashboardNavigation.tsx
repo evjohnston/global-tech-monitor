@@ -18,7 +18,13 @@ export function DashboardNavigation({ active, onNavigate }: { active: Dashboard;
       <div className="dashboard-nav-heading">Track</div>
       <nav className="dashboard-nav" aria-label="Dashboards">
         {DASHBOARDS.map((d) => (
-          <button key={d.key} className="dashboard-nav-btn" aria-pressed={active === d.key} onClick={() => onNavigate(d.key)}>
+          <button
+            key={d.key}
+            className="dashboard-nav-btn"
+            aria-pressed={active === d.key}
+            aria-current={active === d.key ? "page" : undefined}
+            onClick={() => onNavigate(d.key)}
+          >
             {d.label}
           </button>
         ))}

@@ -10,7 +10,8 @@ export type DrawerTarget =
   | { kind: "investor"; name: string }
   | { kind: "entry"; id: string }
   | { kind: "collaboration"; a: string; b: string }
-  | { kind: "sankeyLink"; investor: string; companyId: string };
+  | { kind: "sankeyLink"; investor: string; companyId: string }
+  | { kind: "researchFlowLink"; source: string; target: string };
 
 export function serializeDrawerTarget(t: DrawerTarget | null | undefined): string | null {
   if (!t) return null;
@@ -27,6 +28,8 @@ export function serializeDrawerTarget(t: DrawerTarget | null | undefined): strin
       return `collab:${encodeURIComponent(t.a)}~${encodeURIComponent(t.b)}`;
     case "sankeyLink":
       return `sankey:${encodeURIComponent(t.investor)}~${encodeURIComponent(t.companyId)}`;
+    case "researchFlowLink":
+      return `researchflow:${encodeURIComponent(t.source)}~${encodeURIComponent(t.target)}`;
   }
 }
 
@@ -58,6 +61,10 @@ export function parseDrawerTarget(raw: string | null): DrawerTarget | null {
       case "sankey": {
         const [inv, comp] = rest.split("~").map(decodeURIComponent);
         return inv && comp ? { kind: "sankeyLink", investor: inv, companyId: comp } : null;
+      }
+      case "researchflow": {
+        const [source, target] = rest.split("~").map(decodeURIComponent);
+        return source && target ? { kind: "researchFlowLink", source, target } : null;
       }
       default:
         return null;

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { DashboardContext } from "./types.ts";
-import { countByCountry, orgLeaderboard, topCountries } from "../lib/aggregate.ts";
+import { countByCountry, orgLeaderboard, rankOf, topCountries } from "../lib/aggregate.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
 import { KpiCard } from "../components/KpiCard.tsx";
 import { BarRow } from "../components/BarRow.tsx";
@@ -8,6 +8,8 @@ import { Leaderboard } from "../components/Leaderboard.tsx";
 import { RecentEntries } from "../components/RecentEntries.tsx";
 import { MethodNote } from "../components/MethodNote.tsx";
 import { PolicyTakeaway, SectionHeader } from "../components/ChartFrame.tsx";
+import { FindingsPanel } from "../components/FindingsPanel.tsx";
+import { computeDashboardFindings } from "../lib/findingsEngine.ts";
 
 const RECENT_LIMIT = 5;
 
@@ -20,24 +22,33 @@ const RECENT_LIMIT = 5;
 // exists: verified vs. reported. Order: by-country, leading adopters,
 // verification mix, recent records, explorer.
 export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
-  const { entries, shown, country, compareCountries, openCountryProfile, openOrgDrawer, openEntryDrawer, setRecordExplorerStage } = ctx;
+  const { entries, shown, country, compareCountries, openCountryProfile, openOrgDrawer, openEntryDrawer, setRecordExplorerStage, openTarget } = ctx;
 
   const adoptionEntries = useMemo(() => entries.filter((e) => e.stage === "adoption"), [entries]);
   const counts = useMemo(() => countByCountry(entries, "adoption"), [entries]);
   const top = useMemo(() => topCountries(counts, 8), [counts]);
   const total = Object.values(counts).reduce((s, n) => s + n, 0) || 1;
+  const topCountry = top.top[0];
+  const shownAdoption = useMemo(() => shown.filter((e) => e.stage === "adoption"), [shown]);
+
+  // Country-filtered view (section 5.4): shownAdoption already reflects
+  // the active country filter — every card recalculates for that country,
+  // not just the adopter card.
+  const isFiltered = country !== "all";
+  const scopedEntries = isFiltered ? shownAdoption : adoptionEntries;
   // orgLeaderboard already skips entries with no org — and the RSS
   // ingestion path (src/lib/sources/rss.ts) no longer substitutes the
   // publisher's own name when it can't identify the real adopter (fixed
   // 2026-07-25: "The Quantum Insider"/"Quantum Zeitgeist"/"Quantum
   // Computing Report" previously topped this exact leaderboard, above
   // every real adopter). What's left here genuinely represents adopters.
-  const orgRows = useMemo(() => orgLeaderboard(adoptionEntries, undefined, 10), [adoptionEntries]);
-  const verified = adoptionEntries.filter((e) => e.provenance === "seeded").length;
-  const reported = adoptionEntries.filter((e) => e.provenance === "auto").length;
-  const topCountry = top.top[0];
+  const orgRows = useMemo(() => orgLeaderboard(scopedEntries, undefined, 10), [scopedEntries]);
+  const verified = scopedEntries.filter((e) => e.provenance === "seeded").length;
+  const reported = scopedEntries.filter((e) => e.provenance === "auto").length;
   const topAdopter = orgRows[0];
-  const shownAdoption = useMemo(() => shown.filter((e) => e.stage === "adoption"), [shown]);
+  const countryRank = isFiltered ? rankOf(counts, country) : null;
+  const countryShare = isFiltered ? ((counts[country] ?? 0) / total) * 100 : null;
+  const findings = useMemo(() => computeDashboardFindings(entries, "adoption", country), [entries, country]);
 
   return (
     <div>
@@ -48,13 +59,25 @@ export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
         <MethodNote>Verified = hand-checked against its source before being added (data/&lt;vertical&gt;/seed.ts). Reported = keyword-classified from trade press RSS — real automation, but a weaker attribution tier; stage/country calls there are a guess.</MethodNote>
       </PolicyTakeaway>
 
-      <div className="kpirow">
-        <KpiCard label="Tracked adoption records" value={String(adoptionEntries.length)} caption="deployment and procurement records · all time" />
-        <KpiCard label="Verified" value={String(verified)} caption="hand-checked against a source URL" />
-        <KpiCard label="Reported" value={String(reported)} caption="RSS auto-classified, weakest tier" />
-        <KpiCard label="Top country" value={topCountry ? countryName(topCountry.country) : "—"} caption={topCountry ? `${topCountry.count} records, ${((topCountry.count / total) * 100).toFixed(0)}% of tracked total` : "no data yet"} />
-        <KpiCard label="Top adopter" value={topAdopter ? topAdopter.org : "Unknown adopter"} caption={topAdopter ? `${topAdopter.count} tracked records` : "no adopter identifiable yet"} />
-      </div>
+      {isFiltered ? (
+        <div className="kpirow">
+          <KpiCard label={`${countryName(country)} adoption records`} value={String(scopedEntries.length)} caption="deployment and procurement records · all time" />
+          <KpiCard label="Verified" value={String(verified)} caption="hand-checked against a source URL" />
+          <KpiCard label="Reported" value={String(reported)} caption="RSS auto-classified, weakest tier" />
+          <KpiCard label="Share / rank" value={countryRank != null ? `#${countryRank}` : "—"} caption={countryShare != null ? `${countryShare.toFixed(0)}% of tracked global output` : "no tracked output yet"} />
+          <KpiCard span2 label="Top adopter" value={topAdopter ? topAdopter.org : "Unknown adopter"} caption={topAdopter ? `${topAdopter.count} tracked records in ${countryName(country)}` : "no adopter identifiable yet"} />
+        </div>
+      ) : (
+        <div className="kpirow">
+          <KpiCard label="Tracked adoption records" value={String(scopedEntries.length)} caption="deployment and procurement records · all time" />
+          <KpiCard label="Verified" value={String(verified)} caption="hand-checked against a source URL" />
+          <KpiCard label="Reported" value={String(reported)} caption="RSS auto-classified, weakest tier" />
+          <KpiCard label="Top country" value={topCountry ? countryName(topCountry.country) : "—"} caption={topCountry ? `${topCountry.count} records, ${((topCountry.count / total) * 100).toFixed(0)}% of tracked total` : "no data yet"} />
+          <KpiCard label="Top adopter" value={topAdopter ? topAdopter.org : "Unknown adopter"} caption={topAdopter ? `${topAdopter.count} tracked records` : "no adopter identifiable yet"} />
+        </div>
+      )}
+
+      <FindingsPanel findings={findings} onOpenTarget={openTarget} />
 
       <div className="row3">
         <div className="panel">

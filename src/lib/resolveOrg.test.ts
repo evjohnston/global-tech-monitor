@@ -76,6 +76,7 @@ describe("DrawerTarget URL round-trip — every kind serializes and parses back 
     { kind: "entry", id: "oa-W123456" },
     { kind: "collaboration", a: "CN", b: "US" },
     { kind: "sankeyLink", investor: "Sequoia Capital", companyId: "openai" },
+    { kind: "researchFlowLink", source: "US", target: "ibm" },
   ];
   for (const target of cases) {
     it(`round-trips ${JSON.stringify(target)}`, () => {

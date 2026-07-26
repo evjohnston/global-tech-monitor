@@ -5,7 +5,7 @@ import { countryName } from "./lib/countries.ts";
 import { buildOrgFinancialIndex } from "./lib/orgFinancials.ts";
 import { canonicalizeOrg } from "./lib/entityResolution.ts";
 import type { DrawerTarget } from "./lib/drawerTarget.ts";
-import { readUrlState, writeUrlState, type Dashboard } from "./lib/urlState.ts";
+import { readUrlState, writeUrlState, type Dashboard, type MoneyFlowView, type OverviewMapMetric } from "./lib/urlState.ts";
 import type { FindingCard } from "./lib/findings.ts";
 import type { ChangeLogItem } from "./lib/changeLog.ts";
 import type { DashboardContext } from "./dashboards/types.ts";
@@ -15,6 +15,7 @@ import { TrackScaling } from "./dashboards/TrackScaling.tsx";
 import { TrackAdoption } from "./dashboards/TrackAdoption.tsx";
 import { TrackMoney } from "./dashboards/TrackMoney.tsx";
 import { NewsTicker } from "./components/NewsTicker.tsx";
+import { NewsExplorer } from "./components/NewsExplorer.tsx";
 import { MetadataDrawer } from "./components/MetadataDrawer.tsx";
 import { RecordExplorer } from "./components/RecordExplorer.tsx";
 import { DashboardNavigation } from "./components/DashboardNavigation.tsx";
@@ -43,10 +44,11 @@ export default function App() {
   const [stage, setStage] = useState<Stage | "all">(initialUrlState.stage);
   const [dateRange, setDateRange] = useState<{ from: string | null; to: string | null }>({ from: initialUrlState.from, to: initialUrlState.to });
   const [mode, setMode] = useState<LiveMode>("loading");
-  const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
+  const [highlightOrg, setHighlightOrg] = useState<string | null>(initialUrlState.org);
   const [compareCountries, setCompareCountries] = useState<string[]>(initialUrlState.compareCountries);
   const [drawerTarget, setDrawerTarget] = useState<DrawerTarget | null>(initialUrlState.record);
-  const [sankeyMeasure, setSankeyMeasure] = useState<"count" | "amount">(initialUrlState.sankeyMeasure);
+  const [moneyFlowView, setMoneyFlowView] = useState<MoneyFlowView>(initialUrlState.moneyFlowView);
+  const [mapMetric, setMapMetric] = useState<OverviewMapMetric>(initialUrlState.mapMetric);
   const [recordExplorerStage, setRecordExplorerStage] = useState<Stage | null>(null);
   const [dark, setDark] = useState<boolean>(() => {
     const saved = localStorage.getItem("gtm-theme");
@@ -54,6 +56,7 @@ export default function App() {
     return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
   });
   const [nowTick, setNowTick] = useState(0);
+  const [newsExplorerOpen, setNewsExplorerOpen] = useState(false);
   const dataCacheRef = useRef<Record<string, DataFile>>({});
 
   useEffect(() => {
@@ -67,8 +70,8 @@ export default function App() {
   // uses pushState for dashboard/technology switches specifically, so
   // browser back/forward moves between dashboards as expected.
   useEffect(() => {
-    writeUrlState({ technology: verticalId, dashboard, compareCountries, country, stage, from: dateRange.from, to: dateRange.to, record: drawerTarget, sankeyMeasure });
-  }, [verticalId, dashboard, compareCountries, country, stage, dateRange, drawerTarget, sankeyMeasure]);
+    writeUrlState({ technology: verticalId, dashboard, compareCountries, country, stage, from: dateRange.from, to: dateRange.to, record: drawerTarget, moneyFlowView, mapMetric, org: highlightOrg });
+  }, [verticalId, dashboard, compareCountries, country, stage, dateRange, drawerTarget, moneyFlowView, mapMetric, highlightOrg]);
 
   // Browser back/forward restores dashboard + technology (and everything
   // else readUrlState resolves) from whatever the URL now says.
@@ -82,7 +85,9 @@ export default function App() {
       setDateRange({ from: s.from, to: s.to });
       setCompareCountries(s.compareCountries);
       setDrawerTarget(s.record);
-      setSankeyMeasure(s.sankeyMeasure);
+      setMoneyFlowView(s.moneyFlowView);
+      setMapMetric(s.mapMetric);
+      setHighlightOrg(s.org);
     }
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
@@ -98,18 +103,20 @@ export default function App() {
     setData(cached ?? null);
     setMode(cached ? "static" : "loading");
     // A technology switch is a FULL reset of every technology-scoped
-    // selection — sankeyMeasure, compareCountries, country, stage, date
+    // selection — moneyFlowView, compareCountries, country, stage, date
     // range, and the pinned drawer all reset, so nothing (e.g. a Quantum
-    // Track Money sankeyMeasure=amount) leaks into AI Overview. Dashboard
-    // itself is intentionally NOT reset here — switching technology keeps
-    // you on the same dashboard, just for the other technology.
+    // Track Money moneyFlowView=amount-bars) leaks into AI Overview.
+    // Dashboard itself is intentionally NOT reset here — switching
+    // technology keeps you on the same dashboard, just for the other
+    // technology.
     setCountry("all");
     setStage("all");
     setDateRange({ from: null, to: null });
     setDrawerTarget(null);
     setHighlightOrg(null);
     setCompareCountries([]);
-    setSankeyMeasure("count");
+    setMoneyFlowView("count");
+    setMapMetric("research");
     const dataUrl = `${import.meta.env.BASE_URL}data/${vertical.id}.json`;
     fetch(dataUrl)
       .then((r) => r.json() as Promise<DataFile>)
@@ -244,7 +251,7 @@ export default function App() {
     openTarget, openCountryProfile, openOrgDrawer, openOrgDrawerBySymbol, openEntryDrawer,
     highlightOrgInPipeline, setHighlightOrg, setRecordExplorerStage,
     activateFinding, activateChangeLogItem, clearAllSelections, copySelectionLink,
-    sankeyMeasure, setSankeyMeasure,
+    moneyFlowView, setMoneyFlowView, mapMetric, setMapMetric,
   };
 
   // Real countries present in this technology's own data — never a
@@ -280,7 +287,7 @@ export default function App() {
         </div>
       </div>
 
-      <NewsTicker entries={shown} onSelect={openEntryDrawer} />
+      <NewsTicker entries={entries} dashboard={dashboard} country={country} updatedAgo={updatedAgo} onSelect={openEntryDrawer} onViewAll={() => setNewsExplorerOpen(true)} />
 
       <div className="wrap">
         <div className="pagehead">
@@ -345,6 +352,15 @@ export default function App() {
           entries={byStage[recordExplorerStage]}
           onClose={() => setRecordExplorerStage(null)}
           onSelectEntry={(entry) => { setRecordExplorerStage(null); openEntryDrawer(entry); }}
+        />
+      )}
+
+      {newsExplorerOpen && (
+        <NewsExplorer
+          entries={entries}
+          focusCountry={country === "all" ? null : country}
+          onClose={() => setNewsExplorerOpen(false)}
+          onSelectEntry={(entry) => { setNewsExplorerOpen(false); openEntryDrawer(entry); }}
         />
       )}
 
