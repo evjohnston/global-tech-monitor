@@ -47,7 +47,7 @@ export function TrackScaling({ ctx }: { ctx: DashboardContext }) {
   return (
     <div>
       {isFiltered ? (
-        <div className="kpirow">
+        <div className="kpirow kpirow-6">
           <KpiCard label={`${countryName(country)} scaling records`} value={String(scopedEntries.length)} caption="hardware and production milestones · all time" />
           <KpiCard label="Verified" value={String(verified)} caption="hand-checked against a source URL" />
           <KpiCard label="Reported" value={String(reported)} caption="RSS auto-classified, weakest tier" />

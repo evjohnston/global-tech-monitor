@@ -35,28 +35,34 @@ export function AwardSizeHistogram({ entries }: { entries: Entry[] }) {
   const max = Math.max(1, ...counts);
 
   return (
-    <div className="histogram">
-      {BUCKETS.map((b, i) => (
-        <div
-          key={b.label}
-          className="histogram-col"
-          onMouseMove={(e) =>
-            setTip({
-              x: e.clientX,
-              y: e.clientY,
-              label: `${b.label} · ${counts[i]} ${counts[i] === 1 ? "award" : "awards"} · ${fmtUsd(sums[i])} disclosed`,
-            })
-          }
-          onMouseLeave={() => setTip(null)}
-        >
-          <div className="histogram-count num">{counts[i]}</div>
-          <div className="histogram-bar-track">
-            <div className="histogram-bar" style={{ height: `${(counts[i] / max) * 100}%` }} />
+    <div>
+      {/* One shared y-axis unit label rather than repeating "awards" on every
+          bar — the bare count atop each bar (e.g. "11") has no unit of its
+          own, and the x-axis bucket labels already carry their own ($). */}
+      <div style={{ fontSize: "9.5px", color: "var(--mist)", marginBottom: 4 }}>Awards (count)</div>
+      <div className="histogram">
+        {BUCKETS.map((b, i) => (
+          <div
+            key={b.label}
+            className="histogram-col"
+            onMouseMove={(e) =>
+              setTip({
+                x: e.clientX,
+                y: e.clientY,
+                label: `${b.label} · ${counts[i]} ${counts[i] === 1 ? "award" : "awards"} · ${fmtUsd(sums[i])} disclosed`,
+              })
+            }
+            onMouseLeave={() => setTip(null)}
+          >
+            <div className="histogram-count num">{counts[i]}</div>
+            <div className="histogram-bar-track">
+              <div className="histogram-bar" style={{ height: `${(counts[i] / max) * 100}%` }} />
+            </div>
+            <div className="histogram-label">{b.label}</div>
           </div>
-          <div className="histogram-label">{b.label}</div>
-        </div>
-      ))}
-      {tip && <Tooltip x={tip.x} y={tip.y}>{tip.label}</Tooltip>}
+        ))}
+        {tip && <Tooltip x={tip.x} y={tip.y}>{tip.label}</Tooltip>}
+      </div>
     </div>
   );
 }

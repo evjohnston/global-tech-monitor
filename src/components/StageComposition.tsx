@@ -85,6 +85,9 @@ export function StageComposition({
             {s.label}
           </span>
         ))}
+        <span className="trend-note">
+          bar width is each country's own stage mix normalized to 100%, not a shared scale across countries — the number at right is that country's total tracked entries
+        </span>
       </div>
       {tip && <Tooltip x={tip.x} y={tip.y}>{tip.label}</Tooltip>}
     </div>

@@ -85,6 +85,19 @@ export interface Entry {
   // data — same "omit rather than fabricate" convention as every other
   // optional field here. Only ever populated for OpenAlex-sourced entries.
   collaboratingCountries?: string[];
+  // Real status within the adoption journey, when the source text actually
+  // supports it — "announced" (unveiled/plans to), "pilot" (trial/test
+  // deployment), "procurement" (ordered/signed/awarded a contract),
+  // "deployed" (installed/went live), "operating" (in production/ongoing
+  // use). Only ever set for stage:"adoption" entries; omitted rather than
+  // guessed when the text doesn't clearly support one of the five — same
+  // "omit rather than fabricate" convention as every other optional field
+  // here. Two tiers, same honesty split as everything else: hand-assigned
+  // for seed.ts entries (re-reading the same source text already verified
+  // when the entry was added), keyword-classified for RSS entries (see
+  // classifyDeploymentStatus in sources/rss.ts) — the latter inherits
+  // provenance:"auto"'s weaker reliability, it doesn't get its own tier.
+  deploymentStatus?: "announced" | "pilot" | "procurement" | "deployed" | "operating";
   // 0-1 confidence that this entry genuinely belongs in its vertical —
   // currently a disclosed, coarse heuristic by source kind (see
   // sourceMeta.ts's RELEVANCE_SCORE_BY_SOURCE), not a per-entry ML score.

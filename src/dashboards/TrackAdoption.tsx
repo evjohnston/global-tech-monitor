@@ -13,14 +13,18 @@ import { computeDashboardFindings } from "../lib/findingsEngine.ts";
 
 const RECENT_LIMIT = 5;
 
-// Adoption's data model doesn't carry sector/vendor/deployment-status
-// fields (announced/pilot/procurement/deployed/operating) — this app only
-// has country, org, date, and provenance (seeded=verified deployment
-// record, auto=RSS-classified news) for adoption-stage entries. Rather
-// than fabricate a status taxonomy the data can't support, this dashboard
-// is honest about the gap and uses the one real status-like axis that
-// exists: verified vs. reported. Order: by-country, leading adopters,
-// verification mix, recent records, explorer.
+// Adoption entries can now carry a real deploymentStatus (announced/pilot/
+// procurement/deployed/operating — see Entry in types.ts) — hand-assigned
+// for verified seed.ts records, keyword-guessed for RSS ones (see
+// classifyDeploymentStatus in sources/rss.ts). Coverage is real but
+// partial: most records, especially older or ambiguous ones, don't carry
+// it and are shown as "not yet classified" rather than guessed. Order:
+// by-country, leading adopters, verification mix, status mix, recent
+// records, explorer.
+const STATUS_ORDER = ["announced", "pilot", "procurement", "deployed", "operating"] as const;
+const STATUS_LABEL: Record<(typeof STATUS_ORDER)[number], string> = {
+  announced: "Announced", pilot: "Pilot", procurement: "Procurement", deployed: "Deployed", operating: "Operating",
+};
 export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
   const { entries, shown, country, compareCountries, openCountryProfile, openOrgDrawer, openEntryDrawer, setRecordExplorerStage, openTarget } = ctx;
 
@@ -45,6 +49,13 @@ export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
   const orgRows = useMemo(() => orgLeaderboard(scopedEntries, undefined, 10), [scopedEntries]);
   const verified = scopedEntries.filter((e) => e.provenance === "seeded").length;
   const reported = scopedEntries.filter((e) => e.provenance === "auto").length;
+  const statusCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const e of scopedEntries) counts[e.deploymentStatus ?? "unclassified"] = (counts[e.deploymentStatus ?? "unclassified"] ?? 0) + 1;
+    return counts;
+  }, [scopedEntries]);
+  const statusTotal = scopedEntries.length || 1;
+  const unclassifiedCount = statusCounts.unclassified ?? 0;
   const topAdopter = orgRows[0];
   const countryRank = isFiltered ? rankOf(counts, country) : null;
   const countryShare = isFiltered ? ((counts[country] ?? 0) / total) * 100 : null;
@@ -53,14 +64,14 @@ export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
   return (
     <div>
       <PolicyTakeaway tone="warning">
-        Adoption here means tracked deployment or procurement records. The dataset does not yet consistently separate
-        announcements, pilots, procurements, deployed systems, and operating systems — the one real status-like distinction
-        available today is verification tier (verified vs. reported), used below.
-        <MethodNote>Verified = hand-checked against its source before being added (data/&lt;vertical&gt;/seed.ts). Reported = keyword-classified from trade press RSS — real automation, but a weaker attribution tier; stage/country calls there are a guess.</MethodNote>
+        Adoption here means tracked deployment or procurement records. {unclassifiedCount} of {scopedEntries.length} ({((unclassifiedCount / statusTotal) * 100).toFixed(0)}%)
+        don't yet carry a real announcement/pilot/procurement/deployed/operating status — that split is real where it's shown, not
+        fabricated, but coverage is partial. Verification tier (verified vs. reported) is the one status-like axis with full coverage, used below.
+        <MethodNote>Verified = hand-checked against its source before being added (data/&lt;vertical&gt;/seed.ts). Reported = keyword-classified from trade press RSS — real automation, but a weaker attribution tier; stage/country calls there are a guess. Deployment status is hand-assigned for verified records, keyword-guessed (same weaker tier) for reported ones — see the status mix panel below.</MethodNote>
       </PolicyTakeaway>
 
       {isFiltered ? (
-        <div className="kpirow">
+        <div className="kpirow kpirow-6">
           <KpiCard label={`${countryName(country)} adoption records`} value={String(scopedEntries.length)} caption="deployment and procurement records · all time" />
           <KpiCard label="Verified" value={String(verified)} caption="hand-checked against a source URL" />
           <KpiCard label="Reported" value={String(reported)} caption="RSS auto-classified, weakest tier" />
@@ -109,6 +120,26 @@ export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
           <BarRow label="Verified deployments" pct={total > 0 ? (verified / (verified + reported || 1)) * 100 : 0} color="var(--status-verified)" valueLabel={String(verified)} detail={`${verified} hand-verified adoption records`} />
           <BarRow label="Reported / news" pct={total > 0 ? (reported / (verified + reported || 1)) * 100 : 0} color="var(--status-reported)" valueLabel={String(reported)} detail={`${reported} RSS auto-classified adoption records`} />
         </div>
+      </div>
+
+      <div className="panel">
+        <SectionHeader
+          title="Where are these adoption records in their deployment journey?"
+          note={<MethodNote>Hand-assigned for verified seed records (re-reading the same already-verified source text); keyword-guessed for RSS-sourced ones, inheriting that tier's weaker reliability. "Not yet classified" is the honest majority today, not a gap being papered over.</MethodNote>}
+        />
+        {STATUS_ORDER.map((s) => (
+          <BarRow
+            key={s}
+            label={STATUS_LABEL[s]}
+            pct={((statusCounts[s] ?? 0) / statusTotal) * 100}
+            color="var(--ink-2)"
+            valueLabel={String(statusCounts[s] ?? 0)}
+            detail={`${statusCounts[s] ?? 0} ${STATUS_LABEL[s].toLowerCase()} adoption records`}
+          />
+        ))}
+        {unclassifiedCount > 0 && (
+          <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>{unclassifiedCount} records ({((unclassifiedCount / statusTotal) * 100).toFixed(0)}%) don't carry a clear status yet.</div>
+        )}
       </div>
 
       <div className="panel">

@@ -4,7 +4,7 @@ import type { VcCompanyFunding } from "../lib/types.ts";
 import { buildMoneyFlow, MONEY_FLOW_TOP_COMPANIES, MONEY_FLOW_TOP_INVESTORS, type MoneyFlowNode } from "../lib/moneyFlow.ts";
 import { fmtUsd } from "../lib/format.ts";
 import { usePrefersReducedMotion } from "../lib/useReducedMotion.ts";
-import { scatterDots } from "../lib/sankeyParticles.ts";
+import { scatterMotionDots } from "../lib/sankeyParticles.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
 // WIDTH matches the v5 content container (--maxw: 1440px minus desktop
@@ -40,7 +40,7 @@ export function MoneyFlowSankey({
   onSelectLink?: (investor: string, companyId: string) => void;
 }) {
   const reducedMotion = usePrefersReducedMotion();
-  const [particlesOn, setParticlesOn] = useState(false); // off by default, per spec
+  const [particlesOn, setParticlesOn] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [hoverNode, setHoverNode] = useState<string | null>(null);
   const [hoverLink, setHoverLink] = useState<number | null>(null);
@@ -140,15 +140,13 @@ export function MoneyFlowSankey({
             if (!d) return null;
             const active = isLinkActive(i, source.id, target.id, source.label, target.label);
             const width = Math.max(1, l.width ?? 1);
-            // A dense scatter of dots filling the ribbon's real area (not a
-            // few crawling its centerline) — count scales with the link's
+            // Many dots, each genuinely moving along its own lane through
+            // the ribbon's real thickness — count scales with the link's
             // real value relative to the diagram's max, so a bigger real
-            // flow reads as a visibly denser fill, never an arbitrary fixed
-            // count. Every link gets a real, visible texture when
-            // particles are on; the active/hovered link's dots stay full
-            // brightness while the rest dim along with their ribbon.
+            // flow reads as both denser AND busier with real motion, never
+            // an arbitrary fixed count.
             const dots = particlesOn && !reducedMotion
-              ? scatterDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 6 + Math.sqrt(l.value / maxValue) * 28, i)
+              ? scatterMotionDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 4 + Math.sqrt(l.value / maxValue) * 14, i)
               : [];
             return (
               <g key={i}>
@@ -182,18 +180,21 @@ export function MoneyFlowSankey({
                   onKeyDown={(e) => { if (onSelectLink && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelectLink(source.id, target.id); } }}
                 />
                 {dots.map((dot, pi) => {
-                  // A stationary scatter, not a trickle crawling the
-                  // centerline — each dot sits at its own fixed spot
-                  // somewhere across the ribbon's real thickness (from
-                  // scatterDots()) and only twinkles in place, so at any
-                  // instant the whole ribbon reads as densely filled the
-                  // way the reference does, not as a few moving points.
+                  // Each dot travels its own lane (a copy of the ribbon's
+                  // real curve, offset laterally — see sankeyParticles.ts)
+                  // via animateMotion's inline path, with a paired opacity
+                  // fade so it doesn't pop in/out at the ends. Staggered
+                  // begin times across many lanes read as a continuously
+                  // filled, genuinely moving ribbon rather than a few
+                  // points crawling the centerline.
                   const base = anyHover ? (active ? 0.95 : 0.05) : 0.55;
                   return (
-                    <circle key={pi} cx={dot.x} cy={dot.y} r={dot.r} fill={active ? "var(--red)" : "var(--slate)"} opacity={base}>
+                    <circle key={pi} r={dot.r} fill={active ? "var(--red)" : "var(--slate)"} opacity={0}>
+                      <animateMotion path={dot.pathD} dur={`${dot.dur.toFixed(2)}s`} begin={`${dot.delay.toFixed(2)}s`} repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1" />
                       <animate
                         attributeName="opacity"
-                        values={`${(base * 0.35).toFixed(2)};${base.toFixed(2)};${(base * 0.35).toFixed(2)}`}
+                        values={`0;${base.toFixed(2)};${base.toFixed(2)};0`}
+                        keyTimes="0;0.15;0.85;1"
                         dur={`${dot.dur.toFixed(2)}s`}
                         begin={`${dot.delay.toFixed(2)}s`}
                         repeatCount="indefinite"

@@ -250,6 +250,7 @@ export const SEED: Entry[] = [
     title: "AWS Braket adds new hardware backends for on-demand access",
     org: "Amazon Web Services", date: "2025-09",
     url: "https://aws.amazon.com/braket/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-ionq-afrl-2024",
@@ -257,6 +258,7 @@ export const SEED: Entry[] = [
     title: "IonQ signs a $54.5 million contract with the Air Force Research Laboratory for quantum networking research, its largest 2024 US quantum award",
     org: "IonQ", date: "2024-09",
     url: "https://www.ionq.com/news/ionq-announces-largest-2024-u-s-quantum-contract-award-of-usd54-5m-with",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-quantinuum-darpa-stagea-2025",
@@ -264,6 +266,7 @@ export const SEED: Entry[] = [
     title: "DARPA selects Quantinuum to advance to Stage A of its Quantum Benchmarking Initiative",
     org: "Quantinuum / DARPA", date: "2025-04",
     url: "https://www.quantinuum.com/press-releases/quantinuum-selected-by-darpa-to-advance-to-first-stage-of-quantum-benchmarking-initiative",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-nersc-ibm-cloud-2025",
@@ -271,6 +274,7 @@ export const SEED: Entry[] = [
     title: "NERSC at Lawrence Berkeley National Laboratory opens cloud access to IBM quantum computers through a new Quantum Innovation Center",
     org: "NERSC / Lawrence Berkeley National Laboratory", date: "2025-01",
     url: "https://thequantuminsider.com/2025/01/24/nersc-opens-access-to-ibm-quantum-computers-through-quantum-innovation-center/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-darpa-qbi-stageb-2025",
@@ -278,6 +282,7 @@ export const SEED: Entry[] = [
     title: "DARPA advances 11 companies, including IBM, IonQ and Quantinuum, to Stage B of its Quantum Benchmarking Initiative",
     org: "DARPA", date: "2025-11",
     url: "https://www.darpa.mil/research/programs/quantum-benchmarking-initiative/stage-b-selection",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-quantumctek-504chip-2024",
@@ -285,6 +290,7 @@ export const SEED: Entry[] = [
     title: "Chinese Academy of Sciences researchers deliver a 504-qubit superconducting chip to QuantumCTek to build a cloud-accessible quantum computer with China Telecom",
     org: "QuantumCTek / CAS", date: "2024-04",
     url: "https://thequantuminsider.com/2024/04/27/chinese-researchers-develop-504-qubit-superconducting-qc-chip-build-partnership-for-cloud-access/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-origin-20mvisits-2025",
@@ -292,6 +298,7 @@ export const SEED: Entry[] = [
     title: "Origin Quantum's Wukong computer surpasses 20 million cumulative remote visits from users in 139 countries since its January 2024 launch",
     org: "Origin Quantum / Hefei", date: "2025-02",
     url: "https://english.www.gov.cn/news/202502/16/content_WS67b1d60cc6d0868f4e8efaf2.html",
+    deploymentStatus: "operating",
   },
   {
     id: "seed-tianyan-commercial-2025",
@@ -299,6 +306,7 @@ export const SEED: Entry[] = [
     title: "China Telecom Quantum Group and QuantumCTek put the Zuchongzhi superconducting quantum computer into commercial operation via the Tianyan cloud platform",
     org: "China Telecom Quantum Group", date: "2025-10",
     url: "https://thequantuminsider.com/2025/10/14/china-opens-its-superconducting-quantum-computer-for-commercial-use/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-origin-wukong180-2026",
@@ -306,6 +314,7 @@ export const SEED: Entry[] = [
     title: "Origin Quantum unveils its fourth-generation Wukong-180 quantum computer, after its predecessor logged about 50 million cloud accesses from over 160 countries",
     org: "Origin Quantum / Hefei", date: "2026-05",
     url: "https://thequantuminsider.com/2026/05/15/origin-quantum-wukong-180/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-pasqal-hpcqs-2023",
@@ -313,6 +322,7 @@ export const SEED: Entry[] = [
     title: "Pasqal delivers two 100+-qubit neutral-atom quantum computers to GENCI/CEA in France and FZJ in Germany under the EuroHPC-funded HPCQS project",
     org: "Pasqal", date: "2023-11",
     url: "https://www.pasqal.com/newsroom/genci-cea-fzj-and-pasqal-announce-significant-milestone-in-hybrid-computing/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-iqm-munich-datacentre-2024",
@@ -320,6 +330,7 @@ export const SEED: Entry[] = [
     title: "IQM opens its first quantum data centre in Munich, Germany, with plans to host up to 12 quantum computers for industry customers",
     org: "IQM Quantum Computers", date: "2024-06",
     url: "https://iqm.tech/press-releases/iqm-quantum-computers-opens-quantum-data-centre-in-germany-to-support-industry-applications/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-eurohpc-euroqexa-2024",
@@ -327,6 +338,7 @@ export const SEED: Entry[] = [
     title: "EuroHPC JU and IQM sign a procurement contract for the Euro-Q-Exa superconducting quantum computer to be hosted in Germany",
     org: "EuroHPC JU", date: "2024-10",
     url: "https://www.eurohpc-ju.europa.eu/signature-procurement-contract-eurohpc-quantum-computer-located-germany-2024-10-15_en",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-eurohpc-marenostrum-2025",
@@ -334,6 +346,7 @@ export const SEED: Entry[] = [
     title: "EuroHPC JU and Qilimanjaro Quantum Tech sign a procurement contract for the MareNostrum Ona quantum annealer to be hosted in Spain",
     org: "EuroHPC JU", date: "2025-01",
     url: "https://www.eurohpc-ju.europa.eu/signature-procurement-contract-eurohpc-quantum-computer-located-spain-2025-01-28_en",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-nqcc-testbeds-2025",
@@ -341,6 +354,7 @@ export const SEED: Entry[] = [
     title: "UK's National Quantum Computing Centre awards contracts to seven companies to deliver quantum computing testbeds under a £30 million programme",
     org: "National Quantum Computing Centre (UK)", date: "2025-02",
     url: "https://www.nqcc.ac.uk/updates/science-minister-andrew-griffith-announces-the-results-of-the-30m-quantum-computing-testbed-competition/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-psiquantum-australia-2024",
@@ -348,6 +362,7 @@ export const SEED: Entry[] = [
     title: "Australian and Queensland governments commit $940 million AUD to PsiQuantum to build a utility-scale fault-tolerant quantum computer near Brisbane",
     org: "PsiQuantum", date: "2024-04",
     url: "https://www.psiquantum.com/news-import/psiquantum-to-build-worlds-first-utility-scale-fault-tolerant-quantum-computer-in-australia",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-fujitsu-aist-order-2024",
@@ -355,6 +370,7 @@ export const SEED: Entry[] = [
     title: "Fujitsu receives an order for a gate-based superconducting quantum computer from Japan's National Institute of Advanced Industrial Science and Technology",
     org: "Fujitsu", date: "2024-05",
     url: "https://info.archives.global.fujitsu/global/about/resources/news/press-releases/2024/0618-01.html",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-yonsei-ibm-korea-2024",
@@ -362,6 +378,7 @@ export const SEED: Entry[] = [
     title: "Yonsei University deploys the first IBM Quantum System One in South Korea, only the second such system on a university campus worldwide",
     org: "Yonsei University", date: "2024-11",
     url: "https://newsroom.ibm.com/2024-11-19-yonsei-deploys-first-ibm-quantum-system-one-in-the-republic-of-korea",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-ibm-riken-kobe-2025",
@@ -369,6 +386,7 @@ export const SEED: Entry[] = [
     title: "IBM and RIKEN unveil the first IBM Quantum System Two deployed outside the United States, co-located with the Fugaku supercomputer in Kobe, Japan",
     org: "IBM / RIKEN", date: "2025-06",
     url: "https://newsroom.ibm.com/2025-06-23-ibm-and-riken-unveil-first-ibm-quantum-system-two-outside-of-the-u-s",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-xanadu-canada-2025",
@@ -376,6 +394,7 @@ export const SEED: Entry[] = [
     title: "Xanadu is selected for Canada's Quantum Champions Program and will receive up to CAD $23 million in federal funding",
     org: "Xanadu", date: "2025-12",
     url: "https://thequantuminsider.com/2025/12/15/xanadu-23m-quantum-champions-canada/",
+    deploymentStatus: "procurement",
   },
 
   // ── 2026 expansion — more scaling entries, more countries ─────────
@@ -457,6 +476,7 @@ export const SEED: Entry[] = [
     title: "EuroHPC JU inaugurates EuroQCS-Spain, a 10-qubit analogue quantum annealer at the Barcelona Supercomputing Center integrated with the MareNostrum 5 supercomputer",
     org: "Barcelona Supercomputing Center / Qilimanjaro / EuroHPC JU", date: "2026-05",
     url: "https://www.eurohpc-ju.europa.eu/eurohpc-ju-inaugurates-euroqcs-spain-barcelona-2026-05-28_en",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-aramco-pasqal-2026",
@@ -464,6 +484,7 @@ export const SEED: Entry[] = [
     title: "Aramco and Pasqal launch Saudi Arabia's first quantum computer, a 200-qubit neutral-atom system, and the Middle East's first commercial Quantum Computing as a Service platform, at Aramco's Dhahran data center",
     org: "Aramco / Pasqal", date: "2026-05",
     url: "https://www.pasqal.com/newsroom/aramco-and-pasqal-launch-saudi-arabias-first-quantum-computer-and-middle-easts-first-commercial-quantum-computing-as-a-service-platform/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-iqm-galaxy-poland-2026",
@@ -471,6 +492,7 @@ export const SEED: Entry[] = [
     title: "IQM sells a 54-qubit Radiance quantum computer to Polish IT firm Galaxy Systemy Informatyczne, the first private company anywhere to buy and operate its own on-premise quantum system",
     org: "IQM Quantum Computers / Galaxy Systemy Informatyczne", date: "2026-04",
     url: "https://iqm.tech/press-releases/polands-galaxy-systemy-informatyczne-becomes-first-private-enterprise-to-buy-quantum-computer-from-iqm/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-taiwan-nstc-tender-2026",
@@ -478,6 +500,7 @@ export const SEED: Entry[] = [
     title: "Taiwan's National Science and Technology Council opens an international tender to procure a quantum computer for its national HPC-quantum mainframe project, with US export restrictions a live constraint on bidders",
     org: "National Science and Technology Council (Taiwan)", date: "2026-01",
     url: "https://www.digitimes.com/news/a20260115PD229/quantum-computer-taiwan-nstc-quantum-computing-academia-sinica.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-quantinuum-singapore-2026",
@@ -485,6 +508,7 @@ export const SEED: Entry[] = [
     title: "Quantinuum opens an R&D and Operations Centre in Singapore under its National Quantum Office partnership, ahead of a planned deployment of a Helios quantum computer for local researchers and companies",
     org: "Quantinuum / Singapore National Quantum Office", date: "2026-03",
     url: "https://thequantuminsider.com/2026/03/12/quantinuum-expands-global-footprint-to-singapore-with-the-establishment-of-a-new-rd-centre/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-pasqal-cineca-delivery-2026",
@@ -492,6 +516,7 @@ export const SEED: Entry[] = [
     title: "Pasqal delivers a 140-qubit neutral-atom quantum processor to Italy's CINECA supercomputing center in Bologna, to be integrated with the Leonardo pre-exascale supercomputer under the national ICSC program",
     org: "Pasqal / CINECA / ICSC", date: "2026-02",
     url: "https://thequantuminsider.com/2026/02/17/pasqal-neutral-atom-qpu-italy/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-cineca-sol-inaugurated-2026",
@@ -499,6 +524,7 @@ export const SEED: Entry[] = [
     title: "CINECA inaugurates SOL, the 140-qubit Pasqal Orion neutral-atom quantum processor delivered in February, as Italy's first operational neutral-atom quantum computer",
     org: "CINECA / Pasqal", date: "2026-06",
     url: "https://thequantuminsider.com/2026/06/11/pasqal-inaugurates-italys-first-neutral-atom-quantum-computer-third-system-europe/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-euroqexa-inaugurated-2026",
@@ -506,6 +532,7 @@ export const SEED: Entry[] = [
     title: "EuroHPC JU inaugurates Euro-Q-Exa, a 54-qubit IQM superconducting quantum computer integrated with the SuperMUC-NG supercomputer at Germany's Leibniz Supercomputing Centre in Munich",
     org: "EuroHPC JU / IQM / Leibniz Supercomputing Centre", date: "2026-02",
     url: "https://www.eurohpc-ju.europa.eu/inauguration-euro-q-exa-expanding-european-quantum-computing-infrastructure-2026-02-12_en",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-tii-cloud-access-2026",
@@ -513,6 +540,7 @@ export const SEED: Entry[] = [
     title: "Abu Dhabi's Technology Innovation Institute launches a cloud service giving external partners remote access to its in-house 5-to-25-qubit superconducting quantum processors via the open-source Qibo framework",
     org: "Technology Innovation Institute", date: "2026-02",
     url: "https://thequantuminsider.com/2026/02/23/tii-cloud-access-superconducting-qpus/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-kisti-nvidia-ionq-2026",
@@ -520,6 +548,7 @@ export const SEED: Entry[] = [
     title: "KISTI signs a trilateral agreement with NVIDIA and IonQ to build a national quantum-HPC hybrid environment integrating a 100-qubit IonQ Tempo system with Korea's HANGANG supercomputer",
     org: "KISTI / NVIDIA / IonQ", date: "2026-03",
     url: "https://www.kisti.re.kr/eng/news/post/eng_news/6919",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-ibm-amaravati-india-2026",
@@ -527,6 +556,7 @@ export const SEED: Entry[] = [
     title: "IBM confirms Amaravati's Quantum Valley Tech Park will host a 156-qubit IBM Quantum System Two, one of the first two IBM quantum computers physically deployed in India, targeted for commissioning by September 2026",
     org: "IBM / Government of Andhra Pradesh / TCS", date: "2026-07",
     url: "https://quantumcomputingreport.com/ibm-to-commission-one-of-indias-first-physical-quantum-computers-in-amaravati-by-september-2026/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-ciquanta-brazil-2026",
@@ -534,6 +564,7 @@ export const SEED: Entry[] = [
     title: "Brazil's federal science ministry and the Paraíba state government confirm CIQuanta, a João Pessoa center that will house Brazil's first two operational quantum computers, 20- and 100-qubit systems",
     org: "Ministry of Science, Technology and Innovation / Government of Paraíba", date: "2026-03",
     url: "https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/noticias/2026/03/centro-na-paraiba-vai-receber-primeiros-computadores-quanticos-operacionais-do-pais",
+    deploymentStatus: "announced",
   },
 
   // ── Historical research backfill (2016-2026) — scaling ─────────────
@@ -1021,6 +1052,7 @@ export const SEED: Entry[] = [
     title: "IBM puts a 5-qubit quantum processor on the public cloud for the first time via the IBM Quantum Experience.",
     org: "IBM", date: "2016-05",
     url: "https://uk.newsroom.ibm.com/2016-May-04-IBM-Makes-Quantum-Computing-Available-on-IBM-Cloud-to-Accelerate-Innovation",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-volkswagen-dwave-beijing-traffic",
@@ -1028,6 +1060,7 @@ export const SEED: Entry[] = [
     title: "Volkswagen Group IT researchers use a D-Wave quantum computer to optimize traffic flow for 10,000 public taxis in Beijing, the automaker's first real-world quantum computing pilot.",
     org: "Volkswagen Group; D-Wave Systems", date: "2017-03",
     url: "https://www.volkswagen-group.com/en/press-releases/research-project-successful-volkswagen-it-experts-use-quantum-computing-for-traffic-flow-optimization-16498",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-ibm-q-network-launch-2017",
@@ -1035,6 +1068,7 @@ export const SEED: Entry[] = [
     title: "IBM launches the IBM Q Network, giving JPMorgan Chase, Daimler, Samsung, and Oak Ridge National Laboratory cloud access to its 20-qubit quantum system.",
     org: "IBM, JPMorgan Chase, Daimler, Samsung, Oak Ridge National Laboratory", date: "2017-12",
     url: "https://www.hpcwire.com/2017/12/14/ibm-launches-commercial-quantum-network-samsung-ornl/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-denso-toyota-tsusho-dwave-thailand",
@@ -1042,6 +1076,7 @@ export const SEED: Entry[] = [
     title: "DENSO and Toyota Tsusho run what they call the world's first test applying a D-Wave quantum computer to real-time traffic data from roughly 130,000 commercial vehicles in Thailand.",
     org: "DENSO; Toyota Tsusho", date: "2017-12",
     url: "https://www.prnewswire.com/news-releases/denso-and-toyota-tsusho-to-conduct-a-test-applying-a-quantum-computer-to-analyze-iot-data-with-a-commercial-application-300570850.html",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-exxonmobil-ibm-q-network",
@@ -1049,6 +1084,7 @@ export const SEED: Entry[] = [
     title: "ExxonMobil becomes the first energy company to join the IBM Q Network, partnering with IBM to research quantum algorithms for carbon-capture materials and maritime inventory routing.",
     org: "ExxonMobil; IBM", date: "2019-01",
     url: "https://corporate.exxonmobil.com/news/news-releases/2019/0108_exxonmobil-and-ibm-to-advance-energy-sector-application-of-quantum-computing",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-cqc-ironbridge-2019",
@@ -1056,6 +1092,7 @@ export const SEED: Entry[] = [
     title: "Cambridge Quantum unveils IronBridge, the world's first commercially-ready certifiable quantum cryptographic device, at the RSA Conference",
     org: "Cambridge Quantum Computing", date: "2019-03",
     url: "https://www.prnewswire.com/news-releases/cqc-unveils-the-worlds-first-commercially-ready-certifiable-quantum-cryptographic-device-300805197.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-dwave-lanl-advantage-2019",
@@ -1063,6 +1100,7 @@ export const SEED: Entry[] = [
     title: "D-Wave sells the first of its next-generation 5,000-qubit quantum computer, later branded Advantage, to Los Alamos National Laboratory",
     org: "D-Wave Systems / Los Alamos National Laboratory", date: "2019-10",
     url: "https://thequantuminsider.com/2019/10/06/los-alamos-lab-purchases-latest-d-wave-offering/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-juniq-dwave-leap-first-europe",
@@ -1070,6 +1108,7 @@ export const SEED: Entry[] = [
     title: "Forschungszentrum Julich's JUNIQ facility signs a user contract for a D-Wave quantum annealer, becoming the first D-Wave Leap cloud-based quantum site in Europe.",
     org: "Forschungszentrum Julich, D-Wave Systems", date: "2019-10",
     url: "https://www.fz-juelich.de/en/jsc/systems/quantum-computing/juniq-facility/juniq",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-vw-lisbon-bus-pilot-2019",
@@ -1077,6 +1116,7 @@ export const SEED: Entry[] = [
     title: "Volkswagen runs the world's first live pilot of quantum-computed traffic-routing optimization for nine public buses, using a D-Wave system, at Web Summit in Lisbon",
     org: "Volkswagen / D-Wave Systems", date: "2019-11",
     url: "https://www.volkswagen-group.com/en/press-releases/volkswagen-optimizes-traffic-flow-with-quantum-computers-16995",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-woodside-energy-ibm-q-network",
@@ -1084,6 +1124,7 @@ export const SEED: Entry[] = [
     title: "Woodside Energy becomes the first commercial organization in Australia to join the IBM Q Network, partnering with IBM to explore quantum computing for optimization problems across its operations.",
     org: "Woodside Energy; IBM", date: "2019-11",
     url: "https://au.newsroom.ibm.com/2019-11-12-Woodside-Energy-and-IBM-to-leverage-current-and-emerging-technologies-like-AI-and-Quantum-computing-to-realise-vision-of-an-Intelligent-Plant",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-wells-fargo-ibm-quantum-research",
@@ -1091,6 +1132,7 @@ export const SEED: Entry[] = [
     title: "American Banker reports Wells Fargo has signed a quantum computing research agreement with IBM and MIT, part of a program that has produced nearly a dozen quantum algorithms and ten peer-reviewed papers.",
     org: "Wells Fargo; IBM", date: "2019-11",
     url: "https://www.americanbanker.com/news/behind-wells-fargos-foray-into-quantum-computing",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-aws-braket-launch",
@@ -1098,6 +1140,7 @@ export const SEED: Entry[] = [
     title: "Amazon Web Services launches Amazon Braket, a managed quantum computing cloud service giving enterprise customers access to D-Wave, IonQ, and Rigetti hardware through a single platform.",
     org: "Amazon Web Services", date: "2019-12",
     url: "https://techcrunch.com/2019/12/02/aws-launches-braket-its-quantum-computing-service/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-daimler-ibm-lithium-sulfur-battery",
@@ -1112,6 +1155,7 @@ export const SEED: Entry[] = [
     title: "BBVA and Multiverse Computing pilot quantum and quantum-inspired algorithms on D-Wave, IBM Q System One, and Tensor Networks to optimize a 52-asset investment portfolio using 8 years of market data.",
     org: "BBVA; Multiverse Computing", date: "2020-08",
     url: "https://www.bbva.com/en/bbva-and-multiverse-showcase-how-quantum-computing-could-help-optimize-investment-portfolio-management/",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-vw-paintshop-advantage-2020",
@@ -1119,6 +1163,7 @@ export const SEED: Entry[] = [
     title: "Volkswagen uses D-Wave's newly launched 5,000-qubit Advantage system to optimize paint-shop scheduling at its German production plants",
     org: "Volkswagen / D-Wave Systems", date: "2020-09",
     url: "https://fortune.com/2020/09/29/d-wave-5000-qubit-quantum-computer/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-roche-cambridge-quantum-alzheimers",
@@ -1126,6 +1171,7 @@ export const SEED: Entry[] = [
     title: "Roche partners with Cambridge Quantum Computing to apply its EUMEN quantum chemistry platform to early-stage Alzheimer's disease drug discovery.",
     org: "Roche; Cambridge Quantum Computing", date: "2021-01",
     url: "https://thequantuminsider.com/2021/01/31/cqc-roche-partner-to-use-quantum-algorithms-to-tackle-drug-discovery-for-alzheimers-disease/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-boehringer-ingelheim-google-quantum",
@@ -1133,6 +1179,7 @@ export const SEED: Entry[] = [
     title: "Boehringer Ingelheim becomes the first pharmaceutical company to partner with Google in quantum computing, launching a three-year collaboration on molecular dynamics simulation for drug R&D.",
     org: "Boehringer Ingelheim; Google", date: "2021-01",
     url: "https://www.boehringer-ingelheim.com/us/media/press-releases/quantum-computing-boehringer-ingelheim-and-google-partner-pharma-rd",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-azure-quantum-public-preview",
@@ -1140,6 +1187,7 @@ export const SEED: Entry[] = [
     title: "Microsoft brings Azure Quantum into public preview, giving enterprise customers cloud access to trapped-ion hardware from Honeywell and IonQ alongside Toshiba, Quantum Circuits, and 1QBit.",
     org: "Microsoft", date: "2021-02",
     url: "https://siliconangle.com/2021/02/01/microsoft-brings-azure-quantum-cloud-service-public-preview/",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-qilimanjaro-tii-uae-announcement",
@@ -1147,6 +1195,7 @@ export const SEED: Entry[] = [
     title: "Barcelona's Qilimanjaro Quantum Tech partners with Abu Dhabi's Technology Innovation Institute to build the UAE's first quantum computer.",
     org: "Qilimanjaro Quantum Tech, Technology Innovation Institute", date: "2021-04",
     url: "https://www.mediaoffice.abudhabi/en/technology/in-a-first-uae-to-build-quantum-computer/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-goldman-sachs-qcware-monte-carlo",
@@ -1161,6 +1210,7 @@ export const SEED: Entry[] = [
     title: "IBM and Fraunhofer-Gesellschaft unveil a 27-qubit IBM Quantum System One in Ehningen, Germany, the first IBM Quantum System One installed outside the United States.",
     org: "IBM, Fraunhofer-Gesellschaft", date: "2021-06",
     url: "https://www.fraunhofer.de/en/press/research-news/2021/june-2021/fraunhofer-and-ibm-to-unveil-quantum-computer.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-austria-quantum-austria-initiative",
@@ -1168,6 +1218,7 @@ export const SEED: Entry[] = [
     title: "Austria's Federal Ministry of Education, Science and Research launches the 'Quantum Austria' initiative, providing 107 million euros for quantum research and quantum technologies.",
     org: "Federal Ministry of Education, Science and Research (Austria)", date: "2021-06",
     url: "https://thequantuminsider.com/2021/06/23/quantum-austria-offers-107-million-euros-for-quantum-research-and-quantum-technologies/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-ibm-q-system-one-japan-utokyo",
@@ -1175,6 +1226,7 @@ export const SEED: Entry[] = [
     title: "IBM and the University of Tokyo unveil Japan's first IBM Quantum System One, installed at the Kawasaki Business Incubation Center.",
     org: "IBM, University of Tokyo", date: "2021-07",
     url: "https://newsroom.ibm.com/2021-07-26-IBM-and-the-University-of-Tokyo-Unveil-Japans-Most-Powerful-Quantum-Computer",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-oqc-lucy-aws-braket",
@@ -1182,6 +1234,7 @@ export const SEED: Entry[] = [
     title: "Oxford Quantum Circuits' 8-qubit Lucy processor becomes the first non-North-American quantum computer available on Amazon's AWS Braket cloud.",
     org: "Oxford Quantum Circuits", date: "2021-11",
     url: "https://thequantuminsider.com/2021/11/30/amazons-braket-available-in-europe-oxford-quantum-circuit-will-be-first-non-north-american-qc-on-service/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-cqc-quantum-origin-2021",
@@ -1189,6 +1242,7 @@ export const SEED: Entry[] = [
     title: "Cambridge Quantum launches Quantum Origin, a quantum-generated cryptographic key platform that becomes Quantinuum's first commercial cybersecurity product",
     org: "Cambridge Quantum Computing", date: "2021-12",
     url: "https://thequantuminsider.com/2021/12/07/cambridge-quantum-launches-quantum-enhanced-cryptographic-key-generation-platform-to-protect-data-from-advancing-threats/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-bmw-aws-quantum-computing-challenge",
@@ -1203,6 +1257,7 @@ export const SEED: Entry[] = [
     title: "Nomura Holdings, Nomura Securities, NICT, Toshiba, and NEC complete a joint verification test showing quantum cryptography can secure large-volume, low-latency stock-trading data transmission without degrading throughput versus a conventional system.",
     org: "Nomura Holdings; Nomura Securities; NICT; Toshiba; NEC", date: "2022-01",
     url: "https://www.nict.go.jp/en/press/2022/02/18-1.html",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-hyundai-ionq-battery-chemistry",
@@ -1217,6 +1272,7 @@ export const SEED: Entry[] = [
     title: "Origin Quantum delivers the 24-qubit second-generation Wuyuan system to a consortium of investors, China's first commercially sold quantum computer.",
     org: "Origin Quantum", date: "2022-02",
     url: "https://thequantuminsider.com/2023/02/03/chinas-origin-quantum-ships-first-quantum-computer/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-israel-defense-ministry-quantum-computing-center",
@@ -1224,6 +1280,7 @@ export const SEED: Entry[] = [
     title: "Israel's Defense Ministry Directorate of Defense R&D (DDR&D) and the Israel Innovation Authority commit roughly NIS 200 million ($62 million) to establish the country's first national quantum computing center.",
     org: "Israel Innovation Authority, MAFAT/DDR&D", date: "2022-02",
     url: "https://www.timesofisrael.com/defense-ministry-innovation-authority-to-fund-israels-first-quantum-computer/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-xanadu-braket-cloud-2022",
@@ -1231,6 +1288,7 @@ export const SEED: Entry[] = [
     title: "Xanadu makes Borealis publicly available over Xanadu Cloud and Amazon Braket, the first cloud deployment of a quantum-advantage-capable photonic computer",
     org: "Xanadu / Amazon Web Services", date: "2022-06",
     url: "https://www.prnewswire.com/news-releases/xanadu-launches-first-public-cloud-deployed-computer-with-quantum-computational-advantage-301559097.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-dwave-mastercard-2022",
@@ -1238,6 +1296,7 @@ export const SEED: Entry[] = [
     title: "D-Wave and Mastercard sign a multi-year strategic alliance to develop quantum-hybrid applications for loyalty, cross-border settlement and fraud management",
     org: "D-Wave Systems / Mastercard", date: "2022-07",
     url: "https://www.dwavequantum.com/company/newsroom/press-release/d-wave-and-mastercard-take-quantum-leap-into-future-of-financial-services/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-rigetti-darpa-benchmarking-2022",
@@ -1245,6 +1304,7 @@ export const SEED: Entry[] = [
     title: "Rigetti is awarded a $2.9 million DARPA contract, with the University of Technology Sydney, Aalto University and USC, to develop testable quantum application benchmarks.",
     org: "Rigetti Computing, DARPA", date: "2022-08",
     url: "https://www.globenewswire.com/news-release/2022/08/04/2492411/0/en/Rigetti-Awarded-DARPA-Contract-for-Quantum-Application-Benchmarking.html",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-ionq-afrl-13m-contract-2022",
@@ -1252,6 +1312,7 @@ export const SEED: Entry[] = [
     title: "IonQ signs a $13.4 million contract to supply trapped-ion quantum computing systems to the U.S. Air Force Research Laboratory.",
     org: "IonQ, U.S. Air Force Research Laboratory (AFRL)", date: "2022-09",
     url: "https://ionq.com/news/september-30-2022-ionq-afrl",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-universal-quantum-dlr-contract",
@@ -1259,6 +1320,7 @@ export const SEED: Entry[] = [
     title: "Universal Quantum wins a 67 million euro contract from Germany's DLR to build a fault-tolerant trapped-ion quantum computer of up to 100 qubits.",
     org: "Universal Quantum, DLR", date: "2022-11",
     url: "https://universalquantum.com/knowledge-hub/uq-wins-%E2%82%AC67m-contract-to-build-full-scalable-trapped-ion-quantum-computer",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-eni-pasqal-quantum-energy",
@@ -1266,6 +1328,7 @@ export const SEED: Entry[] = [
     title: "Eni and Pasqal partner to develop next-generation HPC-quantum computing solutions for Eni's upstream, refining, chemicals, and renewables operations, using Pasqal's neutral-atom systems.",
     org: "Eni; Pasqal", date: "2022-11",
     url: "https://www.eni.com/en-IT/media/press-release/2022/11/eni-pasqal-together-develop-quantum-solutions-energy-sector.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-jpmorgan-quantinuum-20-qubit-optimization",
@@ -1273,6 +1336,7 @@ export const SEED: Entry[] = [
     title: "JPMorgan Chase and Quantinuum run what they describe as the largest gate-based constrained-optimization demonstration to date, using Quantinuum's new 20-qubit H1-1 system on document-summarization-relevant workloads.",
     org: "JPMorgan Chase; Quantinuum", date: "2022-12",
     url: "https://www.quantinuum.com/blog/quantinuum-customer-jpmorgan-chase-advances-constrained-quantum-optimization-with-new-20-qubit-system",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-ibm-cleveland-clinic-system-one",
@@ -1280,6 +1344,7 @@ export const SEED: Entry[] = [
     title: "Cleveland Clinic and IBM unveil an on-site IBM Quantum System One, the first quantum computer in the world dedicated to healthcare research.",
     org: "IBM, Cleveland Clinic", date: "2023-03",
     url: "https://newsroom.ibm.com/2023-03-20-Cleveland-Clinic-and-IBM-Unveil-First-Quantum-Computer-Dedicated-to-Healthcare-Research",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-india-national-quantum-mission",
@@ -1287,6 +1352,7 @@ export const SEED: Entry[] = [
     title: "India's Union Cabinet approves the National Quantum Mission, allocating Rs 6,003.65 crore (about $730 million) through 2030-31 to build quantum computers and applications.",
     org: "Union Cabinet of India, Department of Science and Technology", date: "2023-04",
     url: "https://thequantuminsider.com/2023/04/20/india-announces-730-million-plus-national-quantum-mission/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-planqc-dlr-contract",
@@ -1294,6 +1360,7 @@ export const SEED: Entry[] = [
     title: "planqc is awarded a 29 million euro DLR contract to build and install a 100-qubit neutral-atom quantum computer at DLR's Innovation Center in Ulm.",
     org: "planqc, DLR", date: "2023-05",
     url: "https://thequantuminsider.com/2023/05/04/planqc-awarded-29-million-euro-contract-from-dlr-to-build-and-install-scalable-neutral-atom-quantum-computer/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-qilimanjaro-gmv-bsc-gen0-delivery",
@@ -1301,6 +1368,7 @@ export const SEED: Entry[] = [
     title: "Qilimanjaro and GMV deliver Spain's first quantum computer milestone, remote access to a 5-qubit Gen0 chip at BSC under the Quantum Spain project.",
     org: "Qilimanjaro Quantum Tech, GMV, Barcelona Supercomputing Center", date: "2023-07",
     url: "https://qilimanjaro.tech/successful-first-delivery-for-the-quantum-spain-project-to-build-the-first-spanish-quantum-computer/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-ibm-pinq2-quebec-system-one",
@@ -1308,6 +1376,7 @@ export const SEED: Entry[] = [
     title: "PINQ² and IBM inaugurate the first IBM Quantum System One in Canada, a 127-qubit system at IBM's Bromont, Quebec facility.",
     org: "IBM, PINQ², Université de Sherbrooke", date: "2023-09",
     url: "https://newsroom.ibm.com/2023-09-22-The-Platform-for-Digital-and-Quantum-Innovation-of-Quebec-PINQ-Proudly-Announces-the-Historic-Inauguration-of-an-IBM-Quantum-System-One-Quantum-Computer-in-Bromont",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-ionq-afrl-25m-contract-2023",
@@ -1315,6 +1384,7 @@ export const SEED: Entry[] = [
     title: "IonQ signs a new $25.5 million agreement with the Air Force Research Laboratory, delivering and installing quantum systems at AFRL's Rome, New York site.",
     org: "IonQ, U.S. Air Force Research Laboratory (AFRL)", date: "2023-09",
     url: "https://www.businesswire.com/news/home/20230928720732/en/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-quandela-mosaiq-ovhcloud",
@@ -1322,6 +1392,7 @@ export const SEED: Entry[] = [
     title: "Quandela delivers its first MosaiQ photonic quantum computer to French cloud provider OVHcloud.",
     org: "Quandela, OVHcloud", date: "2023-10",
     url: "https://www.universite-paris-saclay.fr/en/news/quandela-journey-single-photons-sources-quantum-computers",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-aqt-lrz-munich-quantum-valley",
@@ -1329,6 +1400,7 @@ export const SEED: Entry[] = [
     title: "AQT delivers a trapped-ion quantum computer to the Leibniz Supercomputing Centre for Munich Quantum Valley research.",
     org: "Alpine Quantum Technologies, Leibniz Supercomputing Centre", date: "2023-12",
     url: "https://www.aqt.eu/ion-trap-quantum-computer-ready-for-novel-research-and-development-at-the-lrz/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-sk-telecom-thales-5g-pqc",
@@ -1336,6 +1408,7 @@ export const SEED: Entry[] = [
     title: "SK Telecom and Thales deploy post-quantum cryptography (Crystals-Kyber) on a live 5G standalone network to protect subscriber identity data from future quantum attacks.",
     org: "SK Telecom; Thales", date: "2023-12",
     url: "https://www.thefastmode.com/technology-solutions/34320-sk-telecom-and-thales-successfully-deploy-post-quantum-cryptography-on-5g-sa-networks",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-dwave-deloitte-canada-2024",
@@ -1343,6 +1416,7 @@ export const SEED: Entry[] = [
     title: "D-Wave and Deloitte Canada form a strategic alliance to bring quantum-annealing and hybrid solutions to Canadian government agencies",
     org: "D-Wave Quantum / Deloitte Canada", date: "2024-01",
     url: "https://www.dwavequantum.com/company/newsroom/press-release/d-wave-joins-forces-with-deloitte-canada-to-advance-quantum-adoption/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-ibm-rpi-university-system-one",
@@ -1350,6 +1424,7 @@ export const SEED: Entry[] = [
     title: "IBM and Rensselaer Polytechnic Institute unveil the world's first IBM Quantum System One installed on a university campus.",
     org: "IBM, Rensselaer Polytechnic Institute", date: "2024-04",
     url: "https://newsroom.ibm.com/2024-04-05-Rensselaer-Polytechnic-Institute-and-IBM-unveil-the-worlds-first-IBM-Quantum-System-One-on-a-university-campus",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-rigetti-novera-horizon-singapore-2024",
@@ -1357,6 +1432,7 @@ export const SEED: Entry[] = [
     title: "Rigetti delivers a 9-qubit Novera QPU to Horizon Quantum Computing for a new Singapore-based hardware testbed, its first QPU located in Asia.",
     org: "Rigetti Computing, Horizon Quantum Computing", date: "2024-04",
     url: "https://www.rigetti.com/news/rigetti-computing-delivers-novera-qpu-to-horizon-quantum-computing-for-singapore-based-hardware-testbed",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-jpmorgan-argonne-quantinuum-qaoa-2024",
@@ -1364,6 +1440,7 @@ export const SEED: Entry[] = [
     title: "JPMorgan Chase, Argonne National Laboratory and Quantinuum demonstrate a theoretical quantum speedup with QAOA on Quantinuum's trapped-ion computer, cutting algorithmic errors up to 65%",
     org: "JPMorgan Chase / Argonne National Laboratory / Quantinuum", date: "2024-05",
     url: "https://www.quantinuum.com/press-releases/jpmorgan-chase-argonne-national-laboratory-and-quantinuum-show-theoretical-quantum-speedup-with-the-quantum-approximate-optimization-algorithm",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-singapore-national-quantum-strategy",
@@ -1371,6 +1448,7 @@ export const SEED: Entry[] = [
     title: "Singapore's Deputy Prime Minister Heng Swee Keat launches the National Quantum Strategy, committing close to S$300 million over five years through the National Quantum Office and National Research Foundation.",
     org: "National Quantum Office, National Research Foundation Singapore", date: "2024-05",
     url: "https://www.edb.gov.sg/en/business-insights/insights/singapore-to-invest-about-s300-million-in-quantum-tech-research-and-talent.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-singapore-quantinuum-helios-mou",
@@ -1378,6 +1456,7 @@ export const SEED: Entry[] = [
     title: "Singapore's National Quantum Office, A*STAR, NUS, and the National Supercomputing Centre sign an MoU with Quantinuum giving Singapore-based researchers cloud access to Quantinuum's H-Series and forthcoming Helios quantum computers for computational-biology research.",
     org: "National Quantum Office; A*STAR; National University of Singapore; National Supercomputing Centre; Quantinuum", date: "2024-07",
     url: "https://www.quantinuum.com/press-releases/singapore-inks-mou-with-quantinuum-enabling-access-to-their-advanced-quantum-computer",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-ntt-docomo-dwave-2024",
@@ -1385,6 +1464,7 @@ export const SEED: Entry[] = [
     title: "NTT DOCOMO and D-Wave deploy quantum optimization to cut mobile-network paging congestion by 15% across Japan's live network",
     org: "NTT DOCOMO / D-Wave Quantum", date: "2024-08",
     url: "https://thequantuminsider.com/2024/08/23/ntt-docomo-and-d-wave-improve-mobile-network-performance-by-15-with-quantum-optimization-technology/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-hsbc-quantinuum-gold-2024",
@@ -1392,6 +1472,7 @@ export const SEED: Entry[] = [
     title: "HSBC and Quantinuum complete a pilot using post-quantum cryptography and Quantum Origin randomness to protect HSBC's tokenised gold trading from quantum attacks",
     org: "HSBC / Quantinuum", date: "2024-09",
     url: "https://www.hsbc.com/news-and-views/news/media-releases/2024/hsbc-pilots-quantum-safe-technology-for-tokenised-gold",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-switzerland-quantum-call-2024",
@@ -1399,6 +1480,7 @@ export const SEED: Entry[] = [
     title: "Switzerland's federal Swiss Quantum Initiative, run through SNSF and Innosuisse, approves CHF 16 million for 13 quantum computing, sensing, simulation and communication projects under the Swiss Quantum Call 2024.",
     org: "Swiss Quantum Initiative (SQI), SNSF, Innosuisse", date: "2024-09",
     url: "https://scnat.ch/en/uuid/i/390377db-a1d2-5885-90de-70eceb2ec4af-Swiss_Quantum_Call_2024_13_projects_approved",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-jpmorgan-quantinuum-hhl-portfolio",
@@ -1406,6 +1488,7 @@ export const SEED: Entry[] = [
     title: "JPMorgan Chase runs its Hybrid HHL++ quantum linear-systems algorithm on Quantinuum trapped-ion hardware for small-scale portfolio optimization, its largest experimental HHL demonstration to date.",
     org: "JPMorgan Chase; Quantinuum", date: "2024-09",
     url: "https://www.jpmorganchase.com/about/technology/blog/quantum-linear-systems-for-portfolio-optimization",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-ibm-europe-quantum-data-center-ehningen",
@@ -1413,6 +1496,7 @@ export const SEED: Entry[] = [
     title: "IBM opens its first Quantum Data Center outside the United States, in Ehningen, Germany, to serve European clients under EU data rules.",
     org: "IBM", date: "2024-10",
     url: "https://www.forbes.com/sites/moorinsights/2024/10/21/ibm-opens-its-first-quantum-data-center-in-europe/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-rigetti-nqcc-uk-ankaa-2024",
@@ -1420,6 +1504,7 @@ export const SEED: Entry[] = [
     title: "A fully operational 24-qubit Rigetti Ankaa-class system goes live inside the UK's newly opened National Quantum Computing Centre at Harwell.",
     org: "Rigetti Computing, National Quantum Computing Centre (NQCC)", date: "2024-10",
     url: "https://www.globenewswire.com/news-release/2024/10/30/2972087/0/en/Fully-Operational-Rigetti-QPU-Included-in-UK-s-Recently-Opened-National-Quantum-Computer-Centre.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-nqcc-harwell-opening",
@@ -1427,6 +1512,7 @@ export const SEED: Entry[] = [
     title: "The UK's National Quantum Computing Centre officially opens at Harwell Campus, a 4,000-square-metre facility built to host a dozen quantum computers.",
     org: "National Quantum Computing Centre", date: "2024-10",
     url: "https://www.ukri.org/news/science-minister-opens-national-quantum-computing-centre/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-origin-wukong-first-overseas-sale",
@@ -1434,6 +1520,7 @@ export const SEED: Entry[] = [
     title: "Origin Quantum sells its 72-qubit Wukong quantum computer to an overseas client for the first time, China's first export of quantum computing power.",
     org: "Origin Quantum", date: "2024-11",
     url: "https://www.globaltimes.cn/page/202411/1322416.shtml",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-denmark-quantum-denmark-launch",
@@ -1441,6 +1528,7 @@ export const SEED: Entry[] = [
     title: "Denmark launches Quantum Denmark, a national initiative backed by the Danish Business Authority and the Danish Agency for Higher Education and Science to coordinate the country's quantum computing ecosystem.",
     org: "Danish Business Authority, Danish Agency for Higher Education and Science", date: "2024-11",
     url: "https://www.quantumworldcongress.com/news-and-updates/denmark-strengthens-quantum-leadership-through-eu-strategy-nato-collaboration-and-national-innovation-hubs",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-ionq-quantumbasel-switzerland-2024",
@@ -1448,6 +1536,7 @@ export const SEED: Entry[] = [
     title: "IonQ unveils its first quantum computer in Europe at QuantumBasel, Switzerland, with a Forte Enterprise system online at a record #AQ36.",
     org: "IonQ, QuantumBasel", date: "2024-12",
     url: "https://www.ionq.com/news/ionq-unveils-its-first-quantum-computer-in-europe-online-now-at-a-record-aq36",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-hefei-quantum-medicine-institute",
@@ -1455,6 +1544,7 @@ export const SEED: Entry[] = [
     title: "Origin Quantum and Bengbu Medical University launch the Hefei Institute of Quantum Computing and Data Medicine to run real-machine quantum medical algorithms.",
     org: "Origin Quantum, Bengbu Medical University", date: "2024-12",
     url: "https://www.chinadaily.com.cn/a/202412/10/WS6757952ba310f1265a1d1ff2.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-malaysia-quantum-computing-centre",
@@ -1462,6 +1552,7 @@ export const SEED: Entry[] = [
     title: "Malaysia's Ministry of Science, Technology and Innovation (MOSTI) backs the country's first Quantum Computing Centre, a partnership between national R&D agency MIMOS and South Korea's SDT Inc.",
     org: "MOSTI, MIMOS, SDT Inc.", date: "2024-12",
     url: "https://postquantum.com/quantum-computing/quantum-singapore-asean/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-vietnam-resolution-57-quantum",
@@ -1469,6 +1560,7 @@ export const SEED: Entry[] = [
     title: "Vietnam's Communist Party Central Committee issues Resolution 57, naming quantum technology among the country's 10 strategic technologies and setting the policy basis for national quantum labs and talent pipelines.",
     org: "Communist Party of Vietnam Central Committee", date: "2024-12",
     url: "https://vietnamnews.vn/society/1784637/viet-nam-lays-groundwork-for-quantum-push-amid-global-scramble.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-airbus-bmw-quantum-mobility-quest",
@@ -1483,6 +1575,7 @@ export const SEED: Entry[] = [
     title: "IonQ signs a $21.1 million AFRL project to build quantum network infrastructure at the Innovare Advancement Center and test free-space optical links from ground stations to drones.",
     org: "IonQ, U.S. Air Force Research Laboratory (AFRL)", date: "2025-01",
     url: "https://ionq.com/news/ionq-announces-new-usd21-1-million-project-with-united-states-air-force",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-spinq-italy-university-delivery",
@@ -1490,6 +1583,7 @@ export const SEED: Entry[] = [
     title: "SpinQ, via partner Giglio Group's OmniaQuantum platform, delivers its first quantum computers to the University of Perugia and University of Salerno in Italy.",
     org: "SpinQ Technology", date: "2025-01",
     url: "https://www.classxhsilkroad.it/news/azienda-information-technology/accordo-strategico-sui-computer-quantici-tra-giglio-e-spinq-202501141724134341",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-fzj-dwave-purchase-2025",
@@ -1497,6 +1591,7 @@ export const SEED: Entry[] = [
     title: "Forschungszentrum Jülich purchases D-Wave's 5,000-plus-qubit Advantage system, becoming the first HPC center to own one ahead of coupling it to the JUPITER exascale supercomputer",
     org: "Forschungszentrum Jülich / D-Wave Quantum", date: "2025-02",
     url: "https://www.fz-juelich.de/en/news/archive/press-release/2025/forschungszentrum-julich-strengthens-quantum-research-with-purchase-of-d-wavetm",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-saudi-arabia-national-quantum-alliance",
@@ -1504,6 +1599,7 @@ export const SEED: Entry[] = [
     title: "Saudi Arabia's Research, Development and Innovation Authority announces the National Quantum Alliance at LEAP 2025, coordinating government, academia and industry toward building a domestic quantum computer.",
     org: "Research, Development and Innovation Authority (RDIA), Saudi Arabia", date: "2025-02",
     url: "https://www.rdia.gov.sa/en/programs/infrastructure/national-quantum/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-quantinuum-nvidia-nvaqc-2025",
@@ -1511,6 +1607,7 @@ export const SEED: Entry[] = [
     title: "Quantinuum joins NVIDIA's Accelerated Quantum Research Center as a founding collaborator, pairing its System H2 with NVIDIA's GB200 NVL72 supercomputer",
     org: "Quantinuum / NVIDIA", date: "2025-03",
     url: "https://www.quantinuum.com/press-releases/quantinuum-selected-as-a-founding-collaborator-for-nvidia-accelerated-quantum-research-center",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-vodafone-ibm-quantum-safe-smartphone",
@@ -1518,6 +1615,7 @@ export const SEED: Entry[] = [
     title: "Vodafone and IBM demonstrate a post-quantum cryptography proof of concept for Vodafone Secure Net at Mobile World Congress, protecting smartphone traffic against future 'harvest now, decrypt later' quantum attacks.",
     org: "Vodafone; IBM", date: "2025-03",
     url: "https://newsroom.ibm.com/2025-03-03-vodafone-and-ibm-work-to-future-proof-smartphone-security-with-quantum-safe-cryptography",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-ionq-epb-chattanooga-2025",
@@ -1525,6 +1623,7 @@ export const SEED: Entry[] = [
     title: "IonQ signs a $22 million deal with utility EPB to build the EPB Quantum Center in Chattanooga, Tennessee, billed as the first U.S. quantum computing and networking hub.",
     org: "IonQ, EPB", date: "2025-04",
     url: "https://www.ionq.com/news/ionq-announces-usd22m-deal-with-epb-establishing-chattanooga-tennessee-as",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-origin-wukong-ai-finetune",
@@ -1539,6 +1638,7 @@ export const SEED: Entry[] = [
     title: "South Africa's Department of Science, Technology and Innovation commits R142 million over five years to Phase 2 of the South African Quantum Technology Initiative (SA QuTI), spanning computing, communication and sensing.",
     org: "Department of Science, Technology and Innovation (DSTI), SA QuTI", date: "2025-04",
     url: "https://techcentral.co.za/south-africas-quantum-bet-starts-to-leave-the-lab/283492/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-finland-vtt-300-qubit-computer",
@@ -1546,6 +1646,7 @@ export const SEED: Entry[] = [
     title: "Finland's state research center VTT selects IQM Quantum Computers to build a 300-qubit superconducting quantum computer, backed by a EUR 70 million special government grant awarded in 2024.",
     org: "VTT Technical Research Centre of Finland, IQM Quantum Computers", date: "2025-05",
     url: "https://www.vttresearch.com/en/news-and-ideas/iqm-quantum-computers-supply-finland-world-leading-superconducting-300-qubit-quantum",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-qatar-national-quantum-computing-strategy",
@@ -1553,6 +1654,7 @@ export const SEED: Entry[] = [
     title: "Qatar's Ministry of Communications and Information Technology launches a national quantum computing strategy committing $1 billion over the next decade to research, infrastructure and talent.",
     org: "Ministry of Communications and Information Technology (MCIT), Qatar", date: "2025-05",
     url: "https://www.semafor.com/article/05/21/2025/qatar-makes-a-1-billion-bet-on-quantum-computing",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-turingq-valet-parking",
@@ -1560,6 +1662,7 @@ export const SEED: Entry[] = [
     title: "TuringQ deploys a quantum-optimized autonomous valet parking system at a large commercial lot, cutting average vehicle search time from 19.8 to about 5.5 minutes.",
     org: "TuringQ", date: "2025-06",
     url: "https://english.news.cn/20250623/a4e6b2c872fd4b52b7fb5c31a22ba468/c.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-qboson-bank-teller-scheduling",
@@ -1567,6 +1670,7 @@ export const SEED: Entry[] = [
     title: "QBoson, the Postal Savings Bank of China, and China Mobile deploy a quantum algorithm-based bank teller scheduling solution that finds optimal staffing within milliseconds.",
     org: "QBoson, Postal Savings Bank of China, China Mobile", date: "2025-06",
     url: "https://english.news.cn/20250623/a4e6b2c872fd4b52b7fb5c31a22ba468/c.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-aqt-piast-q-poznan-inauguration",
@@ -1574,6 +1678,7 @@ export const SEED: Entry[] = [
     title: "AQT's PIAST-Q trapped-ion quantum computer is inaugurated at PCSS in Poznan, Europe's first EuroHPC quantum computer deployment.",
     org: "Alpine Quantum Technologies, PCSS, EuroHPC JU", date: "2025-06",
     url: "https://www.aqt.eu/inauguration-of-piast-q-a-leap-for-european-quantum-computing/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-orca-pt2-nqcc-delivery",
@@ -1581,6 +1686,7 @@ export const SEED: Entry[] = [
     title: "ORCA Computing installs its PT-2 photonic quantum computer at the UK's National Quantum Computing Centre, the first photonic quantum system in the UK public sector.",
     org: "ORCA Computing, National Quantum Computing Centre", date: "2025-06",
     url: "https://orcacomputing.com/installation-marks-key-milestone-in-the-uks-121m-quantum-initiative-advancing-practical-quantum-research/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-south-africa-cqctec-ukzn",
@@ -1588,6 +1694,7 @@ export const SEED: Entry[] = [
     title: "South Africa's Department of Science, Technology and Innovation and the University of KwaZulu-Natal establish the Centre for Quantum Computing and Technology (CQCtec) to build national quantum computing capacity.",
     org: "Department of Science, Technology and Innovation (DSTI), University of KwaZulu-Natal", date: "2025-06",
     url: "https://quantumzeitgeist.com/south-africa-quantum-computing-quantum-center/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-rigetti-qphox-afrl-2025",
@@ -1595,6 +1702,7 @@ export const SEED: Entry[] = [
     title: "Rigetti and QphoX are awarded a $5.8 million, three-year AFRL contract to develop optical networks linking superconducting qubits at AFRL's Rome, New York facility.",
     org: "Rigetti Computing, QphoX, U.S. Air Force Research Laboratory (AFRL)", date: "2025-09",
     url: "https://www.rigetti.com/news/rigetti-in-collaboration-with-qphox-awarded-5-8m-afrl-contract-to-advance-superconducting-quantum-networking",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-norway-quantum-technology-pledge",
@@ -1602,6 +1710,7 @@ export const SEED: Entry[] = [
     title: "Norwegian Prime Minister Jonas Gahr Store pledges NOK 1.1 billion (about $100 million) over five years for quantum technology, to be managed by the Research Council of Norway.",
     org: "Government of Norway, Research Council of Norway", date: "2025-09",
     url: "https://thequantuminsider.com/2025/09/02/norway-pledges-over-100-million-us-to-quantum-technology-drive/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-hsbc-ibm-quantum-bond-trading",
@@ -1609,6 +1718,7 @@ export const SEED: Entry[] = [
     title: "HSBC and IBM demonstrate quantum-enabled algorithmic bond trading, improving prediction of European corporate bond trade completion by up to 34% using IBM Heron quantum processors.",
     org: "HSBC; IBM", date: "2025-09",
     url: "https://www.hsbc.com/news-and-views/news/media-releases/2025/hsbc-demonstrates-worlds-first-known-quantum-enabled-algorithmic-trading-with-ibm",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-standard-chartered-fujitsu-project-quanta",
@@ -1616,6 +1726,7 @@ export const SEED: Entry[] = [
     title: "SC Ventures (Standard Chartered) and Fujitsu launch Project Quanta, a joint platform giving banks pre-built quantum algorithms for fraud detection, risk simulation, derivative pricing, and credit decisions.",
     org: "Standard Chartered (SC Ventures); Fujitsu", date: "2025-09",
     url: "https://global.fujitsu/en-global/pr/news/2025/09/25-02",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-ibm-basque-system-two-donostia",
@@ -1623,6 +1734,7 @@ export const SEED: Entry[] = [
     title: "The Basque Government and IBM inaugurate Europe's first IBM Quantum System Two, powered by a 156-qubit Heron processor, in Donostia-San Sebastián.",
     org: "IBM, Basque Government", date: "2025-10",
     url: "https://thequantuminsider.com/2025/10/14/the-basque-government-and-ibm-inaugurate-europes-first-ibm-quantum-system-two-in-donostia-san-sebastian/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-pakistan-national-center-quantum-computing",
@@ -1630,6 +1742,7 @@ export const SEED: Entry[] = [
     title: "Pakistan's Ministry of Planning, Development and Special Initiatives signs an MOU with China's CETC to establish Pakistan's National Center for Quantum Computing, covering research partnerships and skills training.",
     org: "Ministry of Planning, Development and Special Initiatives (Pakistan), China Electronics Technology Group Corporation (CETC), Emerging Technologies Lab", date: "2025-10",
     url: "https://quantumcomputingreport.com/china-to-assist-pakistan-in-establishing-national-center-for-quantum-computing/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-canada-quantum-defense-funding-2025",
@@ -1637,6 +1750,7 @@ export const SEED: Entry[] = [
     title: "Canada's 2025 federal budget allocates C$334.3 million over five years for quantum technology under the new Defence Industrial Strategy, split between C$223.1 million for research and C$111.2 million for industry-oriented measures.",
     org: "Innovation, Science and Economic Development Canada (ISED), National Research Council, NSERC", date: "2025-11",
     url: "https://thequantuminsider.com/2025/11/06/canada-targets-quantum-as-strategic-industry-in-c334-million-defense-push/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-ionq-kisti-tempo-southkorea-2025",
@@ -1644,6 +1758,7 @@ export const SEED: Entry[] = [
     title: "IonQ and South Korea's KISTI finalize an agreement to deliver a 100-qubit Tempo quantum system, integrated on-site with KISTI's KISTI-6 (HANKANG) supercomputer.",
     org: "IonQ, Korea Institute of Science and Technology Information (KISTI)", date: "2025-12",
     url: "https://thequantuminsider.com/2025/12/23/ionq-and-kisti-finalize-agreement-to-deliver-100-qubit-quantum-system-in-south-korea/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-horizon-quantum-owns-own-quantum-computer",
@@ -1651,6 +1766,7 @@ export const SEED: Entry[] = [
     title: "Horizon Quantum completes assembly of its own quantum computer, built from a Rigetti superconducting processor, Maybell cryogenics, and Quantum Machines control electronics, and deploys it for commercial use at its Singapore headquarters, becoming the first quantum-software company to own and operate a quantum computer.",
     org: "Horizon Quantum; Rigetti Computing; Maybell Quantum; Quantum Machines", date: "2025-12",
     url: "https://thequantuminsider.com/2025/12/03/horizon-quantum-in-house-quantum-computer/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-chile-national-quantum-strategy",
@@ -1658,6 +1774,7 @@ export const SEED: Entry[] = [
     title: "Chilean President Gabriel Boric and the Ministry of Science, Technology, Knowledge and Innovation formalize a National Strategy for Quantum Technologies 2025-2035, prioritizing sovereign computing and sensing capacity.",
     org: "Ministry of Science, Technology, Knowledge and Innovation (Chile)", date: "2025-12",
     url: "https://quantumcomputingreport.com/chile-launches-national-quantum-strategy-2025-2035-prioritizing-sovereign-computing-and-sensing/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-new-zealand-quantum-discovery-phase",
@@ -1665,6 +1782,7 @@ export const SEED: Entry[] = [
     title: "New Zealand's Science, Innovation and Technology Minister Shane Reti commits NZ$1.35 million for the New Zealand Institute for Advanced Technology to run a quantum technology discovery phase from December 2025 to June 2026.",
     org: "New Zealand Institute for Advanced Technology (NZIAT)", date: "2025-12",
     url: "https://www.beehive.govt.nz/release/government-launches-quantum-tech-discovery",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-rigetti-novera-saskatchewan-2026",
@@ -1672,6 +1790,7 @@ export const SEED: Entry[] = [
     title: "Rigetti sells a 9-qubit Novera QPU to the University of Saskatchewan, becoming the core of the university's first quantum computing system.",
     org: "Rigetti Computing, University of Saskatchewan", date: "2026-03",
     url: "https://investors.rigetti.com/news-releases/news-release-details/rigetti-announces-novera-qpu-sale-university-saskatchewan",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-sdt-ionq-qureka-integration",
@@ -1679,6 +1798,7 @@ export const SEED: Entry[] = [
     title: "SDT integrates IonQ's trapped-ion quantum systems, including Tempo, directly into its QuREKA hybrid quantum-cloud platform, letting users generate API keys to run algorithms on IonQ hardware alongside classical and other quantum resources without separate accounts.",
     org: "SDT; IonQ", date: "2026-04",
     url: "https://thequantuminsider.com/2026/04/17/sdt-and-ionq-partner-to-bring-trapped-ion-quantum-power-to-the-qureka-platform/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-credit-agricole-pasqal-quantum-finance",
@@ -1686,6 +1806,7 @@ export const SEED: Entry[] = [
     title: "Crédit Agricole CIB and Pasqal advance their strategic partnership on neutral-atom quantum computing for capital markets, targeting initial production use cases in counterparty credit risk and portfolio optimization by 2028.",
     org: "Crédit Agricole CIB; Pasqal", date: "2026-06",
     url: "https://www.ca-cib.com/en/news/credit-agricole-cib-and-pasqal-advance-their-strategic-partnership-deploy-quantum-computing-0",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-archer-ionq-cloud-2026-07",
@@ -1693,6 +1814,7 @@ export const SEED: Entry[] = [
     title: "Archer Materials signs a three-year, US$1.5 million Quantum Compute Agreement with IonQ, gaining cloud access to IonQ's Forte-class systems and simulators to run its fraud-detection and capital-markets quantum machine-learning models, and to study deploying a sovereign quantum computer in Australia",
     org: "Archer Materials", date: "2026-07-02",
     url: "https://thequantuminsider.com/2026/07/02/archer-materials-to-access-ionq-cloud-explore-sovereign-quantum-computer-in-australia/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-esa-equal1-bell1-2026-07",
@@ -1700,6 +1822,7 @@ export const SEED: Entry[] = [
     title: "The European Space Agency installs its first quantum computer, Equal1's six-qubit Bell-1 system, at the ESA-ESRIN Earth observation centre in Frascati, Italy, to run a pilot on hybrid quantum-classical algorithms for satellite land-cover classification and mission planning",
     org: "European Space Agency (ESA-ESRIN)", date: "2026-07-15",
     url: "https://www.esa.int/Applications/Observing_the_Earth/ESA_brings_quantum_computing_to_Earth_observation",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-digitalcatapult-natwest-2026-07",
@@ -1707,6 +1830,7 @@ export const SEED: Entry[] = [
     title: "Digital Catapult's third Quantum Technology Access Programme cohort, run with the UK's National Quantum Computing Centre, gives NatWest, the Rail Safety and Standards Board, and Health Innovation North West Coast hands-on access to ORCA Computing's PT-2 quantum computer to test fraud-detection, optimisation, and medical-diagnosis use cases",
     org: "NatWest (with Digital Catapult / NQCC's SparQ programme)", date: "2026-07-16",
     url: "https://thequantuminsider.com/2026/07/16/digital-catapult-quantum-technology-access-programme-cohort/",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-quantinuum-rollsroyce-2026-07",
@@ -1714,6 +1838,7 @@ export const SEED: Entry[] = [
     title: "Rolls-Royce signs a multi-year agreement with Quantinuum, quantum error-correction firm Riverlane, and the University of Edinburgh's EPCC to test Quantinuum's 98-qubit Helios quantum computer against gas-turbine computational fluid dynamics simulations, Rolls-Royce's first named quantum computing use case",
     org: "Rolls-Royce", date: "2026-07-14",
     url: "https://thequantuminsider.com/2026/07/14/quantinuum-rolls-royce-riverlane-and-university-of-edinburgh-sign-agreement-to-explore-quantum-computing-for-industrial-design-and-simulation/",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-pasqal-megazone-korea-2026-07",
@@ -1721,6 +1846,7 @@ export const SEED: Entry[] = [
     title: "MegazoneCloud signs a memorandum of understanding with Pasqal to integrate Pasqal's neutral-atom quantum processors into its managed cloud services, giving South Korean enterprises in finance, logistics, and manufacturing a domestic route to quantum computing access",
     org: "MegazoneCloud", date: "2026-07-07",
     url: "https://www.globenewswire.com/news-release/2026/07/07/3323140/0/en/pasqal-and-megazonecloud-partner-to-bring-industrial-scale-quantum-computing-to-south-korea.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-classiq-qai-korea-2026-07",
@@ -1728,6 +1854,7 @@ export const SEED: Entry[] = [
     title: "QAI signs an agreement with Israeli quantum software firm Classiq to launch South Korea's first domestically operated quantum-computing-as-a-service business out of Seoul",
     org: "QAI Co., Ltd.", date: "2026-07-02",
     url: "https://www.koreaherald.com/article/10796226",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-umd-ibm-quantum-2026-07",
@@ -1735,6 +1862,7 @@ export const SEED: Entry[] = [
     title: "The University of Maryland's QLab signs an agreement with IBM giving university departments remote access to IBM's 156-qubit Heron and 120-qubit Nighthawk quantum processors starting fall 2026, on approval of a submitted research or assignment proposal",
     org: "University of Maryland (QLab)", date: "2026-07",
     url: "https://umdrightnow.umd.edu/news-releases/qlab-expands-quantum-computing-access-to-ibm-platform",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-logicalqubit-pharmaron-2026-07",
@@ -1742,6 +1870,7 @@ export const SEED: Entry[] = [
     title: "Pharmaron signs a strategic cooperation agreement with Chinese quantum firm Logical Qubit Technology at its Quantum Day 2026 event, agreeing to build joint laboratories applying its AGate quantum cloud platform to pharmaceutical R&D",
     org: "Pharmaron", date: "2026-07-09",
     url: "https://thequantuminsider.com/2026/07/14/logical-qubit-technology-launches-quantum-cloud-platform-at-quantum-day-2026/",
+    deploymentStatus: "announced",
   },
 
   // ── Stage 04: investment — private funding rounds ─────────────────

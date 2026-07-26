@@ -56,7 +56,18 @@ export function Overview({ ctx }: { ctx: DashboardContext }) {
     return topFilterCountries.slice(0, 2);
   }, [compareCountries, topFilterCountries]);
 
-  const activeProfileCountry = profileCountry ?? compareCountries[0] ?? null;
+  // The global country filter previously did nothing on this page at all —
+  // every chart here reads from the full, unfiltered `entries` on purpose
+  // (Overview's charts are inherently cross-country comparisons; re-running
+  // them against `shown` would collapse a top-8 matrix/map/gap-chart down
+  // to one trivial row the moment a filter is set). The real fix isn't to
+  // filter the data, it's to make the filter visibly DO something: it now
+  // drives which country the map highlights and the inline profile panel
+  // opens for (an explicit map click still wins, so clicking a different
+  // country to preview doesn't fight the persistent filter), and which row
+  // stands out (not faded) in the leadership matrix below.
+  const activeProfileCountry = profileCountry ?? (country !== "all" ? country : null) ?? compareCountries[0] ?? null;
+  const matrixEmphasis = country !== "all" && !compareCountries.includes(country) ? [country, ...compareCountries] : compareCountries;
   const profile = useMemo(() => (activeProfileCountry ? computeCountryProfile(entries, activeProfileCountry) : null), [entries, activeProfileCountry]);
 
   function handleMapSelect(code: string) {
@@ -74,7 +85,10 @@ export function Overview({ ctx }: { ctx: DashboardContext }) {
   return (
     <div className="overview">
       {headline && <h1 className="finding-headline">{headline}</h1>}
-      <div className="trend-note" style={{ marginBottom: 14 }}>Last updated {generated}{updatedAgo ? ` · ${updatedAgo}` : ""}</div>
+      <div className="trend-note" style={{ marginBottom: 14 }}>
+        Last updated {generated}{updatedAgo ? ` · ${updatedAgo}` : ""}
+        {country !== "all" && ` · Filtered to ${countryName(country)}: highlighted on the map and matrix below, and opened in the profile panel — this page's charts stay cross-country comparisons by design, so the filter emphasizes rather than restricts them.`}
+      </div>
 
       {cards.length > 0 && (
         <div className="leader-card-row" style={{ marginBottom: 14 }}>
@@ -98,7 +112,7 @@ export function Overview({ ctx }: { ctx: DashboardContext }) {
             </MethodNote>
           }
         />
-        <EcosystemMatrix entries={entries} compareCountries={compareCountries} onSelectCell={handleMatrixCell} />
+        <EcosystemMatrix entries={entries} compareCountries={matrixEmphasis} onSelectCell={handleMatrixCell} />
       </div>
 
       <div className="panel" id="overview-strategic">

@@ -32,6 +32,21 @@ export function ResearchAdoptionGapChart({ entries, countries }: { entries: Entr
           </div>
         );
       })}
+      {/* Real x-axis scale for the diverging track above: the bar geometry
+          maps track-left/center/right to -maxAbs/0/+maxAbs exactly (see
+          widthPct math), so these three ticks are the real domain, not
+          invented round numbers. Reuses gap-chart-row's own grid so the
+          ticks land under the track column precisely, with the label/value
+          columns left blank rather than duplicating text next to them. */}
+      <div className="gap-chart-row">
+        <div />
+        <div style={{ position: "relative", height: 12, fontSize: 10, color: "var(--mist)" }}>
+          <span style={{ position: "absolute", left: 0 }}>-{maxAbs.toFixed(0)}pt</span>
+          <span style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>0pt</span>
+          <span style={{ position: "absolute", right: 0 }}>+{maxAbs.toFixed(0)}pt</span>
+        </div>
+        <div />
+      </div>
       <div className="cap">research share of tracked activity minus adoption share of tracked activity, each computed independently — positive means more tracked research than adoption, not a conversion rate or a causal pipeline</div>
     </div>
   );

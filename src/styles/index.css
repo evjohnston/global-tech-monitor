@@ -143,7 +143,7 @@ a { color: inherit; }
   font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
   background: var(--red); color: #fff;
 }
-.ticker-track-wrap { flex: 1; overflow: hidden; position: relative; min-width: 0; }
+.ticker-track-wrap { flex: 1; overflow: hidden; position: relative; min-width: 0; display: flex; align-items: center; }
 .ticker-track { display: inline-flex; align-items: center; animation: ticker-scroll linear infinite; }
 .ticker-track.paused { animation-play-state: paused; }
 .ticker-item { display: inline-flex; align-items: center; gap: 6px; padding: 0 22px; font-size: 11px; color: var(--ink-2); }
@@ -258,10 +258,15 @@ a { color: inherit; }
    vcFunding at all), so auto-fit rather than a fixed column count. */
 .finrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--sp-1); margin-bottom: var(--sp-1); }
 .kpi { padding: var(--sp-2); min-width: 0; }
-/* Country-filtered metric row: 3 one-unit cards + 1 two-unit institution/
-   organization card = 5 units total, same width as the unfiltered
-   5-card row — the row's total width never jumps when a filter is
-   applied. A long institution name wraps rather than forcing overflow. */
+/* Country-filtered metric row: 4 one-unit cards + 1 two-unit institution/
+   organization card = 6 units total, so the row switches to a 6-column
+   grid (.kpirow-6, paired with .kpirow on the same element) rather than
+   the unfiltered row's 5 — that's what keeps all 5 real cards on one line
+   instead of the 2-unit card wrapping to its own row with 3 empty columns
+   beside it. Cards get proportionally narrower (a real width change, not a
+   font-size change) to make room; a long institution name wraps within its
+   card rather than forcing overflow. */
+.kpirow-6 { grid-template-columns: repeat(6, 1fr); }
 .kpi-span2 { grid-column: span 2; }
 .kpi.hi { background: var(--red); border-color: var(--red); color: #fff; }
 .kpi .label { font-size: var(--fs-card-label); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); overflow-wrap: break-word; }
@@ -792,7 +797,7 @@ a { color: inherit; }
 .foot code { background: var(--panel-2); padding: 1px 4px; border-radius: 0; }
 .foot .sig { color: var(--red); font-weight: 600; margin-top: 10px; font-size: 11px; }
 
-@media (max-width: 1100px) { .kpirow { grid-template-columns: repeat(2,1fr); } .row3 { grid-template-columns: 1fr; } .pipeline { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 1100px) { .kpirow, .kpirow-6 { grid-template-columns: repeat(2,1fr); } .row3 { grid-template-columns: 1fr; } .pipeline { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 620px) { .wrap { padding: 0 14px 32px; } .pipeline { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 
@@ -812,7 +817,7 @@ a { color: inherit; }
 }
 @media (max-width: 768px) {
   .finding-grid { grid-template-columns: 1fr 1fr; }
-  .kpirow { grid-template-columns: repeat(2, 1fr); }
+  .kpirow, .kpirow-6 { grid-template-columns: repeat(2, 1fr); }
   .selection-bar { flex-wrap: wrap; }
   .drawer { max-width: 100%; }
   .collab-layout { grid-template-columns: 1fr; }
@@ -822,7 +827,7 @@ a { color: inherit; }
 }
 @media (max-width: 480px) {
   .finding-grid { grid-template-columns: 1fr; }
-  .kpirow { grid-template-columns: 1fr; }
+  .kpirow, .kpirow-6 { grid-template-columns: 1fr; }
   .leader-card-row { grid-template-columns: 1fr; }
   .controls { flex-wrap: wrap; }
   .record-explorer-controls { flex-direction: column; align-items: stretch; }

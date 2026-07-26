@@ -48,6 +48,44 @@ export function FundingTrend({ trend }: { trend: TrendPoint[] }) {
   const lastVal = values[values.length - 1];
   const changePct = firstVal > 0 ? ((lastVal - firstVal) / firstVal) * 100 : null;
 
+  // Marker + label plan: every real point gets a circle, but only a
+  // readable subset gets a printed value next to it — first/last point plus
+  // real local peaks/troughs, thinned by a minimum pixel gap so two close
+  // values never collide (mechanically labeling every point breaks down
+  // once points sit a few px apart, which this series will do as trend[]
+  // keeps accumulating one point per day).
+  const lastIdx = points.length - 1;
+  const labelGap = 42;
+  const isExtreme = (i: number) =>
+    i > 0 && i < lastIdx &&
+    ((values[i] > values[i - 1] && values[i] > values[i + 1]) ||
+      (values[i] < values[i - 1] && values[i] < values[i + 1]));
+  const candidates = [0, ...values.map((_v, i) => i).filter(isExtreme), lastIdx];
+  const labelIdx: number[] = [];
+  for (const i of candidates) {
+    if (labelIdx.length === 0 || x(i) - x(labelIdx[labelIdx.length - 1]) >= labelGap) labelIdx.push(i);
+  }
+  // The latest value is the one figure this chart must always surface —
+  // swap out a too-close neighbor rather than ever dropping it.
+  if (labelIdx[labelIdx.length - 1] !== lastIdx) {
+    if (labelIdx.length && x(lastIdx) - x(labelIdx[labelIdx.length - 1]) < labelGap) labelIdx.pop();
+    labelIdx.push(lastIdx);
+  }
+  const aboveFor = (i: number) => {
+    const prev = values[Math.max(0, i - 1)];
+    const next = values[Math.min(lastIdx, i + 1)];
+    if (values[i] >= prev && values[i] >= next) return true; // peak (or rising edge)
+    if (values[i] <= prev && values[i] <= next) return false; // trough (or falling edge)
+    return i % 2 === 0;
+  };
+  // Point 0 sits in the same x column as the y-axis min/max tick labels —
+  // push its value label toward whichever half of the chart ISN'T that
+  // axis label, rather than the usual peak/trough rule, so it never
+  // collides with them.
+  const above0 = (values[0] - min) / range <= 0.5;
+  const aboveY = (py: number) => Math.max(7, py - 7);
+  const belowY = (py: number) => Math.min(133, py + 9);
+
   function handleMove(e: MouseEvent<SVGSVGElement>) {
     const svg = svgRef.current;
     if (!svg) return;
@@ -74,16 +112,26 @@ export function FundingTrend({ trend }: { trend: TrendPoint[] }) {
       >
         <line x1={padL} y1={padT} x2={padL} y2={H - padB} stroke="var(--line)" />
         <line x1={padL} y1={H - padB} x2={W - padR} y2={H - padB} stroke="var(--line)" />
-        {truncated && (
-          <text x={padL - 4} y={H - padB - 3} textAnchor="end" fontSize="8" fill="var(--mist)">⌇ truncated</text>
-        )}
         <text x={padL - 4} y={padT + 4} textAnchor="end" fontSize="9" fill="var(--mist)">{fmtUsd(max)}</text>
         <text x={padL - 4} y={H - padB} textAnchor="end" fontSize="9" fill="var(--mist)">{truncated ? fmtUsd(min) : "$0"}</text>
         <path d={line} fill="none" stroke={color} strokeWidth="2" />
         {hover && (
           <line x1={x(hover.i)} y1={padT} x2={x(hover.i)} y2={H - padB} stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 2" />
         )}
-        <circle cx={x(points.length - 1)} cy={y(lastVal)} r="3" fill={color} />
+        {points.map((p, i) => (
+          <circle key={p.date} cx={x(i)} cy={y(values[i])} r={i === lastIdx ? 3 : 2} fill={color} />
+        ))}
+        {labelIdx.map((i) => {
+          const cy = y(values[i]);
+          const anchor = i === 0 ? "start" : i === lastIdx ? "end" : "middle";
+          const lx = i === 0 ? x(i) + 4 : i === lastIdx ? x(i) - 4 : x(i);
+          const above = i === 0 ? above0 : aboveFor(i);
+          return (
+            <text key={`v-${points[i].date}`} x={lx} y={above ? aboveY(cy) : belowY(cy)} textAnchor={anchor} fontSize="7.5" fill={color}>
+              {fmtUsd(values[i])}
+            </text>
+          );
+        })}
         <text x={padL} y={H - 6} fontSize="9" fill="var(--mist)">{points[0].date}</text>
         <text x={W - padR} y={H - 6} textAnchor="end" fontSize="9" fill="var(--mist)">{points[points.length - 1].date}</text>
       </svg>

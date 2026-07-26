@@ -13,6 +13,13 @@ const MEASURES: { key: BumpMeasure; label: string }[] = [
   { key: "investment", label: "Investment" },
 ];
 const MIN_LABEL_GAP = 12;
+// Conservative Inter-at-10px average glyph width — bounds how much of a
+// real country name the end label can print before it would run past the
+// SVG's right edge. i18n-iso-countries' real names range far wider than
+// the "US"/"China" cases this was originally sized for — e.g. "Taiwan,
+// Province of China" (25 chars) — so the name is measured against this,
+// not assumed to always fit.
+const LABEL_CHAR_PX = 5.8;
 
 // Real rank-over-time, reconstructed from entry dates (see bumpChart.ts) —
 // same hand-rolled SVG approach as TrendChart.tsx (this app has no charting
@@ -42,7 +49,7 @@ export function BumpChart({
   const hasData = data.series.some((s) => s.ranks.some((r) => r != null));
   const maxRank = Math.max(1, ...data.series.flatMap((s) => s.ranks.filter((r): r is number => r != null)));
 
-  const W = 720, H = 280, padL = 14, padR = 108, padT = 14, padB = 30;
+  const W = 720, H = 280, padL = 14, padR = 120, padT = 14, padB = 30;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const n = data.dates.length;
@@ -81,6 +88,9 @@ export function BumpChart({
       ) : (
         <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label={`${title} — country rank over time, ${measure}`}>
           <line x1={padL} y1={H - padB} x2={W - padR} y2={H - padB} stroke="var(--line)" />
+          {/* y-axis orientation only — no rank scale is a real Entry field the way each line's own "#N" end label
+              is, so this states the direction (top = rank 1) rather than inventing tick gridlines for it. */}
+          <text x={padL + 14} y={padT - 5} fontSize={8} fill="var(--mist)">top = rank 1 (highest count)</text>
           {data.dates.map((d, i) => (
             <text key={d} x={x(i)} y={H - padB + 14} fontSize={9} textAnchor="middle" fill="var(--mist)">{d.slice(5)}</text>
           ))}
@@ -94,6 +104,11 @@ export function BumpChart({
             const last = points[points.length - 1];
             const hovered = hoverCountry === s.country;
             const labelY = labelPositions.get(s.country) ?? y(last.r);
+            const rankSuffix = ` · #${last.r}`;
+            const availPx = Math.max(20, W - (x(last.i) + 7) - 4);
+            const nameBudget = Math.max(3, Math.floor(availPx / LABEL_CHAR_PX) - rankSuffix.length);
+            const fullName = countryName(s.country);
+            const shownName = fullName.length > nameBudget ? `${fullName.slice(0, nameBudget - 1)}…` : fullName;
             return (
               <g
                 key={s.country}
@@ -114,7 +129,7 @@ export function BumpChart({
                 ))}
                 <line x1={x(last.i)} y1={y(last.r)} x2={x(last.i) + 6} y2={labelY} stroke={countryColor(s.country)} strokeWidth={0.75} opacity={0.5} />
                 <text x={x(last.i) + 7} y={labelY} fontSize={10} dominantBaseline="middle" fill="var(--ink-2)" fontWeight={hovered ? 700 : 400}>
-                  {countryName(s.country)} · #{last.r}
+                  {shownName}{rankSuffix}
                 </text>
               </g>
             );

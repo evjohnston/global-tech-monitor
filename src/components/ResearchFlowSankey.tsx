@@ -7,7 +7,7 @@ import {
 } from "../lib/researchFlow.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
 import { usePrefersReducedMotion } from "../lib/useReducedMotion.ts";
-import { scatterDots } from "../lib/sankeyParticles.ts";
+import { scatterMotionDots } from "../lib/sankeyParticles.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
 const WIDTH = 1360;
@@ -40,7 +40,7 @@ export function ResearchFlowSankey({
   onSelectLink?: (sourceId: string, targetId: string) => void;
 }) {
   const reducedMotion = usePrefersReducedMotion();
-  const [particlesOn, setParticlesOn] = useState(false);
+  const [particlesOn, setParticlesOn] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [hoverNode, setHoverNode] = useState<string | null>(null);
   const [hoverLink, setHoverLink] = useState<number | null>(null);
@@ -156,7 +156,7 @@ export function ResearchFlowSankey({
             const width = Math.max(1, l.width ?? 1);
             const color = colorFor(source.id);
             const dots = particlesOn && !reducedMotion
-              ? scatterDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 6 + Math.sqrt(l.value / maxValue) * 28, i)
+              ? scatterMotionDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 4 + Math.sqrt(l.value / maxValue) * 14, i)
               : [];
             return (
               <g key={i}>
@@ -192,10 +192,12 @@ export function ResearchFlowSankey({
                 {dots.map((dot, pi) => {
                   const base = anyHover ? (active ? 0.95 : 0.05) : 0.5;
                   return (
-                    <circle key={pi} cx={dot.x} cy={dot.y} r={dot.r} fill={color} opacity={base}>
+                    <circle key={pi} r={dot.r} fill={color} opacity={0}>
+                      <animateMotion path={dot.pathD} dur={`${dot.dur.toFixed(2)}s`} begin={`${dot.delay.toFixed(2)}s`} repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1" />
                       <animate
                         attributeName="opacity"
-                        values={`${(base * 0.35).toFixed(2)};${base.toFixed(2)};${(base * 0.35).toFixed(2)}`}
+                        values={`0;${base.toFixed(2)};${base.toFixed(2)};0`}
+                        keyTimes="0;0.15;0.85;1"
                         dur={`${dot.dur.toFixed(2)}s`}
                         begin={`${dot.delay.toFixed(2)}s`}
                         repeatCount="indefinite"

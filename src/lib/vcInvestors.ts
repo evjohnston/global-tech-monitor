@@ -51,6 +51,8 @@ export interface PrivateFundingSummary {
   mostDealsRecipient: { name: string; dealCount: number } | null;
   mostDealsInvestor: { investor: string; dealCount: number } | null;
   topFiveSharePct: number | null;
+  companiesTracked: number;
+  totalDeals: number;
 }
 
 // The private-funding dashboard's real "who's getting the money, in one
@@ -58,9 +60,12 @@ export interface PrivateFundingSummary {
 // them. topFiveSharePct is share of DISCLOSED totalRaisedUsd only, the
 // same disclosed-vs-undisclosed distinction this app applies everywhere
 // else in Money (an undisclosed amount is real missing data, not zero).
+// companiesTracked/totalDeals round the summary out to a real 5th metric
+// (the KPI row this feeds is a 5-column grid — see TrackMoney.tsx) rather
+// than leaving an empty column.
 export function privateFundingSummary(companies: VcCompanyFunding[]): PrivateFundingSummary {
   if (companies.length === 0) {
-    return { largestRecipient: null, mostDealsRecipient: null, mostDealsInvestor: null, topFiveSharePct: null };
+    return { largestRecipient: null, mostDealsRecipient: null, mostDealsInvestor: null, topFiveSharePct: null, companiesTracked: 0, totalDeals: 0 };
   }
   const byRaised = [...companies].sort((a, b) => b.totalRaisedUsd - a.totalRaisedUsd);
   const byDeals = [...companies].sort((a, b) => b.dealCount - a.dealCount);
@@ -74,5 +79,7 @@ export function privateFundingSummary(companies: VcCompanyFunding[]): PrivateFun
     mostDealsRecipient: byDeals[0] ? { name: byDeals[0].name, dealCount: byDeals[0].dealCount } : null,
     mostDealsInvestor: topInvestorByDeals ? { investor: topInvestorByDeals.investor, dealCount: topInvestorByDeals.dealCount } : null,
     topFiveSharePct: totalRaised > 0 ? (top5Raised / totalRaised) * 100 : null,
+    companiesTracked: companies.length,
+    totalDeals: companies.reduce((s, c) => s + c.dealCount, 0),
   };
 }

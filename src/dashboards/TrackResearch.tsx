@@ -75,7 +75,7 @@ export function TrackResearch({ ctx }: { ctx: DashboardContext }) {
   return (
     <div>
       {isFiltered ? (
-        <div className="kpirow">
+        <div className="kpirow kpirow-6">
           <KpiCard label={`${countryName(country)} research records`} value={String(countryInnovationEntries.length)} caption="papers, patents, and research statistics · all time" />
           <KpiCard label="Publications" value={String(countryPublications)} caption="papers + arXiv preprints" />
           <KpiCard label="Patents" value={String(countryPatents)} caption="EPO-filed patents" />

@@ -89,6 +89,9 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
         {data?.companies && data.companies.length > 0 && (
           <KpiCard label="Public companies tracked" value={String(data.companies.length)} caption={isFiltered ? `${fmtUsd(marketCapTotalUsd)} global, filter doesn't apply` : `${fmtUsd(marketCapTotalUsd)} combined market cap`} />
         )}
+        {latestRdSpend && (
+          <KpiCard label="R&D-reporting companies" value={String(latestRdSpend.companies.length)} caption={`of ${data?.companies?.length ?? 0} tracked, disclosed FY${latestRdSpend.fiscalYear} R&D`} />
+        )}
       </div>
       <div className="trend-note" style={{ marginBottom: 10 }}>
         Four distinct real pools, never summed into one figure — each has its own coverage, source, and definition below.
@@ -142,6 +145,7 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
                     <KpiCard label="Most deals (recipient)" value={s.mostDealsRecipient?.name ?? "—"} caption={s.mostDealsRecipient ? `${s.mostDealsRecipient.dealCount} rounds` : "no data yet"} />
                     <KpiCard label="Most deals (investor)" value={s.mostDealsInvestor?.investor ?? "—"} caption={s.mostDealsInvestor ? `${s.mostDealsInvestor.dealCount} deals` : "no data yet"} />
                     <KpiCard label="Top 5 recipients' share" value={s.topFiveSharePct != null ? `${s.topFiveSharePct.toFixed(0)}%` : "—"} caption="of disclosed totals" />
+                    <KpiCard label="Companies tracked" value={String(s.companiesTracked)} caption={`${s.totalDeals} total tracked rounds`} />
                   </div>
                 );
               })()}

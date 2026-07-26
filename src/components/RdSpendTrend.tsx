@@ -34,6 +34,44 @@ export function RdSpendTrend({ points }: { points: RdSpendPoint[] }) {
   const line = values.map((v, i) => `${i === 0 ? "M" : "L"} ${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
   const color = "var(--red)";
 
+  // Marker + label plan, same as FundingTrend.tsx: every real point gets a
+  // circle, but only a readable subset gets a printed value — first/last
+  // plus real local peaks/troughs, greedily thinned by a minimum x-gap so
+  // two close labels never collide. This series runs the full real SEC
+  // EDGAR history back to whatever fiscal year each vertical's tickers
+  // first filed (often 30+ points) squeezed into a ~450px-wide plot — an
+  // earlier version of this file labeled every single point, which reads
+  // fine on a short 3-6 point series but garbles into unreadable overlap on
+  // a real multi-decade one (confirmed by hand against the real quantum
+  // vertical's 1987-2025 series).
+  const lastIdx = points.length - 1;
+  const labelGap = 46;
+  const isExtreme = (i: number) =>
+    i > 0 && i < lastIdx &&
+    ((values[i] > values[i - 1] && values[i] > values[i + 1]) ||
+      (values[i] < values[i - 1] && values[i] < values[i + 1]));
+  const candidates = [0, ...values.map((_v, i) => i).filter(isExtreme), lastIdx];
+  const labelIdx: number[] = [];
+  for (const i of candidates) {
+    if (labelIdx.length === 0 || x(i) - x(labelIdx[labelIdx.length - 1]) >= labelGap) labelIdx.push(i);
+  }
+  // The latest value is the one figure this chart must always surface —
+  // swap out a too-close neighbor rather than ever dropping it.
+  if (labelIdx[labelIdx.length - 1] !== lastIdx) {
+    if (labelIdx.length && x(lastIdx) - x(labelIdx[labelIdx.length - 1]) < labelGap) labelIdx.pop();
+    labelIdx.push(lastIdx);
+  }
+  const aboveFor = (i: number) => {
+    if (i === 0 || i === lastIdx) return true; // edges double as the x-axis year ticks below, so their label always goes above
+    const prev = values[i - 1];
+    const next = values[i + 1];
+    if (values[i] >= prev && values[i] >= next) return true;
+    if (values[i] <= prev && values[i] <= next) return false;
+    return i % 2 === 0;
+  };
+  const aboveY = (py: number) => Math.max(8, py - 8);
+  const belowY = (py: number) => Math.min(H - padB - 4, py + 13);
+
   function handleMove(e: MouseEvent<SVGSVGElement>) {
     const svg = svgRef.current;
     if (!svg) return;
@@ -65,9 +103,23 @@ export function RdSpendTrend({ points }: { points: RdSpendPoint[] }) {
         {hover && (
           <line x1={x(hover.i)} y1={padT} x2={x(hover.i)} y2={H - padB} stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 2" />
         )}
-        <circle cx={x(points.length - 1)} cy={y(values[values.length - 1])} r="3" fill={color} />
-        <text x={padL} y={H - 6} fontSize="9" fill="var(--mist)">{points[0].fiscalYear}</text>
-        <text x={W - padR} y={H - 6} textAnchor="end" fontSize="9" fill="var(--mist)">{points[points.length - 1].fiscalYear}</text>
+        {values.map((v, i) => (
+          <circle key={i} cx={x(i)} cy={y(v)} r={i === lastIdx ? 3 : 1.75} fill={color} />
+        ))}
+        {labelIdx.map((i) => {
+          const px = x(i);
+          const py = y(values[i]);
+          const anchor = i === 0 ? "start" : i === lastIdx ? "end" : "middle";
+          const labelX = i === 0 ? px + 4 : i === lastIdx ? px - 4 : px;
+          const above = aboveFor(i);
+          return (
+            <text key={`v-${i}`} x={labelX} y={above ? aboveY(py) : belowY(py)} textAnchor={anchor} fontSize="7.5" fill="var(--ink-2)">
+              {fmtUsd(values[i])}
+            </text>
+          );
+        })}
+        <text x={padL} y={H - 6} fontSize="9" fill="var(--mist)">FY{points[0].fiscalYear}</text>
+        <text x={W - padR} y={H - 6} textAnchor="end" fontSize="9" fill="var(--mist)">FY{points[points.length - 1].fiscalYear}</text>
       </svg>
       {hover && (
         <Tooltip x={hover.x} y={hover.y}>

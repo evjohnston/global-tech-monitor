@@ -115,6 +115,49 @@ function classifyStage(title: string, description: string, classifier: RssClassi
   return null; // ambiguous or neither — not a clean fit, drop it
 }
 
+// Real adoption-status guess from the same headline/description text —
+// same honesty tier as classifyStage above (provenance stays "auto"), only
+// ever consulted for items already classified stage:"adoption". Checked
+// against the real "5-way collision" risk this app's stage classifier
+// already learned to worry about: a headline can legitimately contain more
+// than one status word at once (an article ABOUT a deployment often also
+// says a company "announced" it), so this doesn't drop ambiguous items the
+// way classifyStage does — it picks the single most-advanced real-world
+// state, most-advanced-first, since a more specific, later-stage word
+// co-occurring with a vaguer "announces" is the stronger signal, not a
+// conflict. Anything matching none of the five stays undefined — omitted,
+// not guessed.
+//
+// Tuned against two real false positives found by running this against
+// live feed output (2026-07-26), not guessed: (1) a bare "orders?" alone
+// matched "executive orders" in an unrelated policy story — narrowed to
+// actual purchase-order phrasing; (2) "AMD to invest... Anthropic will
+// deploy up to two gigawatts" and "Digital Motion plans to deploy its
+// token standards" both matched bare "deploy" and were tagged as an
+// already-completed deployment when the real text is forward-looking —
+// FUTURE_DEPLOY demotes any "will/plans/intends/aims to deploy" phrasing
+// to "announced" instead, checked before the DEPLOYED_WORDS test wins.
+const OPERATING_WORDS =
+  /\b(in\s+(?:full\s+)?production|operational\s+since|has\s+been\s+(?:running|operating)|ongoing\s+operations?|in\s+(?:daily|regular|routine)\s+use|in\s+service\s+since|continues?\s+to\s+operate|\d+\s+years?\s+of\s+operation)\b/i;
+const FUTURE_DEPLOY = /\b(?:will|plans?\s+to|intends?\s+to|aims?\s+to|to)\s+deploy\b/i;
+const DEPLOYED_WORDS =
+  /\b(deploys?|deployed|deploying|installs?|installed|goes?\s+live|launch(?:es|ed)|rolls?\s+out|rolled\s+out|activat(?:es|ed)|commission(?:s|ed)|brings?\s+online|brought\s+online)\b/i;
+const PROCUREMENT_WORDS =
+  /\b(places?\s+an?\s+order|purchase\s+orders?|orders?\s+\d|signs?\s+(?:an?\s+)?(?:\$\S+\s+)?contract|awarded\s+an?\s*contract|procures?|purchase\s+agreement|wins?\s+an?\s+(?:\$\S+\s+)?contract|inks?\s+an?\s+(?:\$\S+\s+)?deal|selects?\s+\S+\s+to\s+(?:supply|build|provide)|agreement\s+to\s+(?:acquire|purchase|supply))\b/i;
+const PILOT_WORDS =
+  /\b(pilot(?:\s+(?:program|project|deployment))?|trials?|proof[- ]of[- ]concept|\bPoC\b|test\s*bed|test\s+deployment|beta\s+test|early\s+access)\b/i;
+const ANNOUNCED_WORDS =
+  /\b(announces?|unveils?|plans?\s+to|intends?\s+to|reveals?\s+plans|to\s+build|signs?\s+an?\s+mou|memorandum\s+of\s+understanding)\b/i;
+
+export function classifyDeploymentStatus(text: string): Entry["deploymentStatus"] {
+  if (OPERATING_WORDS.test(text)) return "operating";
+  if (DEPLOYED_WORDS.test(text) && !FUTURE_DEPLOY.test(text)) return "deployed";
+  if (PROCUREMENT_WORDS.test(text)) return "procurement";
+  if (PILOT_WORDS.test(text)) return "pilot";
+  if (ANNOUNCED_WORDS.test(text) || FUTURE_DEPLOY.test(text)) return "announced";
+  return undefined;
+}
+
 function parseDate(pubDate: string): string {
   const d = new Date(pubDate);
   return Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 10);
@@ -148,6 +191,7 @@ async function fetchOneFeed(feed: RssFeedConfig, cutoffMs: number, classifier: R
       title: item.title, org: "", date, url: item.link, publisher: feed.name,
       countryEvidence: `${evidence} (auto-classified from ${feed.name} RSS, unverified)`,
       abstract: item.description || undefined,
+      deploymentStatus: stage === "adoption" ? classifyDeploymentStatus(`${item.title} ${item.description}`) : undefined,
     });
   }
   return out;

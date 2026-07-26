@@ -616,6 +616,7 @@ export const SEED: Entry[] = [
     title: "Turkey enacted its National Artificial Intelligence Strategy 2021-2025 via Presidential Circular No. 2021/18, the first comprehensive national AI framework in Western Asia.",
     org: "Presidential Digital Transformation Office / Ministry of Industry and Technology", date: "2021-08",
     url: "https://wp.oecd.ai/app/uploads/2021/12/Turkey_National_Artificial_Intelligence_Strategy_2021-2025.pdf",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-chatgpt-launch",
@@ -623,6 +624,7 @@ export const SEED: Entry[] = [
     title: "OpenAI released ChatGPT as a free research preview built on GPT-3.5, reaching 1 million users within five days.",
     org: "OpenAI", date: "2022-11",
     url: "https://openai.com/index/chatgpt/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-panasonic-connect-connectai",
@@ -630,6 +632,7 @@ export const SEED: Entry[] = [
     title: "Panasonic Connect rolled out ConnectAI, an Azure OpenAI-based assistant, to all 12,500 employees in Japan, logging 55,380 employee questions in its first month.",
     org: "Panasonic Connect", date: "2023-02",
     url: "https://news.microsoft.com/source/asia/features/not-if-but-when-why-japans-panasonic-connect-is-going-all-in-on-ai/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-italy-chatgpt-ban",
@@ -644,6 +647,7 @@ export const SEED: Entry[] = [
     title: "Air India became the first airline to deploy a generative AI virtual agent, built on Azure OpenAI Service, answering over half a million customer queries during its pilot.",
     org: "Air India", date: "2023-03",
     url: "https://www.airindia.com/in/en/newsroom/press-release/air-india-successfully-deploys-airline-industry-s-first-generati.html",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-bloomberg-bloomberggpt",
@@ -658,6 +662,7 @@ export const SEED: Entry[] = [
     title: "Rwanda's Cabinet approved the country's National AI Policy, developed by the Ministry of ICT and Innovation with RURA, one of Africa's earliest comprehensive government AI strategies.",
     org: "Ministry of ICT and Innovation (MINICT)", date: "2023-04",
     url: "https://thefuturesociety.org/cabinet-of-rwanda-approves-national-ai-policy/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-instacart-ask-instacart-chatgpt",
@@ -665,6 +670,7 @@ export const SEED: Entry[] = [
     title: "Instacart rolled out 'Ask Instacart,' an AI search tool built on OpenAI's ChatGPT, to all US and Canadian customers.",
     org: "Instacart", date: "2023-05",
     url: "https://www.instacart.com/company/updates/bringing-inspirational-ai-powered-search-to-the-instacart-app-with-ask-instacart",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-mercedes-benz-mbux-chatgpt",
@@ -672,6 +678,7 @@ export const SEED: Entry[] = [
     title: "Mercedes-Benz began a beta trial embedding ChatGPT into the MBUX voice assistant via Azure OpenAI Service across roughly 900,000 US vehicles.",
     org: "Mercedes-Benz", date: "2023-06",
     url: "https://group.mercedes-benz.com/technology/digitalisation/connectivity/car-voice-control-with-chatgpt.html",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-hsbc-google-cloud-aml",
@@ -679,6 +686,7 @@ export const SEED: Entry[] = [
     title: "HSBC's rollout of Google Cloud's Anti Money Laundering AI cut false-positive alert volumes by more than 60% and detected two to four times more true financial-crime risk.",
     org: "HSBC", date: "2023-06",
     url: "https://cloud.google.com/blog/topics/financial-services/how-hsbc-fights-money-launderers-with-artificial-intelligence",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-carrefour-hopla-chatgpt",
@@ -686,6 +694,7 @@ export const SEED: Entry[] = [
     title: "Carrefour launched Hopla, a ChatGPT-based shopping assistant on its French e-commerce platform, letting customers generate shopping baskets by budget or dietary need.",
     org: "Carrefour", date: "2023-06",
     url: "https://www.carrefour.com/en/news/2023/carrefour-integrates-openai-technologies-and-launches-generative-ai-powered-shopping",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-emirates-nbd-genai-microsoft",
@@ -693,6 +702,7 @@ export const SEED: Entry[] = [
     title: "Emirates NBD launched a generative AI push with Microsoft, becoming one of the first companies to pilot Microsoft 365 Copilot and deploying GitHub Copilot X and ChatGPT use cases across contact centers, legal, and compliance.",
     org: "Emirates NBD", date: "2023-07",
     url: "https://www.emiratesnbd.com/en/media-center/emirates-nbd-to-transform-business-operations-and-enhance-productivity-with-generative-ai",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-chatgpt-enterprise-launch",
@@ -700,6 +710,7 @@ export const SEED: Entry[] = [
     title: "OpenAI launched ChatGPT Enterprise with unlimited GPT-4 access, a 32k-token context window, and no training on customer data, with early adopters including Block, Canva, and PwC.",
     org: "OpenAI", date: "2023-08",
     url: "https://openai.com/index/introducing-chatgpt-enterprise/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-walmart-my-assistant",
@@ -707,6 +718,7 @@ export const SEED: Entry[] = [
     title: "Walmart gave more than 50,000 corporate associates access to 'My Assistant,' a generative AI tool built on Microsoft Azure OpenAI Service.",
     org: "Walmart", date: "2023-08",
     url: "https://www.ciodive.com/news/Walmart-generative-AI-tool-My-Assistant/692385/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-morgan-stanley-gpt4-advisors",
@@ -714,6 +726,7 @@ export const SEED: Entry[] = [
     title: "Morgan Stanley launched an internal GPT-4-powered assistant giving its financial advisors instant access to roughly 100,000 research reports and documents.",
     org: "Morgan Stanley, OpenAI", date: "2023-09",
     url: "https://www.cnbc.com/2023/09/18/morgan-stanley-chatgpt-financial-advisors.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-uk-ai-safety-institute",
@@ -721,6 +734,7 @@ export const SEED: Entry[] = [
     title: "UK Prime Minister Rishi Sunak launched the world's first government AI Safety Institute, an evaluation body for frontier AI models growing out of the earlier Frontier AI Taskforce.",
     org: "UK Department for Science, Innovation and Technology (AI Safety Institute)", date: "2023-11",
     url: "https://www.gov.uk/government/news/prime-minister-launches-new-ai-safety-institute",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-bradesco-bia-azure-genai",
@@ -728,6 +742,7 @@ export const SEED: Entry[] = [
     title: "Banco Bradesco integrated Azure generative AI into its BIA Agências assistant for branch managers, reaching an 82% first-level resolution rate in its first week.",
     org: "Banco Bradesco", date: "2023-11",
     url: "https://www.microsoft.com/en/customers/story/19177-banco-bradesco-sa-azure-ai-services",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-israel-ai-policy-responsible-innovation",
@@ -735,6 +750,7 @@ export const SEED: Entry[] = [
     title: "Israel's Ministry of Innovation, Science and Technology published its national AI policy, \"Responsible Innovation,\" setting a sectoral, non-binding regulatory approach coordinated with the Israel Innovation Authority.",
     org: "Ministry of Innovation, Science and Technology", date: "2023-12",
     url: "https://www.gov.il/BlobFolder/policy/ai_2023/en/Israels%20AI%20Policy%202023.pdf",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-singapore-national-ai-strategy-2",
@@ -742,6 +758,7 @@ export const SEED: Entry[] = [
     title: "Singapore's Prime Minister Lawrence Wong launched National AI Strategy 2.0, setting out 10 enablers to harness AI for the public good and positioning Singapore among the top three AI nations globally.",
     org: "Ministry of Digital Development and Information", date: "2023-12",
     url: "https://www.mddi.gov.sg/newsroom/update-to-singapore-s-national-ai-strategy--refreshed-priorities-to-harness-ai-for-the-public-good-factsheet/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-samsung-galaxy-s24-gemini",
@@ -749,6 +766,7 @@ export const SEED: Entry[] = [
     title: "Samsung becomes the first Google Cloud partner to deploy Gemini Pro and Imagen 2 on a smartphone, integrating them into the Galaxy S24's Notes, Voice Recorder, Keyboard and Gallery apps.",
     org: "Samsung; Google DeepMind", date: "2024-01",
     url: "https://news.samsung.com/global/samsung-and-google-cloud-join-forces-to-bring-generative-ai-to-samsung-galaxy-s24-series",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-volkswagen-ida-chatgpt",
@@ -756,6 +774,7 @@ export const SEED: Entry[] = [
     title: "Volkswagen became the first volume automaker to make ChatGPT a standard feature of its IDA voice assistant, via Cerence Chat Pro, across the Golf, Tiguan, Passat, and ID. model lines.",
     org: "Volkswagen", date: "2024-01",
     url: "https://www.volkswagen-newsroom.com/en/press-releases/world-premiere-at-ces-volkswagen-integrates-chatgpt-into-its-vehicles-18048",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-vodafone-tobi-azure-openai",
@@ -763,6 +782,7 @@ export const SEED: Entry[] = [
     title: "Vodafone and Microsoft signed a 10-year, $1.5 billion partnership to rebuild Vodafone's TOBi virtual assistant, which already handles nearly 45 million customer questions a month, on Azure OpenAI Service.",
     org: "Vodafone", date: "2024-01",
     url: "https://news.microsoft.com/source/2024/01/15/vodafone-and-microsoft-sign-10-year-strategic-partnership-to-bring-generative-ai-digital-services-and-the-cloud-to-more-than-300-million-businesses-and-consumers/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-gemini-workspace-enterprise",
@@ -770,6 +790,7 @@ export const SEED: Entry[] = [
     title: "Google launches Gemini Business and Gemini Enterprise add-ons for Google Workspace, rebranding Duet AI and bringing generative AI to business and enterprise customers.",
     org: "Google", date: "2024-02",
     url: "https://blog.google/products-and-platforms/products/workspace/google-gemini-workspace/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-mistral-azure-partnership",
@@ -777,6 +798,7 @@ export const SEED: Entry[] = [
     title: "Microsoft invests $16 million in Mistral AI and becomes its first distribution partner, making Mistral Large available on Azure AI Studio and Azure Machine Learning.",
     org: "Mistral AI; Microsoft", date: "2024-02",
     url: "https://azure.microsoft.com/en-us/blog/microsoft-and-mistral-ai-announce-new-partnership-to-accelerate-ai-innovation-and-introduce-mistral-large-first-on-azure/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-klarna-ai-assistant",
@@ -784,6 +806,7 @@ export const SEED: Entry[] = [
     title: "Klarna's OpenAI-powered customer service assistant handled 2.3 million conversations in its first month, equivalent to the work of 700 full-time agents.",
     org: "Klarna", date: "2024-02",
     url: "https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/",
+    deploymentStatus: "operating",
   },
   {
     id: "seed-dbs-bank-ai-economic-value",
@@ -791,6 +814,7 @@ export const SEED: Entry[] = [
     title: "DBS Bank's AI and machine learning initiatives generated S$370 million in economic value for the bank in FY2023.",
     org: "DBS Bank", date: "2024-02",
     url: "https://www.edb.gov.sg/en/business-insights/insights/how-dbs-southeast-asias-largest-bank-is-capturing-the-full-value-of-ai-and-machine-learning-in-singapore.html",
+    deploymentStatus: "operating",
   },
   {
     id: "seed-moderna-chatgpt-enterprise",
@@ -798,6 +822,7 @@ export const SEED: Entry[] = [
     title: "Moderna formalized a partnership with OpenAI to deploy ChatGPT Enterprise and more than 750 custom GPTs across legal, research, manufacturing, and commercial teams.",
     org: "Moderna", date: "2024-04",
     url: "https://openai.com/index/moderna/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-coca-cola-microsoft-genai",
@@ -805,6 +830,7 @@ export const SEED: Entry[] = [
     title: "The Coca-Cola Company signed a $1.1 billion, five-year deal with Microsoft to expand cloud and generative AI use across marketing, manufacturing, and supply chain.",
     org: "The Coca-Cola Company", date: "2024-04",
     url: "https://www.coca-colacompany.com/media-center/the-coca-cola-company-and-microsoft-announce-five-year-strategic-partnership-to-accelerate-cloud-and-generative-ai-initiatives",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-spain-ai-strategy-2024",
@@ -812,6 +838,7 @@ export const SEED: Entry[] = [
     title: "Spain's Council of Ministers approved the AI Strategy 2024, committing EUR 1.5 billion including EUR 90 million to upgrade the MareNostrum 5 supercomputer and fund the Spanish-language ALIA model.",
     org: "Government of Spain (Ministry for Digital Transformation)", date: "2024-05",
     url: "https://www.lamoncloa.gob.es/lang/en/gobierno/councilministers/paginas/2024/20240514-council-press-conference.aspx",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-chile-national-ai-policy-update-bill",
@@ -819,6 +846,7 @@ export const SEED: Entry[] = [
     title: "Chile presented an updated National AI Policy and introduced an AI bill at La Moneda Palace, becoming the first country to complete UNESCO's AI Readiness Assessment Methodology.",
     org: "Chilean Ministry of Science, Technology, Knowledge and Innovation", date: "2024-05",
     url: "https://www.unesco.org/en/articles/chile-launches-national-ai-policy-and-introduces-ai-bill-following-unescos-recommendations-0",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-pwc-chatgpt-enterprise",
@@ -826,6 +854,7 @@ export const SEED: Entry[] = [
     title: "PwC agreed to roll out ChatGPT Enterprise to more than 100,000 US and UK employees, becoming OpenAI's first enterprise resale partner.",
     org: "PwC", date: "2024-05",
     url: "https://www.pwc.com/us/en/about-us/newsroom/press-releases/pwc-us-uk-accelerating-ai-chatgpt-enterprise-adoption.html",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-llama-3-1-aws-bedrock",
@@ -833,6 +862,7 @@ export const SEED: Entry[] = [
     title: "Amazon Web Services makes Meta's Llama 3.1 405B, 70B and 8B models available as fully managed APIs in Amazon Bedrock.",
     org: "Meta AI; Amazon Web Services", date: "2024-07",
     url: "https://aws.amazon.com/blogs/aws/announcing-llama-3-1-405b-70b-and-8b-models-from-meta-in-amazon-bedrock/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-brazil-pbia-launch",
@@ -840,6 +870,7 @@ export const SEED: Entry[] = [
     title: "Brazil's Ministry of Science, Technology and Innovation launched the Brazilian AI Plan (PBIA) 2024-2028, budgeting roughly R$23 billion for sovereign compute, a Portuguese-language LLM and public-service AI.",
     org: "Ministério da Ciência, Tecnologia e Inovação (MCTI)", date: "2024-07",
     url: "https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/transformacaodigital/plano-brasileiro-de-inteligencia-artificial",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-eu-ai-act-into-force",
@@ -847,6 +878,7 @@ export const SEED: Entry[] = [
     title: "The EU AI Act entered into force as the world's first comprehensive cross-border legal framework for artificial intelligence, with obligations phasing in through August 2026.",
     org: "European Commission", date: "2024-08",
     url: "https://commission.europa.eu/news-and-media/news/ai-act-enters-force-2024-08-01_en",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-nigeria-draft-national-ai-strategy",
@@ -854,6 +886,7 @@ export const SEED: Entry[] = [
     title: "Nigeria's NITDA/NCAIR published a draft National AI Strategy setting out foundational infrastructure, ecosystem and governance pillars with a 0-10 year phased implementation roadmap.",
     org: "National Information Technology Development Agency (NITDA) / NCAIR", date: "2024-08",
     url: "https://ncair.nitda.gov.ng/wp-content/uploads/2024/08/National-AI-Strategy_01082024-copy.pdf",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-south-africa-national-ai-policy-framework",
@@ -861,6 +894,7 @@ export const SEED: Entry[] = [
     title: "South Africa's Department of Communications and Digital Technologies published its draft National AI Policy Framework, outlining six pillars including responsible governance and inclusive growth.",
     org: "Department of Communications and Digital Technologies (DCDT)", date: "2024-08",
     url: "https://www.dcdt.gov.za/sa-national-ai-policy-framework/file/338-sa-national-ai-policy-framework.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-jpmorgan-llm-suite",
@@ -868,6 +902,7 @@ export const SEED: Entry[] = [
     title: "JPMorgan Chase rolled out its proprietary LLM Suite generative AI tool, reaching roughly 140,000 employees by late 2024.",
     org: "JPMorgan Chase", date: "2024-08",
     url: "https://www.cnbc.com/2024/08/09/jpmorgan-chase-ai-artificial-intelligence-assistant-chatgpt-openai.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-telstra-copilot-rollout",
@@ -875,6 +910,7 @@ export const SEED: Entry[] = [
     title: "Telstra deployed 21,000 Microsoft Copilot for Microsoft 365 licenses to staff, the largest such rollout in Australia and among the largest of any telecom globally.",
     org: "Telstra", date: "2024-08",
     url: "https://www.telstra.com.au/aboutus/media/media-releases/telstra-microsoft-ai-partnership",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-reliance-nvidia-jamnagar-datacenter",
@@ -882,6 +918,7 @@ export const SEED: Entry[] = [
     title: "Reliance and NVIDIA announce a 1-gigawatt AI data center in Jamnagar, Gujarat, India, running NVIDIA Blackwell GPUs to power Reliance's JioBrain platform.",
     org: "Reliance Industries, NVIDIA", date: "2024-10",
     url: "https://www.tomshardware.com/tech-industry/artificial-intelligence/indias-reliance-builds-a-gigawatt-data-center-with-nvidia-blackwell-ai-gpus",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-anthropic-palantir-aws-defense",
@@ -889,6 +926,7 @@ export const SEED: Entry[] = [
     title: "Anthropic partnered with Palantir and AWS to bring Claude 3 and 3.5 models into Palantir's IL6-accredited environment for U.S. intelligence and defense agencies.",
     org: "Anthropic, Palantir, Amazon Web Services", date: "2024-11",
     url: "https://techcrunch.com/2024/11/07/anthropic-teams-up-with-palantir-and-aws-to-sell-its-ai-to-defense-customers/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-meta-llama-us-national-security",
@@ -896,6 +934,7 @@ export const SEED: Entry[] = [
     title: "Meta makes Llama available to U.S. government agencies for defense and national-security use, partnering with Lockheed Martin, Oracle, Scale AI, AWS and Microsoft to deploy it.",
     org: "Meta AI", date: "2024-11",
     url: "https://about.fb.com/news/2024/11/open-source-ai-america-global-security/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-commonwealth-bank-genai-messaging",
@@ -903,6 +942,7 @@ export const SEED: Entry[] = [
     title: "Commonwealth Bank of Australia's generative AI-powered customer messaging service cut call center wait times by 40% and resolves complex inquiries in real time.",
     org: "Commonwealth Bank of Australia", date: "2024-11",
     url: "https://www.commbank.com.au/articles/newsroom/2024/11/reimagining-banking-nov24.html",
+    deploymentStatus: "operating",
   },
   {
     id: "seed-toyota-o-beya-engineering-ai",
@@ -910,6 +950,7 @@ export const SEED: Entry[] = [
     title: "Toyota built O-Beya, a generative AI agent system on Azure OpenAI's GPT-4o, giving about 800 powertrain engineers access to nine specialized engineering-knowledge agents.",
     org: "Toyota Motor Corporation", date: "2024-11",
     url: "https://news.microsoft.com/source/asia/features/toyota-is-deploying-ai-agents-to-harness-the-collective-wisdom-of-engineers-and-innovate-faster/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-samsung-gauss2-employees",
@@ -917,6 +958,7 @@ export const SEED: Entry[] = [
     title: "Samsung Electronics unveiled Gauss2, a multimodal generative AI model deployed internally to assist developers, engineers, and other employees across the company.",
     org: "Samsung Electronics", date: "2024-11",
     url: "https://www.koreatimes.co.kr/business/tech-science/20241121/samsung-electronics-unveils-generative-ai-gauss2-to-assist-employees",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-meta-louisiana-datacenter",
@@ -924,6 +966,7 @@ export const SEED: Entry[] = [
     title: "Meta selects Richland Parish, Louisiana as the site of a $10 billion AI-optimized data center, its largest facility among more than 20 worldwide.",
     org: "Meta", date: "2024-12",
     url: "https://www.opportunitylouisiana.gov/news/meta-selects-northeast-louisiana-as-site-of-10-billion-artificial-intelligence-optimized-data-center-governor-jeff-landry-calls-investment-a-new-chapter-for-state",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-ytl-nvidia-malaysia-datacenter",
@@ -931,6 +974,7 @@ export const SEED: Entry[] = [
     title: "YTL Power and NVIDIA announce a $2.3 billion investment in AI infrastructure in Johor, Malaysia, centered on a 600MW data center using NVIDIA GB200 NVL72 systems.",
     org: "YTL Power, NVIDIA", date: "2024-12",
     url: "https://www.datacenterdynamics.com/en/news/ytl-power-and-nvidia-to-invest-23bn-in-ai-infrastructure-in-malaysia/",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-south-korea-ai-basic-act",
@@ -938,6 +982,7 @@ export const SEED: Entry[] = [
     title: "South Korea's National Assembly passed the AI Basic Act, making Korea the second jurisdiction in the world after the EU to adopt a comprehensive statutory framework governing AI, effective January 2026.",
     org: "National Assembly of the Republic of Korea / Ministry of Science and ICT", date: "2024-12",
     url: "https://www.msit.go.kr/eng/bbs/view.do?sCode=eng&mId=4&mPid=2&pageIndex=&bbsSeqNo=42&nttSeqNo=1071&searchOpt=ALL&searchTxt=",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-malaysia-national-ai-office",
@@ -945,6 +990,7 @@ export const SEED: Entry[] = [
     title: "Malaysian Prime Minister Anwar Ibrahim inaugurated the National AI Office (NAIO) under the Ministry of Digital, months after Cabinet approved its creation, to coordinate AI adoption and governance nationally.",
     org: "Ministry of Digital Malaysia / MYDIGITAL Corporation", date: "2024-12",
     url: "https://www.mydigital.gov.my/malaysia-launches-national-ai-office-naio/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-wells-fargo-fargo-assistant",
@@ -952,6 +998,7 @@ export const SEED: Entry[] = [
     title: "Wells Fargo's Fargo virtual assistant, built on Google Cloud AI, handled more than 245 million customer interactions in 2024, up from 21.3 million in 2023.",
     org: "Wells Fargo", date: "2024-12",
     url: "https://venturebeat.com/ai/wells-fargos-ai-assistant-just-crossed-245-million-interactions-with-zero-humans-in-the-loop-and-zero-pii-to-the-llm",
+    deploymentStatus: "operating",
   },
   {
     id: "seed-johns-hopkins-abridge-ai",
@@ -959,6 +1006,7 @@ export const SEED: Entry[] = [
     title: "Johns Hopkins Medicine agreed to deploy Abridge's ambient AI documentation platform across 6,700 clinicians, six hospitals, and 40 patient-care centers.",
     org: "Johns Hopkins Medicine", date: "2024-12",
     url: "https://www.abridge.com/press-release/hopkins-abridge",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-microsoft-80b-capex-fy2025",
@@ -966,6 +1014,7 @@ export const SEED: Entry[] = [
     title: "Microsoft confirms it will spend roughly $80 billion on AI-enabled data centers in fiscal year 2025, with more than half of the spend inside the United States.",
     org: "Microsoft", date: "2025-01",
     url: "https://www.cnbc.com/2025/01/03/microsoft-expects-to-spend-80-billion-on-ai-data-centers-in-fy-2025.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-huawei-modelarts-deepseek-free",
@@ -973,6 +1022,7 @@ export const SEED: Entry[] = [
     title: "Huawei adds a free, 'Ascend-adapted' DeepSeek-R1-Distill model to its ModelArts Studio platform, the first explicit support for running the model on its own Ascend data-center chips.",
     org: "Huawei", date: "2025-01",
     url: "https://www.tomshardware.com/tech-industry/artificial-intelligence/huawei-adds-deepseek-inference-support-for-its-ascend-ai-gpus",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-deepseek-app-store-1",
@@ -980,6 +1030,7 @@ export const SEED: Entry[] = [
     title: "DeepSeek's mobile app becomes the No. 1 free app on the US Apple App Store, overtaking ChatGPT as downloads jump from 1 million to 2.6 million in three days.",
     org: "DeepSeek", date: "2025-01",
     url: "https://techcrunch.com/2025/01/27/deepseek-displaces-chatgpt-as-the-app-stores-top-app/",
+    deploymentStatus: "operating",
   },
   {
     id: "seed-rbc-cohere-north-for-banking",
@@ -987,6 +1038,7 @@ export const SEED: Entry[] = [
     title: "Royal Bank of Canada and Cohere partnered to build North for Banking, a secure generative AI platform, after RBC's in-house RBC Assist tool reached roughly 27,000 employees.",
     org: "Royal Bank of Canada", date: "2025-01",
     url: "https://www.prnewswire.com/news-releases/rbc-and-cohere-partner-to-develop-the-next-generation-of-highly-secure-generative-ai-solutions-for-financial-services-302346783.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-openai-softbank-cristal",
@@ -994,6 +1046,7 @@ export const SEED: Entry[] = [
     title: "OpenAI and SoftBank Group announced 'Cristal intelligence' for enterprise deployment, with SoftBank committing to spend $3 billion annually to deploy OpenAI's models across its group companies.",
     org: "OpenAI, SoftBank Group", date: "2025-02",
     url: "https://group.softbank/en/news/press/20250203_0",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-uk-anthropic-mou",
@@ -1001,6 +1054,7 @@ export const SEED: Entry[] = [
     title: "The UK's Department for Science, Innovation and Technology signed a memorandum of understanding with Anthropic to explore deploying Claude across GOV.UK public services.",
     org: "Anthropic, UK Department for Science, Innovation and Technology", date: "2025-02",
     url: "https://www.anthropic.com/news/mou-uk-government",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-shenzhen-longgang-deepseek",
@@ -1008,6 +1062,7 @@ export const SEED: Entry[] = [
     title: "Shenzhen's Longgang District completes integration of DeepSeek-R1 into its government digital infrastructure, providing intelligent support to over 20,000 civil servants.",
     org: "Longgang District Government, Shenzhen", date: "2025-02",
     url: "https://www.eyeshenzhen.com/content/2025-04/02/content_31522277.htm",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-shenzhen-futian-ai-employees",
@@ -1015,6 +1070,7 @@ export const SEED: Entry[] = [
     title: "Shenzhen's Futian District rolls out 70 DeepSeek-powered 'AI employees' covering 240 administrative scenarios including public document processing and emergency management.",
     org: "Futian District Government, Shenzhen", date: "2025-02",
     url: "https://english.news.cn/20250318/4056216530784a5193b22dd3d7c3a005/c.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-postal-savings-bank-deepseek",
@@ -1022,6 +1078,7 @@ export const SEED: Entry[] = [
     title: "Postal Savings Bank of China deploys DeepSeek-V3 and the lightweight DeepSeek-R1 inference model into its customer-facing AI Assistant.",
     org: "Postal Savings Bank of China", date: "2025-02",
     url: "https://www.globaltimes.cn/page/202503/1330054.shtml",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-soe-energy-deepseek",
@@ -1029,6 +1086,7 @@ export const SEED: Entry[] = [
     title: "Sinopec, PetroChina, CNOOC, Sinochem Group, CHN Energy and China Southern Power Grid complete private deployments of DeepSeek models into their proprietary large-model systems.",
     org: "Sinopec, PetroChina, CNOOC, Sinochem, CHN Energy, China Southern Power Grid", date: "2025-02",
     url: "https://www.chinadaily.com.cn/a/202502/26/WS67be6a14a310c240449d7453.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-telecom-deepseek-integration",
@@ -1036,6 +1094,7 @@ export const SEED: Entry[] = [
     title: "China Mobile, China Telecom and China Unicom integrate DeepSeek models into their cloud-service platforms as part of a broader central-SOE 'AI+' push.",
     org: "China Mobile, China Telecom, China Unicom", date: "2025-02",
     url: "https://www.chinadaily.com.cn/a/202502/26/WS67be6a14a310c240449d7453.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-dongfeng-deepseek-autonomous",
@@ -1043,6 +1102,7 @@ export const SEED: Entry[] = [
     title: "Dongfeng Motor integrates DeepSeek models into its Voyah, Mengshi and Yipai autonomous-vehicle brands.",
     org: "Dongfeng Motor Corp", date: "2025-02",
     url: "https://www.chinadaily.com.cn/a/202502/26/WS67be6a14a310c240449d7453.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-deepseek-hospitals-rollout",
@@ -1050,6 +1110,7 @@ export const SEED: Entry[] = [
     title: "DeepSeek is deployed across hundreds of China's tertiary hospitals for pathology, imaging and clinical decision support, starting with Shanghai institutions in January 2025 before expanding nationwide.",
     org: "Chinese tertiary hospitals (led by Shanghai institutions)", date: "2025-02",
     url: "https://arxiv.org/abs/2502.16732",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-poland-pllum-launch",
@@ -1057,6 +1118,7 @@ export const SEED: Entry[] = [
     title: "Poland's Ministry of Digital Affairs launched PLLuM, a family of 18 Polish-language AI models built by a national research consortium for use across public administration.",
     org: "Ministry of Digital Affairs of Poland", date: "2025-02",
     url: "https://notesfrompoland.com/2025/02/24/poland-launches-polish-large-language-model/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-ccb-deepseek-r1-model",
@@ -1064,6 +1126,7 @@ export const SEED: Entry[] = [
     title: "China Construction Bank confirms it privately deployed an internal financial large model built on DeepSeek R1.",
     org: "China Construction Bank", date: "2025-03",
     url: "https://www.usnews.com/news/technology/articles/2025-03-28/china-construction-bank-says-it-launched-internal-financial-model-based-on-deepseek-r1",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-icbc-deepseek-deploy",
@@ -1071,6 +1134,7 @@ export const SEED: Entry[] = [
     title: "ICBC completes localized deployment of the open-source DeepSeek model into its large-model matrix, spanning over 20 business areas and 200 real-world applications.",
     org: "Industrial and Commercial Bank of China", date: "2025-03",
     url: "https://www.globaltimes.cn/page/202503/1330054.shtml",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-kenya-national-ai-strategy",
@@ -1078,6 +1142,7 @@ export const SEED: Entry[] = [
     title: "Kenya's Ministry of Information, Communications and the Digital Economy launched the National AI Strategy 2025-2030 at KICC, making Kenya the 16th African country with a national AI strategy.",
     org: "Ministry of Information, Communications and the Digital Economy", date: "2025-03",
     url: "https://bowmanslaw.com/insights/kenya-unveiling-of-the-national-ai-strategy-2025-2030-a-bold-step-into-the-future/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-standard-chartered-sc-gpt",
@@ -1085,6 +1150,7 @@ export const SEED: Entry[] = [
     title: "Standard Chartered rolled out its SC GPT generative AI tool across 41 markets, giving more than 70,000 employees access to AI-assisted content generation, translation, and risk analysis.",
     org: "Standard Chartered", date: "2025-03",
     url: "https://www.sc.com/en/press-release/standard-chartered-rolls-out-sc-gpt-advancing-ai-driven-innovation-in-banking/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-grok-3-azure-foundry",
@@ -1092,6 +1158,7 @@ export const SEED: Entry[] = [
     title: "Microsoft adds Grok 3 and Grok 3 Mini to Azure AI Foundry as managed API endpoints, offering a free preview through early June 2025.",
     org: "xAI; Microsoft", date: "2025-05",
     url: "https://devblogs.microsoft.com/foundry/announcing-grok-3-and-grok-3-mini-on-azure-ai-foundry/",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-stargate-uae-launch-hw",
@@ -1099,6 +1166,7 @@ export const SEED: Entry[] = [
     title: "G42, OpenAI, Oracle, NVIDIA, SoftBank and Cisco launch Stargate UAE, a 1-gigawatt AI compute cluster in Abu Dhabi using NVIDIA GB300 systems, with a first 200MW phase targeted for 2026.",
     org: "G42, OpenAI, Oracle", date: "2025-05",
     url: "https://www.g42.ai/resources/news/global-tech-alliance-launches-stargate-uae",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-humain-nvidia-saudi-ai-factories",
@@ -1106,6 +1174,7 @@ export const SEED: Entry[] = [
     title: "HUMAIN and NVIDIA announce a strategic partnership to build up to 500 megawatts of AI factories in Saudi Arabia, with a first-phase 18,000 GB300 GPU supercomputer.",
     org: "HUMAIN, NVIDIA", date: "2025-05",
     url: "https://nvidianews.nvidia.com/news/humain-and-nvidia-announce-strategic-partnership-to-build-ai-factories-of-the-future-in-saudi-arabia",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-openai-dod-200m-contract",
@@ -1113,6 +1182,7 @@ export const SEED: Entry[] = [
     title: "The U.S. Department of Defense awarded OpenAI a one-year, $200 million ceiling contract via its Chief Digital and AI Office, launching 'OpenAI for Government.'",
     org: "OpenAI, U.S. Department of Defense", date: "2025-06",
     url: "https://www.cnbc.com/2025/06/16/openai-wins-200-million-us-defense-contract.html",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-deutsche-telekom-nvidia-munich-aicloud",
@@ -1120,6 +1190,7 @@ export const SEED: Entry[] = [
     title: "NVIDIA and Deutsche Telekom announce a roughly EUR 1 billion joint investment to build Europe's first industrial AI cloud in Munich, using over 10,000 Blackwell GPUs.",
     org: "Deutsche Telekom, NVIDIA", date: "2025-06",
     url: "https://www.telekom.com/en/media/media-information/archive/ai-sovereignty-for-germany-and-europe-1098708",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-anthropic-dod-200m-contract",
@@ -1127,6 +1198,7 @@ export const SEED: Entry[] = [
     title: "The U.S. Department of Defense awarded Anthropic a two-year prototype agreement with a $200 million ceiling for AI capabilities through its Chief Digital and AI Office.",
     org: "Anthropic, U.S. Department of Defense", date: "2025-07",
     url: "https://www.anthropic.com/news/anthropic-and-the-department-of-defense-to-advance-responsible-ai-in-defense-operations",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-air-france-klm-genai-factory",
@@ -1134,6 +1206,7 @@ export const SEED: Entry[] = [
     title: "Air France-KLM built a generative AI factory on Google Cloud with Accenture, improving its development speed for AI deployments by more than 35% across ground operations, maintenance, and customer service.",
     org: "Air France-KLM", date: "2025-07",
     url: "https://www.aviationbusinessnews.com/industry-news/air-france-klm-builds-cloud-based-gen-ai-factory-to-drive-business-transformation/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-gsa-openai-1-dollar-deal",
@@ -1141,6 +1214,7 @@ export const SEED: Entry[] = [
     title: "The U.S. General Services Administration and OpenAI struck a OneGov deal giving every participating federal agency access to ChatGPT Enterprise for $1 for one year.",
     org: "OpenAI, U.S. General Services Administration", date: "2025-08",
     url: "https://www.gsa.gov/about-us/newsroom/news-releases/gsa-announces-new-partnership-with-openai-delivering-deep-discount-to-chatgpt-08062025",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-gsa-anthropic-1-dollar-deal",
@@ -1148,6 +1222,7 @@ export const SEED: Entry[] = [
     title: "The U.S. General Services Administration struck a OneGov deal with Anthropic offering Claude for Enterprise and Claude for Government to all three federal branches for $1 per agency.",
     org: "Anthropic, U.S. General Services Administration", date: "2025-08",
     url: "https://www.gsa.gov/about-gsa/newsroom/news-releases/gsa-strikes-onegov-deal-with-anthropic-08122025",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-china-ai-plus-action-plan",
@@ -1155,6 +1230,7 @@ export const SEED: Entry[] = [
     title: "China's State Council issues the 'AI Plus' Action Plan, targeting AI-agent and smart-terminal penetration above 70% by 2027 and 90% by 2030 across six key sectors.",
     org: "State Council of China", date: "2025-08",
     url: "https://english.www.gov.cn/policies/latestreleases/202508/27/content_WS68ae7976c6d0868f4e8f51a0.html",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-indonesia-national-ai-roadmap",
@@ -1162,6 +1238,7 @@ export const SEED: Entry[] = [
     title: "Indonesia's Ministry of Communication and Digital (Komdigi) opened public consultation on its White Paper for a National AI Roadmap, produced by a 443-member task force spanning 2025-2045 horizons.",
     org: "Ministry of Communication and Digital Affairs (Komdigi)", date: "2025-08",
     url: "https://intimedia.id/read/komdigi-opens-public-consultation-on-national-ai-roadmap-white-paper-until-august-22-2025",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-gsa-meta-onegov",
@@ -1169,6 +1246,7 @@ export const SEED: Entry[] = [
     title: "The U.S. General Services Administration signs a OneGov agreement with Meta to streamline government-wide procurement access to Llama across federal agencies.",
     org: "Meta AI; U.S. General Services Administration", date: "2025-09",
     url: "https://www.gsa.gov/about-us/newsroom/news-releases/gsa-meta-collaborate-on-ai-adoption-09222025",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-gsa-xai-onegov",
@@ -1176,6 +1254,7 @@ export const SEED: Entry[] = [
     title: "The U.S. General Services Administration signs an 18-month OneGov deal giving federal agencies access to Grok 4 and Grok 4 Fast for $0.42 per agency, running through March 2027.",
     org: "xAI; U.S. General Services Administration", date: "2025-09",
     url: "https://www.gsa.gov/about-gsa/newsroom/news-releases/gsa-xai-partner-to-accelerate-federal-ai-adoption-09252025",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-stargate-abilene-texas-opens",
@@ -1183,6 +1262,7 @@ export const SEED: Entry[] = [
     title: "OpenAI and Oracle bring the first two buildings of the Stargate data center in Abilene, Texas online, a site slated to eventually house more than 450,000 NVIDIA GB200 GPUs.",
     org: "OpenAI, Oracle", date: "2025-09",
     url: "https://www.cnbc.com/2025/09/23/openai-first-data-center-in-500-billion-stargate-project-up-in-texas.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-stellantis-mistral-expansion",
@@ -1190,6 +1270,7 @@ export const SEED: Entry[] = [
     title: "Stellantis and Mistral AI expand an 18-month-old collaboration into company-wide deployment, launching an Innovation Lab and Transformation Academy to scale AI across sales and manufacturing.",
     org: "Stellantis; Mistral AI", date: "2025-10",
     url: "https://www.stellantis.com/en/news/press-releases/2025/october/stellantis-and-mistral-ai-expand-their-collaboration-to-accelerate-enterprise-wide-ai-adoption",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-aws-project-rainier-indiana",
@@ -1197,6 +1278,7 @@ export const SEED: Entry[] = [
     title: "AWS activates Project Rainier in St. Joseph County, Indiana, an $11 billion AI compute cluster with nearly 500,000 Trainium2 chips built for Anthropic's Claude.",
     org: "Amazon Web Services, Anthropic", date: "2025-10",
     url: "https://www.aboutamazon.com/news/aws/aws-project-rainier-ai-trainium-chips-compute-cluster",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-south-korea-nvidia-260k-gpus",
@@ -1204,6 +1286,7 @@ export const SEED: Entry[] = [
     title: "NVIDIA and the South Korean government announce a partnership to deploy more than 260,000 NVIDIA GPUs across Samsung, SK Group, Hyundai, Naver and state institutions.",
     org: "NVIDIA, Government of South Korea", date: "2025-10",
     url: "https://nvidianews.nvidia.com/news/south-korea-ai-infrastructure",
+    deploymentStatus: "announced",
   },
   {
     id: "seed-australia-national-ai-plan",
@@ -1211,6 +1294,7 @@ export const SEED: Entry[] = [
     title: "Australia's federal government launched its National AI Plan, backing it with over A$460 million in AI initiatives including a A$29.9 million commitment to stand up an AI Safety Institute in 2026.",
     org: "Department of Industry, Science and Resources", date: "2025-12",
     url: "https://www.industry.gov.au/publications/national-ai-plan",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-qatar-qai-launch",
@@ -1218,6 +1302,7 @@ export const SEED: Entry[] = [
     title: "Qatar's sovereign wealth fund, the Qatar Investment Authority, launched Qai, a national AI company to develop and invest in AI infrastructure domestically and abroad, following the UAE and Saudi Arabia into state-owned AI vehicles.",
     org: "Qatar Investment Authority (Qai)", date: "2025-12",
     url: "https://thepeninsulaqatar.com/article/08/12/2025/qatar-launches-national-ai-firm-to-advance-digital-transformation",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-vietnam-ai-law",
@@ -1225,6 +1310,7 @@ export const SEED: Entry[] = [
     title: "Vietnam's National Assembly passed Law No. 134/2025/QH15 on Artificial Intelligence, the country's first standalone AI statute, establishing risk-based obligations effective March 2026.",
     org: "National Assembly of Vietnam", date: "2025-12",
     url: "https://english.luatvietnam.vn/law-no-134-2025-qh15-dated-december-10-2025-of-the-national-assembly-on-artificial-intelligence-422299-doc1.html",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-bbva-chatgpt-enterprise",
@@ -1232,6 +1318,7 @@ export const SEED: Entry[] = [
     title: "BBVA expanded its OpenAI partnership to roll out ChatGPT Enterprise to all 120,000 employees across 25 countries, after a pilot in which 80% of users saved three hours a week.",
     org: "BBVA", date: "2025-12",
     url: "https://openai.com/index/bbva-collaboration-expansion/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-mistral-french-defense-framework",
@@ -1239,6 +1326,7 @@ export const SEED: Entry[] = [
     title: "The French government signs a three-year framework agreement giving military branches, the CEA and ONERA a formal pipeline to deploy Mistral AI's assistants exclusively on sovereign French infrastructure.",
     org: "Mistral AI; French Ministry of Armed Forces", date: "2026-01",
     url: "https://www.techrepublic.com/article/news-mistral-french-military-ai-deal/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-mistral-paris-datacenter-financing",
@@ -1253,6 +1341,7 @@ export const SEED: Entry[] = [
     title: "Ping An automates nearly 60% of its accident and health insurance claims with AI, with some claims settled in as little as 51 seconds.",
     org: "Ping An Insurance", date: "2026-03",
     url: "https://www.insurancejournal.com/news/international/2026/03/31/864014.htm",
+    deploymentStatus: "operating",
   },
   {
     id: "seed-airbus-mistral-partnership",
@@ -1260,6 +1349,7 @@ export const SEED: Entry[] = [
     title: "Airbus signs a five-year partnership with Mistral AI, licensing its full product suite for on-premises deployment across industrial operations, engineering and sovereign defense applications.",
     org: "Airbus; Mistral AI", date: "2026-05",
     url: "https://www.airbus.com/en/newsroom/press-releases/2026-05-airbus-partners-with-mistral-ai-to-strengthen-the-use-of-artificial-intelligence-in-sovereign",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-absa-agentforce-abby",
@@ -1267,6 +1357,7 @@ export const SEED: Entry[] = [
     title: "Absa Group became the first bank in Africa to deploy Salesforce Agentforce, with its Abby AI chat agent live on the Absa Banking App across all 11 official South African languages.",
     org: "Absa Group", date: "2026-06",
     url: "https://www.itweb.co.za/article/absa-salesforce-expand-strategic-collaboration-solidifying-ai-leadership-in-banking-across-africa/DZQ58vV8RYkMzXy2",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-bancodobrasil-ai-2026-07",
@@ -1274,6 +1365,7 @@ export const SEED: Entry[] = [
     title: "Brazil's Banco do Brasil pilots NiCE's agentic AI copilot across a service base of more than 90 million customers, automatically summarizing conversations and surfacing engagement history in real time.",
     org: "Banco do Brasil", date: "2026-07-15",
     url: "https://www.intelligentcio.com/latam/2026/07/15/banco-do-brasil-deploys-nice-copilot-agentic-ai-to-enhance-relationship-banking-and-customer-service/",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-claude-teachers-detroit-2026-07",
@@ -1281,6 +1373,7 @@ export const SEED: Entry[] = [
     title: "Anthropic launches Claude for Teachers free for verified US K-12 educators and begins a pilot with Detroit Public Schools Community District to study impact on teaching practice.",
     org: "Detroit Public Schools Community District; Anthropic", date: "2026-07-14",
     url: "https://www.chalkbeat.org/2026/07/14/anthropic-launches-claude-for-teachers-as-ai-companies-battle-for-classrooms/",
+    deploymentStatus: "pilot",
   },
   {
     id: "seed-apple-intelligence-china-2026-07",
@@ -1288,6 +1381,7 @@ export const SEED: Entry[] = [
     title: "China's Cyberspace Administration approves Apple Intelligence for deployment on iPhones sold in mainland China, running on Alibaba's Qwen model in place of Apple's own.",
     org: "Apple; Alibaba (Cyberspace Administration of China)", date: "2026-07-15",
     url: "https://techcrunch.com/2026/07/15/apple-intelligence-approved-for-launch-in-china-with-alibabas-qwen-ai/",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-dta-microsoft-australia-2026-07",
@@ -1295,6 +1389,7 @@ export const SEED: Entry[] = [
     title: "Australia's Digital Transformation Agency opens a five-year, whole-of-government sourcing agreement with Microsoft, discounting Copilot and Azure AI services for federal agencies from July 1.",
     org: "Digital Transformation Agency (Australian Government)", date: "2026-07-01",
     url: "https://www.crn.com.au/news/2026/transformation/microsoft-and-digital-transformation-agency-ink-5-year-deal",
+    deploymentStatus: "procurement",
   },
   {
     id: "seed-waymo-fourcity-2026-07",
@@ -1302,6 +1397,7 @@ export const SEED: Entry[] = [
     title: "Waymo begins fully driverless commercial rides in Las Vegas, with San Diego, Tampa, and Denver following, expanding autonomous ride service to ten US cities.",
     org: "Waymo", date: "2026-07-08",
     url: "https://waymo.com/blog/shorts/ro-den-lv-sd-tmpa/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-nhs-ai-rollout-2026-07",
@@ -1309,6 +1405,7 @@ export const SEED: Entry[] = [
     title: "NHS England expands ambient-voice AI notetaking to four south-west London hospital trusts and rolls out Microsoft Copilot access to more than 500,000 staff.",
     org: "NHS England", date: "2026-07-04",
     url: "https://www.england.nhs.uk/2026/07/nhs-accelerates-artificial-intelligence-rollout-to-cut-waiting-times-and-improve-care-for-millions/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-elcajon-police-ava-2026-07",
@@ -1316,6 +1413,7 @@ export const SEED: Entry[] = [
     title: "El Cajon, California becomes the first city in the state to deploy an AI system, Ava, to take non-emergency police calls in English, Spanish, and Arabic, under a one-year, $74,000 contract.",
     org: "El Cajon Police Department", date: "2026-07-02",
     url: "https://www.nbcsandiego.com/news/local/ai-now-answers-non-emergency-calls-police-el-cajon-first-california/4043861/",
+    deploymentStatus: "deployed",
   },
   {
     id: "seed-china-anthropomorphic-ai-rules-2026-07",
@@ -1323,6 +1421,7 @@ export const SEED: Entry[] = [
     title: "China's Interim Measures for the Administration of Anthropomorphic AI Interaction Services take effect, requiring companion-AI providers nationwide to add anti-addiction, disclosure, and minor-protection safeguards.",
     org: "Cyberspace Administration of China", date: "2026-07-15",
     url: "https://digitalpolicyalert.org/event/39273-interim-measures-for-the-administration-of-anthropomorphic-artificial-intelligence-interaction-services-including-data-protection-regulation-enter-into-force",
+    deploymentStatus: "deployed",
   },
 
   // ── Stage 04: investment — private funding rounds ─────────────────

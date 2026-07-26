@@ -324,6 +324,9 @@ const STAGE_REASON: Record<Entry["stage"], string> = {
   adoption: "Assigned to Adoption: a real deployment, procurement, or use-in-production record.",
   investment: "Assigned to Investment: public grant funding, a disclosed private capital raise, or funding news.",
 };
+const DEPLOYMENT_STATUS_LABEL: Record<NonNullable<Entry["deploymentStatus"]>, string> = {
+  announced: "Announced", pilot: "Pilot", procurement: "Procurement", deployed: "Deployed", operating: "Operating",
+};
 
 function EntryBody({ id, entries, orgFinancialIndex, onOpenTarget, copyLink }: { id: string; entries: Entry[]; orgFinancialIndex: OrgFinancialIndex; onOpenTarget: (t: DrawerTarget) => void; copyLink: () => void }) {
   const entry = entries.find((e) => e.id === id);
@@ -359,6 +362,12 @@ function EntryBody({ id, entries, orgFinancialIndex, onOpenTarget, copyLink }: {
       <Field label="Date" value={entry.date || "undated"} />
       {entry.amountUsd != null && <Field label="Amount" value={fmtUsd(entry.amountUsd)} />}
       <Field label="Organization" value={entry.org ? <button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "org", orgId: entry.orgId ?? entry.org })}>{entry.org}</button> : null} />
+      {entry.deploymentStatus && (
+        <Field
+          label="Deployment status"
+          value={`${DEPLOYMENT_STATUS_LABEL[entry.deploymentStatus]} (${entry.provenance === "seeded" ? "hand-assigned" : "keyword-guessed"})`}
+        />
+      )}
       <Field label="Provenance" value={entry.provenance === "live" ? "Live — institution/awardee-attributed" : entry.provenance === "seeded" ? "Hand-verified against source" : "Auto-classified (RSS/keyword), weakest tier"} />
       {isNewsEntry(entry) && (
         <>

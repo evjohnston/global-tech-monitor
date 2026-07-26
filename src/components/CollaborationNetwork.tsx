@@ -181,6 +181,7 @@ function NetworkView({
 
   const size = 360;
   const cx = size / 2, cy = size / 2, r = size / 2 - 44;
+  const LABEL_OFFSET = 16;
   const pos = new Map<string, { x: number; y: number }>();
   shown.forEach((c, i) => {
     const angle = (i / shown.length) * Math.PI * 2 - Math.PI / 2;
@@ -228,6 +229,18 @@ function NetworkView({
           {shown.map((c) => {
             const p = pos.get(c)!;
             const isFocusOrHover = c === hoveredOrFocus;
+            // Anchor by the point's true angle around the circle (3 buckets,
+            // not just left/right-of-center) — with a binary left/right split,
+            // adjacent countries near the very top/bottom of the circle (small
+            // x difference, near-identical y) landed on the same anchor side
+            // and their labels ran into each other for real long country names.
+            // A "middle" bucket near vertical plus a true radial offset keeps
+            // neighboring labels' text spans from ever sharing the same x range.
+            const ux = (p.x - cx) / r;
+            const uy = (p.y - cy) / r;
+            const anchor: "start" | "middle" | "end" = ux > 0.3 ? "start" : ux < -0.3 ? "end" : "middle";
+            const labelX = p.x + ux * LABEL_OFFSET;
+            const labelY = p.y + uy * LABEL_OFFSET + (anchor === "middle" && uy > 0 ? 6 : 0);
             return (
               <g
                 key={c}
@@ -242,7 +255,15 @@ function NetworkView({
                 onMouseLeave={() => setHoverCountry(null)}
               >
                 <circle cx={p.x} cy={p.y} r={isFocusOrHover ? 6.5 : 5} fill={countryColor(c)} />
-                <text x={p.x + (p.x > cx ? 8 : -8)} y={p.y + (p.y > cy ? 12 : -8)} textAnchor={p.x > cx ? "start" : "end"} fontSize={10} fontWeight={isFocusOrHover ? 700 : 400} fill="var(--ink-2)">
+                <text
+                  x={labelX}
+                  y={labelY}
+                  textAnchor={anchor}
+                  dominantBaseline={anchor === "middle" ? undefined : "middle"}
+                  fontSize={10}
+                  fontWeight={isFocusOrHover ? 700 : 400}
+                  fill="var(--ink-2)"
+                >
                   {countryName(c)}
                 </text>
               </g>

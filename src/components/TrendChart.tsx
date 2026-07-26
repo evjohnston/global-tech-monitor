@@ -91,6 +91,31 @@ export function TrendChart({
 
   const gridVals = [0, yMax * 0.25, yMax * 0.5, yMax * 0.75, yMax];
 
+  // Endpoint value labels (first/last point per country) are the readable
+  // subset for this chart — up to ~21 points per line across several
+  // country lines means a label on every point would garble into
+  // overlapping text, but the two ends (where a series started, where it
+  // stands now) are the numbers a reader actually orients on. Countries
+  // whose shares converge near the same value at either end get pushed
+  // apart vertically so their labels stay legible instead of stacking.
+  const LABEL_GAP = 11;
+  function declutterLabels(pcts: Record<string, number>) {
+    const floor = H - padB - 2;
+    const rows = order.map((c) => ({ c, y: y(pcts[c]) })).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i].y - rows[i - 1].y < LABEL_GAP) rows[i].y = rows[i - 1].y + LABEL_GAP;
+    }
+    if (rows.length && rows[rows.length - 1].y > floor) {
+      rows[rows.length - 1].y = floor;
+      for (let i = rows.length - 2; i >= 0; i--) {
+        if (rows[i + 1].y - rows[i].y < LABEL_GAP) rows[i].y = rows[i + 1].y - LABEL_GAP;
+      }
+    }
+    return new Map(rows.map((r) => [r.c, r.y]));
+  }
+  const firstLabelY = declutterLabels(shares[0].pct);
+  const lastLabelY = declutterLabels(shares[shares.length - 1].pct);
+
   return (
     <figure style={{ margin: 0 }}>
       <svg
@@ -114,7 +139,34 @@ export function TrendChart({
         })}
         {order.map((c) => {
           const faded = !!emphasize?.length && !emphasize.includes(c);
-          return <circle key={c} cx={x(nHist - 1)} cy={y(shares[shares.length - 1].pct[c])} r="3" fill={colorOf(c)} opacity={faded ? 0.25 : 1} />;
+          return shares.map((s, i) => (
+            <circle
+              key={`${c}-${i}`}
+              cx={x(i)}
+              cy={y(s.pct[c])}
+              r={i === nHist - 1 ? 3 : 1.5}
+              fill={colorOf(c)}
+              opacity={faded ? 0.25 : 1}
+            />
+          ));
+        })}
+        {order.map((c) => {
+          const faded = !!emphasize?.length && !emphasize.includes(c);
+          const yLbl = firstLabelY.get(c) ?? y(shares[0].pct[c]);
+          return (
+            <text key={`first-${c}`} x={padL + 8} y={yLbl + 3} fontSize="9" fill={colorOf(c)} opacity={faded ? 0.25 : 1}>
+              {shares[0].pct[c].toFixed(1)}%
+            </text>
+          );
+        })}
+        {order.map((c) => {
+          const faded = !!emphasize?.length && !emphasize.includes(c);
+          const yLbl = lastLabelY.get(c) ?? y(shares[shares.length - 1].pct[c]);
+          return (
+            <text key={`last-${c}`} x={W - padR - 8} y={yLbl + 3} textAnchor="end" fontSize="9" fill={colorOf(c)} opacity={faded ? 0.25 : 1}>
+              {shares[shares.length - 1].pct[c].toFixed(1)}%
+            </text>
+          );
         })}
         {hover && (
           <line x1={x(hover.i)} y1={padT} x2={x(hover.i)} y2={H - padB} stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 2" />
