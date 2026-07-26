@@ -365,7 +365,7 @@ function EntryBody({ id, entries, orgFinancialIndex, onOpenTarget, copyLink }: {
       {entry.deploymentStatus && (
         <Field
           label="Deployment status"
-          value={`${DEPLOYMENT_STATUS_LABEL[entry.deploymentStatus]} (${entry.provenance === "seeded" ? "hand-assigned" : "keyword-guessed"})`}
+          value={`${DEPLOYMENT_STATUS_LABEL[entry.deploymentStatus]} (${entry.provenance === "live" ? "confirmed by the federal award record" : entry.provenance === "seeded" ? "hand-assigned" : "keyword-guessed"})`}
         />
       )}
       <Field label="Provenance" value={entry.provenance === "live" ? "Live — institution/awardee-attributed" : entry.provenance === "seeded" ? "Hand-verified against source" : "Auto-classified (RSS/keyword), weakest tier"} />

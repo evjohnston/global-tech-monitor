@@ -34,6 +34,20 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
     coverageGaps: "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call",
   },
   {
+    key: "usaspending",
+    sourceName: "USASpending.gov (federal awards)",
+    pollCadence: "nightly (GitHub Actions) — free, no key",
+    structuralLag: "USASpending typically posts within days to weeks of contract execution",
+    coverageGaps: "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed",
+  },
+  {
+    key: "sam-gov",
+    sourceName: "SAM.gov Opportunities (federal solicitations)",
+    pollCadence: "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
+    structuralLag: "near-real-time when a run does succeed — solicitations post as agencies publish them",
+    coverageGaps: "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example",
+  },
+  {
     key: "rss-news",
     sourceName: "Trade-press RSS (scaling/adoption)",
     pollCadence: "nightly + live browser refresh",

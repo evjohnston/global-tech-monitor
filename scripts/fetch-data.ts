@@ -50,6 +50,8 @@ import type { DataFile, Entry, StageNote, TrendPoint, RdSpendPoint } from "../sr
 import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
+import { fetchUsaSpendingAwards } from "../src/lib/sources/usaSpending.ts";
+import { fetchSamOpportunities } from "../src/lib/sources/samGov.ts";
 import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
 import { fetchRdSpendByYear } from "../src/lib/sources/secEdgar.ts";
 import { CAPIQ_RD_SPEND } from "../data/capiq/rd-spend.ts";
@@ -116,6 +118,7 @@ const OA_MAILTO = process.env.OPENALEX_MAILTO ?? "gtm@example.com";
 const EPO_KEY = process.env.EPO_KEY ?? "";
 const EPO_SECRET = process.env.EPO_SECRET ?? "";
 const MASSIVE_KEY = process.env.MASSIVE_KEY ?? "";
+const SAM_KEY = process.env.SAM_KEY ?? "";
 
 // ── arXiv fallback (no country codes → keyword inference) — only reached if
 // OpenAlex itself is unreachable, not a fresher alternate feed. ───────────
@@ -324,6 +327,35 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   } catch (err) {
     console.error("companies skipped:", (err as Error).message);
   }
+  // Real, already-executed US federal contracts (Adoption stage,
+  // deploymentStatus: "procurement") — one query per real company name
+  // already resolved by Massive above, reusing the same fundingKeyword NSF
+  // already searches on. See usaSpending.ts for why recipient+keyword
+  // together (not recipient alone) keeps this precise on large diversified
+  // companies. No API key needed.
+  let usaSpendingAwards: Entry[] = [];
+  let usaSpendingOk = false;
+  try {
+    const companyNames = companies.map((c) => canonicalizeOrg(c.name).name);
+    usaSpendingAwards = await fetchUsaSpendingAwards(companyNames, v.fundingKeyword);
+    usaSpendingOk = true;
+    console.log(`USASpending: ${usaSpendingAwards.length} federal contract awards`);
+  } catch (err) {
+    console.error("USASpending skipped:", (err as Error).message);
+  }
+  // Real, currently-posted US federal solicitations (Adoption stage,
+  // deploymentStatus: "announced", or "procurement" once a real award has
+  // resulted) — one query per vertical, same fundingKeyword as above. Needs
+  // SAM_KEY; soft-fails like every other source here if it's unset.
+  let samOpportunities: Entry[] = [];
+  let samGovOk = false;
+  try {
+    samOpportunities = await fetchSamOpportunities(SAM_KEY, v.fundingKeyword);
+    samGovOk = true;
+    console.log(`SAM.gov: ${samOpportunities.length} federal contract opportunities`);
+  } catch (err) {
+    console.error("SAM.gov skipped:", (err as Error).message);
+  }
   // Corporate R&D spend, free/no-key straight from SEC filings — a real
   // multi-year history in one pass, no daily accumulation needed (unlike
   // the NSF funding trend). See secEdgar.ts and DataFile.rdSpend for why
@@ -387,7 +419,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const now = new Date().toISOString();
   const byId = new Map<string, Entry>();
   for (const e of prev?.entries ?? []) byId.set(e.id, e);
-  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews, ...topCited]) {
+  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews, ...topCited, ...usaSpendingAwards, ...samOpportunities]) {
     // ingestedAt is stamped once, at first sight, and preserved on every
     // later re-fetch of the same id — it must never reset to "now" just
     // because a source returned the same entry again.
@@ -427,6 +459,8 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     "arxiv-fallback": arxivOk,
     epo: epoOk,
     nsf: nsfOk,
+    usaspending: usaSpendingOk,
+    "sam-gov": samGovOk,
     massive: massiveOk,
     "sec-edgar": secEdgarOk,
     capiq: capiqTickers.length > 0, // a static hand-imported file, not a live fetch — see data/capiq/rd-spend.ts
