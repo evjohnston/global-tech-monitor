@@ -2,6 +2,7 @@ import type { Entry } from "./types.ts";
 import { countByCountry, countryShares } from "./aggregate.ts";
 import { countryName } from "./countries.ts";
 import { buildBumpData, type BumpMeasure } from "./bumpChart.ts";
+import { collaborationEdges } from "./collaboration.ts";
 
 const MEASURE_LABEL: Record<BumpMeasure, string> = {
   publications: "Publication",
@@ -34,6 +35,13 @@ export function fundingByCountryClaim(entries: Entry[]): string {
   const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
   if (ranked.length < 2) return "Funding by country · investment";
   return `${countryName(ranked[0][0])} receives the most disclosed public research funding tracked here`;
+}
+
+export function collaborationClaim(entries: Entry[]): string {
+  const edges = collaborationEdges(entries);
+  if (edges.length === 0) return "Which countries collaborate across borders?";
+  const top = edges[0];
+  return `${countryName(top.a)} and ${countryName(top.b)} collaborate more than any other country pair`;
 }
 
 export function bumpChartClaim(entries: Entry[], measure: BumpMeasure): string {

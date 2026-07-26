@@ -103,6 +103,12 @@ function mapWork(w: OAWork): Entry {
     for (const raw of a.raw_affiliation_strings ?? []) if (raw) rawAffiliations.push(raw);
   }
 
+  // Kept alongside the modal single-country collapse below, not instead of
+  // it — every other panel reads `country`; this is purely additive, for
+  // the real cross-border-collaboration signal (see collaboration.ts).
+  const distinctCountries = [...new Set(countries)].sort();
+  const collaboratingCountries = distinctCountries.length >= 2 ? distinctCountries : undefined;
+
   let org = modalString(institutionNames);
   let country = modalString(countries);
   let evidence = country
@@ -143,6 +149,7 @@ function mapWork(w: OAWork): Entry {
     abstract: abstractText,
     authors: authorNames.length > 0 ? authorNames.slice(0, 6) : undefined,
     venue: w.primary_location?.source?.display_name ?? undefined,
+    collaboratingCountries,
   };
 }
 

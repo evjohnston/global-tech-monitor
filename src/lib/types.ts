@@ -68,6 +68,16 @@ export interface Entry {
   // leaderboards/filters count the real org once instead of splitting it
   // across case/legal-suffix variants.
   orgId?: string;
+  // Distinct, sorted real institution country codes across a work's
+  // authorships, when 2+ are resolvable — a genuine cross-border
+  // co-authorship, not an inference (see mapWork() in
+  // src/lib/sources/openalex.ts, which already collects every authorship's
+  // country before collapsing to the single modal `country` above; this
+  // just keeps the rest instead of discarding it). Omitted, never an empty
+  // array, when a work is domestic-only or has no resolvable institution
+  // data — same "omit rather than fabricate" convention as every other
+  // optional field here. Only ever populated for OpenAlex-sourced entries.
+  collaboratingCountries?: string[];
   // 0-1 confidence that this entry genuinely belongs in its vertical —
   // currently a disclosed, coarse heuristic by source kind (see
   // sourceMeta.ts's RELEVANCE_SCORE_BY_SOURCE), not a per-entry ML score.

@@ -42,7 +42,8 @@ import { QuadrantChart } from "./components/QuadrantChart.tsx";
 import { MomentumTable } from "./components/MomentumTable.tsx";
 import { CountryProfileDrawer } from "./components/CountryProfileDrawer.tsx";
 import { biggestDisconnect } from "./lib/findings.ts";
-import { innovationByCountryClaim, fundingByCountryClaim, bumpChartClaim } from "./lib/claims.ts";
+import { innovationByCountryClaim, fundingByCountryClaim, bumpChartClaim, collaborationClaim } from "./lib/claims.ts";
+import { CollaborationNetwork } from "./components/CollaborationNetwork.tsx";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
@@ -306,6 +307,7 @@ export default function App() {
     () => biggestDisconnect(entries)?.context ?? "Research leadership does not always translate into adoption",
     [entries]
   );
+  const collaborationClaimTitle = useMemo(() => collaborationClaim(entries), [entries]);
 
   const generated = data?.generatedAt
     ? new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })
@@ -425,6 +427,10 @@ export default function App() {
                 <span className="drop">research vs. adoption</span>
               </h3>
               <QuadrantChart entries={entries} emphasize={compareCountries} />
+            </div>
+            <div className="panel">
+              <h3>{collaborationClaimTitle} <span className="drop">which countries depend on one another?</span></h3>
+              <CollaborationNetwork entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} />
             </div>
             <div className="panel">
               <h3>Who's gaining momentum <span className="drop">scale, growth, and concentration side by side</span></h3>
@@ -552,6 +558,11 @@ export default function App() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="panel">
+          <h3>{collaborationClaimTitle} <span className="drop">real cross-border co-authorship</span></h3>
+          <CollaborationNetwork entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} />
         </div>
 
         <div className="panel">
@@ -762,6 +773,9 @@ export default function App() {
           period is too thin to be a real baseline, rather than shown as a technically-real but misleading number.
           The "Most cited" row up top is OpenAlex's real cited_by_count, ranked flat over the last 5 years —
           citations accrue over time, so older work naturally ranks higher, same as any other "most cited" list.
+          The collaboration network only counts a real paper once, as an edge between every pair of countries its
+          authors' resolvable institutions span — domestic-only papers and works with no resolvable institution data
+          (the same structural coverage gap disclosed above for country attribution generally) contribute nothing to it.
           <div className="sig">Ideas Advancing Freedom</div>
         </footer>
       </div>
