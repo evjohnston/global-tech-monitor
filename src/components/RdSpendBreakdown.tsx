@@ -11,8 +11,8 @@ export function RdSpendBreakdown({ points }: { points: RdSpendPoint[] }) {
   const sorted = [...latest.companies].sort((a, b) => b.amountUsd - a.amountUsd);
 
   return (
-    <div className="panel">
-      <h3>R&D spend by company <span className="drop">FY{latest.fiscalYear}</span></h3>
+    <div>
+      <div className="trend-note" style={{ marginBottom: 8 }}>FY{latest.fiscalYear} · latest reported year</div>
       <table className="lb">
         <thead>
           <tr>

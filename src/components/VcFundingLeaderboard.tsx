@@ -22,8 +22,7 @@ export function VcFundingLeaderboard({ companies }: { companies: VcCompanyFundin
   const restDeals = rest.reduce((s, c) => s + c.dealCount, 0);
 
   return (
-    <div className="panel vcpanel">
-      <h3>Who's getting the money <span className="drop">real VC/growth rounds, S&P Capital IQ</span></h3>
+    <div className="vcpanel">
       <div className="marketpanel-scroll">
         <table className="lb">
           <thead>

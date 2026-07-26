@@ -17,8 +17,7 @@ export function InvestorLeaderboard({ companies }: { companies: VcCompanyFunding
   const rest = rows.slice(TOP_N);
 
   return (
-    <div className="panel vcpanel">
-      <h3>Who's writing the checks <span className="drop">investors by real deal activity, S&P Capital IQ</span></h3>
+    <div className="vcpanel">
       <div className="marketpanel-scroll">
         <table className="lb">
           <thead>

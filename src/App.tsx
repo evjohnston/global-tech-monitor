@@ -31,6 +31,8 @@ import { RdSpendTrend } from "./components/RdSpendTrend.tsx";
 import { RdSpendBreakdown } from "./components/RdSpendBreakdown.tsx";
 import { VcFundingLeaderboard } from "./components/VcFundingLeaderboard.tsx";
 import { InvestorLeaderboard } from "./components/InvestorLeaderboard.tsx";
+import { MoneyFlowSankey } from "./components/MoneyFlowSankey.tsx";
+import { PanelTabs } from "./components/PanelTabs.tsx";
 import { buildOrgFinancialIndex, lookupOrgFinancials } from "./lib/orgFinancials.ts";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
@@ -63,6 +65,7 @@ export default function App() {
   const vertical = VERTICALS.find((v) => v.id === verticalId) ?? VERTICALS[0];
   const [data, setData] = useState<DataFile | null>(null);
   const [country, setCountry] = useState<string | "all">("all");
+  const [stage, setStage] = useState<Stage | "all">("all");
   const [mode, setMode] = useState<LiveMode>("loading");
   const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
@@ -102,6 +105,7 @@ export default function App() {
     setData(cached ?? null);
     setMode(cached ? "static" : "loading");
     setCountry("all");
+    setStage("all");
     setHighlightOrg(null);
     const dataUrl = `${import.meta.env.BASE_URL}data/${vertical.id}.json`;
     fetch(dataUrl)
@@ -123,7 +127,10 @@ export default function App() {
   // means one consistent thing across the page. The full history stays in
   // `trend`/the data file itself; this is a display-only slice.
   const trend21 = useMemo(() => trend.slice(-21), [trend]);
-  const shown = country === "all" ? entries : entries.filter((e) => e.country === country);
+  const shown = useMemo(
+    () => entries.filter((e) => (country === "all" || e.country === country) && (stage === "all" || e.stage === stage)),
+    [entries, country, stage]
+  );
 
   const byStage = useMemo(() => {
     const by: Record<Stage, Entry[]> = { innovation: [], scaling: [], adoption: [], investment: [] };
@@ -263,6 +270,9 @@ export default function App() {
   function toggleCountry(c: string) {
     setCountry((prev) => (prev === c ? "all" : c));
   }
+  function toggleStage(s: Stage) {
+    setStage((prev) => (prev === s ? "all" : s));
+  }
   function selectOrg(org: string) {
     setHighlightOrg((prev) => (prev === org ? null : org));
     document.getElementById("stage-innovation")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -325,6 +335,15 @@ export default function App() {
           ))}
           <span className="lbl" style={{ marginLeft: 2 }}>— or click any country on the map below</span>
         </div>
+        <div className="controls">
+          <span className="lbl">Filter stage</span>
+          <button className="chip" aria-pressed={stage === "all"} onClick={() => setStage("all")}>All</button>
+          {STAGES.map((s) => (
+            <button key={s.id} className="chip" aria-pressed={stage === s.id} onClick={() => toggleStage(s.id)}>
+              {s.label}
+            </button>
+          ))}
+        </div>
 
         <div className="kpirow">
           <KpiCard
@@ -360,34 +379,49 @@ export default function App() {
 
         <div className="row-map">
           <div className="row-map-stack">
-            <div className="panel">
-              <h3>Output by country · innovation stage</h3>
-              {innovationTop.top.map((c) => (
-                <BarRow
-                  key={c.country}
-                  label={countryName(c.country)}
-                  pct={innovationTopShares[c.country] ?? 0}
-                  color={countryColor(c.country)}
-                  valueLabel={`${c.count} · ${((c.count / innovationTotal) * 100).toFixed(0)}%`}
-                  detail={`${countryName(c.country)} · ${c.count} works · ${((c.count / innovationTotal) * 100).toFixed(1)}% of innovation output · click to filter`}
-                  onClick={() => toggleCountry(c.country)}
-                  active={country === c.country}
-                />
-              ))}
-              {innovationRestCount > 0 && (
-                <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
-                  +{innovationTop.rest.length} more countries, {innovationRestCount} works — see the map →
-                </div>
-              )}
-            </div>
-            <div className="panel">
-              <h3>Innovation output over time</h3>
-              <VolumeTrend trend={trend21} />
-            </div>
-            <div className="panel">
-              <h3>Innovation output, by country <span className="drop">trailing {trend21.length}d</span></h3>
-              <SmallMultiples trend={trend21} countries={smallMultCountries} onSelectCountry={toggleCountry} active={country === "all" ? null : country} />
-            </div>
+            <PanelTabs
+              title="Innovation trends"
+              tabs={[
+                {
+                  key: "country",
+                  label: "By country",
+                  render: () => (
+                    <>
+                      {innovationTop.top.map((c) => (
+                        <BarRow
+                          key={c.country}
+                          label={countryName(c.country)}
+                          pct={innovationTopShares[c.country] ?? 0}
+                          color={countryColor(c.country)}
+                          valueLabel={`${c.count} · ${((c.count / innovationTotal) * 100).toFixed(0)}%`}
+                          detail={`${countryName(c.country)} · ${c.count} works · ${((c.count / innovationTotal) * 100).toFixed(1)}% of innovation output · click to filter`}
+                          onClick={() => toggleCountry(c.country)}
+                          active={country === c.country}
+                        />
+                      ))}
+                      {innovationRestCount > 0 && (
+                        <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
+                          +{innovationTop.rest.length} more countries, {innovationRestCount} works — see the map →
+                        </div>
+                      )}
+                    </>
+                  ),
+                },
+                { key: "time", label: "Over time", render: () => <VolumeTrend trend={trend21} /> },
+                {
+                  key: "multiples",
+                  label: "Small multiples",
+                  render: () => (
+                    <SmallMultiples trend={trend21} countries={smallMultCountries} onSelectCountry={toggleCountry} active={country === "all" ? null : country} />
+                  ),
+                },
+                {
+                  key: "share",
+                  label: "Country share",
+                  render: () => <TrendChart trend={trend21} countries={forecastCountries} />,
+                },
+              ]}
+            />
           </div>
           <div className="panel map-panel">
             <h3>Where the work happens</h3>
@@ -417,88 +451,152 @@ export default function App() {
               onSelect={(key) => scrollToStage(key as Stage)}
             />
           </div>
-          <div className="panel">
-            <h3>Top institutions <span className="drop">innovation</span></h3>
-            <Leaderboard rows={orgRows} unit="works" onSelect={selectOrg} activeOrg={highlightOrg} />
-            {highlightOrg && <button className="viewall" onClick={() => setHighlightOrg(null)}>Clear highlight ({highlightOrg}) →</button>}
-          </div>
+          <PanelTabs
+            title="Institutions"
+            drop="innovation"
+            tabs={[
+              {
+                key: "top",
+                label: "Top 6",
+                render: () => (
+                  <>
+                    <Leaderboard rows={orgRows} unit="works" onSelect={selectOrg} activeOrg={highlightOrg} />
+                    {highlightOrg && <button className="viewall" onClick={() => setHighlightOrg(null)}>Clear highlight ({highlightOrg}) →</button>}
+                  </>
+                ),
+              },
+              {
+                key: "concentration",
+                label: "Full concentration",
+                render: () => (
+                  <>
+                    <div className="trend-note" style={{ marginBottom: 8 }}>institutions by tracked output · colored by country</div>
+                    <InstitutionConcentration rows={orgRows20} onSelect={selectOrg} activeOrg={highlightOrg} />
+                  </>
+                ),
+              },
+            ]}
+          />
           <div className="panel">
             <h3>Recent entries</h3>
             <RecentEntries entries={shown} limit={6} onSelect={setSelectedEntry} />
           </div>
         </div>
 
-        <div className="panel">
-          <h3>Who's producing the work</h3>
-          <div className="trend-note" style={{ marginBottom: 8 }}>institutions by tracked output · colored by country</div>
-          <InstitutionConcentration rows={orgRows20} onSelect={selectOrg} activeOrg={highlightOrg} />
-        </div>
-
-        <div className="finrow">
-          <KpiCard label="Public grants" value={fmtUsd(fundingPeriod.current)} caption="NSF, trailing 21d · US/EU only" />
-          {data?.vcFunding && data.vcFunding.length > 0 && (
-            <KpiCard label="Private VC disclosed" value={fmtUsd(vcTotalUsd)} caption="S&P Capital IQ · all-time, this vertical" />
-          )}
-          {latestRdSpend && (
-            <KpiCard label="Corporate R&D" value={fmtUsd(latestRdSpend.totalUsd)} caption={`FY${latestRdSpend.fiscalYear} · SEC + CapIQ`} />
-          )}
-          {data?.companies && data.companies.length > 0 && (
-            <KpiCard label="Market cap tracked" value={fmtUsd(marketCapTotalUsd)} caption={`${data.companies.length} tickers · Massive`} />
-          )}
-        </div>
-        <div className="trend-note" style={{ marginBottom: 8 }}>four distinct real pools, not summed into one figure — see each panel below for detail</div>
-
-        {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} />}
-
-        <div className="panel">
-          <h3>Funding by country <span className="drop">investment</span></h3>
-          {fundingTop.top.length === 0
-            ? <div className="trend-empty">No disclosed funding yet.</div>
-            : fundingTop.top.map((c) => (
-              <BarRow
-                key={c.country}
-                label={countryName(c.country)}
-                pct={(c.count / fundingGrandTotal) * 100}
-                color={countryColor(c.country)}
-                valueLabel={fmtUsd(c.count)}
-                detail={`${countryName(c.country)} · ${fmtUsd(c.count)} disclosed · ${((c.count / fundingGrandTotal) * 100).toFixed(1)}% of tracked funding`}
-              />
-            ))}
-          {fundingTop.rest.length > 0 && (
-            <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
-              +{fundingTop.rest.length} more countries, {fmtUsd(fundingTop.rest.reduce((s, c) => s + c.count, 0))}
-            </div>
-          )}
-        </div>
-
-        <div className="panel">
-          <h3>Public investment over time <span className="drop">NSF, trailing 21d, recorded daily</span></h3>
-          <FundingTrend trend={trend21} />
-        </div>
-
-        {data?.rdSpend && data.rdSpend.length > 0 && (
-          <div className="panel">
-            <h3>Private investment over time <span className="drop">corporate R&D spend, SEC filings</span></h3>
-            <RdSpendTrend points={data.rdSpend} />
+        <section className="section">
+          <div className="section-kicker">
+            <span className="idx">$</span>
+            <h2>Capital & money flow <span className="new-badge">New</span></h2>
+            <span className="sub">public grants · private VC · corporate R&D · public markets</span>
           </div>
-        )}
 
-        {data?.rdSpend && data.rdSpend.length > 0 && <RdSpendBreakdown points={data.rdSpend} />}
+          <div className="finrow">
+            <KpiCard label="Public grants" value={fmtUsd(fundingPeriod.current)} caption="NSF, trailing 21d · US/EU only" />
+            {data?.vcFunding && data.vcFunding.length > 0 && (
+              <KpiCard label="Private VC disclosed" value={fmtUsd(vcTotalUsd)} caption="S&P Capital IQ · all-time, this vertical" />
+            )}
+            {latestRdSpend && (
+              <KpiCard label="Corporate R&D" value={fmtUsd(latestRdSpend.totalUsd)} caption={`FY${latestRdSpend.fiscalYear} · SEC + CapIQ`} />
+            )}
+            {data?.companies && data.companies.length > 0 && (
+              <KpiCard label="Market cap tracked" value={fmtUsd(marketCapTotalUsd)} caption={`${data.companies.length} tickers · Massive`} />
+            )}
+          </div>
+          <div className="trend-note" style={{ marginBottom: 8 }}>four distinct real pools, not summed into one figure — see each panel below for detail</div>
 
-        {data?.vcFunding && data.vcFunding.length > 0 && <VcFundingLeaderboard companies={data.vcFunding} />}
+          {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} />}
 
-        {data?.vcFunding && data.vcFunding.length > 0 && <InvestorLeaderboard companies={data.vcFunding} />}
+          <PanelTabs
+            title="NSF grants"
+            drop="investment"
+            tabs={[
+              {
+                key: "country",
+                label: "By country",
+                render: () => (
+                  fundingTop.top.length === 0
+                    ? <div className="trend-empty">No disclosed funding yet.</div>
+                    : (
+                      <>
+                        {fundingTop.top.map((c) => (
+                          <BarRow
+                            key={c.country}
+                            label={countryName(c.country)}
+                            pct={(c.count / fundingGrandTotal) * 100}
+                            color={countryColor(c.country)}
+                            valueLabel={fmtUsd(c.count)}
+                            detail={`${countryName(c.country)} · ${fmtUsd(c.count)} disclosed · ${((c.count / fundingGrandTotal) * 100).toFixed(1)}% of tracked funding`}
+                          />
+                        ))}
+                        {fundingTop.rest.length > 0 && (
+                          <div className="trend-note" style={{ marginTop: 8, fontSize: 11 }}>
+                            +{fundingTop.rest.length} more countries, {fmtUsd(fundingTop.rest.reduce((s, c) => s + c.count, 0))}
+                          </div>
+                        )}
+                      </>
+                    )
+                ),
+              },
+              {
+                key: "sizes",
+                label: "Award sizes",
+                render: () => (
+                  <>
+                    <div className="trend-note" style={{ marginBottom: 4 }}>NSF grants only · private hyperscaler capex not shown and dwarfs this</div>
+                    <AwardSizeHistogram entries={shown} />
+                  </>
+                ),
+              },
+            ]}
+          />
 
-        <div className="panel">
-          <h3>Disclosed award sizes</h3>
-          <div className="trend-note" style={{ marginBottom: 4 }}>NSF grants only · private hyperscaler capex not shown and dwarfs this</div>
-          <AwardSizeHistogram entries={shown} />
-        </div>
+          <PanelTabs
+            title="Investment over time"
+            tabs={[
+              {
+                key: "public",
+                label: "Public (NSF)",
+                render: () => (
+                  <>
+                    <div className="trend-note" style={{ marginBottom: 8 }}>NSF, trailing 21d, recorded daily</div>
+                    <FundingTrend trend={trend21} />
+                  </>
+                ),
+              },
+              ...(data?.rdSpend && data.rdSpend.length > 0
+                ? [{
+                    key: "private",
+                    label: "Private (corporate R&D)",
+                    render: () => (
+                      <>
+                        <div className="trend-note" style={{ marginBottom: 8 }}>corporate R&D spend, SEC + CapIQ filings</div>
+                        <RdSpendTrend points={data.rdSpend!} />
+                      </>
+                    ),
+                  }]
+                : []),
+            ]}
+          />
 
-        <div className="panel">
-          <h3>Country innovation share <span className="drop">recorded</span></h3>
-          <TrendChart trend={trend21} countries={forecastCountries} />
-        </div>
+          {(data?.rdSpend && data.rdSpend.length > 0) || (data?.vcFunding && data.vcFunding.length > 0) ? (
+            <PanelTabs
+              title="Capital leaderboards"
+              newBadge
+              tabs={[
+                ...(data?.rdSpend && data.rdSpend.length > 0
+                  ? [{ key: "rd", label: "R&D by company", render: () => <RdSpendBreakdown points={data.rdSpend!} /> }]
+                  : []),
+                ...(data?.vcFunding && data.vcFunding.length > 0
+                  ? [
+                      { key: "vc", label: "Who's getting it", render: () => <VcFundingLeaderboard companies={data.vcFunding!} /> },
+                      { key: "investors", label: "Who's writing checks", render: () => <InvestorLeaderboard companies={data.vcFunding!} /> },
+                      { key: "flow", label: "Money flow", render: () => <MoneyFlowSankey companies={data.vcFunding!} /> },
+                    ]
+                  : []),
+              ]}
+            />
+          ) : null}
+        </section>
 
         <section className="section">
           <div className="section-kicker">

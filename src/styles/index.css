@@ -166,6 +166,18 @@ a { color: inherit; }
 .panel h3 { font-size: 11.5px; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline; }
 .panel h3 .drop { font-size: 10px; font-weight: 400; color: var(--mist); }
 
+/* PanelTabs — several real views sharing one .panel, switched via .chip
+   buttons, instead of each view getting its own stacked panel. Reuses the
+   existing chip language rather than a second button style. */
+.tab-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+
+/* One-word red pill flagging a recently-added panel/view — same accent as
+   the rest of the app's single highlight color, used sparingly (a handful
+   of "new" panels at a time, not sprinkled everywhere) so it stays inside
+   the app's one-color-budget rule. Not auto-expiring — remove by hand once
+   a panel stops being new, same editorial judgment as the analyst notes. */
+.new-badge { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--red); border: 1px solid var(--red); border-radius: var(--r); padding: 1px 5px; margin-left: 6px; vertical-align: middle; }
+
 .kpirow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 6px; }
 /* Capital-cluster snapshot row — same KpiCard visual language as .kpirow,
    but a variable 2-4 chip count depending on which financial sources this
