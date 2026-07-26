@@ -49,6 +49,37 @@ export function fundingByCountry(entries: Entry[]): Record<string, number> {
   return out;
 }
 
+// Real disclosed dollar total per country across EVERY investment-stage
+// entry (grants + private funding rounds + funding-adjacent news) — the
+// shared "how much money, by country" measure used wherever this app
+// compares countries on the Money dimension (the ecosystem matrix, the
+// Money leader card, the leadership-across-the-stack chart). Deliberately
+// NOT restricted to source==="grant" the way fundingByCountry is — this
+// function answers "how much real money," fundingByCountry answers "how
+// much of the specifically public/NSF number," a different, narrower
+// question used only by the public-investment KPI/chart.
+//
+// Ranked by DOLLARS, not entry count: NSF issues hundreds of small
+// individual grant entries (all US, by construction — no comparable feed
+// exists for other countries) against a mere handful of hand-curated
+// private funding-round entries spread across other countries. Counting
+// them as equal units let raw grant VOLUME alone push the US to ~99%
+// "share" of tracked investment activity while a country with one real,
+// large, disclosed funding round rounded down to 0% — confirmed by hand
+// against the real data (quantum vertical: US 99.3% by entry count vs.
+// 74.0% by real disclosed dollars, with Canada moving from 0.3% — rounds
+// to 0% — to a real 2.9% once its actual disclosed round size counts for
+// what it's worth). Dollars are the honest unit for "money"; entries were
+// never comparable units to begin with.
+export function investmentUsdByCountry(entries: Entry[]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const e of entries) {
+    if (e.stage !== "investment" || !e.country) continue;
+    out[e.country] = (out[e.country] ?? 0) + (e.amountUsd ?? 0);
+  }
+  return out;
+}
+
 export interface CountryCount { country: string; count: number }
 
 // Ranks a country→count map and splits it into the top N (for compact views

@@ -260,27 +260,21 @@ export function WorldMap({
   const [expanded, setExpanded] = useState(false);
   const [hiRes, setHiRes] = useState<Record<string, unknown> | null>(null);
   const [scrubIndex, setScrubIndex] = useState<number | null>(null);
-  // Compact view's real height is whatever its flex-stretched container
-  // ends up being (see .map-fill/.map-wrap/.mapbox in index.css) — that
-  // container can now be taller than the map's own content (the left
-  // column grew a 3rd stacked panel), and the map used to just stay at a
-  // hardcoded 260 regardless, leaving dead space below it. Measuring the
-  // actual box and feeding it back as MapBody's height prop means the SVG's
-  // own viewBox/projection scale to fill it exactly, not just letterbox
-  // inside a taller box that CSS alone would produce.
-  const mapWrapRef = useRef<HTMLDivElement>(null);
-  const [compactHeight, setCompactHeight] = useState(260);
-
-  useEffect(() => {
-    const el = mapWrapRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      const h = entries[0]?.contentRect.height;
-      if (h && h > 0) setCompactHeight(Math.round(h));
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+  // The map is now a standalone full-width panel (see .map-panel in
+  // index.css) with no sibling to height-match — .mapbox gets a real,
+  // definite CSS height per breakpoint (500/440/340px) instead. A fixed
+  // viewBox height here is deliberate, NOT measured from the DOM: this used
+  // to read the box's live rendered height via ResizeObserver and feed it
+  // straight back in as this same prop, but with .mapbox's height itself
+  // driven by percentage/auto CSS (no external stretch anymore), the SVG's
+  // own intrinsic-aspect-ratio sizing turned that into a real feedback loop
+  // — each measured height became a taller next height, ballooning the
+  // panel to thousands of pixels in a few frames (confirmed by hand: a
+  // ~1.5x multiply per cycle, compounding). ComposableMap's default
+  // preserveAspectRatio ("xMidYMid meet") just letterboxes if this doesn't
+  // exactly match .mapbox's real aspect ratio — a minor, static cosmetic
+  // tradeoff, not a growing one.
+  const COMPACT_VIEWBOX_HEIGHT = 500;
 
   const shownCounts = scrubIndex !== null && trend[scrubIndex] ? trend[scrubIndex].counts : counts;
   const max = Math.max(1, ...Object.values(shownCounts));
@@ -327,8 +321,8 @@ export function WorldMap({
 
   return (
     <div className="map-wrap">
-      <div className="mapbox" ref={mapWrapRef}>
-        <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={shownCounts} max={max} onSelect={onSelect} active={active} emphasize={emphasize} height={compactHeight} dark={dark} />
+      <div className="mapbox">
+        <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={shownCounts} max={max} onSelect={onSelect} active={active} emphasize={emphasize} height={COMPACT_VIEWBOX_HEIGHT} dark={dark} />
         <button className="map-expand" onClick={() => setExpanded(true)} aria-label="Expand map to full page">⤢</button>
       </div>
       {canScrub && <TimeBar trend={trend} scrubIndex={scrubIndex} onScrub={setScrubIndex} onLive={() => setScrubIndex(null)} />}

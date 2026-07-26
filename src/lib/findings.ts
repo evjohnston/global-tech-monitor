@@ -170,6 +170,40 @@ export function mostConcentrated(entries: Entry[]): FindingCard | null {
   };
 }
 
+// The Overview dashboard's headline — distinct from headline() above (which
+// leads with the Story mode's single "biggest disconnect" framing). This
+// one names whichever country leads the most of the 4 dashboards (a real
+// count, not an assumption it's always the US), then folds in the
+// disconnect finding as supporting color. Real, per-vertical — never the
+// same sentence when a different country actually leads.
+export function overviewHeadline(entries: Entry[]): string {
+  const stages: { stage: Stage; label: string }[] = [
+    { stage: "innovation", label: "research" },
+    { stage: "scaling", label: "scaling" },
+    { stage: "adoption", label: "adoption" },
+    { stage: "investment", label: "money" },
+  ];
+  const leaderCounts = new Map<string, number>();
+  for (const s of stages) {
+    const counts = countByCountry(entries, s.stage);
+    const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (ranked.length === 0) continue;
+    leaderCounts.set(ranked[0][0], (leaderCounts.get(ranked[0][0]) ?? 0) + 1);
+  }
+  const ranked = [...leaderCounts.entries()].sort((a, b) => b[1] - a[1]);
+  const disconnect = biggestDisconnect(entries);
+  const base = "Leadership differs across research, scaling, adoption, and money.";
+  if (ranked.length === 0) return base;
+  const [topCountry, topCount] = ranked[0];
+  const leadClause = topCount >= 3
+    ? `${countryName(topCountry)} leads in ${topCount} of the 4 tracked areas.`
+    : ranked.length > 1
+      ? `No single country leads more than ${topCount} of the 4 tracked areas.`
+      : `${countryName(topCountry)} leads the one area with a clear ranking so far.`;
+  const disconnectClause = disconnect ? ` ${disconnect.context}` : "";
+  return `${base} ${leadClause}${disconnectClause}`;
+}
+
 export function computeFindings(entries: Entry[], now = new Date()): FindingCard[] {
   return [fastestRiser(entries, now), largestLead(entries), biggestDisconnect(entries), mostConcentrated(entries)].filter(
     (c): c is FindingCard => c != null

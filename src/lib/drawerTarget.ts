@@ -6,7 +6,7 @@
 // param so a pinned selection is shareable and survives a reload.
 export type DrawerTarget =
   | { kind: "country"; code: string }
-  | { kind: "org"; orgId: string }
+  | { kind: "org"; orgId: string; label?: string } // label = the original display string clicked, used only as a fallback search when orgId resolves to nothing real
   | { kind: "investor"; name: string }
   | { kind: "entry"; id: string }
   | { kind: "collaboration"; a: string; b: string }
@@ -18,7 +18,7 @@ export function serializeDrawerTarget(t: DrawerTarget | null | undefined): strin
     case "country":
       return `country:${t.code}`;
     case "org":
-      return `org:${encodeURIComponent(t.orgId)}`;
+      return `org:${encodeURIComponent(t.orgId)}${t.label ? `~${encodeURIComponent(t.label)}` : ""}`;
     case "investor":
       return `investor:${encodeURIComponent(t.name)}`;
     case "entry":
@@ -43,8 +43,10 @@ export function parseDrawerTarget(raw: string | null): DrawerTarget | null {
     switch (kind) {
       case "country":
         return rest ? { kind: "country", code: rest.toUpperCase() } : null;
-      case "org":
-        return rest ? { kind: "org", orgId: decodeURIComponent(rest) } : null;
+      case "org": {
+        const [id, label] = rest.split("~").map(decodeURIComponent);
+        return id ? { kind: "org", orgId: id, label } : null;
+      }
       case "investor":
         return rest ? { kind: "investor", name: decodeURIComponent(rest) } : null;
       case "entry":

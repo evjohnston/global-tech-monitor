@@ -20,8 +20,13 @@ export function RdSpendTrend({ points }: { points: RdSpendPoint[] }) {
 
   const values = points.map((p) => p.totalUsd);
   const max = Math.max(1, ...values);
+  const first = values[0];
+  const last = values[values.length - 1];
+  const changePct = first > 0 ? ((last - first) / first) * 100 : null;
 
-  const W = 500, H = 200, padL = 42, padR = 10, padT = 14, padB = 26;
+  // 500:150 — wide-and-short so this renders inside the spec's ~360-440px
+  // panel-height range at real Money-dashboard content widths.
+  const W = 500, H = 150, padL = 42, padR = 10, padT = 12, padB = 22;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const x = (i: number) => padL + (i / Math.max(1, points.length - 1)) * plotW;
@@ -40,6 +45,9 @@ export function RdSpendTrend({ points }: { points: RdSpendPoint[] }) {
 
   return (
     <>
+      <div className="trend-note" style={{ marginBottom: 4 }}>
+        {fmtUsd(last)} latest (FY{points[points.length - 1].fiscalYear}){changePct != null && Math.abs(changePct) >= 1 ? ` · ${changePct > 0 ? "+" : ""}${changePct.toFixed(0)}% since FY${points[0].fiscalYear}` : ""}
+      </div>
       <svg
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}

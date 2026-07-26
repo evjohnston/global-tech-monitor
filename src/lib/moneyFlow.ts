@@ -6,6 +6,8 @@ export interface MoneyFlowNode {
   label: string;
   kind: "investor" | "company";
   dealCount: number;
+  companyCount?: number; // investors only — distinct recipient companies among the shown links
+  totalRaisedUsd?: number; // companies only — the company's OWN real disclosed total (not attributed to one investor), shown as informational text, never as a link weight
 }
 
 export interface MoneyFlowLink {
@@ -56,10 +58,12 @@ export function buildMoneyFlow(companies: VcCompanyFunding[], opts: MoneyFlowOpt
   const investorTotal = new Map<string, number>();
   const companyLabel = new Map<string, string>();
   const companyDealCount = new Map<string, number>();
+  const companyTotalRaised = new Map<string, number>();
 
   for (const c of shownCompanies) {
     const companyId = canonicalizeOrg(c.name).id;
     companyLabel.set(companyId, c.name);
+    companyTotalRaised.set(companyId, (companyTotalRaised.get(companyId) ?? 0) + c.totalRaisedUsd);
     const dealsInRange = c.deals.filter(inRange);
     companyDealCount.set(companyId, (companyDealCount.get(companyId) ?? 0) + dealsInRange.length);
     for (const deal of dealsInRange) {
@@ -93,9 +97,17 @@ export function buildMoneyFlow(companies: VcCompanyFunding[], opts: MoneyFlowOpt
     }
   }
 
+  const investorCompanyCount = new Map<string, number>();
+  for (const investor of topInvestorNames) investorCompanyCount.set(investor, new Set(links.filter((l) => l.source === investor).map((l) => l.target)).size);
+
   const nodes: MoneyFlowNode[] = [
-    ...topInvestorNames.filter((name) => linkedCompanyIds.size > 0 && links.some((l) => l.source === name)).map((name) => ({ id: name, label: name, kind: "investor" as const, dealCount: investorTotal.get(name) ?? 0 })),
-    ...[...linkedCompanyIds].map((id) => ({ id, label: companyLabel.get(id) ?? id, kind: "company" as const, dealCount: companyDealCount.get(id) ?? 0 })),
+    ...topInvestorNames
+      .filter((name) => links.some((l) => l.source === name))
+      .sort((a, b) => (investorTotal.get(b) ?? 0) - (investorTotal.get(a) ?? 0))
+      .map((name) => ({ id: name, label: name, kind: "investor" as const, dealCount: investorTotal.get(name) ?? 0, companyCount: investorCompanyCount.get(name) ?? 0 })),
+    ...[...linkedCompanyIds]
+      .sort((a, b) => (companyDealCount.get(b) ?? 0) - (companyDealCount.get(a) ?? 0))
+      .map((id) => ({ id, label: companyLabel.get(id) ?? id, kind: "company" as const, dealCount: companyDealCount.get(id) ?? 0, totalRaisedUsd: companyTotalRaised.get(id) })),
   ];
 
   return {

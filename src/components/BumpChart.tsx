@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { Entry } from "../lib/types.ts";
 import { buildBumpData, type BumpMeasure } from "../lib/bumpChart.ts";
+import { bumpChartClaim } from "../lib/claims.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
@@ -11,14 +12,18 @@ const MEASURES: { key: BumpMeasure; label: string }[] = [
   { key: "adoption", label: "Adoption" },
   { key: "investment", label: "Investment" },
 ];
+const MIN_LABEL_GAP = 12;
 
 // Real rank-over-time, reconstructed from entry dates (see bumpChart.ts) —
 // same hand-rolled SVG approach as TrendChart.tsx (this app has no charting
 // library, see CLAUDE.md), just plotting integer rank instead of percent
-// share. `emphasize` fades every other country when a comparison selection
-// is active, same convention as the other charts that take it. Clicking a
-// country's line pins it (opens the shared metadata drawer via
-// onSelectCountry) — same click model as the map and every other chart.
+// share. The title is computed HERE, from the chart's own current measure
+// (bumpChartClaim), not passed in as a static string from the caller — the
+// bug this fixes was a title reading "publication rankings" while Patents/
+// Scaling/Adoption/Investment was the actually-selected measure. When 1+
+// countries are selected for comparison, they're always included in the
+// series (buildBumpData's priorityCountries) even if outside the global
+// top 8, backfilled with the real top-ranked countries as reference.
 export function BumpChart({
   entries,
   emphasize,
@@ -31,20 +36,39 @@ export function BumpChart({
   const [measure, setMeasure] = useState<BumpMeasure>("publications");
   const [hoverCountry, setHoverCountry] = useState<string | null>(null);
   const [tip, setTip] = useState<{ x: number; y: number; country: string; rank: number; date: string } | null>(null);
-  const data = useMemo(() => buildBumpData(entries, measure), [entries, measure]);
+  const data = useMemo(() => buildBumpData(entries, measure, emphasize), [entries, measure, emphasize]);
+  const title = useMemo(() => bumpChartClaim(entries, measure), [entries, measure]);
 
   const hasData = data.series.some((s) => s.ranks.some((r) => r != null));
   const maxRank = Math.max(1, ...data.series.flatMap((s) => s.ranks.filter((r): r is number => r != null)));
 
-  const W = 720, H = 260, padL = 14, padR = 96, padT = 14, padB = 24;
+  const W = 720, H = 280, padL = 14, padR = 108, padT = 14, padB = 30;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const n = data.dates.length;
   const x = (i: number) => padL + (n <= 1 ? 0 : (i / (n - 1)) * plotW);
   const y = (rank: number) => padT + ((rank - 1) / Math.max(1, maxRank - 1)) * plotH;
 
+  // Simple top-to-bottom collision avoidance on the end labels — sort by
+  // natural y position, then push any label that would overlap the one
+  // above it down just enough to clear.
+  const labelPositions = useMemo(() => {
+    const withLast = data.series
+      .map((s) => {
+        const last = [...s.ranks].reverse().find((r) => r != null);
+        return last == null ? null : { country: s.country, rank: last, y: y(last) };
+      })
+      .filter((p): p is { country: string; rank: number; y: number } => p != null)
+      .sort((a, b) => a.y - b.y);
+    for (let i = 1; i < withLast.length; i++) {
+      if (withLast[i].y - withLast[i - 1].y < MIN_LABEL_GAP) withLast[i].y = withLast[i - 1].y + MIN_LABEL_GAP;
+    }
+    return new Map(withLast.map((p) => [p.country, p.y]));
+  }, [data]);
+
   return (
     <div>
+      <div className="chart-title">{title}</div>
       <div className="tab-bar">
         {MEASURES.map((m) => (
           <button key={m.key} className="chip" aria-pressed={measure === m.key} onClick={() => setMeasure(m.key)}>
@@ -55,7 +79,11 @@ export function BumpChart({
       {!hasData ? (
         <div className="trend-empty">Not enough dated entries yet to reconstruct rank history for this measure.</div>
       ) : (
-        <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label={`Country rank over time, ${measure}`}>
+        <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label={`${title} — country rank over time, ${measure}`}>
+          <line x1={padL} y1={H - padB} x2={W - padR} y2={H - padB} stroke="var(--line)" />
+          {data.dates.map((d, i) => (
+            <text key={d} x={x(i)} y={H - padB + 14} fontSize={9} textAnchor="middle" fill="var(--mist)">{d.slice(5)}</text>
+          ))}
           {data.series.map((s) => {
             const faded = !!emphasize?.length && !emphasize.includes(s.country);
             const points = s.ranks
@@ -65,6 +93,7 @@ export function BumpChart({
             const d = points.map((p, idx) => `${idx === 0 ? "M" : "L"} ${x(p.i).toFixed(1)} ${y(p.r).toFixed(1)}`).join(" ");
             const last = points[points.length - 1];
             const hovered = hoverCountry === s.country;
+            const labelY = labelPositions.get(s.country) ?? y(last.r);
             return (
               <g
                 key={s.country}
@@ -83,7 +112,8 @@ export function BumpChart({
                 {points.map((p) => (
                   <circle key={p.i} cx={x(p.i)} cy={y(p.r)} r={hovered ? 4 : 3} fill={countryColor(s.country)} />
                 ))}
-                <text x={x(last.i) + 7} y={y(last.r)} fontSize={10} dominantBaseline="middle" fill="var(--ink-2)" fontWeight={hovered ? 700 : 400}>
+                <line x1={x(last.i)} y1={y(last.r)} x2={x(last.i) + 6} y2={labelY} stroke={countryColor(s.country)} strokeWidth={0.75} opacity={0.5} />
+                <text x={x(last.i) + 7} y={labelY} fontSize={10} dominantBaseline="middle" fill="var(--ink-2)" fontWeight={hovered ? 700 : 400}>
                   {countryName(s.country)} · #{last.r}
                 </text>
               </g>
@@ -98,7 +128,7 @@ export function BumpChart({
       )}
       <div className="cap">
         rank reconstructed from real entry dates at {n} points across the trailing 90 days, not a stored daily series
-        · investment counts grants and disclosed private rounds together as activity, never their blended dollar totals
+        (x-axis, MM-DD) · investment counts grants and disclosed private rounds together as activity, never their blended dollar totals
       </div>
     </div>
   );

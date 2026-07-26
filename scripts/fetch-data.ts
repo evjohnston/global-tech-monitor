@@ -206,12 +206,26 @@ function mergeCapiqRdSpend(rdSpend: RdSpendPoint[], tickers: string[]): RdSpendP
   return [...byYear.values()].sort((a, b) => a.fiscalYear - b.fiscalYear);
 }
 
-function trendPoint(live: Entry[], allEntries: Entry[]): TrendPoint {
-  const counts: Record<string, number> = {};
+function trendPoint(live: Entry[], allEntries: Entry[], prevPoint?: TrendPoint): TrendPoint {
+  const rawCounts: Record<string, number> = {};
   for (const e of live) {
     if (e.stage !== "innovation" || !e.country) continue;
-    counts[e.country] = (counts[e.country] ?? 0) + 1;
+    rawCounts[e.country] = (rawCounts[e.country] ?? 0) + 1;
   }
+  // A run where country-attributed volume collapses to a sliver of the
+  // prior day's real total (confirmed by hand, 2026-07-21: an OpenAlex
+  // outage forced an arXiv fallback that structurally carries almost no
+  // country data, so that day's attributed total cratered to ~1 while
+  // true research volume stayed normal) used to get recorded as a
+  // full-weight trend point anyway — reading downstream as one country
+  // instantly at 0% share and another at 100%. Carry the prior day's real
+  // counts forward instead of recording a visibly degraded snapshot, the
+  // same "carry forward rather than blank on a transient failure"
+  // convention already used for company snapshots (see massive.ts).
+  const todayTotal = Object.values(rawCounts).reduce((a, b) => a + b, 0);
+  const prevTotal = prevPoint ? Object.values(prevPoint.counts).reduce((a, b) => a + b, 0) : 0;
+  const degraded = !!prevPoint && prevTotal >= 20 && todayTotal < prevTotal * 0.15;
+  const counts = degraded ? prevPoint!.counts : rawCounts;
   const now = new Date();
   const stageCounts = { innovation: 0, scaling: 0, adoption: 0, investment: 0 } as Record<Entry["stage"], number>;
   for (const s of Object.keys(stageCounts) as Entry["stage"][]) {
@@ -400,7 +414,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     (p) => p.date !== today && !Object.keys(p.counts).some((k) => ["us", "cn", "eu", "other"].includes(k))
   );
   const allEntries = [...byId.values()];
-  const trend = live.length > 0 ? [...history, trendPoint(live, allEntries)] : history;
+  const trend = live.length > 0 ? [...history, trendPoint(live, allEntries, history[history.length - 1])] : history;
 
   const vcFundingAll = CAPIQ_VC_FUNDING.filter((c) => c.vertical === v.id).map(({ vertical: _vertical, ...rest }) => rest);
   const vcFundingForVertical = vcFundingAll.slice(0, VC_FUNDING_CAP);

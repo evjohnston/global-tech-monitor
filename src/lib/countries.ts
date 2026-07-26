@@ -72,23 +72,30 @@ export function alpha2FromNumeric(numericId: string | undefined): string | null 
   return countries.numericToAlpha2(numericId) ?? null;
 }
 
-// Color budget, v4: every country is colored by its continent (six tones,
-// see --cont-* tokens in index.css) rather than a US/China-vs-everyone-else
-// split — a deliberate change from the earlier two-brand-color scheme.
-// Hoover Red (--red) stays reserved for the single UI accent (KPI highlight,
-// primary button) and is not reused here, so continent color never reads as
-// "the brand color" on a country that happens to be in Asia.
-const CONTINENT_COLOR: Record<Continent, string> = {
-  "north-america": "var(--cont-na)",
-  "south-america": "var(--cont-sa)",
-  europe: "var(--cont-eu)",
-  asia: "var(--cont-as)",
-  africa: "var(--cont-af)",
-  oceania: "var(--cont-oc)",
-  "middle-east": "var(--cont-me)",
-};
+// v4's continent-based color map (CONTINENT_COLOR) was removed 2026-07-25
+// when country color reverted to the named-actor scheme below — see
+// countryColor(). continentOf()/Continent stay exported; the --cont-*
+// tokens stay in index.css as an unused-but-documented fallback palette.
+
+// v5 country color (2026-07-25, reverted from v4's continent scheme at
+// explicit user request): a fixed identity for the handful of actors a
+// policy reader tracks by name — US, China, India, and the EU/Germany
+// bloc — so a chart reads "which side is which" without hovering.
+// Everything else gets one restrained neutral, not more decorative
+// variety; this is deliberately a SMALL, named set, not a full per-
+// country palette. EU_COUNTRIES is the real 27 member states (not every
+// European country — the UK, Norway, Switzerland etc. fall through to
+// --country-other, same as any non-named country).
+const EU_COUNTRIES = new Set([
+  "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU",
+  "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE",
+]);
 
 export function countryColor(code: string | null | undefined): string {
-  const cont = continentOf(code);
-  return cont ? CONTINENT_COLOR[cont] : "var(--mist)";
+  if (!code) return "var(--country-other)";
+  if (code === "US") return "var(--country-us)";
+  if (code === "CN") return "var(--country-cn)";
+  if (code === "IN") return "var(--country-in)";
+  if (EU_COUNTRIES.has(code)) return "var(--country-eu)";
+  return "var(--country-other)";
 }

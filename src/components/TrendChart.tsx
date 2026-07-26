@@ -42,11 +42,22 @@ export function TrendChart({
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
 
-  const shares = trend.map((p: TrendPoint) => {
-    const total = order.reduce((s, c) => s + (p.counts[c] ?? 0), 0) || 1;
+  // Trailing 7-day rolling sum, not a single day's raw counts — a source
+  // outage on one day (confirmed by hand, 2026-07-21: OpenAlex failed over
+  // to arXiv, which structurally carries almost no country data, so that
+  // day's country-attributed total collapsed to ~1 while true volume was
+  // normal) used to read as one country instantly at 0% and another at
+  // 100%, then reverting the next day. A rolling window means one degraded
+  // day contributes at most 1/7th of the weight behind any point, instead
+  // of being the entire denominator for that day's chart position.
+  const ROLL = 7;
+  const shares = trend.map((_: TrendPoint, i: number) => {
+    const window = trend.slice(Math.max(0, i - ROLL + 1), i + 1);
+    const rolled = Object.fromEntries(order.map((c) => [c, window.reduce((s, p) => s + (p.counts[c] ?? 0), 0)]));
+    const total = order.reduce((s, c) => s + rolled[c], 0) || 1;
     return {
-      date: p.date,
-      pct: Object.fromEntries(order.map((c) => [c, ((p.counts[c] ?? 0) / total) * 100])) as Record<string, number>,
+      date: trend[i].date,
+      pct: Object.fromEntries(order.map((c) => [c, (rolled[c] / total) * 100])) as Record<string, number>,
     };
   });
 
@@ -83,7 +94,7 @@ export function TrendChart({
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         role="img"
-        aria-label="Country share of tracked innovation output over time"
+        aria-label="Country share of tracked innovation output over time, trailing 7-day rolling average"
         width="100%"
         onMouseMove={handleMove}
         onMouseLeave={() => setHover(null)}
@@ -124,7 +135,7 @@ export function TrendChart({
             {countryName(c)}
           </span>
         ))}
-        <span className="trend-note">share of tracked innovation output by country, recorded only</span>
+        <span className="trend-note">trailing 7-day share of tracked innovation output by country, recorded only — smoothed to absorb single-day ingestion gaps, not projected forward</span>
       </figcaption>
     </figure>
   );

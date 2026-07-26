@@ -20,15 +20,33 @@ export function FundingTrend({ trend }: { trend: TrendPoint[] }) {
   }
 
   const values = points.map((p) => p.fundingUsd);
-  const max = Math.max(1, ...values);
+  const rawMax = Math.max(1, ...values);
+  const rawMin = Math.min(...values);
+  // A truncated, zoomed axis — not 0-to-max — when the real values cluster
+  // in a narrow band far from zero (e.g. $95M-$108M): a full 0-based axis
+  // there reads as a nearly flat line hugging the top with most of the
+  // chart's height wasted as blank space. Floors at 0 rather than going
+  // negative, and the break marks below make the truncation visible rather
+  // than implying a false zero baseline.
+  const truncated = rawMin > rawMax * 0.2;
+  const min = truncated ? Math.max(0, rawMin * 0.92) : 0;
+  const max = rawMax * 1.05;
+  const range = Math.max(1, max - min);
+  const color = STAGE_COLOR.investment;
 
-  const W = 500, H = 200, padL = 42, padR = 10, padT = 14, padB = 26;
+  // 500:150 — wide-and-short so this renders inside the spec's 360-440px
+  // panel-height range at real Money-dashboard content widths, not the
+  // taller 500:200 this used to be (which rendered closer to 500-550px
+  // tall at full content width).
+  const W = 500, H = 150, padL = 46, padR = 10, padT = 12, padB = 24;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const x = (i: number) => padL + (i / Math.max(1, points.length - 1)) * plotW;
-  const y = (v: number) => padT + (1 - v / max) * plotH;
+  const y = (v: number) => padT + (1 - (v - min) / range) * plotH;
   const line = values.map((v, i) => `${i === 0 ? "M" : "L"} ${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
-  const color = STAGE_COLOR.investment;
+  const firstVal = values[0];
+  const lastVal = values[values.length - 1];
+  const changePct = firstVal > 0 ? ((lastVal - firstVal) / firstVal) * 100 : null;
 
   function handleMove(e: MouseEvent<SVGSVGElement>) {
     const svg = svgRef.current;
@@ -41,6 +59,10 @@ export function FundingTrend({ trend }: { trend: TrendPoint[] }) {
 
   return (
     <>
+      <div className="trend-note" style={{ marginBottom: 4 }}>
+        {fmtUsd(lastVal)} latest{changePct != null && Math.abs(changePct) >= 1 ? ` · ${changePct > 0 ? "+" : ""}${changePct.toFixed(0)}% since ${points[0].date}` : ""}
+        {truncated && " · axis truncated to the real range, not zero-based"}
+      </div>
       <svg
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
@@ -52,13 +74,16 @@ export function FundingTrend({ trend }: { trend: TrendPoint[] }) {
       >
         <line x1={padL} y1={padT} x2={padL} y2={H - padB} stroke="var(--line)" />
         <line x1={padL} y1={H - padB} x2={W - padR} y2={H - padB} stroke="var(--line)" />
+        {truncated && (
+          <text x={padL - 4} y={H - padB - 3} textAnchor="end" fontSize="8" fill="var(--mist)">⌇ truncated</text>
+        )}
         <text x={padL - 4} y={padT + 4} textAnchor="end" fontSize="9" fill="var(--mist)">{fmtUsd(max)}</text>
-        <text x={padL - 4} y={H - padB} textAnchor="end" fontSize="9" fill="var(--mist)">$0</text>
+        <text x={padL - 4} y={H - padB} textAnchor="end" fontSize="9" fill="var(--mist)">{truncated ? fmtUsd(min) : "$0"}</text>
         <path d={line} fill="none" stroke={color} strokeWidth="2" />
         {hover && (
           <line x1={x(hover.i)} y1={padT} x2={x(hover.i)} y2={H - padB} stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 2" />
         )}
-        <circle cx={x(points.length - 1)} cy={y(values[values.length - 1])} r="3" fill={color} />
+        <circle cx={x(points.length - 1)} cy={y(lastVal)} r="3" fill={color} />
         <text x={padL} y={H - 6} fontSize="9" fill="var(--mist)">{points[0].date}</text>
         <text x={W - padR} y={H - 6} textAnchor="end" fontSize="9" fill="var(--mist)">{points[points.length - 1].date}</text>
       </svg>

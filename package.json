@@ -15,7 +15,8 @@
     "form-d-sector-tracker": "tsx scripts/form-d-sector-tracker.ts",
     "import-capiq-rd-export": "tsx scripts/import-capiq-rd-export.ts",
     "import-capiq-transactions": "tsx scripts/import-capiq-transactions.ts",
-    "typecheck": "tsc -b --noEmit"
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@types/d3-sankey": "^0.12.5",
@@ -40,6 +41,7 @@
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vite": "^6.0.3",
+    "vitest": "^4.1.10",
     "world-countries": "^5.1.0"
   }
 }

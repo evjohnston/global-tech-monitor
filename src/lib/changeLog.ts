@@ -21,6 +21,14 @@ export interface ChangeLogItem {
 
 const CHANGE_LOG_WINDOW_DAYS = 7;
 const MAX_CROSSOVERS = 3;
+// Overview's "recent changes" is meant to be a short, policy-relevant
+// digest, not the full activity log — cap the combined item list here so
+// a reader never sees more than this many at once (the full set stays
+// reconstructable from entries[] any time, this just isn't the feed that
+// shows it). A minor rank crossover deep in the ranking (e.g. #59 to #53)
+// is filtered out entirely below rather than crowding out anything real.
+const MAX_ITEMS = 4;
+const MINOR_RANK_FLOOR = 10;
 
 // This app's entries[] keeps only each record's CURRENT attribution, not a
 // history of past attributions — so "did this rank change come from new
@@ -62,6 +70,11 @@ export function computeChangeLog(entries: Entry[], now = new Date()): ChangeLogI
     const pastRank = rankOf(pastCounts, winner);
     const currentRank = rankOf(currentCounts, winner);
     if (pastRank == null || currentRank == null || currentRank >= pastRank) continue;
+    // Only crossovers that touch the top 10 — a jump from #90 to #70 is a
+    // real rank change but not policy-relevant enough for a 4-item digest,
+    // and would otherwise crowd out real top-rank movement just for having
+    // a numerically bigger jump.
+    if (pastRank > MINOR_RANK_FLOOR && currentRank > MINOR_RANK_FLOOR) continue;
     const loser = Object.keys(pastCounts).find((c) => c !== winner && rankOf(pastCounts, c) === currentRank);
     if (loser) crossovers.push({ winner, loser, from: pastRank, to: currentRank });
   }
@@ -136,5 +149,5 @@ export function computeChangeLog(entries: Entry[], now = new Date()): ChangeLogI
     });
   }
 
-  return items;
+  return items.slice(0, MAX_ITEMS);
 }

@@ -136,7 +136,16 @@ async function fetchOneFeed(feed: RssFeedConfig, cutoffMs: number, classifier: R
       id: `rss-${idSlug}`,
       stage, country, provenance: "auto",
       source: stage === "scaling" ? "milestone" : "deployment",
-      title: item.title, org: feed.name, date, url: item.link,
+      // org is deliberately NOT feed.name — the RSS classifier has no real
+      // named-entity extraction, and defaulting org to the publisher (e.g.
+      // "Quantum Zeitgeist") let a trade-press feed outrank every real
+      // scaling org/adopter in the leaderboards (confirmed by hand: it was
+      // the #1 "organization" by a wide margin). Empty, not a name, matches
+      // this app's existing convention for "no institution-shaped data"
+      // (see the OpenAlex fallback in openalex.ts) — the publisher is still
+      // fully auditable via countryEvidence below, just never treated as
+      // the acting organization.
+      title: item.title, org: "", date, url: item.link,
       countryEvidence: `${evidence} (auto-classified from ${feed.name} RSS, unverified)`,
       abstract: item.description || undefined,
     });

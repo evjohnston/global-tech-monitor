@@ -3,7 +3,8 @@ import type { DataFile, Entry, TrendPoint } from "../lib/types.ts";
 import { STAGES } from "../lib/types.ts";
 import type { DrawerTarget } from "../lib/drawerTarget.ts";
 import { serializeDrawerTarget } from "../lib/drawerTarget.ts";
-import { countByCountry, countryShares, orgLeaderboard, rankOf, entriesForOrg, orgRankOf } from "../lib/aggregate.ts";
+import { countByCountry, countryShares, orgLeaderboard, rankOf, orgRankOf } from "../lib/aggregate.ts";
+import { resolveOrgProfile } from "../lib/resolveOrg.ts";
 import { entriesAsOf, daysAgo } from "../lib/history.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
 import { investorLeaderboard } from "../lib/vcInvestors.ts";
@@ -69,7 +70,7 @@ function DrawerBody(props: MetadataDrawerProps & { copyLink: () => void }) {
     return <CountryBody code={target.code} entries={entries} trend={trend} compareCountries={compareCountries} onFilterCountry={onFilterCountry} onToggleCompare={onToggleCompare} onOpenTarget={onOpenTarget} copyLink={copyLink} />;
   }
   if (target.kind === "org") {
-    return <OrgBody orgId={target.orgId} entries={entries} orgFinancialIndex={orgFinancialIndex} onHighlightOrg={onHighlightOrg} onOpenTarget={onOpenTarget} copyLink={copyLink} />;
+    return <OrgBody orgId={target.orgId} label={target.label} entries={entries} orgFinancialIndex={orgFinancialIndex} onHighlightOrg={onHighlightOrg} onOpenTarget={onOpenTarget} copyLink={copyLink} />;
   }
   if (target.kind === "investor") {
     return <InvestorBody name={target.name} vcFunding={data.vcFunding ?? []} onOpenTarget={onOpenTarget} copyLink={copyLink} />;
@@ -179,21 +180,47 @@ function CountryBody({
 }
 
 // ── Institution / company ───────────────────────────────────────────
+// Three real, honest outcomes instead of one blanket "not found": (1) the
+// org has tracked Entry records — full profile as before; (2) it has no
+// Entry records but DOES have real financial data (a ticker/VC/R&D row
+// keyed by the same canonical id — orgFinancialIndex's maps are already
+// id-keyed, so this doesn't need the entries path at all) — a company can
+// be legitimately financially-tracked with zero papers/patents/milestones,
+// that's real, not broken; (3) neither resolves, in which case fall back to
+// searching entries for the raw label text that was actually clicked
+// (target.label) and show those as "appears in the following records"
+// rather than a dead end.
 function OrgBody({
-  orgId, entries, orgFinancialIndex, onHighlightOrg, onOpenTarget, copyLink,
+  orgId, label, entries, orgFinancialIndex, onHighlightOrg, onOpenTarget, copyLink,
 }: {
-  orgId: string; entries: Entry[]; orgFinancialIndex: OrgFinancialIndex; onHighlightOrg: (org: string) => void; onOpenTarget: (t: DrawerTarget) => void; copyLink: () => void;
+  orgId: string; label?: string; entries: Entry[]; orgFinancialIndex: OrgFinancialIndex; onHighlightOrg: (org: string) => void; onOpenTarget: (t: DrawerTarget) => void; copyLink: () => void;
 }) {
-  const orgEntries = useMemo(() => entriesForOrg(entries, orgId), [entries, orgId]);
-  if (orgEntries.length === 0) {
+  const resolution = useMemo(() => resolveOrgProfile(entries, orgFinancialIndex, orgId, label), [entries, orgFinancialIndex, orgId, label]);
+
+  if (resolution.status === "unresolved") {
     return (
       <>
-        <h2>Institution not found</h2>
-        <p className="drawer-note">No tracked records currently resolve to this institution id — it may have been renamed on re-fetch, or this link is stale.</p>
+        <h2>Unresolved organization</h2>
+        <div className="drawer-type">{label ?? orgId}</div>
+        {resolution.fuzzyMatches.length > 0 ? (
+          <>
+            <p className="drawer-note">This label doesn't match a tracked institution id directly, but appears in the following tracked records:</p>
+            <ul className="drawer-list">
+              {resolution.fuzzyMatches.map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button> · {e.org}</li>)}
+            </ul>
+          </>
+        ) : (
+          <p className="drawer-note">No tracked records or financial data currently resolve to this label — it may have been renamed on re-fetch, or this link is stale.</p>
+        )}
+        <Actions>
+          <button className="chip" onClick={copyLink}>Copy link to this view</button>
+        </Actions>
       </>
     );
   }
-  const name = orgEntries[0].org;
+
+  const orgEntries = resolution.status === "entries" ? resolution.entries : [];
+  const name = resolution.name;
   const countries = new Set(orgEntries.map((e) => e.country).filter((c): c is string => !!c));
   const primaryCountry = orgEntries.find((e) => e.country)?.country ?? null;
   const byStage = STAGES.map((s) => ({ stage: s.id, label: s.label, count: orgEntries.filter((e) => e.stage === s.id).length, rank: orgRankOf(entries, orgId, s.id) })).filter((s) => s.count > 0);
@@ -205,7 +232,12 @@ function OrgBody({
       {primaryCountry && <div className="drawer-flag" style={{ background: countryColor(primaryCountry) }} />}
       <h2>{name}</h2>
       <div className="drawer-type">Institution / company</div>
-      <Field label="Country" value={primaryCountry ? <button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "country", code: primaryCountry })}>{countryName(primaryCountry)}</button> : "Unknown — no resolvable institution country on any tracked record"} />
+      {orgEntries.length === 0 && (
+        <p className="drawer-note">No tracked papers, patents, or milestones for this organization — it's tracked here only through its financial data below. That's a real, expected gap for a public company or investor, not a broken link.</p>
+      )}
+      {orgEntries.length > 0 && (
+        <Field label="Country" value={primaryCountry ? <button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "country", code: primaryCountry })}>{countryName(primaryCountry)}</button> : "Unknown — no resolvable institution country on any tracked record"} />
+      )}
       <Field label="Total tracked records" value={orgEntries.length} />
       {countries.size > 1 && <Field label="Note" value={`Records under this name carry ${countries.size} different country codes — a real multi-site organization, or a data-attribution mismatch worth checking (see each record's country evidence).`} />}
       {byStage.length > 0 && (
@@ -231,15 +263,21 @@ function OrgBody({
           </ul>
         </>
       )}
-      <div className="drawer-label">Recent records</div>
-      <ul className="drawer-list">
-        {recent.map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button> · {e.date || "undated"}</li>)}
-      </ul>
+      {recent.length > 0 && (
+        <>
+          <div className="drawer-label">Recent records</div>
+          <ul className="drawer-list">
+            {recent.map((e) => <li key={e.id}><button className="drawer-link-btn" onClick={() => onOpenTarget({ kind: "entry", id: e.id })}>{e.title}</button> · {e.date || "undated"}</li>)}
+          </ul>
+        </>
+      )}
       <Actions>
-        <button className="pill primary" onClick={() => onHighlightOrg(name)}>Highlight in the pipeline →</button>
-        <button className="chip" onClick={() => downloadCsv(`${orgId}-records.csv`, orgEntries.map((e) => ({ id: e.id, title: e.title, stage: e.stage, country: e.country ?? "", date: e.date, amountUsd: e.amountUsd ?? "", url: e.url })))}>
-          Download these rows ({orgEntries.length})
-        </button>
+        {orgEntries.length > 0 && <button className="pill primary" onClick={() => onHighlightOrg(name)}>Highlight in the pipeline →</button>}
+        {orgEntries.length > 0 && (
+          <button className="chip" onClick={() => downloadCsv(`${orgId}-records.csv`, orgEntries.map((e) => ({ id: e.id, title: e.title, stage: e.stage, country: e.country ?? "", date: e.date, amountUsd: e.amountUsd ?? "", url: e.url })))}>
+            Download these rows ({orgEntries.length})
+          </button>
+        )}
         <button className="chip" onClick={copyLink}>Copy link to this view</button>
       </Actions>
     </>

@@ -40,7 +40,13 @@ function matchesMeasure(measure: BumpMeasure, e: Entry): boolean {
 // trailing BUMP_WINDOW_DAYS, using entriesAsOf — no new stored trend field,
 // this is the same "filter to date <= cutoff" trick as findings.ts/
 // changeLog.ts, generalized to any measure instead of just innovation.
-export function buildBumpData(entries: Entry[], measure: BumpMeasure, now = new Date()): BumpData {
+//
+// `priorityCountries` (the page's compare selection, when set) are always
+// included even if they'd fall outside the global top N, so a reader who
+// selected specific countries to compare doesn't have them silently
+// dropped — the rest of the top N still fills in as a real reference
+// group, not just the selected countries in isolation.
+export function buildBumpData(entries: Entry[], measure: BumpMeasure, priorityCountries: string[] = [], now = new Date()): BumpData {
   const filtered = entries.filter((e) => matchesMeasure(measure, e));
   const dates: string[] = [];
   for (let i = BUMP_POINTS - 1; i >= 0; i--) {
@@ -49,10 +55,10 @@ export function buildBumpData(entries: Entry[], measure: BumpMeasure, now = new 
   }
   const snapshots = dates.map((d) => countByCountry(entriesAsOf(filtered, d)));
   const current = snapshots[snapshots.length - 1];
-  const topCountries = Object.entries(current)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, BUMP_TOP_N)
-    .map(([country]) => country);
+  const ranked = Object.entries(current).sort((a, b) => b[1] - a[1]).map(([country]) => country);
+  const priorityInRanking = priorityCountries.filter((c) => ranked.includes(c));
+  const rest = ranked.filter((c) => !priorityInRanking.includes(c)).slice(0, Math.max(0, BUMP_TOP_N - priorityInRanking.length));
+  const topCountries = [...priorityInRanking, ...rest];
   const series: BumpSeries[] = topCountries.map((country) => ({
     country,
     ranks: snapshots.map((counts) => rankOf(counts, country)),

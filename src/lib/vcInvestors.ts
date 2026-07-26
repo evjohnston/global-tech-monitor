@@ -45,3 +45,34 @@ export function investorLeaderboard(companies: VcCompanyFunding[]): InvestorRow[
   }
   return [...map.values()].sort((a, b) => b.companies.length - a.companies.length || b.dealCount - a.dealCount);
 }
+
+export interface PrivateFundingSummary {
+  largestRecipient: { name: string; totalRaisedUsd: number } | null;
+  mostDealsRecipient: { name: string; dealCount: number } | null;
+  mostDealsInvestor: { investor: string; dealCount: number } | null;
+  topFiveSharePct: number | null;
+}
+
+// The private-funding dashboard's real "who's getting the money, in one
+// glance" summary — shown above the detailed leaderboards, not instead of
+// them. topFiveSharePct is share of DISCLOSED totalRaisedUsd only, the
+// same disclosed-vs-undisclosed distinction this app applies everywhere
+// else in Money (an undisclosed amount is real missing data, not zero).
+export function privateFundingSummary(companies: VcCompanyFunding[]): PrivateFundingSummary {
+  if (companies.length === 0) {
+    return { largestRecipient: null, mostDealsRecipient: null, mostDealsInvestor: null, topFiveSharePct: null };
+  }
+  const byRaised = [...companies].sort((a, b) => b.totalRaisedUsd - a.totalRaisedUsd);
+  const byDeals = [...companies].sort((a, b) => b.dealCount - a.dealCount);
+  const investors = investorLeaderboard(companies);
+  const topInvestorByDeals = [...investors].sort((a, b) => b.dealCount - a.dealCount)[0] ?? null;
+  const totalRaised = companies.reduce((s, c) => s + c.totalRaisedUsd, 0);
+  const top5Raised = byRaised.slice(0, 5).reduce((s, c) => s + c.totalRaisedUsd, 0);
+
+  return {
+    largestRecipient: byRaised[0] ? { name: byRaised[0].name, totalRaisedUsd: byRaised[0].totalRaisedUsd } : null,
+    mostDealsRecipient: byDeals[0] ? { name: byDeals[0].name, dealCount: byDeals[0].dealCount } : null,
+    mostDealsInvestor: topInvestorByDeals ? { investor: topInvestorByDeals.investor, dealCount: topInvestorByDeals.dealCount } : null,
+    topFiveSharePct: totalRaised > 0 ? (top5Raised / totalRaised) * 100 : null,
+  };
+}

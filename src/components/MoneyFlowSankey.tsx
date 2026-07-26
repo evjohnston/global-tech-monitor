@@ -6,62 +6,57 @@ import { fmtUsd } from "../lib/format.ts";
 import { usePrefersReducedMotion } from "../lib/useReducedMotion.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
-const WIDTH = 680;
-const HEIGHT = 440;
+// WIDTH matches the v5 content container (--maxw: 1440px minus desktop
+// padding) so this renders at full content width instead of leaving a
+// fixed-1180px chart stranded with unused margin beside it on wide
+// viewports. HEIGHT meets the spec's 680px desktop minimum.
+const WIDTH = 1360;
+const HEIGHT = 680;
+const LABEL_MARGIN = 240;
+const TOP_MARGIN = 46; // room for the INVESTORS / RECIPIENT COMPANIES headings
 
-// Real investor -> company flow (see moneyFlow.ts) rendered as a hand-drawn
-// SVG sankey — d3-sankey supplies only the node/link layout math (node
-// x/y positions, link curve widths), same division of labor as WorldMap.tsx
-// using d3-geo purely for map projection while the actual rendering stays
-// plain JSX/SVG.
+// Real investor -> company DEAL-COUNT flow only (see moneyFlow.ts) — amount
+// mode was removed from the Sankey entirely (section 7B): when one company
+// dominates disclosed funding, a Sankey's proportional link width collapses
+// into one unreadable rectangle. Attributable disclosed amount is now its
+// own ranked-bars/matrix view (MoneyFlowRankedBars.tsx /
+// MoneyFlowMatrix.tsx), not this chart.
 //
-// Default state is readable before interaction: links start in a neutral
-// gray, only endpoint nodes carry the color budget. Hovering a node lights
-// up its own links and fades everything else; hovering/pinning a link does
-// the same for just that one path. Moving particles (native SVG
-// <animateMotion>, not a JS animation loop) only render on the currently
-// active link(s), at a fixed duration regardless of link size — density can
-// scale with a link's real weight, speed never does, so a thicker link
-// never reads as "money moving faster."
+// Full label margins on both sides so every visible node has a real,
+// always-on label (name + real activity counts) — no reader should have to
+// hover blindly to identify a node. d3-sankey supplies only the node/link
+// layout math (same division of labor as WorldMap.tsx using d3-geo purely
+// for map projection); rendering stays hand-rolled SVG.
 export function MoneyFlowSankey({
   companies,
-  emphasize,
-  measure: controlledMeasure,
-  onMeasureChange,
   onSelectInvestor,
   onSelectCompany,
   onSelectLink,
 }: {
   companies: VcCompanyFunding[];
-  emphasize?: string[];
-  measure?: "count" | "amount";
-  onMeasureChange?: (measure: "count" | "amount") => void;
   onSelectInvestor?: (name: string) => void;
   onSelectCompany?: (name: string) => void;
   onSelectLink?: (investor: string, companyId: string) => void;
 }) {
   const reducedMotion = usePrefersReducedMotion();
-  const [localMeasure, setLocalMeasure] = useState<"count" | "amount">("count");
-  const measure = controlledMeasure ?? localMeasure;
-  const setMeasure = onMeasureChange ?? setLocalMeasure;
-  const [particlesOn, setParticlesOn] = useState(true);
+  const [particlesOn, setParticlesOn] = useState(false); // off by default, per spec
   const [expanded, setExpanded] = useState(false);
   const [hoverNode, setHoverNode] = useState<string | null>(null);
   const [hoverLink, setHoverLink] = useState<number | null>(null);
   const [tip, setTip] = useState<{ x: number; y: number; content: React.ReactNode } | null>(null);
 
   const flow = useMemo(
-    () => buildMoneyFlow(companies, { measure, topInvestors: expanded ? MONEY_FLOW_TOP_INVESTORS * 2 : MONEY_FLOW_TOP_INVESTORS, topCompanies: expanded ? MONEY_FLOW_TOP_COMPANIES * 2 : MONEY_FLOW_TOP_COMPANIES }),
-    [companies, measure, expanded]
+    () => buildMoneyFlow(companies, { measure: "count", topInvestors: expanded ? MONEY_FLOW_TOP_INVESTORS * 2 : MONEY_FLOW_TOP_INVESTORS, topCompanies: expanded ? MONEY_FLOW_TOP_COMPANIES * 2 : MONEY_FLOW_TOP_COMPANIES }),
+    [companies, expanded]
   );
 
   const graph = useMemo(() => {
     if (flow.nodes.length === 0 || flow.links.length === 0) return null;
     const layout = sankey<MoneyFlowNode, { value: number; dealCount: number }>()
       .nodeId((d) => d.id)
-      .nodeWidth(10)
-      .nodePadding(10)
-      .extent([[1, 1], [WIDTH - 1, HEIGHT - 1]]);
+      .nodeWidth(14)
+      .nodePadding(12)
+      .extent([[LABEL_MARGIN, TOP_MARGIN], [WIDTH - LABEL_MARGIN, HEIGHT - 20]]);
     return layout({
       nodes: flow.nodes.map((n) => ({ ...n })),
       links: flow.links.map((l) => ({ source: l.source, target: l.target, value: l.value, dealCount: l.dealCount })),
@@ -69,7 +64,7 @@ export function MoneyFlowSankey({
   }, [flow]);
 
   if (!graph) {
-    return <div className="trend-empty">Not enough overlapping deal activity yet to draw a flow diagram{measure === "amount" ? " with disclosed, unsyndicated amounts" : ""}.</div>;
+    return <div className="trend-empty">Not enough overlapping deal activity yet to draw a flow diagram.</div>;
   }
 
   const linkPath = sankeyLinkHorizontal();
@@ -85,135 +80,138 @@ export function MoneyFlowSankey({
   return (
     <div>
       <div className="tab-bar">
-        <button className="chip" aria-pressed={measure === "count"} onClick={() => setMeasure("count")}>Deal count</button>
-        <button className="chip" aria-pressed={measure === "amount"} onClick={() => setMeasure("amount")}>Disclosed amount</button>
         <button className="chip" aria-pressed={particlesOn} onClick={() => setParticlesOn((p) => !p)}>Particles {particlesOn ? "on" : "off"}</button>
         {(flow.omittedInvestors > 0 || flow.omittedCompanies > 0 || expanded) && (
           <button className="chip" aria-pressed={expanded} onClick={() => setExpanded((e) => !e)}>{expanded ? "Show fewer" : "Show more"}</button>
         )}
         <button className="chip" onClick={() => { setHoverNode(null); setHoverLink(null); }}>Reset</button>
       </div>
-      {measure === "amount" && (
-        <div className="trend-note" style={{ marginBottom: 6 }}>
-          Amount mode only counts unsyndicated (single-investor) rounds — a syndicated round's amount can't be honestly split per co-investor.
-        </div>
+
+      <div className="sankey-legend">
+        <span><span className="sankey-legend-swatch" style={{ background: "var(--red)" }} /> Investor</span>
+        <span><span className="sankey-legend-swatch" style={{ background: "var(--ink)" }} /> Recipient company</span>
+        <span>Link width = real tracked deal count</span>
+        <span>Particles show direction only, fixed speed, off by default</span>
+        <span>Top {expanded ? MONEY_FLOW_TOP_INVESTORS * 2 : MONEY_FLOW_TOP_INVESTORS} investors × top {expanded ? MONEY_FLOW_TOP_COMPANIES * 2 : MONEY_FLOW_TOP_COMPANIES} companies by activity — see below for what's excluded</span>
+      </div>
+      {expanded && (
+        <div className="trend-note" style={{ marginBottom: 6 }}>Showing more nodes than the default — labels and links get denser and harder to trace at this size.</div>
       )}
+
       <div className="sankey-scroll">
-      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} width={WIDTH} style={{ minWidth: WIDTH, maxWidth: "100%" }} height={HEIGHT} role="img" aria-label="Investor to company deal flow">
-        {graph.links.map((l, i) => {
-          const source = l.source as SankeyNode<MoneyFlowNode, { value: number; dealCount: number }>;
-          const target = l.target as SankeyNode<MoneyFlowNode, { value: number; dealCount: number }>;
-          const d = linkPath(l as never);
-          if (!d) return null;
-          const active = isLinkActive(i, source.id, target.id);
-          const compareFaded = !!emphasize?.length; // country emphasize doesn't map onto investor/company nodes — no-op here, kept for prop-shape consistency
-          void compareFaded;
-          const width = Math.max(1, l.width ?? 1);
-          const particleCount = particlesOn && !reducedMotion && active ? Math.max(1, Math.round(Math.sqrt(l.value / maxValue) * 3)) : 0;
-          return (
-            <g key={i}>
-              <path
-                id={`sankey-link-${i}`}
-                d={d}
-                fill="none"
-                stroke={active ? "var(--red)" : "var(--slate)"}
-                strokeOpacity={anyHover ? (active ? 0.85 : 0.07) : 0.32}
-                strokeWidth={active ? width + 1.5 : width}
-                style={{ cursor: onSelectLink ? "pointer" : "default", transition: "stroke-opacity 0.15s, stroke-width 0.15s" }}
-                role={onSelectLink ? "button" : undefined}
-                tabIndex={onSelectLink ? 0 : undefined}
-                aria-label={onSelectLink ? `${source.label} to ${target.label}, ${l.dealCount} deals` : undefined}
-                onMouseEnter={() => setHoverLink(i)}
-                onMouseLeave={() => { setHoverLink(null); setTip(null); }}
+        <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} width={WIDTH} style={{ minWidth: WIDTH, maxWidth: "100%" }} height={HEIGHT} role="img" aria-label="Investor to company deal flow">
+          <text x={LABEL_MARGIN} y={24} fontSize={11} fontWeight={700} letterSpacing="0.06em" fill="var(--mist)">INVESTORS</text>
+          <text x={WIDTH - LABEL_MARGIN} y={24} fontSize={11} fontWeight={700} letterSpacing="0.06em" fill="var(--mist)" textAnchor="end">RECIPIENT COMPANIES</text>
+
+          {graph.links.map((l, i) => {
+            const source = l.source as SankeyNode<MoneyFlowNode, { value: number; dealCount: number }>;
+            const target = l.target as SankeyNode<MoneyFlowNode, { value: number; dealCount: number }>;
+            const d = linkPath(l as never);
+            if (!d) return null;
+            const active = isLinkActive(i, source.id, target.id);
+            const width = Math.max(1, l.width ?? 1);
+            const particleCount = particlesOn && !reducedMotion && active ? Math.max(1, Math.round(Math.sqrt(l.value / maxValue) * 3)) : 0;
+            return (
+              <g key={i}>
+                <path
+                  id={`sankey-link-${i}`}
+                  d={d}
+                  fill="none"
+                  stroke={active ? "var(--red)" : "var(--slate)"}
+                  strokeOpacity={anyHover ? (active ? 0.85 : 0.07) : 0.32}
+                  strokeWidth={active ? width + 1.5 : width}
+                  style={{ cursor: onSelectLink ? "pointer" : "default", transition: "stroke-opacity 0.15s, stroke-width 0.15s" }}
+                  role={onSelectLink ? "button" : undefined}
+                  tabIndex={onSelectLink ? 0 : undefined}
+                  aria-label={onSelectLink ? `${source.label} to ${target.label}, ${l.dealCount} deals` : undefined}
+                  onMouseEnter={() => setHoverLink(i)}
+                  onMouseLeave={() => { setHoverLink(null); setTip(null); }}
+                  onMouseMove={(e) =>
+                    setTip({
+                      x: e.clientX,
+                      y: e.clientY,
+                      content: (
+                        <>
+                          <div style={{ fontWeight: 600 }}>{source.label} → {target.label}</div>
+                          <div>{l.dealCount} tracked deal{l.dealCount === 1 ? "" : "s"}</div>
+                          <div style={{ color: "var(--mist)", fontSize: 10 }}>S&P Capital IQ · click for the underlying transactions</div>
+                        </>
+                      ),
+                    })
+                  }
+                  onClick={() => onSelectLink?.(source.id, target.id)}
+                  onKeyDown={(e) => { if (onSelectLink && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelectLink(source.id, target.id); } }}
+                />
+                {Array.from({ length: particleCount }).map((_, pi) => (
+                  <circle key={pi} r={2.2} fill="var(--red)">
+                    <animateMotion dur="1.6s" repeatCount="indefinite" begin={`${(pi * 1.6) / particleCount}s`}>
+                      <mpath href={`#sankey-link-${i}`} />
+                    </animateMotion>
+                  </circle>
+                ))}
+              </g>
+            );
+          })}
+          {graph.nodes.map((n, i) => {
+            const x0 = n.x0 ?? 0, x1 = n.x1 ?? 0, y0 = n.y0 ?? 0, y1 = n.y1 ?? 0;
+            const isInvestor = n.kind === "investor";
+            const isHovered = hoverNode === n.id;
+            const faded = anyHover && !isHovered && hoverLink == null;
+            const onSelect = isInvestor ? onSelectInvestor : onSelectCompany;
+            const nameLine = n.label.length > 30 ? `${n.label.slice(0, 29)}…` : n.label;
+            const detailLine = isInvestor
+              ? `${n.dealCount} tracked deal${n.dealCount === 1 ? "" : "s"} · ${n.companyCount ?? 0} compan${(n.companyCount ?? 0) === 1 ? "y" : "ies"}`
+              : n.totalRaisedUsd
+                ? `${n.dealCount} tracked round${n.dealCount === 1 ? "" : "s"} · ${fmtUsd(n.totalRaisedUsd)} disclosed`
+                : `${n.dealCount} tracked round${n.dealCount === 1 ? "" : "s"}`;
+            return (
+              <g
+                key={i}
+                opacity={faded ? 0.35 : 1}
+                style={{ cursor: onSelect ? "pointer" : "default", outline: "none" }}
+                role={onSelect ? "button" : undefined}
+                tabIndex={onSelect ? 0 : undefined}
+                aria-label={onSelect ? `${n.label}, ${detailLine}` : undefined}
+                onMouseEnter={() => setHoverNode(n.id)}
+                onMouseLeave={() => { setHoverNode(null); setTip(null); }}
                 onMouseMove={(e) =>
                   setTip({
                     x: e.clientX,
                     y: e.clientY,
                     content: (
                       <>
-                        <div style={{ fontWeight: 600 }}>{source.label} → {target.label}</div>
-                        <div>{l.dealCount} tracked deal{l.dealCount === 1 ? "" : "s"}</div>
-                        {measure === "amount" && <div>{fmtUsd(l.value)} disclosed (unsyndicated rounds only)</div>}
-                        <div style={{ color: "var(--mist)", fontSize: 10 }}>S&P Capital IQ · click for the underlying transactions</div>
+                        <div style={{ fontWeight: 600 }}>{n.label}</div>
+                        <div>{detailLine}</div>
+                        <div style={{ color: "var(--mist)", fontSize: 10 }}>{isInvestor ? "Investor" : "Company"} · S&P Capital IQ</div>
                       </>
                     ),
                   })
                 }
-                onClick={() => onSelectLink?.(source.id, target.id)}
-                onKeyDown={(e) => { if (onSelectLink && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelectLink(source.id, target.id); } }}
-              />
-              {Array.from({ length: particleCount }).map((_, pi) => (
-                <circle key={pi} r={2.2} fill="var(--red)">
-                  <animateMotion dur="1.6s" repeatCount="indefinite" begin={`${(pi * 1.6) / particleCount}s`}>
-                    <mpath href={`#sankey-link-${i}`} />
-                  </animateMotion>
-                </circle>
-              ))}
-            </g>
-          );
-        })}
-        {graph.nodes.map((n, i) => {
-          const x0 = n.x0 ?? 0, x1 = n.x1 ?? 0, y0 = n.y0 ?? 0, y1 = n.y1 ?? 0;
-          const isInvestor = n.kind === "investor";
-          const label = n.label.length > 26 ? `${n.label.slice(0, 25)}…` : n.label;
-          const isHovered = hoverNode === n.id;
-          const faded = anyHover && !isHovered && hoverLink == null;
-          const onSelect = isInvestor ? onSelectInvestor : onSelectCompany;
-          return (
-            <g
-              key={i}
-              opacity={faded ? 0.35 : 1}
-              style={{ cursor: onSelect ? "pointer" : "default", outline: "none" }}
-              role={onSelect ? "button" : undefined}
-              tabIndex={onSelect ? 0 : undefined}
-              aria-label={onSelect ? `${n.label}, ${n.dealCount} deals` : undefined}
-              onMouseEnter={() => setHoverNode(n.id)}
-              onMouseLeave={() => { setHoverNode(null); setTip(null); }}
-              onMouseMove={(e) =>
-                setTip({
-                  x: e.clientX,
-                  y: e.clientY,
-                  content: (
-                    <>
-                      <div style={{ fontWeight: 600 }}>{n.label}</div>
-                      <div>{n.dealCount} tracked deal{n.dealCount === 1 ? "" : "s"}</div>
-                      <div style={{ color: "var(--mist)", fontSize: 10 }}>{isInvestor ? "Investor" : "Company"} · S&P Capital IQ, top {isInvestor ? MONEY_FLOW_TOP_INVESTORS : MONEY_FLOW_TOP_COMPANIES}-by-activity only</div>
-                    </>
-                  ),
-                })
-              }
-              onClick={() => onSelect?.(n.id)}
-              onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelect(n.id); } }}
-            >
-              <rect x={x0} y={y0} width={Math.max(1, x1 - x0)} height={Math.max(1, y1 - y0)} fill={isInvestor ? "var(--red)" : "var(--ink)"} />
-              <text
-                x={isInvestor ? x0 - 6 : x1 + 6}
-                y={(y0 + y1) / 2}
-                textAnchor={isInvestor ? "end" : "start"}
-                dominantBaseline="middle"
-                fontSize={9.5}
-                fontWeight={isHovered ? 700 : 400}
-                fill="var(--ink-2)"
+                onClick={() => onSelect?.(n.id)}
+                onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelect(n.id); } }}
               >
-                {label}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
+                <rect x={x0} y={y0} width={Math.max(1, x1 - x0)} height={Math.max(1, y1 - y0)} fill={isInvestor ? "var(--red)" : "var(--ink)"} />
+                <text x={isInvestor ? x0 - 8 : x1 + 8} y={(y0 + y1) / 2 - 5} textAnchor={isInvestor ? "end" : "start"} fontSize={10.5} fontWeight={isHovered ? 700 : 600} fill="var(--ink)">
+                  {nameLine}
+                </text>
+                <text x={isInvestor ? x0 - 8 : x1 + 8} y={(y0 + y1) / 2 + 8} textAnchor={isInvestor ? "end" : "start"} fontSize={9} fill="var(--mist)">
+                  {detailLine}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
       </div>
       {tip && <Tooltip x={tip.x} y={tip.y}>{tip.content}</Tooltip>}
       {(flow.omittedInvestors > 0 || flow.omittedCompanies > 0) && (
         <div className="trend-note" style={{ marginTop: 4, fontSize: 11 }}>
-          Top {expanded ? MONEY_FLOW_TOP_INVESTORS * 2 : MONEY_FLOW_TOP_INVESTORS} investors × top {expanded ? MONEY_FLOW_TOP_COMPANIES * 2 : MONEY_FLOW_TOP_COMPANIES} companies by disclosed deal activity —
-          {" "}+{flow.omittedInvestors} more investors, +{flow.omittedCompanies} more companies not shown.
+          +{flow.omittedInvestors} more investors, +{flow.omittedCompanies} more companies with real, smaller tracked activity — not shown here.
         </div>
       )}
       <div className="cap">
-        {measure === "count"
-          ? "link width = real disclosed deal count between that investor and company, not a dollar amount — a syndicated round's full amount can't be honestly split per co-investor"
-          : "link width = real disclosed dollars from unsyndicated (single-investor) rounds only — syndicated rounds contribute to deal-count mode but not here"}
-        {" "}(see "Who's writing the checks"). Particle motion shows direction only, at a fixed speed — it is not a measure of momentum or amount.
+        link width = real disclosed deal count between that investor and company · a company's disclosed total (shown
+        as text, never as link width) is its own real all-time raise, not attributed to any one investor · particle
+        motion shows direction only, at a fixed speed regardless of link size — it is not a measure of momentum or amount
       </div>
     </div>
   );

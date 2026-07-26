@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Entry, Stage } from "../lib/types.ts";
 import { STAGES } from "../lib/types.ts";
 import { Card } from "./Card.tsx";
+import { EmptyState } from "./ChartFrame.tsx";
 
 type SortKey = "date" | "amount" | "relevance";
 const SORTS: { key: SortKey; label: string; compare: (a: Entry, b: Entry) => number }[] = [
@@ -68,7 +69,7 @@ export function RecordExplorer({
         </div>
         <div className="record-explorer-body">
           {filtered.length === 0 ? (
-            <div className="trend-empty" style={{ padding: "22px 14px", textAlign: "center" }}>no records match this search</div>
+            <EmptyState>No records match this search — try widening the filters or date range.</EmptyState>
           ) : (
             filtered.map((e) => <Card key={e.id} entry={e} onSelect={onSelectEntry} />)
           )}
