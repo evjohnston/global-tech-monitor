@@ -61,6 +61,12 @@ const SORT_OPTIONS: Partial<Record<Stage, SortOption[]>> = {
   ],
 };
 
+// Shown inline per column before "View all" takes over — real records, not
+// a placeholder count, just capped so four columns don't each carry their
+// own permanently-visible internal scrollbar (the "four nested scrollbars"
+// problem). The full list is always one click away via RecordExplorer.
+const INLINE_LIMIT = 8;
+
 export function StageColumn({
   stage,
   entries,
@@ -68,6 +74,7 @@ export function StageColumn({
   highlightOrg,
   id,
   onSelectEntry,
+  onViewAll,
 }: {
   stage: Stage;
   entries: Entry[];
@@ -75,6 +82,7 @@ export function StageColumn({
   highlightOrg?: string | null;
   id?: string;
   onSelectEntry?: (entry: Entry) => void;
+  onViewAll?: (stage: Stage) => void;
 }) {
   const meta = STAGES.find((s) => s.id === stage)!;
   const typeFilters = TYPE_FILTERS[stage];
@@ -149,8 +157,13 @@ export function StageColumn({
       <div className="stage-body" ref={bodyRef}>
         {display.length === 0
           ? <div className="trend-empty" style={{ padding: "22px 14px", textAlign: "center" }}>no entries for this filter</div>
-          : display.map((e) => <Card key={e.id} entry={e} dim={hasFilter && !matches(e)} onSelect={onSelectEntry} />)}
+          : display.slice(0, INLINE_LIMIT).map((e) => <Card key={e.id} entry={e} dim={hasFilter && !matches(e)} onSelect={onSelectEntry} />)}
       </div>
+      {entries.length > INLINE_LIMIT && (
+        <button className="viewall stage-viewall" onClick={() => onViewAll?.(stage)}>
+          View all {entries.length} entries →
+        </button>
+      )}
     </section>
   );
 }

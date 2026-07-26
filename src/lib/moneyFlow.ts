@@ -1,4 +1,4 @@
-import type { VcCompanyFunding } from "./types.ts";
+import type { VcCompanyFunding, VcDeal } from "./types.ts";
 import { canonicalizeOrg } from "./entityResolution.ts";
 
 export interface MoneyFlowNode {
@@ -11,7 +11,8 @@ export interface MoneyFlowNode {
 export interface MoneyFlowLink {
   source: string;
   target: string;
-  value: number; // real deal count between this investor and this company — never a dollar amount, see note below
+  value: number; // real deal count OR real unsyndicated disclosed amount, see buildMoneyFlow
+  dealCount: number; // always the real deal count, regardless of `measure` — for tooltips
 }
 
 export interface MoneyFlowData {
@@ -24,27 +25,34 @@ export interface MoneyFlowData {
 export const MONEY_FLOW_TOP_INVESTORS = 12;
 export const MONEY_FLOW_TOP_COMPANIES = 15;
 
+export interface MoneyFlowOptions {
+  topInvestors?: number;
+  topCompanies?: number;
+  // "count" (default) weights a link by real deal count. "amount" weights
+  // it by real disclosed dollars, but ONLY from unsyndicated deals (exactly
+  // one investor) — a syndicated round's full amount can't be honestly
+  // attributed to one co-investor without double-counting across the
+  // others (same reasoning vcInvestors.ts documents), so syndicated deals
+  // simply don't contribute to "amount" mode rather than being force-split.
+  measure?: "count" | "amount";
+  from?: string | null;
+  to?: string | null;
+}
+
 // Real investor -> company flow, restricted to the top N companies by
 // disclosed total raised (same ranking VcFundingLeaderboard uses) and the
-// top M investors by deal count within that set. Link weight is a real deal
-// count, deliberately NOT a dollar amount — the same reasoning
-// vcInvestors.ts already documents: a syndicated round's full disclosed
-// amount can't be honestly attributed to one co-investor without
-// double-counting across every other investor on that round. A Sankey's
-// link width just needs an honest, non-fabricated weight; deal count is
-// that, dollars aren't for this data.
-export function buildMoneyFlow(
-  companies: VcCompanyFunding[],
-  topInvestors = MONEY_FLOW_TOP_INVESTORS,
-  topCompanies = MONEY_FLOW_TOP_COMPANIES
-): MoneyFlowData {
+// top M investors by deal count within that set.
+export function buildMoneyFlow(companies: VcCompanyFunding[], opts: MoneyFlowOptions = {}): MoneyFlowData {
+  const { topInvestors = MONEY_FLOW_TOP_INVESTORS, topCompanies = MONEY_FLOW_TOP_COMPANIES, measure = "count", from, to } = opts;
+  const inRange = (d: VcDeal) => (!from || !d.date || d.date >= from) && (!to || !d.date || d.date <= to);
+
   const sortedCompanies = [...companies].sort((a, b) => b.totalRaisedUsd - a.totalRaisedUsd);
   const shownCompanies = sortedCompanies.slice(0, topCompanies);
 
-  // Nested map (investor -> companyId -> deal count) rather than a joined
-  // string key — investor names and company ids can both contain arbitrary
-  // characters, so any single-string delimiter risks a collision.
-  const pairCounts = new Map<string, Map<string, number>>();
+  // Nested map (investor -> companyId -> {count, amount}) rather than a
+  // joined string key — investor names and company ids can both contain
+  // arbitrary characters, so any single-string delimiter risks a collision.
+  const pairStats = new Map<string, Map<string, { count: number; amount: number }>>();
   const investorTotal = new Map<string, number>();
   const companyLabel = new Map<string, string>();
   const companyDealCount = new Map<string, number>();
@@ -52,15 +60,20 @@ export function buildMoneyFlow(
   for (const c of shownCompanies) {
     const companyId = canonicalizeOrg(c.name).id;
     companyLabel.set(companyId, c.name);
-    companyDealCount.set(companyId, (companyDealCount.get(companyId) ?? 0) + c.dealCount);
-    for (const deal of c.deals) {
+    const dealsInRange = c.deals.filter(inRange);
+    companyDealCount.set(companyId, (companyDealCount.get(companyId) ?? 0) + dealsInRange.length);
+    for (const deal of dealsInRange) {
+      const unsyndicatedAmount = deal.investors.length === 1 && deal.amountUsd != null ? deal.amountUsd : 0;
       for (const investor of deal.investors) {
-        let byCompany = pairCounts.get(investor);
+        let byCompany = pairStats.get(investor);
         if (!byCompany) {
           byCompany = new Map();
-          pairCounts.set(investor, byCompany);
+          pairStats.set(investor, byCompany);
         }
-        byCompany.set(companyId, (byCompany.get(companyId) ?? 0) + 1);
+        const cur = byCompany.get(companyId) ?? { count: 0, amount: 0 };
+        cur.count += 1;
+        cur.amount += unsyndicatedAmount;
+        byCompany.set(companyId, cur);
         investorTotal.set(investor, (investorTotal.get(investor) ?? 0) + 1);
       }
     }
@@ -72,14 +85,16 @@ export function buildMoneyFlow(
   const links: MoneyFlowLink[] = [];
   const linkedCompanyIds = new Set<string>();
   for (const investor of topInvestorNames) {
-    for (const [companyId, value] of pairCounts.get(investor) ?? []) {
-      links.push({ source: investor, target: companyId, value });
+    for (const [companyId, stats] of pairStats.get(investor) ?? []) {
+      const value = measure === "amount" ? stats.amount : stats.count;
+      if (value <= 0) continue; // an amount-mode pair with only syndicated deals has nothing honest to show
+      links.push({ source: investor, target: companyId, value, dealCount: stats.count });
       linkedCompanyIds.add(companyId);
     }
   }
 
   const nodes: MoneyFlowNode[] = [
-    ...topInvestorNames.map((name) => ({ id: name, label: name, kind: "investor" as const, dealCount: investorTotal.get(name) ?? 0 })),
+    ...topInvestorNames.filter((name) => linkedCompanyIds.size > 0 && links.some((l) => l.source === name)).map((name) => ({ id: name, label: name, kind: "investor" as const, dealCount: investorTotal.get(name) ?? 0 })),
     ...[...linkedCompanyIds].map((id) => ({ id, label: companyLabel.get(id) ?? id, kind: "company" as const, dealCount: companyDealCount.get(id) ?? 0 })),
   ];
 
@@ -89,4 +104,14 @@ export function buildMoneyFlow(
     omittedInvestors: Math.max(0, rankedInvestors.length - topInvestorNames.length),
     omittedCompanies: Math.max(0, shownCompanies.length - linkedCompanyIds.size),
   };
+}
+
+// Real underlying deals for one Sankey link (a specific investor-company
+// pair) — feeds the metadata drawer / "open underlying transactions" click,
+// and the Sankey link tooltip's disclosed-amount/date/round-type fields.
+export function dealsForLink(companies: VcCompanyFunding[], investor: string, companyId: string): { company: VcCompanyFunding; deals: VcDeal[] } | null {
+  const company = companies.find((c) => canonicalizeOrg(c.name).id === companyId);
+  if (!company) return null;
+  const deals = company.deals.filter((d) => d.investors.includes(investor));
+  return { company, deals };
 }

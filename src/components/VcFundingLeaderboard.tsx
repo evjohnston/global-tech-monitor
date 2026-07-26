@@ -11,7 +11,7 @@ import { fmtUsd } from "../lib/format.ts";
 // rather than silently dropped.
 const TOP_N = 25;
 
-export function VcFundingLeaderboard({ companies }: { companies: VcCompanyFunding[] }) {
+export function VcFundingLeaderboard({ companies, onSelect }: { companies: VcCompanyFunding[]; onSelect?: (name: string) => void }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   if (companies.length === 0) return null;
 
@@ -42,7 +42,14 @@ export function VcFundingLeaderboard({ companies }: { companies: VcCompanyFundin
                   title="Click to see individual rounds"
                 >
                   <td className="rank">{i + 1}</td>
-                  <td className="org-name">{c.name}</td>
+                  <td className="org-name">
+                    {c.name}
+                    {onSelect && (
+                      <button className="drawer-link-btn" onClick={(e) => { e.stopPropagation(); onSelect(c.name); }} aria-label={`Open ${c.name} profile`} title="Open company profile" style={{ marginLeft: 6 }}>
+                        →
+                      </button>
+                    )}
+                  </td>
                   <td className="right count">{fmtUsd(c.totalRaisedUsd)}</td>
                   <td className="right count">{c.dealCount}</td>
                 </tr>

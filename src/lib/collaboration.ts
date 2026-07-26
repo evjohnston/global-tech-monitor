@@ -44,3 +44,20 @@ export function collaborationTotalsByCountry(edges: CollaborationEdge[]): Record
   }
   return totals;
 }
+
+// The real papers behind one edge — feeds the metadata drawer's "view
+// underlying records" for a collaboration pair, and the collaboration
+// network's edge-hover/click drill-down.
+export function entriesForCollaboration(entries: Entry[], a: string, b: string): Entry[] {
+  return entries.filter((e) => e.collaboratingCountries?.includes(a) && e.collaboratingCountries?.includes(b));
+}
+
+// Top partners for one country, by edge weight — feeds the "5 strongest
+// partners" side list on hover.
+export function topPartnersFor(edges: CollaborationEdge[], country: string, n = 5): { partner: string; count: number }[] {
+  return edges
+    .filter((e) => e.a === country || e.b === country)
+    .map((e) => ({ partner: e.a === country ? e.b : e.a, count: e.count }))
+    .sort((x, y) => y.count - x.count)
+    .slice(0, n);
+}

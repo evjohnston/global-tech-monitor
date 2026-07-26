@@ -5,7 +5,7 @@ import { fmtUsd } from "../lib/format.ts";
 // same real companies[].amountUsd data the trend chart's tooltip only ever
 // summarized as a count, one row per ticker, source-tagged (sec vs capiq,
 // see CLAUDE.md's "Foreign R&D spend" section for why both exist).
-export function RdSpendBreakdown({ points }: { points: RdSpendPoint[] }) {
+export function RdSpendBreakdown({ points, onSelect }: { points: RdSpendPoint[]; onSelect?: (symbol: string) => void }) {
   if (points.length === 0) return null;
   const latest = points[points.length - 1];
   const sorted = [...latest.companies].sort((a, b) => b.amountUsd - a.amountUsd);
@@ -23,7 +23,14 @@ export function RdSpendBreakdown({ points }: { points: RdSpendPoint[] }) {
         </thead>
         <tbody>
           {sorted.map((c) => (
-            <tr key={c.symbol}>
+            <tr
+              key={c.symbol}
+              className={onSelect ? "clickable" : undefined}
+              tabIndex={onSelect ? 0 : undefined}
+              onClick={() => onSelect?.(c.symbol)}
+              onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelect(c.symbol); } }}
+              title={onSelect ? "Click for company details" : undefined}
+            >
               <td className="org-name" style={{ fontFamily: "var(--mono)", fontSize: 10.5 }}>{c.symbol}</td>
               <td className="right count">{fmtUsd(c.amountUsd)}</td>
               <td className="right count" style={{ textTransform: "uppercase", fontSize: 9.5 }}>{c.source}</td>

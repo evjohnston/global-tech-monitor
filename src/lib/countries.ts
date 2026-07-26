@@ -39,6 +39,24 @@ export function countryName(code: string | null | undefined): string {
   return COMMON_NAME[code] ?? countries.getName(code, "en") ?? code;
 }
 
+const COMMON_NAME_REVERSE: Record<string, string> = Object.fromEntries(
+  Object.entries(COMMON_NAME).map(([code, name]) => [name.toLowerCase(), code])
+);
+
+// Reverse of countryName() — a human-readable name (as typed into a URL's
+// ?countries=china,india, or read back out of one) to the real alpha-2 code
+// every other lookup in this app keys off. i18n-iso-countries' own fuzzy
+// name matching handles most cases; COMMON_NAME_REVERSE covers the same
+// handful this file already overrides for display (e.g. "china" rather
+// than "People's Republic of China").
+export function codeFromCountryName(name: string): string | null {
+  const trimmed = name.trim();
+  if (!trimmed) return null;
+  const lower = trimmed.toLowerCase();
+  if (COMMON_NAME_REVERSE[lower]) return COMMON_NAME_REVERSE[lower];
+  return countries.getAlpha2Code(trimmed, "en") ?? null;
+}
+
 // world-atlas / Natural Earth topojson keys each country feature by its ISO
 // 3166-1 NUMERIC code (e.g. "840" for US), not the alpha-2 code every data
 // source in this app uses. This is the bridge between the two.

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent } from "react";
 import { ComposableMap, Geographies, Geography, useGeographies, ZoomableGroup } from "react-simple-maps";
 import { geoArea, geoCentroid } from "d3-geo";
 import worldLow from "world-atlas/countries-110m.json";
@@ -166,6 +166,10 @@ function MapBody({
                     fill={muted ? `rgb(${(dark ? MUTED_RGB_DARK : MUTED_RGB).join(",")})` : heatColor(count, max, dark)}
                     stroke="var(--line)"
                     strokeWidth={0.5}
+                    className="map-geography"
+                    tabIndex={code && onSelect ? 0 : -1}
+                    role={code && onSelect ? "button" : undefined}
+                    aria-label={code ? `${countryName(code)}, ${count} ${count === 1 ? "entry" : "entries"}` : undefined}
                     style={{
                       default: { outline: "none", transition: "fill 0.2s" },
                       hover: { outline: "none", fill: "var(--red)", cursor: code && onSelect ? "pointer" : "default" },
@@ -174,6 +178,7 @@ function MapBody({
                     onMouseMove={(e: ReactMouseEvent) => code && setTip({ x: e.clientX, y: e.clientY, code })}
                     onMouseLeave={() => setTip(null)}
                     onClick={() => code && onSelect?.(code)}
+                    onKeyDown={(e: ReactKeyboardEvent) => { if (code && onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelect(code); } }}
                   />
                 );
               })

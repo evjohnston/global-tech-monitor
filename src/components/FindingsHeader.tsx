@@ -11,11 +11,13 @@ export function FindingsHeader({
   generated,
   updatedAgo,
   coverageLabel,
+  onSelectCard,
 }: {
   entries: Entry[];
   generated: string;
   updatedAgo: string | null;
   coverageLabel: string;
+  onSelectCard?: (card: ReturnType<typeof computeFindings>[number]) => void;
 }) {
   const cards = computeFindings(entries);
   const headlineText = headline(cards);
@@ -25,7 +27,7 @@ export function FindingsHeader({
       {cards.length > 0 && (
         <div className="finding-grid">
           {cards.map((c) => (
-            <FindingCard key={c.key} card={c} />
+            <FindingCard key={c.key} card={c} onSelect={onSelectCard} />
           ))}
         </div>
       )}

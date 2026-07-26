@@ -199,6 +199,22 @@ export function countByCountryAndStage(entries: Entry[]): Record<string, Record<
   return out;
 }
 
+// Real entries belonging to one canonical org id — the org-drawer
+// counterpart to filtering entries by country. Falls back to computing
+// canonicalizeOrg on the fly for entries ingested before orgId was stamped
+// (same fallback orgLeaderboard already uses).
+export function entriesForOrg(entries: Entry[], orgId: string): Entry[] {
+  return entries.filter((e) => e.org && (e.orgId ?? canonicalizeOrg(e.org).id) === orgId);
+}
+
+// 1-based rank of one org among every org tracked in a stage, by entry
+// count — the org-drawer counterpart to rankOf() for countries.
+export function orgRankOf(entries: Entry[], orgId: string, stage?: Stage): number | null {
+  const rows = orgLeaderboard(entries, stage, Number.MAX_SAFE_INTEGER);
+  const idx = rows.findIndex((r) => (r.org ? canonicalizeOrg(r.org).id : "") === orgId);
+  return idx < 0 ? null : idx + 1;
+}
+
 // 1-based rank of a country within a count map, or null when it has no
 // counted activity at all — never invent a rank for absence of data.
 // Ties get the same (dense) rank: a country is ranked N+1 where N is how

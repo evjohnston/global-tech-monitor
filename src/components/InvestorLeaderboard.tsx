@@ -8,7 +8,15 @@ import { investorLeaderboard } from "../lib/vcInvestors.ts";
 // pattern as VcFundingLeaderboard, reusing the same .lb table styling.
 const TOP_N = 25;
 
-export function InvestorLeaderboard({ companies }: { companies: VcCompanyFunding[] }) {
+export function InvestorLeaderboard({
+  companies,
+  onSelectInvestor,
+  onSelectCompany,
+}: {
+  companies: VcCompanyFunding[];
+  onSelectInvestor?: (name: string) => void;
+  onSelectCompany?: (name: string) => void;
+}) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const rows = investorLeaderboard(companies);
   if (rows.length === 0) return null;
@@ -37,7 +45,14 @@ export function InvestorLeaderboard({ companies }: { companies: VcCompanyFunding
                   title="Click to see companies backed"
                 >
                   <td className="rank">{i + 1}</td>
-                  <td className="org-name">{r.investor}</td>
+                  <td className="org-name">
+                    {r.investor}
+                    {onSelectInvestor && (
+                      <button className="drawer-link-btn" onClick={(e) => { e.stopPropagation(); onSelectInvestor(r.investor); }} aria-label={`Open ${r.investor} profile`} title="Open investor profile" style={{ marginLeft: 6 }}>
+                        →
+                      </button>
+                    )}
+                  </td>
                   <td className="right count">{r.dealCount}</td>
                   <td className="right count">{r.companies.length}</td>
                 </tr>
@@ -48,7 +63,11 @@ export function InvestorLeaderboard({ companies }: { companies: VcCompanyFunding
                       <div className="vc-deals">
                         {r.companies.map((co) => (
                           <div key={co.orgId} className="vc-deal-row">
-                            <span>{co.name}</span>
+                            {onSelectCompany ? (
+                              <button className="drawer-link-btn" onClick={() => onSelectCompany(co.name)}>{co.name}</button>
+                            ) : (
+                              <span>{co.name}</span>
+                            )}
                           </div>
                         ))}
                       </div>

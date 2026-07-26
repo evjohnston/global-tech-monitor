@@ -11,7 +11,7 @@ import { fmtUsd } from "../lib/format.ts";
 // instrument" design language. No red/green up-down color — this app's
 // color budget is spent on the Hoover accent and country hues only (see
 // CLAUDE.md's design system); direction is conveyed with a +/- sign.
-export function CompanyMarketPanel({ companies }: { companies: CompanySnapshot[] }) {
+export function CompanyMarketPanel({ companies, onSelect }: { companies: CompanySnapshot[]; onSelect?: (name: string) => void }) {
   if (companies.length === 0) return null;
   const asOf = companies[0]?.asOf ? new Date(companies[0].asOf).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "";
   const sorted = [...companies].sort((a, b) => (b.marketCapUsd ?? 0) - (a.marketCapUsd ?? 0));
@@ -33,10 +33,20 @@ export function CompanyMarketPanel({ companies }: { companies: CompanySnapshot[]
           </thead>
           <tbody>
             {sorted.map((c, i) => (
-              <tr key={c.symbol} className="clickable" onClick={() => window.open(c.url, "_blank", "noopener,noreferrer")} title={`as of ${new Date(c.asOf).toLocaleString()}`}>
+              <tr
+                key={c.symbol}
+                className="clickable"
+                tabIndex={onSelect ? 0 : undefined}
+                onClick={() => onSelect?.(c.name)}
+                onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelect(c.name); } }}
+                title={`as of ${new Date(c.asOf).toLocaleString()} · click for details`}
+              >
                 <td className="rank">{i + 1}</td>
                 <td className="org-name" style={{ fontFamily: "var(--mono)", fontSize: 10.5 }}>{c.symbol}</td>
-                <td className="org-name" style={{ maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name}</td>
+                <td className="org-name" style={{ maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {c.name}{" "}
+                  <a href={c.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} aria-label={`${c.name} website ↗`} title="Visit company site">↗</a>
+                </td>
                 <td className="right count">{c.price != null ? `$${c.price.toFixed(2)}` : "—"}</td>
                 <td className="right count">{c.marketCapUsd != null ? fmtUsd(c.marketCapUsd) : "—"}</td>
                 <td className="right count">

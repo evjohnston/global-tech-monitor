@@ -17,7 +17,6 @@ import { WorldMap } from "./components/WorldMap.tsx";
 import { Leaderboard } from "./components/Leaderboard.tsx";
 import { RecentEntries } from "./components/RecentEntries.tsx";
 import { PieChart } from "./components/PieChart.tsx";
-import { EntryModal } from "./components/EntryModal.tsx";
 import { fmtUsd } from "./lib/format.ts";
 import { STAGE_COLOR } from "./lib/stageColor.ts";
 import { StageComposition } from "./components/StageComposition.tsx";
@@ -33,17 +32,24 @@ import { VcFundingLeaderboard } from "./components/VcFundingLeaderboard.tsx";
 import { InvestorLeaderboard } from "./components/InvestorLeaderboard.tsx";
 import { MoneyFlowSankey } from "./components/MoneyFlowSankey.tsx";
 import { PanelTabs } from "./components/PanelTabs.tsx";
-import { buildOrgFinancialIndex, lookupOrgFinancials } from "./lib/orgFinancials.ts";
+import { buildOrgFinancialIndex } from "./lib/orgFinancials.ts";
 import { FindingsHeader } from "./components/FindingsHeader.tsx";
 import { ChangeLog } from "./components/ChangeLog.tsx";
 import { CompareRibbon } from "./components/CompareRibbon.tsx";
 import { BumpChart } from "./components/BumpChart.tsx";
 import { QuadrantChart } from "./components/QuadrantChart.tsx";
 import { MomentumTable } from "./components/MomentumTable.tsx";
-import { CountryProfileDrawer } from "./components/CountryProfileDrawer.tsx";
-import { biggestDisconnect } from "./lib/findings.ts";
+import { MetadataDrawer } from "./components/MetadataDrawer.tsx";
+import { SelectionBar } from "./components/SelectionBar.tsx";
+import { RecordExplorer } from "./components/RecordExplorer.tsx";
+import { MethodNote } from "./components/MethodNote.tsx";
+import { biggestDisconnect, type FindingCard as FindingCardData } from "./lib/findings.ts";
+import type { ChangeLogItem } from "./lib/changeLog.ts";
 import { innovationByCountryClaim, fundingByCountryClaim, bumpChartClaim, collaborationClaim } from "./lib/claims.ts";
 import { CollaborationNetwork } from "./components/CollaborationNetwork.tsx";
+import { canonicalizeOrg } from "./lib/entityResolution.ts";
+import type { DrawerTarget } from "./lib/drawerTarget.ts";
+import { readUrlState, writeUrlState } from "./lib/urlState.ts";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
@@ -74,23 +80,29 @@ export default function App() {
   const [verticalId, setVerticalId] = useState(VERTICALS[0].id);
   const vertical = VERTICALS.find((v) => v.id === verticalId) ?? VERTICALS[0];
   const [data, setData] = useState<DataFile | null>(null);
-  const [country, setCountry] = useState<string | "all">("all");
-  const [stage, setStage] = useState<Stage | "all">("all");
+  // Every piece of shared selection state initializes from the URL in one
+  // pass (readUrlState, src/lib/urlState.ts) — a shared link restores the
+  // exact same view: mode, comparison set, single filters, date range, and
+  // whatever record was pinned in the metadata drawer.
+  const initialUrlState = useRef(readUrlState()).current;
+  const [country, setCountry] = useState<string | "all">(initialUrlState.country);
+  const [stage, setStage] = useState<Stage | "all">(initialUrlState.stage);
+  const [dateRange, setDateRange] = useState<{ from: string | null; to: string | null }>({ from: initialUrlState.from, to: initialUrlState.to });
   const [mode, setMode] = useState<LiveMode>("loading");
   const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
-  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   // "Story" (findings-led, default) vs. "Explore" (today's full dashboard).
-  const [view, setView] = useState<"story" | "explore">("story");
+  const [view, setView] = useState<"story" | "explore">(initialUrlState.mode);
   // Persistent 2-4 country comparison, independent of the single `country`
   // hard filter above — this one highlights across charts instead of
-  // narrowing the page. Initialized from ?compare=US,CN,GB so a shared URL
-  // restores the same selection.
-  const [compareCountries, setCompareCountries] = useState<string[]>(() => {
-    const raw = new URLSearchParams(window.location.search).get("compare");
-    if (!raw) return [];
-    return raw.split(",").map((c) => c.trim().toUpperCase()).filter(Boolean).slice(0, 4);
-  });
-  const [profileCountry, setProfileCountry] = useState<string | null>(null);
+  // narrowing the page.
+  const [compareCountries, setCompareCountries] = useState<string[]>(initialUrlState.compareCountries);
+  // One pinned "what's open in the metadata drawer" value shared by every
+  // chart/table/map (src/lib/drawerTarget.ts) — replaces the old separate
+  // selectedEntry/profileCountry state pairs so there's exactly one
+  // consistent pin/drawer model across the whole app.
+  const [drawerTarget, setDrawerTarget] = useState<DrawerTarget | null>(initialUrlState.record);
+  const [sankeyMeasure, setSankeyMeasure] = useState<"count" | "amount">(initialUrlState.sankeyMeasure);
+  const [recordExplorerStage, setRecordExplorerStage] = useState<Stage | null>(null);
   const [dark, setDark] = useState<boolean>(() => {
     const saved = localStorage.getItem("gtm-theme");
     if (saved === "dark" || saved === "light") return saved === "dark";
@@ -114,18 +126,14 @@ export default function App() {
     localStorage.setItem("gtm-theme", dark ? "dark" : "light");
   }, [dark]);
 
-  // Keeps the comparison selection shareable — a reader can copy the URL
-  // and reload it with the same countries highlighted. replaceState, not
-  // pushState: this is a selection, not real navigation, so it shouldn't
-  // pile up back-button entries.
+  // Keeps every selection shareable — a reader can copy the URL and reload
+  // it with the same mode/comparison/filters/date range/pinned record
+  // restored (see readUrlState in the initializers above). replaceState,
+  // not pushState: this is a selection, not real navigation, so it
+  // shouldn't pile up back-button entries.
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (compareCountries.length > 0) params.set("compare", compareCountries.join(","));
-    else params.delete("compare");
-    const query = params.toString();
-    const url = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
-    window.history.replaceState(null, "", url);
-  }, [compareCountries]);
+    writeUrlState({ mode: view, compareCountries, country, stage, from: dateRange.from, to: dateRange.to, record: drawerTarget, sankeyMeasure });
+  }, [view, compareCountries, country, stage, dateRange, drawerTarget, sankeyMeasure]);
 
   // A real ticking clock — "12s ago" against the actual last-fetch
   // timestamp, not a fabricated animation. nowTick just forces a re-render
@@ -141,6 +149,8 @@ export default function App() {
     setMode(cached ? "static" : "loading");
     setCountry("all");
     setStage("all");
+    setDateRange({ from: null, to: null });
+    setDrawerTarget(null);
     setHighlightOrg(null);
     const dataUrl = `${import.meta.env.BASE_URL}data/${vertical.id}.json`;
     fetch(dataUrl)
@@ -163,8 +173,15 @@ export default function App() {
   // `trend`/the data file itself; this is a display-only slice.
   const trend21 = useMemo(() => trend.slice(-21), [trend]);
   const shown = useMemo(
-    () => entries.filter((e) => (country === "all" || e.country === country) && (stage === "all" || e.stage === stage)),
-    [entries, country, stage]
+    () =>
+      entries.filter(
+        (e) =>
+          (country === "all" || e.country === country) &&
+          (stage === "all" || e.stage === stage) &&
+          (!dateRange.from || !e.date || e.date >= dateRange.from) &&
+          (!dateRange.to || !e.date || e.date <= dateRange.to)
+      ),
+    [entries, country, stage, dateRange]
   );
 
   const byStage = useMemo(() => {
@@ -215,6 +232,16 @@ export default function App() {
   // src/lib/orgFinancials.ts. Built once per data load, looked up per
   // selected entry when the modal opens.
   const orgFinancialIndex = useMemo(() => buildOrgFinancialIndex(data ?? {}), [data]);
+  // R&D spend only carries a ticker symbol, not a company name (see
+  // RdSpendPoint) — resolves it against the real company snapshots before
+  // opening an org drawer, since entriesForOrg matches on org NAME, not
+  // ticker. Falls back to the raw symbol if there's no matching snapshot
+  // (rare — a CapIQ-only foreign filer with no Massive market-cap data);
+  // the drawer's own "not found" state handles that gracefully.
+  const symbolToCompanyName = useMemo(() => new Map((data?.companies ?? []).map((c) => [c.symbol, c.name])), [data]);
+  function openOrgDrawerBySymbol(symbol: string) {
+    openOrgDrawer(symbolToCompanyName.get(symbol) ?? symbol);
+  }
 
   // Real, un-summed totals for the capital-cluster KPI strip — each stays
   // its own distinct pool (never blended into one figure), same discipline
@@ -340,22 +367,55 @@ export default function App() {
   function filterToCountry(c: string) {
     setCountry(c);
   }
-  // Clicking a country on the map or the flagship "by country" chart opens
-  // its profile drawer instead of hard-filtering the page immediately — the
-  // drawer is where a reader chooses to filter or add it to the comparison
-  // ribbon (see CountryProfileDrawer.tsx). Deliberately scoped to these two
-  // primary surfaces, not every bar/row on the page — StageComposition,
-  // SmallMultiples, and the top filter chips keep their existing direct
-  // toggleCountry behavior.
-  function openCountryProfile(c: string) {
-    setProfileCountry(c);
+  // One consistent pin model for the whole app — click opens+pins the
+  // metadata drawer; clicking the chart background or pressing Escape
+  // clears it (handled by MetadataDrawer's own backdrop/Escape). Every
+  // click handler below routes through this instead of a per-entity-type
+  // state variable.
+  function openTarget(t: DrawerTarget) {
+    setDrawerTarget(t);
   }
-  function selectOrg(org: string) {
+  function openCountryProfile(c: string) {
+    openTarget({ kind: "country", code: c });
+  }
+  function openOrgDrawer(org: string) {
+    openTarget({ kind: "org", orgId: canonicalizeOrg(org).id });
+  }
+  function openEntryDrawer(entry: Entry) {
+    openTarget({ kind: "entry", id: entry.id });
+  }
+  // The org drawer's own "Highlight in the pipeline" action — closes the
+  // drawer so the highlighted cards are actually visible underneath it.
+  function highlightOrgInPipeline(org: string) {
+    setDrawerTarget(null);
     setHighlightOrg((prev) => (prev === org ? null : org));
     document.getElementById("stage-innovation")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
   function scrollToStage(s: Stage) {
     document.getElementById(`stage-${s}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  // Story finding cards / "since the last update" items carry their own
+  // real activation target (findings.ts / changeLog.ts) — clicking one
+  // sets whichever filters it names, scrolls to the chart that supports
+  // it, and opens the drawer on the specific entity the claim is about.
+  function activateFinding(card: FindingCardData) {
+    if (card.activateCountry) setCountry(card.activateCountry);
+    if (card.activateStage) setStage(card.activateStage);
+    document.getElementById(card.scrollToId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    openTarget(card.drawerTarget);
+  }
+  function activateChangeLogItem(item: ChangeLogItem) {
+    if (item.activateCountry) setCountry(item.activateCountry);
+    if (item.drawerTarget) openTarget(item.drawerTarget);
+  }
+  function clearAllSelections() {
+    setCompareCountries([]);
+    setCountry("all");
+    setStage("all");
+    setDateRange({ from: null, to: null });
+  }
+  function copySelectionLink() {
+    navigator.clipboard?.writeText(window.location.href).catch(() => {});
   }
 
   return (
@@ -392,7 +452,7 @@ export default function App() {
         </div>
       </div>
 
-      <NewsTicker entries={shown} onSelect={setSelectedEntry} />
+      <NewsTicker entries={shown} onSelect={openEntryDrawer} />
 
       <div className="wrap">
         <div className="pagehead">
@@ -407,32 +467,49 @@ export default function App() {
           <button className="chip" aria-pressed={view === "explore"} onClick={() => setView("explore")}>Explore</button>
         </div>
 
+        <SelectionBar
+          compareCountries={compareCountries}
+          country={country}
+          stage={stage}
+          from={dateRange.from}
+          to={dateRange.to}
+          onClearAll={clearAllSelections}
+          onCopyLink={copySelectionLink}
+        />
+
         {view === "story" && (
           <>
-            <FindingsHeader entries={entries} generated={generated} updatedAgo={updatedAgo} coverageLabel={coverageLabel} />
-            <ChangeLog entries={entries} />
+            <FindingsHeader entries={entries} generated={generated} updatedAgo={updatedAgo} coverageLabel={coverageLabel} onSelectCard={activateFinding} />
+            <ChangeLog entries={entries} onSelectItem={activateChangeLogItem} />
             <CompareRibbon
               entries={entries}
               available={topFilterCountries.map((c) => c.country)}
               selected={compareCountries}
               onToggle={toggleCompareCountry}
             />
-            <div className="panel">
-              <h3>{bumpClaimTitle} <span className="drop">where is activity growing?</span></h3>
-              <BumpChart entries={entries} emphasize={compareCountries} />
+            <div className="panel" id="story-bump-chart">
+              <h3>
+                {bumpClaimTitle} <span className="drop">where is activity growing?</span>
+                <MethodNote>Rank reconstructed from real entry dates at 6 points across the trailing 90 days — not a stored daily series. Investment counts NSF grants and disclosed private rounds together as activity, never their blended dollar totals.</MethodNote>
+              </h3>
+              <BumpChart entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} />
             </div>
-            <div className="panel">
+            <div className="panel" id="story-quadrant">
               <h3>
                 {quadrantClaimTitle}
                 <span className="drop">research vs. adoption</span>
+                <MethodNote>Position = each country's share of tracked research/adoption output, not raw counts. Bubble size = investment-stage entry count (grants and disclosed private rounds, never a dollar total). Excludes countries with zero research and zero adoption activity.</MethodNote>
               </h3>
-              <QuadrantChart entries={entries} emphasize={compareCountries} />
+              <QuadrantChart entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} />
             </div>
-            <div className="panel">
-              <h3>{collaborationClaimTitle} <span className="drop">which countries depend on one another?</span></h3>
-              <CollaborationNetwork entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} />
+            <div className="panel" id="story-collab">
+              <h3>
+                {collaborationClaimTitle} <span className="drop">which countries depend on one another?</span>
+                <MethodNote>An edge is one real paper whose authors' institutions span 2+ countries with resolvable data (OpenAlex). Domestic-only papers and works with no resolvable institution data contribute nothing. This shows who has co-published, not a claim about who depends on whom.</MethodNote>
+              </h3>
+              <CollaborationNetwork entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} onSelectPair={(a, b) => openTarget({ kind: "collaboration", a, b })} />
             </div>
-            <div className="panel">
+            <div className="panel" id="story-momentum">
               <h3>Who's gaining momentum <span className="drop">scale, growth, and concentration side by side</span></h3>
               <MomentumTable entries={entries} />
             </div>
@@ -460,6 +537,21 @@ export default function App() {
               {s.label}
             </button>
           ))}
+        </div>
+        <div className="controls">
+          <span className="lbl">Date range</span>
+          <label className="date-input">
+            <span className="sr-only">From date</span>
+            <input type="date" value={dateRange.from ?? ""} onChange={(e) => setDateRange((d) => ({ ...d, from: e.target.value || null }))} />
+          </label>
+          <span className="lbl" style={{ margin: "0 2px" }}>to</span>
+          <label className="date-input">
+            <span className="sr-only">To date</span>
+            <input type="date" value={dateRange.to ?? ""} onChange={(e) => setDateRange((d) => ({ ...d, to: e.target.value || null }))} />
+          </label>
+          {(dateRange.from || dateRange.to) && (
+            <button className="chip" onClick={() => setDateRange({ from: null, to: null })}>Clear dates</button>
+          )}
         </div>
 
         <div className="kpirow">
@@ -492,7 +584,7 @@ export default function App() {
           />
         </div>
 
-        <TopCitedTicker entries={entries} onSelect={setSelectedEntry} />
+        <TopCitedTicker entries={entries} onSelect={openEntryDrawer} />
 
         <div className="row-map">
           <div className="row-map-stack">
@@ -543,7 +635,10 @@ export default function App() {
             />
           </div>
           <div className="panel map-panel">
-            <h3>Where the work happens</h3>
+            <h3>
+              Where the work happens
+              <MethodNote>Every country with at least one attributed work is shaded — darker means more output, sqrt-scaled so a couple of dominant countries don't wash out smaller real ones. Innovation-stage only. Country attribution is a lead, not a verdict — hover any country for its real evidence.</MethodNote>
+            </h3>
             <div className="map-fill">
               <WorldMap
                 counts={innovationCounts}
@@ -562,7 +657,7 @@ export default function App() {
 
         <div className="panel">
           <h3>{collaborationClaimTitle} <span className="drop">real cross-border co-authorship</span></h3>
-          <CollaborationNetwork entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} />
+          <CollaborationNetwork entries={entries} emphasize={compareCountries} onSelectCountry={openCountryProfile} onSelectPair={(a, b) => openTarget({ kind: "collaboration", a, b })} />
         </div>
 
         <div className="panel">
@@ -591,7 +686,7 @@ export default function App() {
                 label: "Top 6",
                 render: () => (
                   <>
-                    <Leaderboard rows={orgRows} unit="works" onSelect={selectOrg} activeOrg={highlightOrg} />
+                    <Leaderboard rows={orgRows} unit="works" onSelect={openOrgDrawer} activeOrg={highlightOrg} />
                     {highlightOrg && <button className="viewall" onClick={() => setHighlightOrg(null)}>Clear highlight ({highlightOrg}) →</button>}
                   </>
                 ),
@@ -602,7 +697,7 @@ export default function App() {
                 render: () => (
                   <>
                     <div className="trend-note" style={{ marginBottom: 8 }}>institutions by tracked output · colored by country</div>
-                    <InstitutionConcentration rows={orgRows20} onSelect={selectOrg} activeOrg={highlightOrg} />
+                    <InstitutionConcentration rows={orgRows20} onSelect={openOrgDrawer} activeOrg={highlightOrg} />
                   </>
                 ),
               },
@@ -610,7 +705,7 @@ export default function App() {
           />
           <div className="panel">
             <h3>Recent entries</h3>
-            <RecentEntries entries={shown} limit={6} onSelect={setSelectedEntry} />
+            <RecentEntries entries={shown} limit={6} onSelect={openEntryDrawer} />
           </div>
         </div>
 
@@ -635,7 +730,7 @@ export default function App() {
           </div>
           <div className="trend-note" style={{ marginBottom: 8 }}>four distinct real pools, not summed into one figure — see each panel below for detail</div>
 
-          {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} />}
+          {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} onSelect={openOrgDrawer} />}
 
           <PanelTabs
             title={fundingClaimTitle}
@@ -716,13 +811,26 @@ export default function App() {
               newBadge
               tabs={[
                 ...(data?.rdSpend && data.rdSpend.length > 0
-                  ? [{ key: "rd", label: "R&D by company", render: () => <RdSpendBreakdown points={data.rdSpend!} /> }]
+                  ? [{ key: "rd", label: "R&D by company", render: () => <RdSpendBreakdown points={data.rdSpend!} onSelect={openOrgDrawerBySymbol} /> }]
                   : []),
                 ...(data?.vcFunding && data.vcFunding.length > 0
                   ? [
-                      { key: "vc", label: "Who's getting it", render: () => <VcFundingLeaderboard companies={data.vcFunding!} /> },
-                      { key: "investors", label: "Who's writing checks", render: () => <InvestorLeaderboard companies={data.vcFunding!} /> },
-                      { key: "flow", label: "Money flow", render: () => <MoneyFlowSankey companies={data.vcFunding!} /> },
+                      { key: "vc", label: "Who's getting it", render: () => <VcFundingLeaderboard companies={data.vcFunding!} onSelect={openOrgDrawer} /> },
+                      { key: "investors", label: "Who's writing checks", render: () => <InvestorLeaderboard companies={data.vcFunding!} onSelectInvestor={(name) => openTarget({ kind: "investor", name })} onSelectCompany={openOrgDrawer} /> },
+                      {
+                        key: "flow",
+                        label: "Money flow",
+                        render: () => (
+                          <MoneyFlowSankey
+                            companies={data.vcFunding!}
+                            measure={sankeyMeasure}
+                            onMeasureChange={setSankeyMeasure}
+                            onSelectInvestor={(name) => openTarget({ kind: "investor", name })}
+                            onSelectCompany={openOrgDrawer}
+                            onSelectLink={(investor, companyId) => openTarget({ kind: "sankeyLink", investor, companyId })}
+                          />
+                        ),
+                      },
                     ]
                   : []),
               ]}
@@ -745,7 +853,8 @@ export default function App() {
                 entries={byStage[s.id]}
                 note={latestNote[s.id]}
                 highlightOrg={s.id === "innovation" ? highlightOrg : null}
-                onSelectEntry={setSelectedEntry}
+                onSelectEntry={openEntryDrawer}
+                onViewAll={setRecordExplorerStage}
               />
             ))}
           </div>
@@ -780,23 +889,27 @@ export default function App() {
         </footer>
       </div>
 
-      {selectedEntry && (
-        <EntryModal
-          entry={selectedEntry}
-          orgFinancials={lookupOrgFinancials(orgFinancialIndex, selectedEntry.org)}
-          onClose={() => setSelectedEntry(null)}
+      {recordExplorerStage && (
+        <RecordExplorer
+          stage={recordExplorerStage}
+          entries={byStage[recordExplorerStage]}
+          onClose={() => setRecordExplorerStage(null)}
+          onSelectEntry={(entry) => { setRecordExplorerStage(null); openEntryDrawer(entry); }}
         />
       )}
 
-      {profileCountry && (
-        <CountryProfileDrawer
-          country={profileCountry}
-          entries={entries}
+      {drawerTarget && data && (
+        <MetadataDrawer
+          target={drawerTarget}
+          data={data}
           trend={trend}
+          orgFinancialIndex={orgFinancialIndex}
           compareCountries={compareCountries}
-          onClose={() => setProfileCountry(null)}
-          onFilter={filterToCountry}
+          onClose={() => setDrawerTarget(null)}
+          onFilterCountry={filterToCountry}
           onToggleCompare={toggleCompareCountry}
+          onOpenTarget={openTarget}
+          onHighlightOrg={highlightOrgInPipeline}
         />
       )}
     </>

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { Entry } from "../lib/types.ts";
 import { buildBumpData, type BumpMeasure } from "../lib/bumpChart.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
+import { Tooltip } from "./Tooltip.tsx";
 
 const MEASURES: { key: BumpMeasure; label: string }[] = [
   { key: "publications", label: "Publications" },
@@ -15,9 +16,21 @@ const MEASURES: { key: BumpMeasure; label: string }[] = [
 // same hand-rolled SVG approach as TrendChart.tsx (this app has no charting
 // library, see CLAUDE.md), just plotting integer rank instead of percent
 // share. `emphasize` fades every other country when a comparison selection
-// is active, same convention as the other charts that take it.
-export function BumpChart({ entries, emphasize }: { entries: Entry[]; emphasize?: string[] }) {
+// is active, same convention as the other charts that take it. Clicking a
+// country's line pins it (opens the shared metadata drawer via
+// onSelectCountry) — same click model as the map and every other chart.
+export function BumpChart({
+  entries,
+  emphasize,
+  onSelectCountry,
+}: {
+  entries: Entry[];
+  emphasize?: string[];
+  onSelectCountry?: (country: string) => void;
+}) {
   const [measure, setMeasure] = useState<BumpMeasure>("publications");
+  const [hoverCountry, setHoverCountry] = useState<string | null>(null);
+  const [tip, setTip] = useState<{ x: number; y: number; country: string; rank: number; date: string } | null>(null);
   const data = useMemo(() => buildBumpData(entries, measure), [entries, measure]);
 
   const hasData = data.series.some((s) => s.ranks.some((r) => r != null));
@@ -51,19 +64,37 @@ export function BumpChart({ entries, emphasize }: { entries: Entry[]; emphasize?
             if (points.length === 0) return null;
             const d = points.map((p, idx) => `${idx === 0 ? "M" : "L"} ${x(p.i).toFixed(1)} ${y(p.r).toFixed(1)}`).join(" ");
             const last = points[points.length - 1];
+            const hovered = hoverCountry === s.country;
             return (
-              <g key={s.country} opacity={faded ? 0.25 : 1}>
-                <path d={d} fill="none" stroke={countryColor(s.country)} strokeWidth={faded ? 1.5 : 2.5} strokeLinejoin="round" />
+              <g
+                key={s.country}
+                opacity={faded && !hovered ? 0.25 : 1}
+                role={onSelectCountry ? "button" : undefined}
+                tabIndex={onSelectCountry ? 0 : undefined}
+                aria-label={onSelectCountry ? `${countryName(s.country)}, rank ${last.r}` : undefined}
+                style={{ cursor: onSelectCountry ? "pointer" : "default", outline: "none" }}
+                onClick={() => onSelectCountry?.(s.country)}
+                onKeyDown={(e) => { if (onSelectCountry && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelectCountry(s.country); } }}
+                onMouseEnter={() => setHoverCountry(s.country)}
+                onMouseLeave={() => { setHoverCountry(null); setTip(null); }}
+                onMouseMove={(e) => setTip({ x: e.clientX, y: e.clientY, country: s.country, rank: last.r, date: data.dates[data.dates.length - 1] })}
+              >
+                <path d={d} fill="none" stroke={countryColor(s.country)} strokeWidth={hovered ? 3.5 : faded ? 1.5 : 2.5} strokeLinejoin="round" />
                 {points.map((p) => (
-                  <circle key={p.i} cx={x(p.i)} cy={y(p.r)} r={3} fill={countryColor(s.country)} />
+                  <circle key={p.i} cx={x(p.i)} cy={y(p.r)} r={hovered ? 4 : 3} fill={countryColor(s.country)} />
                 ))}
-                <text x={x(last.i) + 7} y={y(last.r)} fontSize={10} dominantBaseline="middle" fill="var(--ink-2)">
+                <text x={x(last.i) + 7} y={y(last.r)} fontSize={10} dominantBaseline="middle" fill="var(--ink-2)" fontWeight={hovered ? 700 : 400}>
                   {countryName(s.country)} · #{last.r}
                 </text>
               </g>
             );
           })}
         </svg>
+      )}
+      {tip && (
+        <Tooltip x={tip.x} y={tip.y}>
+          {countryName(tip.country)} · #{tip.rank} · {tip.date}{onSelectCountry ? " · click for profile" : ""}
+        </Tooltip>
       )}
       <div className="cap">
         rank reconstructed from real entry dates at {n} points across the trailing 90 days, not a stored daily series

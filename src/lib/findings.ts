@@ -3,6 +3,8 @@ import { STAGES } from "./types.ts";
 import { countByCountry, concentrationShare, orgLeaderboard, countryShares } from "./aggregate.ts";
 import { entriesAsOf, daysAgo } from "./history.ts";
 import { countryName } from "./countries.ts";
+import { canonicalizeOrg } from "./entityResolution.ts";
+import type { DrawerTarget } from "./drawerTarget.ts";
 
 export interface FindingCard {
   key: "fastestRiser" | "largestLead" | "biggestDisconnect" | "mostConcentrated";
@@ -10,6 +12,17 @@ export interface FindingCard {
   value: string;
   deltaLabel?: string;
   context: string;
+  // What clicking this card should do — real, computed targets, not a
+  // generic "learn more" link. activateCountry/activateStage set the
+  // page's existing filters; drawerTarget opens the metadata drawer on the
+  // specific entity the claim is about; scrollToId jumps to the chart that
+  // supports it; evidence is the literal numbers the claim was computed
+  // from, shown in the drawer's evidence section.
+  activateCountry?: string;
+  activateStage?: Stage;
+  drawerTarget: DrawerTarget;
+  scrollToId: string;
+  evidence: { label: string; value: string }[];
 }
 
 // How far back "fastest riser" looks for a real gain — same 42-day bar
@@ -24,8 +37,10 @@ const RISER_WINDOW_DAYS = 42;
 export function fastestRiser(entries: Entry[], now = new Date()): FindingCard | null {
   const past = entriesAsOf(entries, daysAgo(RISER_WINDOW_DAYS, now));
   if (past.length === 0) return null;
-  const pastShares = countryShares(countByCountry(past, "innovation"));
-  const currentShares = countryShares(countByCountry(entries, "innovation"));
+  const pastCounts = countByCountry(past, "innovation");
+  const currentCounts = countByCountry(entries, "innovation");
+  const pastShares = countryShares(pastCounts);
+  const currentShares = countryShares(currentCounts);
   let best: { country: string; gain: number } | null = null;
   for (const country of Object.keys(currentShares)) {
     const gain = currentShares[country] - (pastShares[country] ?? 0);
@@ -38,6 +53,15 @@ export function fastestRiser(entries: Entry[], now = new Date()): FindingCard | 
     value: countryName(best.country),
     deltaLabel: `+${best.gain.toFixed(1)}pt share`,
     context: `${countryName(best.country)}'s share of tracked innovation output rose ${best.gain.toFixed(1)} points over the trailing ${RISER_WINDOW_DAYS} days.`,
+    activateCountry: best.country,
+    drawerTarget: { kind: "country", code: best.country },
+    scrollToId: "story-bump-chart",
+    evidence: [
+      { label: `Innovation share, ${RISER_WINDOW_DAYS}d ago`, value: `${(pastShares[best.country] ?? 0).toFixed(1)}%` },
+      { label: "Innovation share, now", value: `${currentShares[best.country].toFixed(1)}%` },
+      { label: `Entries counted ${RISER_WINDOW_DAYS}d ago`, value: String(pastCounts[best.country] ?? 0) },
+      { label: "Entries counted now", value: String(currentCounts[best.country] ?? 0) },
+    ],
   };
 }
 
@@ -45,14 +69,16 @@ export function fastestRiser(entries: Entry[], now = new Date()): FindingCard | 
 // stage's total — real per-stage country counts (countByCountry already
 // supports a stage filter), no new counting logic.
 export function largestLead(entries: Entry[]): FindingCard | null {
-  let best: { stage: Stage; leader: string; gap: number } | null = null;
+  let best: { stage: Stage; leader: string; runnerUp: string; leaderCount: number; runnerUpCount: number; total: number; gap: number } | null = null;
   for (const s of STAGES) {
     const counts = countByCountry(entries, s.id);
     const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
     if (ranked.length < 2) continue;
     const total = ranked.reduce((sum, [, n]) => sum + n, 0) || 1;
     const gap = ((ranked[0][1] - ranked[1][1]) / total) * 100;
-    if (!best || gap > best.gap) best = { stage: s.id, leader: ranked[0][0], gap };
+    if (!best || gap > best.gap) {
+      best = { stage: s.id, leader: ranked[0][0], runnerUp: ranked[1][0], leaderCount: ranked[0][1], runnerUpCount: ranked[1][1], total, gap };
+    }
   }
   if (!best) return null;
   const stageLabel = STAGES.find((s) => s.id === best!.stage)!.label;
@@ -62,6 +88,16 @@ export function largestLead(entries: Entry[]): FindingCard | null {
     value: `${countryName(best.leader)} · ${stageLabel}`,
     deltaLabel: `${best.gap.toFixed(0)}pt gap to #2`,
     context: `${countryName(best.leader)} holds the widest gap over its nearest rival in ${stageLabel.toLowerCase()}.`,
+    activateCountry: best.leader,
+    activateStage: best.stage,
+    drawerTarget: { kind: "country", code: best.leader },
+    scrollToId: "story-momentum",
+    evidence: [
+      { label: `${countryName(best.leader)} entries`, value: String(best.leaderCount) },
+      { label: `${countryName(best.runnerUp)} entries (#2)`, value: String(best.runnerUpCount) },
+      { label: `Total tracked ${stageLabel.toLowerCase()} entries`, value: String(best.total) },
+      { label: "Gap as share of total", value: `${best.gap.toFixed(1)}pt` },
+    ],
   };
 }
 
@@ -70,8 +106,10 @@ export function largestLead(entries: Entry[]): FindingCard | null {
 // commercial conversion" (or the reverse), since adoption-stage entries are
 // literally deployment/procurement records, not a fabricated axis.
 export function biggestDisconnect(entries: Entry[]): FindingCard | null {
-  const innovation = countryShares(countByCountry(entries, "innovation"));
-  const adoption = countryShares(countByCountry(entries, "adoption"));
+  const innovationCounts = countByCountry(entries, "innovation");
+  const adoptionCounts = countByCountry(entries, "adoption");
+  const innovation = countryShares(innovationCounts);
+  const adoption = countryShares(adoptionCounts);
   const countries = new Set([...Object.keys(innovation), ...Object.keys(adoption)]);
   if (countries.size < 2) return null;
   let best: { country: string; gap: number } | null = null;
@@ -89,20 +127,29 @@ export function biggestDisconnect(entries: Entry[]): FindingCard | null {
     value: countryName(best.country),
     deltaLabel: `${Math.abs(best.gap).toFixed(1)}pt gap`,
     context,
+    activateCountry: best.country,
+    drawerTarget: { kind: "country", code: best.country },
+    scrollToId: "story-quadrant",
+    evidence: [
+      { label: "Innovation share", value: `${(innovation[best.country] ?? 0).toFixed(1)}%` },
+      { label: "Adoption share", value: `${(adoption[best.country] ?? 0).toFixed(1)}%` },
+      { label: "Innovation entries", value: String(innovationCounts[best.country] ?? 0) },
+      { label: "Adoption entries", value: String(adoptionCounts[best.country] ?? 0) },
+    ],
   };
 }
 
 // Stage where the single leading real org (entity-resolved, see
 // entityResolution.ts) accounts for the largest share of tracked activity.
 export function mostConcentrated(entries: Entry[]): FindingCard | null {
-  let best: { stage: Stage; top1Pct: number; org: string } | null = null;
+  let best: { stage: Stage; top1Pct: number; org: string; count: number; total: number } | null = null;
   for (const s of STAGES) {
     const total = entries.filter((e) => e.stage === s.id).length;
     if (total === 0) continue;
     const rows = orgLeaderboard(entries, s.id, 10);
     if (rows.length === 0) continue;
     const { top1Pct } = concentrationShare(rows, total);
-    if (!best || top1Pct > best.top1Pct) best = { stage: s.id, top1Pct, org: rows[0].org };
+    if (!best || top1Pct > best.top1Pct) best = { stage: s.id, top1Pct, org: rows[0].org, count: rows[0].count, total };
   }
   if (!best) return null;
   const stageLabel = STAGES.find((s) => s.id === best!.stage)!.label;
@@ -112,6 +159,14 @@ export function mostConcentrated(entries: Entry[]): FindingCard | null {
     value: stageLabel,
     deltaLabel: `${best.top1Pct.toFixed(0)}% from one org`,
     context: `${best.org} alone accounts for ${best.top1Pct.toFixed(0)}% of tracked ${stageLabel.toLowerCase()} activity.`,
+    activateStage: best.stage,
+    drawerTarget: { kind: "org", orgId: canonicalizeOrg(best.org).id },
+    scrollToId: "story-momentum",
+    evidence: [
+      { label: `${best.org} entries`, value: String(best.count) },
+      { label: `Total tracked ${stageLabel.toLowerCase()} entries`, value: String(best.total) },
+      { label: "Share held by this one org", value: `${best.top1Pct.toFixed(1)}%` },
+    ],
   };
 }
 
