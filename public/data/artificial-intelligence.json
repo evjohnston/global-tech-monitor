@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-07-26T19:17:00.657Z",
+  "generatedAt": "2026-07-26T20:37:00.657Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -96951,6 +96951,24 @@
       "ingestedAt": "2026-07-26T19:17:00.657Z",
       "orgId": "china jiliang university",
       "relevanceScore": 0.6
+    },
+    {
+      "id": "usaspending-HC105026F0009",
+      "stage": "adoption",
+      "country": "US",
+      "provenance": "live",
+      "source": "deployment",
+      "deploymentStatus": "procurement",
+      "title": "DEFENSE INFORMATION SYSTEMS AGENCY (DISA) CONCIERGE ARTIFICIAL INTELLIGENCE-UNCLASSIFIED (DCAI-U)",
+      "org": "MICROSOFT CORPORATION",
+      "date": "2026-04-06",
+      "url": "https://www.usaspending.gov/award/CONT_AWD_HC105026F0009_9700_HC105023D0003_9700",
+      "amountUsd": 97166.63,
+      "venue": "Department of Defense",
+      "countryEvidence": "US federal award recipient (USASpending.gov)",
+      "ingestedAt": "2026-07-26T20:37:00.657Z",
+      "orgId": "microsoft",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -97821,7 +97839,7 @@
         "investment": 241
       },
       "fundingUsd": 137300885,
-      "totalEntries": 4544
+      "totalEntries": 4545
     }
   ],
   "notes": [
@@ -97857,7 +97875,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -97878,56 +97896,70 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
+      "sourceName": "USASpending.gov (federal awards)",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
+      "pollCadence": "nightly (GitHub Actions) — free, no key",
+      "structuralLag": "USASpending typically posts within days to weeks of contract execution",
+      "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
+    },
+    {
+      "sourceName": "SAM.gov Opportunities (federal solicitations)",
+      "lastSuccessfulPull": null,
+      "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
+      "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
+      "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example"
+    },
+    {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-26T16:14:16.583Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-26T19:17:00.657Z",
+      "lastSuccessfulPull": "2026-07-26T20:37:00.657Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -97938,329 +97970,329 @@
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5009871640000,
-      "asOf": "2026-07-26T19:05:06.942Z",
+      "asOf": "2026-07-26T20:24:57.117Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "TSM",
       "name": "Taiwan Semiconductor Manufacturing Company Ltd.",
       "marketCapUsd": 2092275481584.33,
-      "asOf": "2026-07-26T19:05:22.016Z",
+      "asOf": "2026-07-26T20:25:12.176Z",
       "url": "https://www.tsmc.com"
     },
     {
       "symbol": "AVGO",
       "name": "Broadcom Inc. Common Stock",
       "marketCapUsd": 1817015029220.1602,
-      "asOf": "2026-07-26T19:05:37.145Z",
+      "asOf": "2026-07-26T20:25:27.303Z",
       "url": "https://www.broadcom.com"
     },
     {
       "symbol": "AMD",
       "name": "Advanced Micro Devices",
       "marketCapUsd": 851092003526.05,
-      "asOf": "2026-07-26T19:05:52.212Z",
+      "asOf": "2026-07-26T20:25:42.388Z",
       "url": "https://www.amd.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 674898269000,
-      "asOf": "2026-07-26T19:06:07.280Z",
+      "asOf": "2026-07-26T20:25:57.443Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "ARM",
       "name": "Arm Holdings plc American Depositary Shares",
       "marketCapUsd": 277711158387.6,
-      "asOf": "2026-07-26T19:06:22.416Z",
+      "asOf": "2026-07-26T20:26:12.499Z",
       "url": "https://www.arm.com"
     },
     {
       "symbol": "MRVL",
       "name": "Marvell Technology, Inc. Common Stock",
       "marketCapUsd": 174330053279.28998,
-      "asOf": "2026-07-26T19:06:37.535Z",
+      "asOf": "2026-07-26T20:26:27.631Z",
       "url": "https://www.marvell.com"
     },
     {
       "symbol": "QCOM",
       "name": "Qualcomm Inc",
       "marketCapUsd": 175986380000,
-      "asOf": "2026-07-26T19:06:52.666Z",
+      "asOf": "2026-07-26T20:26:42.692Z",
       "url": "https://www.qualcomm.com"
     },
     {
       "symbol": "MU",
       "name": "Micron Technology, Inc.",
       "marketCapUsd": 1040114622413.4501,
-      "asOf": "2026-07-26T19:07:07.849Z",
+      "asOf": "2026-07-26T20:26:57.819Z",
       "url": "https://www.micron.com"
     },
     {
       "symbol": "SMCI",
       "name": "Super Micro Computer, Inc. Common Stock",
       "marketCapUsd": 19470878112.7,
-      "asOf": "2026-07-26T19:07:22.925Z",
+      "asOf": "2026-07-26T20:27:12.945Z",
       "url": "https://www.supermicro.com"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 2835433526516.8,
-      "asOf": "2026-07-26T19:07:38.151Z",
+      "asOf": "2026-07-26T20:27:28.074Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3910399362863.94,
-      "asOf": "2026-07-26T19:07:53.210Z",
+      "asOf": "2026-07-26T20:27:43.224Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2496832671189.96,
-      "asOf": "2026-07-26T19:08:08.272Z",
+      "asOf": "2026-07-26T20:27:58.363Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "META",
       "name": "Meta Platforms, Inc. Class A Common Stock",
       "marketCapUsd": 1510844166307.7603,
-      "asOf": "2026-07-26T19:08:23.341Z",
+      "asOf": "2026-07-26T20:28:13.431Z",
       "url": "https://about.meta.com"
     },
     {
       "symbol": "CRWV",
       "name": "CoreWeave, Inc. Class A Common Stock",
       "marketCapUsd": 39215596470.479996,
-      "asOf": "2026-07-26T19:08:38.459Z",
+      "asOf": "2026-07-26T20:28:28.491Z",
       "url": "https://www.coreweave.com"
     },
     {
       "symbol": "NBIS",
       "name": "Nebius Group N.V. Class A Ordinary Shares",
       "marketCapUsd": 47674463887.380005,
-      "asOf": "2026-07-26T19:08:53.547Z",
+      "asOf": "2026-07-26T20:28:43.586Z",
       "url": "https://www.group.nebius.com"
     },
     {
       "symbol": "ORCL",
       "name": "Oracle Corp",
       "marketCapUsd": 331225360290,
-      "asOf": "2026-07-26T19:09:08.606Z",
+      "asOf": "2026-07-26T20:28:58.672Z",
       "url": "https://www.oracle.com"
     },
     {
       "symbol": "PLTR",
       "name": "Palantir Technologies Inc. Class A Common Stock",
       "marketCapUsd": 294677588212.84,
-      "asOf": "2026-07-26T19:09:23.694Z",
+      "asOf": "2026-07-26T20:29:13.758Z",
       "url": "https://www.palantir.com"
     },
     {
       "symbol": "AI",
       "name": "C3.ai, Inc.",
       "marketCapUsd": 1266911607.55,
-      "asOf": "2026-07-26T19:09:38.815Z",
+      "asOf": "2026-07-26T20:29:28.850Z",
       "url": "https://www.c3.ai"
     },
     {
       "symbol": "SOUN",
       "name": "SoundHound AI, Inc. Class A Common Stock",
       "marketCapUsd": 2683752948.8,
-      "asOf": "2026-07-26T19:09:53.946Z",
+      "asOf": "2026-07-26T20:29:43.949Z",
       "url": "https://www.soundhound.com"
     },
     {
       "symbol": "BBAI",
       "name": "BigBear.ai Holdings, Inc.",
       "marketCapUsd": 1321900482,
-      "asOf": "2026-07-26T19:10:09.012Z",
+      "asOf": "2026-07-26T20:29:59.081Z",
       "url": "https://www.bigbear.ai"
     },
     {
       "symbol": "INOD",
       "name": "Innodata Inc.",
       "marketCapUsd": 1825107958.6200001,
-      "asOf": "2026-07-26T19:10:24.078Z",
+      "asOf": "2026-07-26T20:30:14.137Z",
       "url": "https://www.innodata.com"
     },
     {
       "symbol": "PATH",
       "name": "UiPath, Inc.",
       "marketCapUsd": 5616423683.44,
-      "asOf": "2026-07-26T19:10:39.251Z",
+      "asOf": "2026-07-26T20:30:29.224Z",
       "url": "https://www.uipath.com"
     },
     {
       "symbol": "APP",
       "name": "Applovin Corporation Class A Common Stock",
       "marketCapUsd": 131681573441.58,
-      "asOf": "2026-07-26T19:10:54.310Z",
+      "asOf": "2026-07-26T20:30:44.280Z",
       "url": "https://www.applovin.com"
     },
     {
       "symbol": "CRM",
       "name": "Salesforce, Inc.",
       "marketCapUsd": 134037540000,
-      "asOf": "2026-07-26T19:11:09.435Z",
+      "asOf": "2026-07-26T20:30:59.340Z",
       "url": "https://www.salesforce.com"
     },
     {
       "symbol": "NOW",
       "name": "SERVICENOW, INC.",
       "marketCapUsd": 102124888360,
-      "asOf": "2026-07-26T19:11:24.582Z",
+      "asOf": "2026-07-26T20:31:14.395Z",
       "url": "https://www.servicenow.com"
     },
     {
       "symbol": "ADBE",
       "name": "Adobe Inc.",
       "marketCapUsd": 89481225000,
-      "asOf": "2026-07-26T19:11:39.732Z",
+      "asOf": "2026-07-26T20:31:29.489Z",
       "url": "https://www.adobe.com"
     },
     {
       "symbol": "SNOW",
       "name": "Snowflake Inc.",
       "marketCapUsd": 92909596000,
-      "asOf": "2026-07-26T19:11:54.799Z",
+      "asOf": "2026-07-26T20:31:44.577Z",
       "url": "https://www.snowflake.com"
     },
     {
       "symbol": "SAP",
       "name": "SAP SE",
       "marketCapUsd": 186809447680,
-      "asOf": "2026-07-26T19:12:09.854Z",
+      "asOf": "2026-07-26T20:31:59.659Z",
       "url": "https://www.sap.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 201795764994.1,
-      "asOf": "2026-07-26T19:12:24.908Z",
+      "asOf": "2026-07-26T20:32:14.714Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "MDB",
       "name": "MongoDB, Inc. Class A",
       "marketCapUsd": 23986409269.940002,
-      "asOf": "2026-07-26T19:12:40.089Z",
+      "asOf": "2026-07-26T20:32:29.818Z",
       "url": "https://www.mongodb.com"
     },
     {
       "symbol": "WDAY",
       "name": "Workday, Inc. Class A Common Stock",
       "marketCapUsd": 33425390647.86,
-      "asOf": "2026-07-26T19:12:55.232Z",
+      "asOf": "2026-07-26T20:32:44.906Z",
       "url": "https://www.workday.com"
     },
     {
       "symbol": "CRWD",
       "name": "CrowdStrike Holdings, Inc. Class A Common Stock",
       "marketCapUsd": 186626560838.4,
-      "asOf": "2026-07-26T19:13:10.287Z",
+      "asOf": "2026-07-26T20:32:59.987Z",
       "url": "https://www.crowdstrike.com"
     },
     {
       "symbol": "PANW",
       "name": "Palo Alto Networks, Inc. Common Stock",
       "marketCapUsd": 263888850000.00003,
-      "asOf": "2026-07-26T19:13:25.346Z",
+      "asOf": "2026-07-26T20:33:15.050Z",
       "url": "https://www.paloaltonetworks.com"
     },
     {
       "symbol": "DDOG",
       "name": "Datadog, Inc. Class A Common Stock",
       "marketCapUsd": 87872332256.54001,
-      "asOf": "2026-07-26T19:13:40.462Z",
+      "asOf": "2026-07-26T20:33:30.145Z",
       "url": "https://www.datadog.com"
     },
     {
       "symbol": "BABA",
       "name": "Alibaba Group Holding Limited American Depositary Shares, each represents eight Ordinary Shares",
       "marketCapUsd": 268785252096.48,
-      "asOf": "2026-07-26T19:13:55.552Z",
+      "asOf": "2026-07-26T20:33:45.288Z",
       "url": "https://www.alibabagroup.com"
     },
     {
       "symbol": "BIDU",
       "name": "Baidu, Inc.",
       "marketCapUsd": 35842215099.06,
-      "asOf": "2026-07-26T19:14:10.667Z",
+      "asOf": "2026-07-26T20:34:00.379Z",
       "url": "https://ir.baidu.com"
     },
     {
       "symbol": "VRT",
       "name": "Vertiv Holdings Co Class A Common Stock",
       "marketCapUsd": 111529835813.76001,
-      "asOf": "2026-07-26T19:14:25.738Z",
+      "asOf": "2026-07-26T20:34:15.586Z",
       "url": "https://www.vertiv.com"
     },
     {
       "symbol": "DELL",
       "name": "Dell Technologies Inc.",
       "marketCapUsd": 282687312250,
-      "asOf": "2026-07-26T19:14:40.908Z",
+      "asOf": "2026-07-26T20:34:30.682Z",
       "url": "https://www.dell.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 63151265916.49,
-      "asOf": "2026-07-26T19:14:56.028Z",
+      "asOf": "2026-07-26T20:34:45.749Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "ANET",
       "name": "Arista Networks",
       "marketCapUsd": 219082890517.62003,
-      "asOf": "2026-07-26T19:15:11.088Z",
+      "asOf": "2026-07-26T20:35:00.841Z",
       "url": "https://www.arista.com"
     },
     {
       "symbol": "CRDO",
       "name": "Credo Technology Group Holding Ltd Ordinary Shares",
       "marketCapUsd": 39747763958.700005,
-      "asOf": "2026-07-26T19:15:26.232Z",
+      "asOf": "2026-07-26T20:35:15.898Z",
       "url": "https://www.credosemi.com"
     },
     {
       "symbol": "ALAB",
       "name": "Astera Labs, Inc. Common Stock",
       "marketCapUsd": 49979126853.619995,
-      "asOf": "2026-07-26T19:15:41.358Z",
+      "asOf": "2026-07-26T20:35:30.966Z",
       "url": "https://www.asteralabs.com"
     },
     {
       "symbol": "LRCX",
       "name": "Lam Research Corp",
       "marketCapUsd": 381686774910,
-      "asOf": "2026-07-26T19:15:56.415Z",
+      "asOf": "2026-07-26T20:35:46.041Z",
       "url": "https://www.lamresearch.com"
     },
     {
       "symbol": "KLAC",
       "name": "KLA Corporation Common Stock",
       "marketCapUsd": 274997057209.2,
-      "asOf": "2026-07-26T19:16:11.560Z",
+      "asOf": "2026-07-26T20:36:01.177Z",
       "url": "https://www.kla.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 425760744337.5,
-      "asOf": "2026-07-26T19:16:26.633Z",
+      "asOf": "2026-07-26T20:36:16.244Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "TER",
       "name": "Teradyne, Inc. Common Stock",
       "marketCapUsd": 54777233327.04,
-      "asOf": "2026-07-26T19:16:41.700Z",
+      "asOf": "2026-07-26T20:36:31.328Z",
       "url": "https://www.teradyne.com"
     }
   ],
