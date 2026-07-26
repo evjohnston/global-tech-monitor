@@ -159,52 +159,35 @@ needs, checked by hand before it goes in `VERTICALS`:
 Every external source fails soft — a missing key or down endpoint drops that
 one source without breaking the build.
 
-## Talent vertical — Innovation stage is a statistic, not a paper corpus
+## Talent vertical — archived 2026-07-25
 
-Added 2026-07-24. `talent`'s `openAlexFilter` is `""` — a live sample
-against the closest OpenAlex Topics for "human capital"/"STEM talent"
-(Human Resource and Talent Management, Labor market dynamics, STEM
-Education, Labour Market and Migration) came back a grab-bag of generic
-HR-management and vocational-education papers, not a coherent research
-corpus the way T10682 is coherently quantum computing (checked by hand,
-only 16/25 sampled works even had institution data, and most of those were
-off-topic). `fetch-data.ts` skips OpenAlex/arXiv/top-cited entirely when
-`openAlexFilter` is empty, and instead calls `src/lib/sources/oecd.ts`
-(`researcherStatsSince` in `verticals.ts`) — real, official per-country
-researcher-headcount statistics (full-time-equivalent) from the OECD's
-Main Science and Technology Indicators (SDMX REST API, `sdmx.oecd.org`, no
-key needed), one Entry per country per reported year, `provenance: "live"`,
-`source: "statistic"`. Covers 44 countries including China, but not India or
-most of Africa/South America (OECD members + a handful of key partners,
-not global) — disclosed in `sourceMeta.ts`'s `oecd` entry.
+A `talent` (STEM workforce / human capital) vertical was added 2026-07-24
+and removed 2026-07-25 as not fitting this app's scope — it needed more
+workarounds than any other vertical to satisfy the pipeline's own shape:
+an empty `openAlexFilter` (no coherent OpenAlex research corpus for "human
+capital"/"STEM talent" — checked by hand, only 16/25 sampled works even had
+institution data, most off-topic) with OECD researcher-headcount statistics
+substituted in for the Innovation stage instead of papers, an empty
+`epoCpcQuery` (no real CPC code maps onto the STEM workforce pipeline), a
+CFDA-code NSF query instead of a free-text keyword (a "STEM workforce"
+keyword matched 281/300 sampled NSF awards, since nearly every grant's
+boilerplate mentions training students), and no ticker list at all (no
+real public company maps onto "STEM talent" as an investable entity). Each
+workaround was individually defensible but together they made talent read
+as a different *kind* of thing than quantum/AI, not just a third instance
+of the same kind.
 
-**Known tension, not yet resolved**: the map/bar-chart "count by country"
-convention (`countByCountry` in `aggregate.ts`) counts *entries*, which is
-the right signal for papers/patents/grants (more entries = more real
-activity) but not for this vertical — a country's Innovation-stage entry
-count here reflects how many years of OECD data exist for it, not its
-actual researcher headcount (which is the real, meaningful number, and is
-right there in each entry's `title` and drill-down modal, just not fed into
-the count-based aggregate). Fixing this properly needs a weighted-count
-variant of `countByCountry` (`weightByCountry` already exists for citations
-— same idea, different field) threaded through WorldMap/BarRow. Flagged
-here rather than silently working around it; don't read the Talent tab's
-map shading as researcher-magnitude until this is addressed.
-
-Patents are skipped too (`epoCpcQuery: ""` — `fetchPatents` throws
-intentionally on an empty query, see `epo.ts`): the closest real CPC code,
-G06Q10/1053, is about HR/hiring *software*, not the scientist/engineer
-pipeline, and forcing that fit would misattribute patents to "talent"
-Innovation. Investment uses NSF's real CFDA code 47.076 (Education & Human
-Resources directorate — GRFP, S-STEM, Robert Noyce, IUSE, Advanced
-Technological Education) via `fundingQueryParam: "cfdaNumber"` on
-`fetchNSF`, not a free-text keyword — checked by hand (2026-07-24): a
-"STEM workforce" keyword search matched 281 of 300 sampled NSF awards,
-because nearly every NSF grant's boilerplate broader-impacts language
-mentions training students, so a text regex can't isolate this topic the
-way "quantum" or "artificial intelligence" can. `tickers: []` — no real
-public company maps cleanly onto "STEM talent" the way IonQ maps onto
-quantum, so the public-markets panel just doesn't render for this vertical.
+Its full code — the `VerticalConfig` entry, RSS feeds/classifier,
+`data/talent/{seed,notes}.ts`, and `src/lib/sources/oecd.ts` (the OECD
+SDMX-API fetch this vertical was the only caller of) — is preserved in
+full on the git branch `archive/talent-vertical`, cut from the commit
+immediately before removal. Restorable in one piece if this vertical is
+worth rebuilding with a different approach later (e.g. a real per-country
+weighted-count aggregate before leaning on OECD stats again — the old
+implementation had an unresolved "known tension" where `countByCountry`'s
+entry-count convention read as researcher-magnitude when it was really
+counting years of OECD data on file, a real bug worth fixing before this
+comes back, not just re-shipping as-is).
 
 ## Public markets panel (Massive) — not part of the 4-stage pipeline
 
@@ -365,9 +348,6 @@ topic-tag story below), plus **prep data for two verticals that don't
 exist in the app yet**, `defense-tech` (999 companies) and `biotechnology`
 (3,916 companies) — imported at the user's request as groundwork for
 future full verticals, not wired into `VERTICALS`/rendered anywhere yet.
-`talent` has none — same reasoning as its missing `tickers` list, no real
-public/private-company concept maps onto "STEM talent" as an investable
-entity.
 
 Four real problems this data has that the import (`scripts/import-capiq-
 transactions.ts`) has to handle, not paper over:

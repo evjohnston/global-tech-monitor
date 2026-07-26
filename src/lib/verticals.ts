@@ -14,21 +14,10 @@ export interface VerticalConfig {
   shortLabel: string; // topbar-compact name, e.g. "Quantum"
   tagline: string; // pagehead subtitle
   dataDir: string; // data/<dataDir>/{seed,notes}.ts — shown in the footer's "sources & method" note
-  openAlexFilter: string; // raw OpenAlex filter fragment, or "" if this vertical's Innovation stage isn't a paper corpus (see researcherStatsSince)
-  // Set only when openAlexFilter is "" — the year to pull OECD researcher-
-  // headcount statistics from, feeding the Innovation stage instead of
-  // papers (see src/lib/sources/oecd.ts). Unset for every paper-based
-  // vertical (quantum, AI).
-  researcherStatsSince?: number;
+  openAlexFilter: string; // raw OpenAlex filter fragment
   arxivCategory: string; // arXiv category for the break-glass fallback if OpenAlex itself is unreachable
   epoCpcQuery: string; // raw EPO OPS CQL fragment, or "" to skip patents entirely (see epo.ts)
-  fundingKeyword: string; // NSF Awards API query value — a free-text keyword, or a CFDA code if fundingQueryParam is set
-  // "keyword" (default) does a free-text title/abstract search — fine when
-  // the topic name itself is distinctive (quantum, artificial intelligence).
-  // "cfdaNumber" filters by NSF's own funding-program classification code
-  // instead — needed when the topic's vocabulary is generic enough to match
-  // nearly every grant's boilerplate text (see nsf.ts's fetchNSF comment).
-  fundingQueryParam?: "keyword" | "cfdaNumber";
+  fundingKeyword: string; // NSF Awards API query value — a free-text keyword
   rssFeeds: RssFeedConfig[];
   rssClassifier: RssClassifierConfig;
   investmentNewsQuery: string; // Google News RSS search query for investment-stage funding news
@@ -82,37 +71,6 @@ const AI_RSS_CLASSIFIER: RssClassifierConfig = {
     /\b(GPU|TPU|accelerator\s+chip|compute\s+cluster|training\s+run|parameter[s]?|foundation\s+model|frontier\s+model|supercomputer|data\s*cent(?:er|re)\s+(?:buildout|expansion)|exaflop|model\s+weights|open.source\s+model|context\s+window|inference\s+cluster)\b/i,
   adoption:
     /\b(deploy|integrat|enterprise|rollout|partner(?:ship)?|government|commercial(?:ize|ization)?|customer|pilot\s+program|adopt(?:s|ed|ion)?|procure(?:ment)?|contract|cloud\s+access|co-locat|grant|national\s+ai\s+(?:strategy|initiative)|regulat|policy)\b/i,
-};
-
-// STEM/tech-talent trade press verified by hand (2026-07-24): each returns
-// valid RSS 2.0 XML from a real, actively-publishing outlet. A 4th
-// candidate (nfap.com, a STEM-immigration policy shop whose analysis would
-// have fit well) was dropped after inspection — its /feed/ endpoint returns
-// default WordPress placeholder posts ("Sample Blog Post", "Hello world!"),
-// not real content, despite a 200 response. Thinner than quantum/AI's list
-// by construction: STEM-workforce-specific trade press is a much smaller
-// beat than an entire technology's press coverage.
-const TALENT_RSS_FEEDS: RssFeedConfig[] = [
-  { url: "https://www.insidehighered.com/rss.xml", name: "Inside Higher Ed", corsOpen: false },
-  { url: "https://www.nature.com/subjects/careers.rss", name: "Nature Careers", corsOpen: false },
-  { url: "https://hechingerreport.org/feed/", name: "The Hechinger Report", corsOpen: false },
-];
-
-// Tuned against a real fetch of the three feeds above (2026-07-24): a lot of
-// their volume is generic higher-ed politics (accreditation, DEI, campus
-// federal fights) or individual career-advice columns, neither of which is
-// about the STEM/tech talent pipeline specifically — `relevant` gates on
-// pipeline/workforce vocabulary rather than "higher ed" broadly so that
-// noise doesn't get pulled in. `scaling` reads as "growing the supply"
-// (fellowships, apprenticeships, doctoral training); `adoption` as
-// "deploying/moving that supply" (hiring, visas, workforce policy).
-const TALENT_RSS_CLASSIFIER: RssClassifierConfig = {
-  relevant:
-    /\b(STEM workforce|STEM education|STEM pipeline|talent pipeline|talent shortage|worker shortage|labor shortage|skills gap|brain drain|brain gain|H-1B|work visa|skilled immigra|foreign[- ]born (?:scientists?|engineers?|workers?|talent)|graduate research fellow|doctoral (?:pipeline|training|enrollment)|PhD pipeline|apprenticeship|reskill|upskill|workforce development|science and engineering workforce|researchers? (?:shortage|pipeline)|research funding)\b/i,
-  scaling:
-    /\b(apprenticeship|graduate research fellowship|PhD (?:pipeline|program|enrollment)|doctoral (?:training|enrollment)|STEM education|upskill|reskill|training program|fellowship|scholarship|enrollment (?:growth|increase)|new program|expand(?:s|ed|ing)?\s+(?:program|training)|workforce development)\b/i,
-  adoption:
-    /\b(hires?|hiring|H-1B|work visa|visa (?:cap|policy|reform)|immigration (?:policy|reform)|industry (?:role|job|position)|employer|deploy(?:ed|ment)?|workforce shortage|labor shortage|policy (?:change|reform)|federal (?:funding|policy)|national\s+(?:ai|quantum)?\s*workforce\s+(?:strategy|initiative)|recruit(?:s|ing|ment)?)\b/i,
 };
 
 export const VERTICALS: VerticalConfig[] = [
@@ -244,62 +202,19 @@ export const VERTICALS: VerticalConfig[] = [
       "LRCX", "KLAC", "AMAT", "TER", // AI-chip fabrication equipment
     ],
   },
-  {
-    id: "talent",
-    number: "03",
-    label: "STEM Talent & Human Capital",
-    shortLabel: "Talent",
-    tagline: "Human capital · researchers, the STEM workforce pipeline, and public investment in people",
-    dataDir: "talent",
-    // Deliberately empty — see CLAUDE.md's Talent-vertical section. A live
-    // sample against the closest OpenAlex Topics (Human Resource and Talent
-    // Management, Labor market dynamics, STEM Education, Labour Market and
-    // Migration) came back a grab-bag of generic HR-management and
-    // vocational-education papers, not a coherent "STEM talent" research
-    // corpus the way T10682 is coherently quantum computing — checked by
-    // hand 2026-07-24, only 16/25 sampled works even had institution data,
-    // and most of the ones that did were off-topic (Indonesian vocational
-    // pedagogy, Ghanaian youth employment). Innovation stage uses OECD
-    // researcher-headcount statistics instead (see researcherStatsSince).
-    openAlexFilter: "",
-    researcherStatsSince: 2015,
-    // Labor economics research on STEM/workforce topics is journal-first,
-    // not preprint-first, unlike quantum-ph or cs.AI — econ.GN (arXiv's
-    // General Economics category) is the closest real fallback if this
-    // vertical's fetch path is ever changed to attempt one, though it's
-    // currently unreached (openAlexFilter is "", so the OpenAlex/arXiv
-    // branch is skipped entirely — see fetch-data.ts).
-    arxivCategory: "econ.GN",
-    // No real CPC code maps "talent"/human-capital onto a patent
-    // classification the way quantum/AI do — the closest, G06Q10/1053
-    // (employment/hiring software), is about HR software, not the
-    // scientist/engineer pipeline. Empty string skips patents entirely
-    // (see epo.ts's fetchPatents guard) rather than force a tangential fit.
-    epoCpcQuery: "",
-    // CFDA 47.076 is NSF's real, official funding-classification code for
-    // its Education & Human Resources directorate (GRFP, S-STEM, Robert
-    // Noyce, Advanced Technological Education, IUSE...) — confirmed live
-    // 2026-07-24. Filtering on it instead of a free-text keyword sidesteps
-    // a real problem: "STEM workforce"/"workforce" as a keyword matched
-    // 281/300 sampled NSF awards, because nearly every NSF grant's
-    // boilerplate broader-impacts language mentions training students —
-    // the topic is too generic to isolate with a text regex the way
-    // "quantum" or "artificial intelligence" can. See nsf.ts.
-    fundingKeyword: "47.076",
-    fundingQueryParam: "cfdaNumber",
-    rssFeeds: TALENT_RSS_FEEDS,
-    rssClassifier: TALENT_RSS_CLASSIFIER,
-    investmentNewsQuery:
-      '"STEM workforce" (grant OR funding OR "graduate research fellowship" OR "national science foundation" OR NSF)',
-    // No real public-company ticker maps cleanly onto "STEM talent" the way
-    // IonQ maps onto quantum or Nvidia onto AI — staffing/EdTech names
-    // (ManpowerGroup, Coursera) are a weak, indirect proxy at best. Left
-    // empty rather than force a tangential fit; CompanyMarketPanel just
-    // doesn't render for this vertical, same soft-fail-to-absent pattern as
-    // everything else here.
-    tickers: [],
-  },
 ];
+
+// A "talent" (STEM workforce / human capital) vertical was built and shipped
+// 2026-07-24, then archived 2026-07-25 as not fitting this app's scope — it
+// didn't cleanly cover the innovation stage's own gate (no coherent OpenAlex
+// research corpus, no real patent classification, no public-company ticker
+// concept), needing more workarounds (an OECD researcher-headcount stand-in
+// for papers, a CFDA-code NSF query) than any of this app's other verticals.
+// Its full code (VerticalConfig entry, RSS feeds/classifier, data/talent/
+// seed+notes, src/lib/sources/oecd.ts) is preserved on the git branch
+// `archive/talent-vertical`, cut from the commit immediately before removal
+// — restorable in full if this vertical is worth rebuilding later. See
+// CLAUDE.md for the removal note.
 
 export function verticalById(id: string): VerticalConfig {
   return VERTICALS.find((v) => v.id === id) ?? VERTICALS[0];

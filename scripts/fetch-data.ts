@@ -51,7 +51,6 @@ import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/opena
 import { fetchPatents } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
-import { fetchResearcherStats } from "../src/lib/sources/oecd.ts";
 import { fetchRdSpendByYear } from "../src/lib/sources/secEdgar.ts";
 import { CAPIQ_RD_SPEND } from "../data/capiq/rd-spend.ts";
 import { CAPIQ_VC_FUNDING } from "../data/capiq/vc-funding.ts";
@@ -66,20 +65,16 @@ import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
 import { NOTES as QUANTUM_NOTES } from "../data/quantum/notes.ts";
 import { SEED as AI_SEED } from "../data/ai/seed.ts";
 import { NOTES as AI_NOTES } from "../data/ai/notes.ts";
-import { SEED as TALENT_SEED } from "../data/talent/seed.ts";
-import { NOTES as TALENT_NOTES } from "../data/talent/notes.ts";
 
 // Static imports rather than a dynamic-import registry — fine at this scale
 // (a handful of verticals); revisit if this list grows large.
 const SEED_BY_VERTICAL: Record<string, Entry[]> = {
   "quantum-computing": QUANTUM_SEED,
   "artificial-intelligence": AI_SEED,
-  talent: TALENT_SEED,
 };
 const NOTES_BY_VERTICAL: Record<string, StageNote[]> = {
   "quantum-computing": QUANTUM_NOTES,
   "artificial-intelligence": AI_NOTES,
-  talent: TALENT_NOTES,
 };
 
 // Which of data/capiq/rd-spend.ts's foreign companies (real, named quantum/
@@ -193,21 +188,6 @@ const TREND_WINDOW_DAYS = 21;
 // vc-funding.ts for anyone auditing it directly — only the public JSON
 // gets capped, and the drop is logged, not silent.
 const VC_FUNDING_CAP = 200;
-// For a vertical with no rolling-window `live` pull (Talent: OECD stats
-// instead of a fresh-papers-since-last-run query), there's no natural
-// "this run's new items" set to feed trendPoint's per-country counts. Using
-// each country's most recent reported year is the honest equivalent — a
-// real current snapshot, not a fabricated rate.
-function latestPerCountry(entries: Entry[]): Entry[] {
-  const byCountry = new Map<string, Entry>();
-  for (const e of entries) {
-    if (!e.country) continue;
-    const prior = byCountry.get(e.country);
-    if (!prior || e.date > prior.date) byCountry.set(e.country, e);
-  }
-  return [...byCountry.values()];
-}
-
 // Layers hand-imported CapIQ R&D figures (foreign 20-F filers) onto SEC
 // EDGAR's already fiscal-year-trimmed rdSpend series. Additive per year —
 // creates a new year bucket if CapIQ has one SEC's tail-trim didn't keep
@@ -256,13 +236,13 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   let openalexOk = false;
   let arxivOk = false;
   // An empty openAlexFilter means this vertical's Innovation stage isn't a
-  // paper corpus at all (Talent: OECD researcher-headcount statistics
-  // instead — see the researcherStatsSince block below and CLAUDE.md's
-  // "Public markets panel" — no, "Talent vertical" section for why) —
-  // skip OpenAlex/arXiv entirely rather than run a query with nothing to
-  // filter on.
+  // paper corpus at all — skip OpenAlex/arXiv entirely rather than run a
+  // query with nothing to filter on. No current vertical leaves this empty
+  // (the one that did, Talent, was archived — see CLAUDE.md and the git
+  // branch `archive/talent-vertical`); kept as generic dormant infrastructure
+  // in case a future vertical needs a non-paper-corpus innovation stage.
   if (!v.openAlexFilter) {
-    sourceUsed = "oecd-stats";
+    sourceUsed = "no-openalex-filter";
   } else {
     try {
       live = await fetchOpenAlexPages({
@@ -300,7 +280,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   let funding: Entry[] = [];
   let nsfOk = false;
   try {
-    funding = await fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant, v.fundingQueryParam);
+    funding = await fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant);
     nsfOk = true;
     console.log(`NSF: ${funding.length} grants`);
   } catch (err) {
@@ -322,9 +302,9 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     // mid-run — so an empty result here isn't reliably "nothing to show,"
     // it's often "this run failed entirely." Only overwrite the
     // carried-forward snapshot when something real came back, or when the
-    // vertical genuinely has no tickers configured (Talent) — otherwise a
-    // rate limit would blank an otherwise-good panel instead of just
-    // leaving yesterday's real numbers in place.
+    // vertical genuinely has no tickers configured — otherwise a rate limit
+    // would blank an otherwise-good panel instead of just leaving
+    // yesterday's real numbers in place.
     if (fetched.length > 0 || v.tickers.length === 0) companies = fetched;
     console.log(`Massive: ${companies.length} companies`);
   } catch (err) {
@@ -348,20 +328,6 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   if (capiqTickers.length > 0) {
     rdSpend = mergeCapiqRdSpend(rdSpend, capiqTickers);
     console.log(`CapIQ: merged R&D spend for ${capiqTickers.length} foreign tickers`);
-  }
-  // OECD researcher-headcount statistics — Talent's stand-in for a paper
-  // corpus (see the openAlexFilter guard above). Only fetched when
-  // researcherStatsSince is set; every other vertical leaves it unset.
-  let researcherStats: Entry[] = [];
-  let oecdOk = false;
-  if (v.researcherStatsSince) {
-    try {
-      researcherStats = await fetchResearcherStats(v.researcherStatsSince);
-      oecdOk = true;
-      console.log(`OECD: ${researcherStats.length} researcher-headcount statistics`);
-    } catch (err) {
-      console.error("OECD stats skipped:", (err as Error).message);
-    }
   }
   let news: Entry[] = [];
   let rssNewsOk = false;
@@ -407,7 +373,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const now = new Date().toISOString();
   const byId = new Map<string, Entry>();
   for (const e of prev?.entries ?? []) byId.set(e.id, e);
-  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews, ...topCited, ...researcherStats]) {
+  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews, ...topCited]) {
     // ingestedAt is stamped once, at first sight, and preserved on every
     // later re-fetch of the same id — it must never reset to "now" just
     // because a source returned the same entry again.
@@ -434,8 +400,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     (p) => p.date !== today && !Object.keys(p.counts).some((k) => ["us", "cn", "eu", "other"].includes(k))
   );
   const allEntries = [...byId.values()];
-  const countsSource = live.length > 0 ? live : latestPerCountry(researcherStats);
-  const trend = countsSource.length > 0 ? [...history, trendPoint(countsSource, allEntries)] : history;
+  const trend = live.length > 0 ? [...history, trendPoint(live, allEntries)] : history;
 
   const vcFundingAll = CAPIQ_VC_FUNDING.filter((c) => c.vertical === v.id).map(({ vertical: _vertical, ...rest }) => rest);
   const vcFundingForVertical = vcFundingAll.slice(0, VC_FUNDING_CAP);
@@ -452,7 +417,6 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     "sec-edgar": secEdgarOk,
     capiq: capiqTickers.length > 0, // a static hand-imported file, not a live fetch — see data/capiq/rd-spend.ts
     "capiq-transactions": CAPIQ_VC_FUNDING.some((c) => c.vertical === v.id), // see data/capiq/vc-funding.ts
-    oecd: oecdOk,
     "rss-news": rssNewsOk,
     "rss-investment": rssInvestmentOk,
     seed: seed.length > 0, // a static import, not a fetch — always "succeeds" when configured
