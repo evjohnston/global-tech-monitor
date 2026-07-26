@@ -15,9 +15,11 @@ import { Tooltip } from "./Tooltip.tsx";
 export function TrendChart({
   trend,
   countries,
+  emphasize,
 }: {
   trend: TrendPoint[];
   countries: string[];
+  emphasize?: string[];
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<{ i: number; x: number; y: number } | null>(null);
@@ -92,12 +94,14 @@ export function TrendChart({
             <text x={padL - 5} y={y(v) + 3} textAnchor="end" fontSize="9" fill="var(--mist)">{Math.round(v)}%</text>
           </g>
         ))}
-        {order.map((c) => (
-          <path key={c} d={histLine(c)} fill="none" stroke={colorOf(c)} strokeWidth="2" strokeLinejoin="round" />
-        ))}
-        {order.map((c) => (
-          <circle key={c} cx={x(nHist - 1)} cy={y(shares[shares.length - 1].pct[c])} r="3" fill={colorOf(c)} />
-        ))}
+        {order.map((c) => {
+          const faded = !!emphasize?.length && !emphasize.includes(c);
+          return <path key={c} d={histLine(c)} fill="none" stroke={colorOf(c)} strokeWidth="2" strokeLinejoin="round" opacity={faded ? 0.25 : 1} />;
+        })}
+        {order.map((c) => {
+          const faded = !!emphasize?.length && !emphasize.includes(c);
+          return <circle key={c} cx={x(nHist - 1)} cy={y(shares[shares.length - 1].pct[c])} r="3" fill={colorOf(c)} opacity={faded ? 0.25 : 1} />;
+        })}
         {hover && (
           <line x1={x(hover.i)} y1={padT} x2={x(hover.i)} y2={H - padB} stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 2" />
         )}

@@ -199,6 +199,34 @@ export function countByCountryAndStage(entries: Entry[]): Record<string, Record<
   return out;
 }
 
+// 1-based rank of a country within a count map, or null when it has no
+// counted activity at all — never invent a rank for absence of data.
+// Ties get the same (dense) rank: a country is ranked N+1 where N is how
+// many *other* countries have a strictly greater count.
+export function rankOf(counts: Record<string, number>, country: string): number | null {
+  const value = counts[country];
+  if (!value || value <= 0) return null;
+  const higher = Object.values(counts).filter((v) => v > value).length;
+  return higher + 1;
+}
+
+// Share of a scope's total held by its top 1/5/10 real orgs — built on the
+// existing orgLeaderboard (already entity-resolved via canonicalizeOrg), not
+// a second counting pass. Pass `rows` from orgLeaderboard(entries, stage, 10)
+// or deeper, and `totalForScope` from countByStage/countByCountryAndStage so
+// the percentage denominator matches whatever scope the rows were computed
+// over (a whole stage, one country's stage activity, etc).
+export function concentrationShare(rows: OrgRow[], totalForScope: number): { top1Pct: number; top5Pct: number; top10Pct: number } {
+  if (totalForScope <= 0) return { top1Pct: 0, top5Pct: 0, top10Pct: 0 };
+  const sorted = [...rows].sort((a, b) => b.count - a.count);
+  const sumTop = (n: number) => sorted.slice(0, n).reduce((s, r) => s + r.count, 0);
+  return {
+    top1Pct: (sumTop(1) / totalForScope) * 100,
+    top5Pct: (sumTop(5) / totalForScope) * 100,
+    top10Pct: (sumTop(10) / totalForScope) * 100,
+  };
+}
+
 // All real recorded snapshots, oldest first — the substrate every trend/
 // delta UI element should read from and gate on, rather than assuming
 // history exists. Trend points recorded before 2026-07-20 lack the newer

@@ -95,6 +95,7 @@ function MapBody({
   max,
   onSelect,
   active,
+  emphasize,
   height,
   dark,
   autoZoom = false,
@@ -104,6 +105,7 @@ function MapBody({
   max: number;
   onSelect?: (country: string) => void;
   active?: string | null;
+  emphasize?: string[];
   height: number;
   dark: boolean;
   autoZoom?: boolean;
@@ -150,7 +152,13 @@ function MapBody({
                 const code = alpha2FromNumeric(String(geo.id ?? ""));
                 const count = code ? counts[code] ?? 0 : 0;
                 const isActive = Boolean(active) && code === active;
-                const muted = Boolean(active) && !isActive;
+                // A hard country filter (active) takes priority over the
+                // multi-country comparison highlight (emphasize) — they're
+                // both "which countries matter right now" signals, but only
+                // one should drive the map's muting at a time.
+                const hasEmphasis = !active && !!emphasize?.length;
+                const isEmphasized = hasEmphasis && !!code && emphasize!.includes(code);
+                const muted = (Boolean(active) && !isActive) || (hasEmphasis && !isEmphasized);
                 return (
                   <Geography
                     key={geo.rsmKey}
@@ -233,12 +241,14 @@ export function WorldMap({
   counts,
   onSelect,
   active,
+  emphasize,
   trend = [],
   dark = false,
 }: {
   counts: Record<string, number>;
   onSelect?: (country: string) => void;
   active?: string | null;
+  emphasize?: string[];
   trend?: TrendPoint[];
   dark?: boolean;
 }) {
@@ -299,6 +309,7 @@ export function WorldMap({
             max={max}
             onSelect={onSelect}
             active={active}
+            emphasize={emphasize}
             height={820}
             dark={dark}
             autoZoom
@@ -312,7 +323,7 @@ export function WorldMap({
   return (
     <div className="map-wrap">
       <div className="mapbox" ref={mapWrapRef}>
-        <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={shownCounts} max={max} onSelect={onSelect} active={active} height={compactHeight} dark={dark} />
+        <MapBody geoData={worldLow as unknown as Record<string, unknown>} counts={shownCounts} max={max} onSelect={onSelect} active={active} emphasize={emphasize} height={compactHeight} dark={dark} />
         <button className="map-expand" onClick={() => setExpanded(true)} aria-label="Expand map to full page">⤢</button>
       </div>
       {canScrub && <TimeBar trend={trend} scrubIndex={scrubIndex} onScrub={setScrubIndex} onLive={() => setScrubIndex(null)} />}

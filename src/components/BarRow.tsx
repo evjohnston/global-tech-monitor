@@ -9,6 +9,7 @@ export function BarRow({
   detail,
   onClick,
   active,
+  faded,
 }: {
   label: string;
   pct: number;
@@ -17,11 +18,13 @@ export function BarRow({
   detail: ReactNode;
   onClick?: () => void;
   active?: boolean;
+  faded?: boolean;
 }) {
   const [tip, setTip] = useState<{ x: number; y: number } | null>(null);
   return (
     <div
       className={`barrow${onClick ? " clickable" : ""}${active ? " active" : ""}`}
+      style={faded ? { opacity: 0.35 } : undefined}
       onMouseMove={(e) => setTip({ x: e.clientX, y: e.clientY })}
       onMouseLeave={() => setTip(null)}
       onClick={onClick}

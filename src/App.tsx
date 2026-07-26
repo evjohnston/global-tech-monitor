@@ -34,6 +34,15 @@ import { InvestorLeaderboard } from "./components/InvestorLeaderboard.tsx";
 import { MoneyFlowSankey } from "./components/MoneyFlowSankey.tsx";
 import { PanelTabs } from "./components/PanelTabs.tsx";
 import { buildOrgFinancialIndex, lookupOrgFinancials } from "./lib/orgFinancials.ts";
+import { FindingsHeader } from "./components/FindingsHeader.tsx";
+import { ChangeLog } from "./components/ChangeLog.tsx";
+import { CompareRibbon } from "./components/CompareRibbon.tsx";
+import { BumpChart } from "./components/BumpChart.tsx";
+import { QuadrantChart } from "./components/QuadrantChart.tsx";
+import { MomentumTable } from "./components/MomentumTable.tsx";
+import { CountryProfileDrawer } from "./components/CountryProfileDrawer.tsx";
+import { biggestDisconnect } from "./lib/findings.ts";
+import { innovationByCountryClaim, fundingByCountryClaim, bumpChartClaim } from "./lib/claims.ts";
 import logoLightBg from "./assets/logos/logo-light-bg.png";
 import logoDarkBg from "./assets/logos/logo-dark-bg.png";
 
@@ -69,6 +78,18 @@ export default function App() {
   const [mode, setMode] = useState<LiveMode>("loading");
   const [highlightOrg, setHighlightOrg] = useState<string | null>(null);
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
+  // "Story" (findings-led, default) vs. "Explore" (today's full dashboard).
+  const [view, setView] = useState<"story" | "explore">("story");
+  // Persistent 2-4 country comparison, independent of the single `country`
+  // hard filter above — this one highlights across charts instead of
+  // narrowing the page. Initialized from ?compare=US,CN,GB so a shared URL
+  // restores the same selection.
+  const [compareCountries, setCompareCountries] = useState<string[]>(() => {
+    const raw = new URLSearchParams(window.location.search).get("compare");
+    if (!raw) return [];
+    return raw.split(",").map((c) => c.trim().toUpperCase()).filter(Boolean).slice(0, 4);
+  });
+  const [profileCountry, setProfileCountry] = useState<string | null>(null);
   const [dark, setDark] = useState<boolean>(() => {
     const saved = localStorage.getItem("gtm-theme");
     if (saved === "dark" || saved === "light") return saved === "dark";
@@ -91,6 +112,19 @@ export default function App() {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
     localStorage.setItem("gtm-theme", dark ? "dark" : "light");
   }, [dark]);
+
+  // Keeps the comparison selection shareable — a reader can copy the URL
+  // and reload it with the same countries highlighted. replaceState, not
+  // pushState: this is a selection, not real navigation, so it shouldn't
+  // pile up back-button entries.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (compareCountries.length > 0) params.set("compare", compareCountries.join(","));
+    else params.delete("compare");
+    const query = params.toString();
+    const url = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+    window.history.replaceState(null, "", url);
+  }, [compareCountries]);
 
   // A real ticking clock — "12s ago" against the actual last-fetch
   // timestamp, not a fabricated animation. nowTick just forces a re-render
@@ -252,6 +286,27 @@ export default function App() {
   const historyDays = useMemo(() => trend.filter((p) => p.stageCounts).length, [trend]);
   const velocityDeltaReady = historyDays >= 42;
 
+  // Real coverage window — the earliest and latest dated entry actually in
+  // this vertical's corpus, so a reader can tell a current snapshot from a
+  // long-run comparison at a glance (per the Story-mode header).
+  const coverageLabel = useMemo(() => {
+    const dates = entries.map((e) => e.date).filter(Boolean).sort();
+    if (dates.length === 0) return "no dated entries yet";
+    return `entries recorded ${dates[0]} through ${dates[dates.length - 1]}`;
+  }, [entries]);
+
+  // Claim-style titles (src/lib/claims.ts) — memoized like every other
+  // entries-derived computation in this component, since each does a real
+  // O(entries) scan and several call sites re-render on filter/tab clicks
+  // that don't change `entries` itself.
+  const innovationClaimTitle = useMemo(() => innovationByCountryClaim(entries), [entries]);
+  const fundingClaimTitle = useMemo(() => fundingByCountryClaim(entries), [entries]);
+  const bumpClaimTitle = useMemo(() => bumpChartClaim(entries, "publications"), [entries]);
+  const quadrantClaimTitle = useMemo(
+    () => biggestDisconnect(entries)?.context ?? "Research leadership does not always translate into adoption",
+    [entries]
+  );
+
   const generated = data?.generatedAt
     ? new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "—";
@@ -272,6 +327,26 @@ export default function App() {
   }
   function toggleStage(s: Stage) {
     setStage((prev) => (prev === s ? "all" : s));
+  }
+  function toggleCompareCountry(c: string) {
+    setCompareCountries((prev) => {
+      if (prev.includes(c)) return prev.filter((x) => x !== c);
+      if (prev.length >= 4) return prev; // cap at 4 — extra clicks are a no-op, not an error
+      return [...prev, c];
+    });
+  }
+  function filterToCountry(c: string) {
+    setCountry(c);
+  }
+  // Clicking a country on the map or the flagship "by country" chart opens
+  // its profile drawer instead of hard-filtering the page immediately — the
+  // drawer is where a reader chooses to filter or add it to the comparison
+  // ribbon (see CountryProfileDrawer.tsx). Deliberately scoped to these two
+  // primary surfaces, not every bar/row on the page — StageComposition,
+  // SmallMultiples, and the top filter chips keep their existing direct
+  // toggleCountry behavior.
+  function openCountryProfile(c: string) {
+    setProfileCountry(c);
   }
   function selectOrg(org: string) {
     setHighlightOrg((prev) => (prev === org ? null : org));
@@ -325,6 +400,42 @@ export default function App() {
           </div>
         </div>
 
+        <div className="view-toggle">
+          <button className="chip" aria-pressed={view === "story"} onClick={() => setView("story")}>Story</button>
+          <button className="chip" aria-pressed={view === "explore"} onClick={() => setView("explore")}>Explore</button>
+        </div>
+
+        {view === "story" && (
+          <>
+            <FindingsHeader entries={entries} generated={generated} updatedAgo={updatedAgo} coverageLabel={coverageLabel} />
+            <ChangeLog entries={entries} />
+            <CompareRibbon
+              entries={entries}
+              available={topFilterCountries.map((c) => c.country)}
+              selected={compareCountries}
+              onToggle={toggleCompareCountry}
+            />
+            <div className="panel">
+              <h3>{bumpClaimTitle} <span className="drop">where is activity growing?</span></h3>
+              <BumpChart entries={entries} emphasize={compareCountries} />
+            </div>
+            <div className="panel">
+              <h3>
+                {quadrantClaimTitle}
+                <span className="drop">research vs. adoption</span>
+              </h3>
+              <QuadrantChart entries={entries} emphasize={compareCountries} />
+            </div>
+            <div className="panel">
+              <h3>Who's gaining momentum <span className="drop">scale, growth, and concentration side by side</span></h3>
+              <MomentumTable entries={entries} />
+            </div>
+            <button className="pill primary" onClick={() => setView("explore")}>Explore the full dashboard →</button>
+          </>
+        )}
+
+        {view === "explore" && (
+        <>
         <div className="controls">
           <span className="lbl">Filter country</span>
           <button className="chip" aria-pressed={country === "all"} onClick={() => setCountry("all")}>All</button>
@@ -380,7 +491,8 @@ export default function App() {
         <div className="row-map">
           <div className="row-map-stack">
             <PanelTabs
-              title="Innovation trends"
+              title={innovationClaimTitle}
+              drop="innovation trends"
               tabs={[
                 {
                   key: "country",
@@ -394,9 +506,10 @@ export default function App() {
                           pct={innovationTopShares[c.country] ?? 0}
                           color={countryColor(c.country)}
                           valueLabel={`${c.count} · ${((c.count / innovationTotal) * 100).toFixed(0)}%`}
-                          detail={`${countryName(c.country)} · ${c.count} works · ${((c.count / innovationTotal) * 100).toFixed(1)}% of innovation output · click to filter`}
-                          onClick={() => toggleCountry(c.country)}
+                          detail={`${countryName(c.country)} · ${c.count} works · ${((c.count / innovationTotal) * 100).toFixed(1)}% of innovation output · click for its profile`}
+                          onClick={() => openCountryProfile(c.country)}
                           active={country === c.country}
+                          faded={!!compareCountries.length && !compareCountries.includes(c.country)}
                         />
                       ))}
                       {innovationRestCount > 0 && (
@@ -418,7 +531,7 @@ export default function App() {
                 {
                   key: "share",
                   label: "Country share",
-                  render: () => <TrendChart trend={trend21} countries={forecastCountries} />,
+                  render: () => <TrendChart trend={trend21} countries={forecastCountries} emphasize={compareCountries} />,
                 },
               ]}
             />
@@ -426,7 +539,14 @@ export default function App() {
           <div className="panel map-panel">
             <h3>Where the work happens</h3>
             <div className="map-fill">
-              <WorldMap counts={innovationCounts} onSelect={toggleCountry} active={country === "all" ? null : country} trend={trend21} dark={dark} />
+              <WorldMap
+                counts={innovationCounts}
+                onSelect={openCountryProfile}
+                active={country === "all" ? null : country}
+                emphasize={compareCountries}
+                trend={trend21}
+                dark={dark}
+              />
               <div className="trend-empty" style={{ padding: "6px 0 0", fontSize: 10.5 }}>
                 Every country with at least one attributed work is shaded — darker means more output. Click any country to filter the page. Drag the time bar below to see real recorded history; expand for the full interactive map.
               </div>
@@ -507,8 +627,8 @@ export default function App() {
           {data?.companies && data.companies.length > 0 && <CompanyMarketPanel companies={data.companies} />}
 
           <PanelTabs
-            title="NSF grants"
-            drop="investment"
+            title={fundingClaimTitle}
+            drop="NSF grants · investment"
             tabs={[
               {
                 key: "country",
@@ -526,6 +646,7 @@ export default function App() {
                             color={countryColor(c.country)}
                             valueLabel={fmtUsd(c.count)}
                             detail={`${countryName(c.country)} · ${fmtUsd(c.count)} disclosed · ${((c.count / fundingGrandTotal) * 100).toFixed(1)}% of tracked funding`}
+                            faded={!!compareCountries.length && !compareCountries.includes(c.country)}
                           />
                         ))}
                         {fundingTop.rest.length > 0 && (
@@ -618,6 +739,8 @@ export default function App() {
             ))}
           </div>
         </section>
+        </>
+        )}
 
         <footer className="foot">
           <div className="h">Sources & method</div>
@@ -648,6 +771,18 @@ export default function App() {
           entry={selectedEntry}
           orgFinancials={lookupOrgFinancials(orgFinancialIndex, selectedEntry.org)}
           onClose={() => setSelectedEntry(null)}
+        />
+      )}
+
+      {profileCountry && (
+        <CountryProfileDrawer
+          country={profileCountry}
+          entries={entries}
+          trend={trend}
+          compareCountries={compareCountries}
+          onClose={() => setProfileCountry(null)}
+          onFilter={filterToCountry}
+          onToggleCompare={toggleCompareCountry}
         />
       )}
     </>
