@@ -5,6 +5,8 @@ import { buildMoneyFlow, MONEY_FLOW_TOP_COMPANIES, MONEY_FLOW_TOP_INVESTORS, typ
 import { fmtUsd } from "../lib/format.ts";
 import { usePrefersReducedMotion } from "../lib/useReducedMotion.ts";
 import { scatterMotionDots } from "../lib/sankeyParticles.ts";
+import { useSankeyIsolateSearch } from "../lib/useSankeyIsolateSearch.ts";
+import { SankeyParticleDots } from "./SankeyParticleDots.tsx";
 import { Tooltip } from "./Tooltip.tsx";
 
 // WIDTH matches the v5 content container (--maxw: 1440px minus desktop
@@ -42,16 +44,10 @@ export function MoneyFlowSankey({
   const reducedMotion = usePrefersReducedMotion();
   const [particlesOn, setParticlesOn] = useState(true);
   const [expanded, setExpanded] = useState(false);
-  const [hoverNode, setHoverNode] = useState<string | null>(null);
-  const [hoverLink, setHoverLink] = useState<number | null>(null);
-  // Clicking a node ISOLATES it (persists after the mouse leaves, unlike
-  // hover) — hover still previews on top of a pin, but clicking empty
-  // space or Reset clears the pin. Distinct from the drawer the click also
-  // opens: isolating and opening details are two different real actions
-  // that happen to share one click.
-  const [pinnedNode, setPinnedNode] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [tip, setTip] = useState<{ x: number; y: number; content: React.ReactNode } | null>(null);
+  const {
+    setHoverNode, hoverLink, setHoverLink, pinnedNode, setPinnedNode, search, setSearch, tip, setTip,
+    focusNode, matchesSearch, anySearch, anyHover, reset, togglePin,
+  } = useSankeyIsolateSearch();
 
   const flow = useMemo(
     () => buildMoneyFlow(companies, { measure: "count", topInvestors: expanded ? MONEY_FLOW_TOP_INVESTORS * 2 : MONEY_FLOW_TOP_INVESTORS, topCompanies: expanded ? MONEY_FLOW_TOP_COMPANIES * 2 : MONEY_FLOW_TOP_COMPANIES }),
@@ -71,16 +67,27 @@ export function MoneyFlowSankey({
     });
   }, [flow]);
 
+  const maxValue = useMemo(() => (graph ? Math.max(1, ...graph.links.map((l) => l.value)) : 1), [graph]);
+
+  // Per-link dot geometry (up to 40 dots/link, each with real trig +
+  // path-string work — see sankeyParticles.ts) memoized on the graph layout
+  // and particle toggle state, not recomputed from scratch on every
+  // mousemove-driven hover re-render while particlesOn is true.
+  const dotsByLink = useMemo(() => {
+    if (!graph || !particlesOn || reducedMotion) return [];
+    return graph.links.map((l, i) => {
+      const source = l.source as SankeyNode<MoneyFlowNode, { value: number; dealCount: number }>;
+      const target = l.target as SankeyNode<MoneyFlowNode, { value: number; dealCount: number }>;
+      const width = Math.max(1, l.width ?? 1);
+      return scatterMotionDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 4 + Math.sqrt(l.value / maxValue) * 14, i);
+    });
+  }, [graph, particlesOn, reducedMotion, maxValue]);
+
   if (!graph) {
     return <div className="trend-empty">Not enough overlapping deal activity yet to draw a flow diagram.</div>;
   }
 
   const linkPath = sankeyLinkHorizontal();
-  const maxValue = Math.max(1, ...graph.links.map((l) => l.value));
-  const focusNode = hoverNode ?? pinnedNode; // hover previews on top of a pin, pin persists after the mouse leaves
-  const searchQuery = search.trim().toLowerCase();
-  const matchesSearch = (label: string) => searchQuery.length > 0 && label.toLowerCase().includes(searchQuery);
-  const anySearch = searchQuery.length > 0;
 
   function isLinkActive(i: number, source: string, target: string, sourceLabel: string, targetLabel: string): boolean {
     if (anySearch) return matchesSearch(sourceLabel) || matchesSearch(targetLabel);
@@ -88,7 +95,6 @@ export function MoneyFlowSankey({
     if (focusNode) return source === focusNode || target === focusNode;
     return false;
   }
-  const anyHover = focusNode != null || hoverLink != null || anySearch;
 
   return (
     <div>
@@ -106,14 +112,14 @@ export function MoneyFlowSankey({
           aria-label="Search Sankey nodes"
           style={{ maxWidth: 200 }}
         />
-        <button className="chip" onClick={() => { setHoverNode(null); setHoverLink(null); setPinnedNode(null); setSearch(""); }}>Reset</button>
+        <button className="chip" onClick={reset}>Reset</button>
       </div>
 
       <div className="sankey-legend">
         <span><span className="sankey-legend-swatch" style={{ background: "var(--red)" }} /> Investor</span>
         <span><span className="sankey-legend-swatch" style={{ background: "var(--ink)" }} /> Recipient company</span>
         <span>Link width = real tracked deal count</span>
-        <span>Particles show direction only (varied timing, not a measure of amount), off by default</span>
+        <span>Particles show direction only (varied timing, not a measure of amount)</span>
         <span>Top {expanded ? MONEY_FLOW_TOP_INVESTORS * 2 : MONEY_FLOW_TOP_INVESTORS} investors × top {expanded ? MONEY_FLOW_TOP_COMPANIES * 2 : MONEY_FLOW_TOP_COMPANIES} companies by activity — see below for what's excluded</span>
       </div>
       {expanded && (
@@ -140,21 +146,15 @@ export function MoneyFlowSankey({
             if (!d) return null;
             const active = isLinkActive(i, source.id, target.id, source.label, target.label);
             const width = Math.max(1, l.width ?? 1);
-            // Many dots, each genuinely moving along its own lane through
-            // the ribbon's real thickness — count scales with the link's
-            // real value relative to the diagram's max, so a bigger real
-            // flow reads as both denser AND busier with real motion, never
-            // an arbitrary fixed count.
-            const dots = particlesOn && !reducedMotion
-              ? scatterMotionDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 4 + Math.sqrt(l.value / maxValue) * 14, i)
-              : [];
+            const color = active ? "var(--red)" : "var(--slate)";
+            const dots = dotsByLink[i] ?? [];
             return (
               <g key={i}>
                 <path
                   id={`sankey-link-${i}`}
                   d={d}
                   fill="none"
-                  stroke={active ? "var(--red)" : "var(--slate)"}
+                  stroke={color}
                   strokeOpacity={anyHover ? (active ? 0.85 : 0.07) : 0.32}
                   strokeWidth={active ? width + 1.5 : width}
                   style={{ cursor: onSelectLink ? "pointer" : "default", transition: "stroke-opacity 0.15s, stroke-width 0.15s" }}
@@ -179,29 +179,7 @@ export function MoneyFlowSankey({
                   onClick={(e) => { e.stopPropagation(); onSelectLink?.(source.id, target.id); }}
                   onKeyDown={(e) => { if (onSelectLink && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelectLink(source.id, target.id); } }}
                 />
-                {dots.map((dot, pi) => {
-                  // Each dot travels its own lane (a copy of the ribbon's
-                  // real curve, offset laterally — see sankeyParticles.ts)
-                  // via animateMotion's inline path, with a paired opacity
-                  // fade so it doesn't pop in/out at the ends. Staggered
-                  // begin times across many lanes read as a continuously
-                  // filled, genuinely moving ribbon rather than a few
-                  // points crawling the centerline.
-                  const base = anyHover ? (active ? 0.95 : 0.05) : 0.55;
-                  return (
-                    <circle key={pi} r={dot.r} fill={active ? "var(--red)" : "var(--slate)"} opacity={0}>
-                      <animateMotion path={dot.pathD} dur={`${dot.dur.toFixed(2)}s`} begin={`${dot.delay.toFixed(2)}s`} repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1" />
-                      <animate
-                        attributeName="opacity"
-                        values={`0;${base.toFixed(2)};${base.toFixed(2)};0`}
-                        keyTimes="0;0.15;0.85;1"
-                        dur={`${dot.dur.toFixed(2)}s`}
-                        begin={`${dot.delay.toFixed(2)}s`}
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                  );
-                })}
+                <SankeyParticleDots dots={dots} color={color} active={active} anyHover={anyHover} baseOpacity={0.55} />
               </g>
             );
           })}
@@ -242,8 +220,8 @@ export function MoneyFlowSankey({
                     ),
                   })
                 }
-                onClick={(e) => { e.stopPropagation(); setPinnedNode((p) => (p === n.id ? null : n.id)); onSelect?.(n.id); }}
-                onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); setPinnedNode((p) => (p === n.id ? null : n.id)); onSelect(n.id); } }}
+                onClick={(e) => { e.stopPropagation(); togglePin(n.id); onSelect?.(n.id); }}
+                onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); togglePin(n.id); onSelect(n.id); } }}
               >
                 <rect x={x0} y={y0} width={Math.max(1, x1 - x0)} height={Math.max(1, y1 - y0)} fill={isInvestor ? "var(--red)" : "var(--ink)"} />
                 <text x={isInvestor ? x0 - 8 : x1 + 8} y={(y0 + y1) / 2 - 5} textAnchor={isInvestor ? "end" : "start"} fontSize={10.5} fontWeight={isFocused ? 700 : 600} fill="var(--ink)">

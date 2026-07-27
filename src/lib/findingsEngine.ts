@@ -10,7 +10,6 @@ export interface Finding {
   id: string;
   text: string;
   period?: string;
-  dataQuality?: string;
   target: DrawerTarget | null;
   scrollToId?: string;
 }
@@ -101,7 +100,7 @@ function verificationChangeFindings(entries: Entry[], stage: Stage, now: Date): 
 // Unfiltered findings for the active dashboard — rank crossovers,
 // concentration shifts, and verification-rate changes, all real diffs
 // against a real historical reconstruction (entriesAsOf), never invented.
-export function computeUnfilteredFindings(entries: Entry[], dashboard: Dashboard, now = new Date()): Finding[] {
+function computeUnfilteredFindings(entries: Entry[], dashboard: Dashboard, now = new Date()): Finding[] {
   const stage = DASHBOARD_STAGE[dashboard];
   if (!stage) return [];
   const findings = [
@@ -117,7 +116,7 @@ export function computeUnfilteredFindings(entries: Entry[], dashboard: Dashboard
 // within that country, verified-vs-reported counts, and that country's
 // single strongest tracked position across all 4 stages. Every value here
 // is computed fresh from the current filtered scope, never hardcoded.
-export function computeCountryFindings(entries: Entry[], country: string): Finding[] {
+function computeCountryFindings(entries: Entry[], country: string): Finding[] {
   const findings: Finding[] = [];
   const stages: Stage[] = ["innovation", "scaling", "adoption", "investment"];
   const sharesByStage = Object.fromEntries(stages.map((s) => [s, countryShares(countByCountry(entries, s))[country] ?? 0])) as Record<Stage, number>;

@@ -3,6 +3,7 @@ import type { TrendPoint } from "../lib/types.ts";
 import { Tooltip } from "./Tooltip.tsx";
 import { fmtUsd } from "../lib/format.ts";
 import { STAGE_COLOR } from "../lib/stageColor.ts";
+import { pickDeclutteredLabelIndices, isPeakOrRising } from "../lib/chartLabels.ts";
 
 // Real disclosed investment (NSF grants, trailing 21d window) recorded once
 // per day since fundingUsd was added to TrendPoint (2026-07-20) — this data
@@ -56,28 +57,8 @@ export function FundingTrend({ trend }: { trend: TrendPoint[] }) {
   // keeps accumulating one point per day).
   const lastIdx = points.length - 1;
   const labelGap = 42;
-  const isExtreme = (i: number) =>
-    i > 0 && i < lastIdx &&
-    ((values[i] > values[i - 1] && values[i] > values[i + 1]) ||
-      (values[i] < values[i - 1] && values[i] < values[i + 1]));
-  const candidates = [0, ...values.map((_v, i) => i).filter(isExtreme), lastIdx];
-  const labelIdx: number[] = [];
-  for (const i of candidates) {
-    if (labelIdx.length === 0 || x(i) - x(labelIdx[labelIdx.length - 1]) >= labelGap) labelIdx.push(i);
-  }
-  // The latest value is the one figure this chart must always surface —
-  // swap out a too-close neighbor rather than ever dropping it.
-  if (labelIdx[labelIdx.length - 1] !== lastIdx) {
-    if (labelIdx.length && x(lastIdx) - x(labelIdx[labelIdx.length - 1]) < labelGap) labelIdx.pop();
-    labelIdx.push(lastIdx);
-  }
-  const aboveFor = (i: number) => {
-    const prev = values[Math.max(0, i - 1)];
-    const next = values[Math.min(lastIdx, i + 1)];
-    if (values[i] >= prev && values[i] >= next) return true; // peak (or rising edge)
-    if (values[i] <= prev && values[i] <= next) return false; // trough (or falling edge)
-    return i % 2 === 0;
-  };
+  const labelIdx = pickDeclutteredLabelIndices(values, x, labelGap);
+  const aboveFor = (i: number) => isPeakOrRising(values, i, lastIdx);
   // Point 0 sits in the same x column as the y-axis min/max tick labels —
   // push its value label toward whichever half of the chart ISN'T that
   // axis label, rather than the usual peak/trough rule, so it never

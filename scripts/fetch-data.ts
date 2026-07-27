@@ -244,6 +244,22 @@ function trendPoint(live: Entry[], allEntries: Entry[], prevPoint?: TrendPoint):
   };
 }
 
+// Shared shape for this file's soft-failing per-source fetches (EPO, NSF,
+// USASpending, SAM.gov, ...) — one implementation of "try, log+fall back to
+// a default on failure" instead of a hand-copied try/catch per source, each
+// with its own `xOk` boolean. Never rejects, so a caller can safely start
+// one of these before it's actually needed (see the SAM.gov call in
+// fetchVertical(), fired early to run concurrently with unrelated fetches)
+// and await it whenever the result is required.
+async function trackedFetch<T>(label: string, fn: () => Promise<T>, fallback: T): Promise<{ value: T; ok: boolean }> {
+  try {
+    return { value: await fn(), ok: true };
+  } catch (err) {
+    console.error(`${label} skipped:`, (err as Error).message);
+    return { value: fallback, ok: false };
+  }
+}
+
 async function fetchVertical(v: VerticalConfig): Promise<void> {
   const outPath = resolve(OUT_DIR, `${v.id}.json`);
   console.log(`\n=== ${v.label} (${v.id}) ===`);
@@ -283,26 +299,26 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
 
   const prev = readPrevious(outPath);
 
+  // Kicked off here, before patents/funding/companies/rdSpend/news, and not
+  // awaited until it's actually needed below — SAM.gov opportunities depend
+  // only on SAM_KEY + v.fundingKeyword (both already available), unlike
+  // USASpending's award search just below, which genuinely needs Massive's
+  // company list first. Running it concurrently with that whole chain
+  // instead of serialized behind it costs nothing (trackedFetch never
+  // rejects, so an early, not-yet-awaited failure just sits resolved until
+  // collected).
+  const samPromise = trackedFetch(
+    "SAM.gov",
+    () => fetchSamOpportunities(SAM_KEY, v.fundingKeyword),
+    [] as Entry[]
+  );
+
   // Patents and funding are additive and each fails soft — a missing key or
   // a down endpoint drops that source without breaking the build.
-  let patents: Entry[] = [];
-  let epoOk = false;
-  try {
-    patents = await fetchPatents(EPO_KEY, EPO_SECRET, EPO_N, v.epoCpcQuery);
-    epoOk = true;
-    console.log(`EPO: ${patents.length} patents`);
-  } catch (err) {
-    console.error("patents skipped:", (err as Error).message);
-  }
-  let funding: Entry[] = [];
-  let nsfOk = false;
-  try {
-    funding = await fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant);
-    nsfOk = true;
-    console.log(`NSF: ${funding.length} grants`);
-  } catch (err) {
-    console.error("funding skipped:", (err as Error).message);
-  }
+  const { value: patents, ok: epoOk } = await trackedFetch("patents", () => fetchPatents(EPO_KEY, EPO_SECRET, EPO_N, v.epoCpcQuery), [] as Entry[]);
+  if (epoOk) console.log(`EPO: ${patents.length} patents`);
+  const { value: funding, ok: nsfOk } = await trackedFetch("funding", () => fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant), [] as Entry[]);
+  if (nsfOk) console.log(`NSF: ${funding.length} grants`);
   // Not part of entries[]/the byId merge below — a market snapshot isn't a
   // discrete dated event, it's a standing fact about a company. On a
   // transient failure, carry the previous run's snapshot forward rather
@@ -333,29 +349,19 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   // already searches on. See usaSpending.ts for why recipient+keyword
   // together (not recipient alone) keeps this precise on large diversified
   // companies. No API key needed.
-  let usaSpendingAwards: Entry[] = [];
-  let usaSpendingOk = false;
-  try {
-    const companyNames = companies.map((c) => canonicalizeOrg(c.name).name);
-    usaSpendingAwards = await fetchUsaSpendingAwards(companyNames, v.fundingKeyword);
-    usaSpendingOk = true;
-    console.log(`USASpending: ${usaSpendingAwards.length} federal contract awards`);
-  } catch (err) {
-    console.error("USASpending skipped:", (err as Error).message);
-  }
+  const { value: usaSpendingAwards, ok: usaSpendingOk } = await trackedFetch(
+    "USASpending",
+    () => fetchUsaSpendingAwards(companies.map((c) => canonicalizeOrg(c.name).name), v.fundingKeyword),
+    [] as Entry[]
+  );
+  if (usaSpendingOk) console.log(`USASpending: ${usaSpendingAwards.length} federal contract awards`);
   // Real, currently-posted US federal solicitations (Adoption stage,
   // deploymentStatus: "announced", or "procurement" once a real award has
-  // resulted) — one query per vertical, same fundingKeyword as above. Needs
-  // SAM_KEY; soft-fails like every other source here if it's unset.
-  let samOpportunities: Entry[] = [];
-  let samGovOk = false;
-  try {
-    samOpportunities = await fetchSamOpportunities(SAM_KEY, v.fundingKeyword);
-    samGovOk = true;
-    console.log(`SAM.gov: ${samOpportunities.length} federal contract opportunities`);
-  } catch (err) {
-    console.error("SAM.gov skipped:", (err as Error).message);
-  }
+  // resulted) — same fundingKeyword as above. Needs SAM_KEY; soft-fails
+  // like every other source here if it's unset. Fetch was kicked off
+  // before patents/funding/companies above — this just collects the result.
+  const { value: samOpportunities, ok: samGovOk } = await samPromise;
+  if (samGovOk) console.log(`SAM.gov: ${samOpportunities.length} federal contract opportunities`);
   // Corporate R&D spend, free/no-key straight from SEC filings — a real
   // multi-year history in one pass, no daily accumulation needed (unlike
   // the NSF funding trend). See secEdgar.ts and DataFile.rdSpend for why

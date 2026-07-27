@@ -26,6 +26,7 @@
 // between prose seed entries and structured award records is attempted;
 // flagging this rather than silently pretending it's solved.
 import type { Entry } from "../types.ts";
+import { sleep } from "./util.ts";
 
 const BASE = "https://api.usaspending.gov/api/v2/search/spending_by_award/";
 const MAX_LIMIT = 100; // confirmed live: {"detail":"Field 'limit' value '101' is above max '100'"}
@@ -55,7 +56,6 @@ interface UsaSpendingResult {
   generated_internal_id?: string;
 }
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const GAP_MS = 150;
 
 async function fetchOneCompany(companyName: string, keyword: string, sinceDays: number): Promise<Entry[]> {

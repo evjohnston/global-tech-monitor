@@ -45,6 +45,7 @@
 // (whichever run in the rotation still has quota left) is an honest
 // fit, not a degraded one.
 import type { Entry } from "../types.ts";
+import { sleep } from "./util.ts";
 
 const BASE = "https://api.sam.gov/opportunities/v2/search";
 
@@ -120,7 +121,7 @@ export async function fetchSamOpportunities(apiKey: string, keyword: string, sin
   for (let i = 0; i < windows.length; i++) {
     // 2 back-to-back requests with no gap tripped a real 429 in a live
     // test — SAM.gov's per-key rate limit is stricter than USASpending's.
-    if (i > 0) await new Promise((r) => setTimeout(r, WINDOW_GAP_MS));
+    if (i > 0) await sleep(WINDOW_GAP_MS);
     opportunities.push(...(await fetchWindow(apiKey, keyword, windows[i].from, windows[i].to)));
   }
   const byId = new Map<string, SamOpportunity>();

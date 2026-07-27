@@ -2,6 +2,7 @@ import { useRef, useState, type MouseEvent } from "react";
 import type { RdSpendPoint } from "../lib/types.ts";
 import { Tooltip } from "./Tooltip.tsx";
 import { fmtUsd } from "../lib/format.ts";
+import { pickDeclutteredLabelIndices, isPeakOrRising } from "../lib/chartLabels.ts";
 
 // Real disclosed corporate R&D spend (SEC 10-K filings, src/lib/sources/
 // secEdgar.ts), summed across this vertical's tickers. A different, private-
@@ -46,28 +47,10 @@ export function RdSpendTrend({ points }: { points: RdSpendPoint[] }) {
   // vertical's 1987-2025 series).
   const lastIdx = points.length - 1;
   const labelGap = 46;
-  const isExtreme = (i: number) =>
-    i > 0 && i < lastIdx &&
-    ((values[i] > values[i - 1] && values[i] > values[i + 1]) ||
-      (values[i] < values[i - 1] && values[i] < values[i + 1]));
-  const candidates = [0, ...values.map((_v, i) => i).filter(isExtreme), lastIdx];
-  const labelIdx: number[] = [];
-  for (const i of candidates) {
-    if (labelIdx.length === 0 || x(i) - x(labelIdx[labelIdx.length - 1]) >= labelGap) labelIdx.push(i);
-  }
-  // The latest value is the one figure this chart must always surface —
-  // swap out a too-close neighbor rather than ever dropping it.
-  if (labelIdx[labelIdx.length - 1] !== lastIdx) {
-    if (labelIdx.length && x(lastIdx) - x(labelIdx[labelIdx.length - 1]) < labelGap) labelIdx.pop();
-    labelIdx.push(lastIdx);
-  }
+  const labelIdx = pickDeclutteredLabelIndices(values, x, labelGap);
   const aboveFor = (i: number) => {
     if (i === 0 || i === lastIdx) return true; // edges double as the x-axis year ticks below, so their label always goes above
-    const prev = values[i - 1];
-    const next = values[i + 1];
-    if (values[i] >= prev && values[i] >= next) return true;
-    if (values[i] <= prev && values[i] <= next) return false;
-    return i % 2 === 0;
+    return isPeakOrRising(values, i, lastIdx);
   };
   const aboveY = (py: number) => Math.max(8, py - 8);
   const belowY = (py: number) => Math.min(H - padB - 4, py + 13);

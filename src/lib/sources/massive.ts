@@ -13,6 +13,7 @@
 // returns `{status, ticker: {day: {c}, todaysChangePerc, updated}}` (`c` is
 // the latest close price, `updated` a nanosecond epoch timestamp).
 import type { CompanySnapshot } from "../types.ts";
+import { sleep } from "./util.ts";
 
 const BASE = "https://api.massive.com";
 
@@ -65,8 +66,6 @@ async function fetchOne(symbol: string, apiKey: string): Promise<CompanySnapshot
     return null;
   }
 }
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // Fetched one ticker at a time with a gap between each, not all in
 // parallel — confirmed by hand (2026-07-24) that firing every ticker's pair

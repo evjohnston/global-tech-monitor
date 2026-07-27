@@ -3,6 +3,7 @@ import type { Entry } from "../lib/types.ts";
 import { buildBumpData, type BumpMeasure } from "../lib/bumpChart.ts";
 import { bumpChartClaim } from "../lib/claims.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
+import { truncateToWidth } from "../lib/chartLabels.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
 const MEASURES: { key: BumpMeasure; label: string }[] = [
@@ -106,9 +107,7 @@ export function BumpChart({
             const labelY = labelPositions.get(s.country) ?? y(last.r);
             const rankSuffix = ` · #${last.r}`;
             const availPx = Math.max(20, W - (x(last.i) + 7) - 4);
-            const nameBudget = Math.max(3, Math.floor(availPx / LABEL_CHAR_PX) - rankSuffix.length);
-            const fullName = countryName(s.country);
-            const shownName = fullName.length > nameBudget ? `${fullName.slice(0, nameBudget - 1)}…` : fullName;
+            const { text: shownName } = truncateToWidth(countryName(s.country), availPx, LABEL_CHAR_PX, rankSuffix.length);
             return (
               <g
                 key={s.country}

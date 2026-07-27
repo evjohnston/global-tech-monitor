@@ -20,7 +20,6 @@ export function FindingsPanel({
           <div className="finding-text">{f.text}</div>
           <div className="finding-meta">
             {f.period && <span className="finding-period">{f.period}</span>}
-            {f.dataQuality && <span className="finding-quality">{f.dataQuality}</span>}
             {(f.target || f.scrollToId) && (
               <button
                 className="finding-link"

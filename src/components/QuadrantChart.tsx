@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Entry } from "../lib/types.ts";
 import { countByCountryAndStage } from "../lib/aggregate.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
+import { truncateToWidth } from "../lib/chartLabels.ts";
 import { Tooltip } from "./Tooltip.tsx";
 
 // Conservative Inter glyph-width estimate at this chart's 9.5px label size
@@ -84,10 +85,7 @@ export function QuadrantChart({
       const py = y(p.y);
       const lx = px + r(p.size) + 4;
       const availPx = Math.max(20, W - pad - lx);
-      const fullName = countryName(p.country);
-      const nameBudget = Math.max(3, Math.floor(availPx / LABEL_CHAR_PX));
-      const text = fullName.length > nameBudget ? `${fullName.slice(0, nameBudget - 1)}…` : fullName;
-      const width = Math.min(fullName.length, nameBudget) * LABEL_CHAR_PX;
+      const { text, width } = truncateToWidth(countryName(p.country), availPx, LABEL_CHAR_PX);
       let ly = py;
       while (placed.some((b) => Math.abs(ly - b.y) < LABEL_ROW_H && lx < b.rx && lx + width > b.lx)) {
         ly += LABEL_ROW_H;

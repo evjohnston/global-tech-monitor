@@ -1,4 +1,4 @@
-import { useRef, useState, type MouseEvent } from "react";
+import { useMemo, useRef, useState, type MouseEvent } from "react";
 import type { TrendPoint } from "../lib/types.ts";
 import { countryName, countryColor } from "../lib/countries.ts";
 import { Tooltip } from "./Tooltip.tsx";
@@ -24,18 +24,8 @@ export function TrendChart({
   const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<{ i: number; x: number; y: number } | null>(null);
 
-  if (trend.length < 2 || countries.length === 0) {
-    return (
-      <div className="trend-empty">
-        Trend builds as the scheduled fetch accumulates. One point recorded so far —
-        the line appears once there are at least two days of data.
-      </div>
-    );
-  }
-
   const order = countries;
   const colorOf = (code: string) => countryColor(code);
-
   const nHist = trend.length;
 
   const W = 720, H = 240, padL = 30, padR = 12, padT = 14, padB = 26;
@@ -50,16 +40,26 @@ export function TrendChart({
   // 100%, then reverting the next day. A rolling window means one degraded
   // day contributes at most 1/7th of the weight behind any point, instead
   // of being the entire denominator for that day's chart position.
+  //
+  // Memoized (along with yMax/the declutter results below) because this and
+  // the two greedy label-declutter passes are real, non-trivial work — a
+  // rolling-window reduce over every point for every country — that has no
+  // reason to rerun on a mousemove-driven hover re-render, only when the
+  // real trend/countries data actually changes.
   const ROLL = 7;
-  const shares = trend.map((_: TrendPoint, i: number) => {
-    const window = trend.slice(Math.max(0, i - ROLL + 1), i + 1);
-    const rolled = Object.fromEntries(order.map((c) => [c, window.reduce((s, p) => s + (p.counts[c] ?? 0), 0)]));
-    const total = order.reduce((s, c) => s + rolled[c], 0) || 1;
-    return {
-      date: trend[i].date,
-      pct: Object.fromEntries(order.map((c) => [c, (rolled[c] / total) * 100])) as Record<string, number>,
-    };
-  });
+  const shares = useMemo(
+    () =>
+      trend.map((_: TrendPoint, i: number) => {
+        const window = trend.slice(Math.max(0, i - ROLL + 1), i + 1);
+        const rolled = Object.fromEntries(order.map((c) => [c, window.reduce((s, p) => s + (p.counts[c] ?? 0), 0)]));
+        const total = order.reduce((s, c) => s + rolled[c], 0) || 1;
+        return {
+          date: trend[i].date,
+          pct: Object.fromEntries(order.map((c) => [c, (rolled[c] / total) * 100])) as Record<string, number>,
+        };
+      }),
+    [trend, order]
+  );
 
   // Dynamic Y-axis: zoom into the real range instead of a fixed 0-100% —
   // with 4-6 countries splitting the pie, no single share usually gets
@@ -69,9 +69,11 @@ export function TrendChart({
   // this is a share of a real total and can't honestly exceed it (a plain
   // +5pt headroom on a rawMax near 100 used to round up to a 110% top
   // gridline, which isn't a real value this chart could ever show).
-  const allVals = shares.flatMap((s) => order.map((c) => s.pct[c]));
-  const rawMax = Math.max(1, ...allVals);
-  const yMax = Math.min(100, Math.ceil((rawMax + 5) / 10) * 10);
+  const yMax = useMemo(() => {
+    const allVals = shares.flatMap((s) => order.map((c) => s.pct[c]));
+    const rawMax = Math.max(1, ...allVals);
+    return Math.min(100, Math.ceil((rawMax + 5) / 10) * 10);
+  }, [shares, order]);
 
   const x = (i: number) => padL + (i / Math.max(1, nHist - 1)) * plotW;
   const y = (pct: number) => padT + (1 - pct / yMax) * plotH;
@@ -113,8 +115,23 @@ export function TrendChart({
     }
     return new Map(rows.map((r) => [r.c, r.y]));
   }
-  const firstLabelY = declutterLabels(shares[0].pct);
-  const lastLabelY = declutterLabels(shares[shares.length - 1].pct);
+  const { firstLabelY, lastLabelY } = useMemo(
+    () =>
+      shares.length === 0
+        ? { firstLabelY: new Map<string, number>(), lastLabelY: new Map<string, number>() }
+        : { firstLabelY: declutterLabels(shares[0].pct), lastLabelY: declutterLabels(shares[shares.length - 1].pct) },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- declutterLabels is a pure function of `order`/`yMax`, already deps here
+    [shares, order, yMax]
+  );
+
+  if (trend.length < 2 || countries.length === 0) {
+    return (
+      <div className="trend-empty">
+        Trend builds as the scheduled fetch accumulates. One point recorded so far —
+        the line appears once there are at least two days of data.
+      </div>
+    );
+  }
 
   return (
     <figure style={{ margin: 0 }}>

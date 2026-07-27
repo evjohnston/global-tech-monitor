@@ -8,6 +8,8 @@ import {
 import { countryColor, countryName } from "../lib/countries.ts";
 import { usePrefersReducedMotion } from "../lib/useReducedMotion.ts";
 import { scatterMotionDots } from "../lib/sankeyParticles.ts";
+import { useSankeyIsolateSearch } from "../lib/useSankeyIsolateSearch.ts";
+import { SankeyParticleDots } from "./SankeyParticleDots.tsx";
 import { Tooltip } from "./Tooltip.tsx";
 
 const WIDTH = 1360;
@@ -42,11 +44,10 @@ export function ResearchFlowSankey({
   const reducedMotion = usePrefersReducedMotion();
   const [particlesOn, setParticlesOn] = useState(true);
   const [expanded, setExpanded] = useState(false);
-  const [hoverNode, setHoverNode] = useState<string | null>(null);
-  const [hoverLink, setHoverLink] = useState<number | null>(null);
-  const [pinnedNode, setPinnedNode] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [tip, setTip] = useState<{ x: number; y: number; content: React.ReactNode } | null>(null);
+  const {
+    setHoverNode, hoverLink, setHoverLink, pinnedNode, setPinnedNode, search, setSearch, tip, setTip,
+    focusNode, matchesSearch, anySearch, anyHover, reset, togglePin,
+  } = useSankeyIsolateSearch();
 
   const flow = useMemo(
     () => buildResearchFlow(entries, {
@@ -69,27 +70,43 @@ export function ResearchFlowSankey({
     });
   }, [flow]);
 
+  // Every institution here has exactly one real home country (researchFlow.ts
+  // only ever links a country to institutions actually headquartered
+  // there) — read back off the country->institution links themselves so
+  // rendering never needs a second lookup structure to stay in sync with
+  // it. Memoized (depends only on `graph`, which is itself memoized) so a
+  // mousemove-driven hover re-render doesn't rebuild this map from scratch.
+  const institutionCountryOf = useMemo(() => {
+    const map = new Map<string, string>();
+    if (!graph) return map;
+    for (const l of graph.links) {
+      const s = l.source as SankeyNode<ResearchFlowNode, { value: number }>;
+      const t = l.target as SankeyNode<ResearchFlowNode, { value: number }>;
+      if (s.kind === "country") map.set(t.id, s.id);
+    }
+    return map;
+  }, [graph]);
+
+  const maxValue = useMemo(() => (graph ? Math.max(1, ...graph.links.map((l) => l.value)) : 1), [graph]);
+
+  // Same reasoning as MoneyFlowSankey.tsx: real per-dot trig/path-string
+  // work, memoized on layout + particle toggle so it isn't recomputed on
+  // every mousemove-driven hover re-render.
+  const dotsByLink = useMemo(() => {
+    if (!graph || !particlesOn || reducedMotion) return [];
+    return graph.links.map((l, i) => {
+      const source = l.source as SankeyNode<ResearchFlowNode, { value: number }>;
+      const target = l.target as SankeyNode<ResearchFlowNode, { value: number }>;
+      const width = Math.max(1, l.width ?? 1);
+      return scatterMotionDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 4 + Math.sqrt(l.value / maxValue) * 14, i);
+    });
+  }, [graph, particlesOn, reducedMotion, maxValue]);
+
   if (!graph) {
     return <div className="trend-empty">Not enough institution-attributed research yet to draw a flow diagram.</div>;
   }
 
   const linkPath = sankeyLinkHorizontal();
-  const maxValue = Math.max(1, ...graph.links.map((l) => l.value));
-  const focusNode = hoverNode ?? pinnedNode;
-  const searchQuery = search.trim().toLowerCase();
-  const matchesSearch = (label: string) => searchQuery.length > 0 && label.toLowerCase().includes(searchQuery);
-  const anySearch = searchQuery.length > 0;
-
-  // Every institution here has exactly one real home country (researchFlow.ts
-  // only ever links a country to institutions actually headquartered
-  // there) — read back off the country->institution links themselves so
-  // rendering never needs a second lookup structure to stay in sync with it.
-  const institutionCountryOf = new Map<string, string>();
-  for (const l of graph.links) {
-    const s = l.source as SankeyNode<ResearchFlowNode, { value: number }>;
-    const t = l.target as SankeyNode<ResearchFlowNode, { value: number }>;
-    if (s.kind === "country") institutionCountryOf.set(t.id, s.id);
-  }
   const colorFor = (id: string) => countryColor(institutionCountryOf.get(id) ?? id);
 
   function isLinkActive(i: number, sourceId: string, targetId: string, sourceLabel: string, targetLabel: string): boolean {
@@ -102,7 +119,6 @@ export function ResearchFlowSankey({
     // from country of origin through to publications/patents.
     return institutionCountryOf.get(sourceId) === focusNode;
   }
-  const anyHover = focusNode != null || hoverLink != null || anySearch;
 
   return (
     <div>
@@ -120,7 +136,7 @@ export function ResearchFlowSankey({
           aria-label="Search research flow nodes"
           style={{ maxWidth: 200 }}
         />
-        <button className="chip" onClick={() => { setHoverNode(null); setHoverLink(null); setPinnedNode(null); setSearch(""); }}>Reset</button>
+        <button className="chip" onClick={reset}>Reset</button>
       </div>
 
       <div className="sankey-legend">
@@ -155,9 +171,7 @@ export function ResearchFlowSankey({
             const active = isLinkActive(i, source.id, target.id, source.label, target.label);
             const width = Math.max(1, l.width ?? 1);
             const color = colorFor(source.id);
-            const dots = particlesOn && !reducedMotion
-              ? scatterMotionDots(source.x1 ?? 0, l.y0 ?? 0, target.x0 ?? 0, l.y1 ?? 0, width, 4 + Math.sqrt(l.value / maxValue) * 14, i)
-              : [];
+            const dots = dotsByLink[i] ?? [];
             return (
               <g key={i}>
                 <path
@@ -189,22 +203,7 @@ export function ResearchFlowSankey({
                   onClick={(e) => { e.stopPropagation(); onSelectLink?.(source.id, target.id); }}
                   onKeyDown={(e) => { if (onSelectLink && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelectLink(source.id, target.id); } }}
                 />
-                {dots.map((dot, pi) => {
-                  const base = anyHover ? (active ? 0.95 : 0.05) : 0.5;
-                  return (
-                    <circle key={pi} r={dot.r} fill={color} opacity={0}>
-                      <animateMotion path={dot.pathD} dur={`${dot.dur.toFixed(2)}s`} begin={`${dot.delay.toFixed(2)}s`} repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1" />
-                      <animate
-                        attributeName="opacity"
-                        values={`0;${base.toFixed(2)};${base.toFixed(2)};0`}
-                        keyTimes="0;0.15;0.85;1"
-                        dur={`${dot.dur.toFixed(2)}s`}
-                        begin={`${dot.delay.toFixed(2)}s`}
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                  );
-                })}
+                <SankeyParticleDots dots={dots} color={color} active={active} anyHover={anyHover} baseOpacity={0.5} />
               </g>
             );
           })}
@@ -260,8 +259,8 @@ export function ResearchFlowSankey({
                     ),
                   })
                 }
-                onClick={(e) => { e.stopPropagation(); setPinnedNode((p) => (p === n.id ? null : n.id)); onSelect?.(selectValue); }}
-                onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); setPinnedNode((p) => (p === n.id ? null : n.id)); onSelect(selectValue); } }}
+                onClick={(e) => { e.stopPropagation(); togglePin(n.id); onSelect?.(selectValue); }}
+                onKeyDown={(e) => { if (onSelect && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); togglePin(n.id); onSelect(selectValue); } }}
               >
                 <rect x={x0} y={y0} width={Math.max(1, x1 - x0)} height={Math.max(1, y1 - y0)} fill={fill} />
                 {showLabel && (

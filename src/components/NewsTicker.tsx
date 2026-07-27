@@ -42,19 +42,21 @@ export function NewsTicker({
   const [hovering, setHovering] = useState(false);
   const [manualOffsetPx, setManualOffsetPx] = useState(0);
 
-  const groups = useMemo(() => {
-    const news = entries.filter(isNewsEntry);
-    const deduped = dedupeNews(news);
-    const ranked = rankNewsForTrack(deduped, { dashboard, country: country === "all" ? null : country });
-    return ranked.slice(0, LIMIT);
-  }, [entries, dashboard, country]);
+  // Shared by both the country-scoped ranking and its fallback below — the
+  // filter+dedupe step doesn't depend on dashboard/country, so it only
+  // needs to run once per real entries[] change, not once per ranking.
+  const deduped = useMemo(() => dedupeNews(entries.filter(isNewsEntry)), [entries]);
+
+  const groups = useMemo(
+    () => rankNewsForTrack(deduped, { dashboard, country: country === "all" ? null : country }).slice(0, LIMIT),
+    [deduped, dashboard, country]
+  );
 
   const usingFallback = groups.length < 4 && country !== "all";
   const fallbackGroups = useMemo(() => {
     if (!usingFallback) return [];
-    const news = entries.filter(isNewsEntry);
-    return rankNewsForTrack(dedupeNews(news), { dashboard, country: null }).slice(0, LIMIT);
-  }, [usingFallback, entries, dashboard]);
+    return rankNewsForTrack(deduped, { dashboard, country: null }).slice(0, LIMIT);
+  }, [usingFallback, deduped, dashboard]);
   const visible = usingFallback ? fallbackGroups : groups;
 
   if (visible.length === 0) {

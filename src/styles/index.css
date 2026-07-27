@@ -63,13 +63,9 @@
    palette; dark-mode values are real, hand-picked tones — never a plain
    inversion of the light set. */
 :root {
-  --page-bg: var(--panel); --header-bg: var(--paper);
-  --surface-1: var(--paper); --surface-2: var(--panel-2); --surface-3: #e4e7ea;
-  --surface-selected: #14181d; --surface-hover: var(--panel);
-  --border-subtle: var(--line); --border-default: var(--line-2); --border-strong: var(--slate);
-  --text-primary: var(--ink); --text-secondary: var(--ink-2); --text-muted: var(--mist); --text-disabled: #a7afb8;
+  --surface-selected: #14181d;
   --on-selected: #ffffff;
-  --gridline: var(--line); --track-bg: var(--panel); --focus-ring: var(--red);
+  --focus-ring: var(--red);
   color-scheme: light;
 }
 /* Dark theme — same rules (zero radius, borders not shadows, same
@@ -84,13 +80,9 @@
   --ink: #e8eaed; --ink-2: #b8c0cb; --slate: #8b95a3; --mist: #6b7480;
   --line: #2a2f37; --line-2: #3a4049; --panel: #1a1d22; --panel-2: #20242b; --paper: #14161a;
 
-  --page-bg: #101217; --header-bg: #11141a;
-  --surface-1: #15181e; --surface-2: #1a1e25; --surface-3: #20252e;
-  --surface-selected: #29313d; --surface-hover: #242a34;
-  --border-subtle: #2a303a; --border-default: #353d49; --border-strong: #4a5564;
-  --text-primary: #f1f3f5; --text-secondary: #b6bec9; --text-muted: #818c9b; --text-disabled: #626c79;
+  --surface-selected: #29313d;
   --on-selected: #f1f3f5;
-  --gridline: #2c323c; --track-bg: #1e2229; --focus-ring: #88b5eb;
+  --focus-ring: #88b5eb;
   color-scheme: dark;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -728,7 +720,7 @@ a { color: inherit; }
 .finding-item { padding: var(--sp-2) var(--sp-3); background: var(--panel-2); border-left: 3px solid var(--red); }
 .finding-text { font-size: var(--fs-body); color: var(--ink); line-height: 1.5; text-align: left; }
 .finding-meta { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-.finding-period, .finding-quality { font-size: 10.5px; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.03em; }
+.finding-period { font-size: 10.5px; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.03em; }
 .finding-link { font: inherit; font-size: 11.5px; font-weight: 600; color: var(--red); background: none; border: none; padding: 0; cursor: pointer; }
 .finding-link:hover { text-decoration: underline; }
 .finding-context { font-size: 11px; color: var(--ink-2); line-height: 1.4; margin-top: 2px; }
