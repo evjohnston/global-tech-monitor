@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-27T02:10:31.952Z",
+  "generatedAt": "2026-07-27T06:25:59.371Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -55332,6 +55332,69 @@
       "countryEvidence": "US federal solicitation (SAM.gov)",
       "ingestedAt": "2026-07-27T00:22:10.627Z",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "nsf-2555436",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "SaTC 2.0: RES: Verification of Quantum Hardware via Existing Syndrome Measurements",
+      "org": "Columbia University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2555436",
+      "amountUsd": 1200000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "As quantum computing becomes increasingly accessible through cloud services, users face a significant security challenge in verifying that their sensitive computations actually run on the specific, authentic hardware for which they have paid.  The project's novelties are how information used to correct computational errors reveals tiny physical imperfections and unique noise patterns inherent to every quantum chip serve as a reliable digital fingerprint, similar to a human iris scan.  By leveraging these existing characteristics, the project develops a low-cost and non-invasive method to verify the identity of a remote quantum computer without requiring additional hardware.  The project's broader significance and importance are found in its ability to strengthen trust in emerging quantum technologies by confirming the origin and integrity of a computation.  This work serves the national interest by securing critical applications in fields such as finance, science, and national security, while also providing open-source tools to foster broader innovation in the research community. \r\n\r\nThis project develops a hardware-agnostic framework for quantum platform attestation by utilizing the classical syndrome outputs of Quantum Error Correction as physical uncloneable functions.  Unlike previous methods that require dedicated and expensive test circuits, this approach turns unavoidable error correction byproducts into security primitives that can be observed without corrupting the primary computation.  The research analyzes the fingerprinting potential of diverse error correction codes across multiple hardware platforms and develops advanced machine learning models designed to be resilient to environmental noise and hardware drift.  The research develops novel compilation strategies that embed verification routines directly into useful computations to prevent provider evasion.  Additionally, the research explores formal threat models to quantify the security of these syndrome-based fingerprints against sophisticated modeling attacks.  This work enables a robust, efficient, and obfuscated verification system suitable for practical cloud-based quantum computing environments.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Dan Rubenstein"
+      ],
+      "venue": "SaTC: Secure and Trustworthy Cyberspace, Nat Security, Secure Border & Pub Safety, QUANTUM COMPUTING",
+      "ingestedAt": "2026-07-27T06:25:59.371Z",
+      "orgId": "columbia university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2608967",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Elements: NequIP infrastructure for training and deploying neural equivariant interatomic potentials and materials foundation models",
+      "org": "Harvard University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2608967",
+      "amountUsd": 600000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Many facets of the US economy require the ability to design and understand next-generation functional materials. Batteries, fuel cells, catalysts, thermal coatings, polymers, electronic materials, and biomolecular systems all depend on atomic scale mechanisms that are difficult to measure directly and too expensive to explore by trial and error. Atomistic simulation can reveal these mechanisms and guide materials design, but the most accurate quantum mechanical simulations are usually too slow for the large systems and longtime scales needed to describe realistic materials behavior. This project will develop and sustain an open cyberinfrastructure ecosystem that will make machine learned models of atomic interactions accurate, fast, reliable, and practical for broad use in science and increasingly in industry. The resulting tools will allow researchers to simulate complex materials with nearly quantum mechanical fidelity at a small fraction of the computational cost, lowering barriers for academic, national laboratory, and industrial users. By strengthening a widely adopted open-source platform for materials simulation, the project will accelerate discovery in areas central to national interests, including energy storage, catalysis, manufacturing, electronics, and health related molecular science. The project will also support education and workforce development by training students and researchers at the intersection of materials science, chemistry, physics, computer science, and machine learning, and by providing tutorials, documentation, reusable models, and community support that make advanced simulation methods accessible to a much wider user base.\r\n \r\nThe project will expand the NequIP and Allegro ecosystem for training and deploying neural equivariant machine learned interatomic potentials (MLIPs) and materials foundation models. The technical scope includes implementation of several new capabilities that are in strong demand both in academic and industrial research efforts but are not available yet in production-level codes. We will emphasize the following thrusts of innovation: (1) Substantial overhaul for next-generation performance and extensibility significantly boosting performance for both training and large-scale deployment (2) Continuous training and release of accurate benchmark-leading foundation MLIPs, universally applicable across many materials classes. (3) Implementation and assessment of leading uncertainty quantification strategies as extension packages to enable uncertainty-aware active learning and training set generation, significantly enhancing the trustworthiness of simulations. (4) Achieving production-ready GPU-accelerated deployment of explicit long-range electrostatic models. (5) Implementing adaptive multiple time-stepping MD integration algorithms with MLIPs (6) Creating a unified differentiable response framework to model materials response properties (dielectric, magnetic, NMR), ensuring thermodynamic consistency, as well as development of temperature-dependent coarse-grained MLIPs.\r\n\r\nThis award by the Office of Advanced Cyberinfrastructure(OAC) is jointly supported by the section of Material Research within the Directorate for Mathematical and Physical Science (MPS).\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Boris Kozinsky"
+      ],
+      "venue": "Artificial Intelligence (AI), Software Institutes, Advanced Manufacturing, ADVANCED SOFTWARE TECH & ALGOR",
+      "ingestedAt": "2026-07-27T06:25:59.371Z",
+      "orgId": "harvard university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2629392",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Conference: Co-designing Networks, Applications, Operating Systems, and Architectures for Large-Scale, AI-driven, Chiplet-rich Systems",
+      "org": "Cornell University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2629392",
+      "amountUsd": 60000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Computing systems across all scales – from mobile devices to supercomputers – are increasingly transitioning to chiplet-based architectures and advanced 3D packaging techniques to sustain performance and energy efficiency gains in the wake of the slowing of Moore's Law. Concurrently, applications like Artificial Intelligence and Machine Learning are expanding at an exponential pace, placing unprecedented demands on compute, memory, and communication. While individual domains have begun exploring chiplets, hardware vendors have largely implemented these technologies in isolation. Without a coordinated, cross-layer transformation, modern systems will fail to fully exploit the potential of emerging hardware packaging. \r\n\r\nThis workshop brings together a diverse set of stakeholders from academia, industry, and the national labs to articulate key challenges and create a cross-cutting, near- and long-term actionable plan for the community to pursue to design efficient, scalable, chiplet-rich systems. The workshop will explore fundamental systems research challenges required to advance artificial intelligence and machine learning spanning semiconductor packaging, memory systems, communication fabrics, resource management, scheduling, operating systems, networking, AI applications, and quantum computing. By bringing together experts from these diverse domains, the workshop will identify new abstractions, interfaces, and system architectures that treat data movement and communication as first-class design principles across scale-in, scaleup, scale-out, and geographically distributed computing environments. The resulting roadmap will provide a coordinated vision for future research investments and help guide the broader computing community toward holistic solutions that maximize the performance, efficiency, scalability, and programmability of chiplet-rich systems. The resulting roadmap will help inform future research priorities, foster new interdisciplinary collaborations, and accelerate innovation across academia, industry, and government laboratories. By addressing challenges in AI infrastructure, high-performance computing, cloud computing, and emerging quantum systems, the workshop will contribute to technologies that support scientific discovery, economic competitiveness, national security, and technological leadership.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Hakim Weatherspoon"
+      ],
+      "venue": "Artificial Intelligence (AI), RES IN NETWORKING TECH & SYS, CONFERENCE AND WORKSHOPS",
+      "ingestedAt": "2026-07-27T06:25:59.371Z",
+      "orgId": "cornell university",
+      "relevanceScore": 0.85
     }
   ],
   "trend": [
@@ -57902,8 +57965,8 @@
         "ZA": 3,
         "US": 58,
         "TW": 3,
-        "FR": 13,
         "LB": 2,
+        "FR": 13,
         "JP": 19,
         "ES": 4,
         "LK": 1,
@@ -57952,10 +58015,10 @@
         "innovation": 963,
         "scaling": 92,
         "adoption": 64,
-        "investment": 122
+        "investment": 125
       },
-      "fundingUsd": 89347657,
-      "totalEntries": 2725
+      "fundingUsd": 91207657,
+      "totalEntries": 2728
     }
   ],
   "notes": [
@@ -57991,7 +58054,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -58012,28 +58075,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
     },
     {
       "sourceName": "SAM.gov Opportunities (federal solicitations)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
@@ -58047,35 +58110,35 @@
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-27T02:10:31.952Z",
+      "lastSuccessfulPull": "2026-07-27T06:25:59.371Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -58086,182 +58149,182 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 12258185092.320002,
-      "asOf": "2026-07-27T02:04:01.180Z",
+      "asOf": "2026-07-27T06:19:13.056Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 4703443119.05,
-      "asOf": "2026-07-27T02:04:16.278Z",
+      "asOf": "2026-07-27T06:19:28.114Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc.",
       "marketCapUsd": 6004916205.700001,
-      "asOf": "2026-07-27T02:04:31.402Z",
+      "asOf": "2026-07-27T06:19:43.209Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
       "marketCapUsd": 1675724953.4099998,
-      "asOf": "2026-07-27T02:04:46.445Z",
+      "asOf": "2026-07-27T06:19:58.342Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
       "marketCapUsd": 289750143.15,
-      "asOf": "2026-07-27T02:05:01.497Z",
+      "asOf": "2026-07-27T06:20:13.497Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
       "marketCapUsd": 541340817.57,
-      "asOf": "2026-07-27T02:05:16.572Z",
+      "asOf": "2026-07-27T06:20:28.669Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 201795764994.1,
-      "asOf": "2026-07-27T02:05:31.697Z",
+      "asOf": "2026-07-27T06:20:43.838Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3910399362863.94,
-      "asOf": "2026-07-27T02:05:46.744Z",
+      "asOf": "2026-07-27T06:20:58.990Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 2835433526516.8,
-      "asOf": "2026-07-27T02:06:01.851Z",
+      "asOf": "2026-07-27T06:21:14.106Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2496832671189.96,
-      "asOf": "2026-07-27T02:06:16.885Z",
+      "asOf": "2026-07-27T06:21:29.216Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 77063963431.5,
-      "asOf": "2026-07-27T02:06:31.945Z",
+      "asOf": "2026-07-27T06:21:44.374Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
       "marketCapUsd": 465662079999.99994,
-      "asOf": "2026-07-27T02:06:46.990Z",
+      "asOf": "2026-07-27T06:21:59.535Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5009871640000,
-      "asOf": "2026-07-27T02:07:02.124Z",
+      "asOf": "2026-07-27T06:22:14.711Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 134458692697.8,
-      "asOf": "2026-07-27T02:07:17.202Z",
+      "asOf": "2026-07-27T06:22:29.759Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 77032255218.24,
-      "asOf": "2026-07-27T02:07:32.272Z",
+      "asOf": "2026-07-27T06:22:44.868Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 286789455461.76,
-      "asOf": "2026-07-27T02:07:47.348Z",
+      "asOf": "2026-07-27T06:23:00.037Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 104588874822.25,
-      "asOf": "2026-07-27T02:08:02.434Z",
+      "asOf": "2026-07-27T06:23:15.121Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 55927607239.71,
-      "asOf": "2026-07-27T02:08:17.481Z",
+      "asOf": "2026-07-27T06:23:30.182Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 14105582157.24,
-      "asOf": "2026-07-27T02:08:32.562Z",
+      "asOf": "2026-07-27T06:23:45.328Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
       "marketCapUsd": 8698815993.73,
-      "asOf": "2026-07-27T02:08:47.606Z",
+      "asOf": "2026-07-27T06:24:00.418Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 425760744337.5,
-      "asOf": "2026-07-27T02:09:02.720Z",
+      "asOf": "2026-07-27T06:24:15.491Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 674898269000,
-      "asOf": "2026-07-27T02:09:17.761Z",
+      "asOf": "2026-07-27T06:24:30.548Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 63151265916.49,
-      "asOf": "2026-07-27T02:09:32.795Z",
+      "asOf": "2026-07-27T06:24:45.681Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
       "marketCapUsd": 449993595703.05,
-      "asOf": "2026-07-27T02:09:47.838Z",
+      "asOf": "2026-07-27T06:25:00.777Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
       "marketCapUsd": 50801060956.1,
-      "asOf": "2026-07-27T02:10:02.918Z",
+      "asOf": "2026-07-27T06:25:15.877Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
       "marketCapUsd": 13693289525.76,
-      "asOf": "2026-07-27T02:10:17.961Z",
+      "asOf": "2026-07-27T06:25:31.039Z",
       "url": "https://www.sktelecom.com"
     }
   ],

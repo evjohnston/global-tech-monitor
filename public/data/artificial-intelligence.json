@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-07-27T02:22:34.162Z",
+  "generatedAt": "2026-07-27T06:38:14.447Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -97161,6 +97161,405 @@
       "countryEvidence": "US federal solicitation (SAM.gov)",
       "ingestedAt": "2026-07-27T00:34:17.604Z",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "nsf-2551339",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: A General Neural Light Transport and Material Framework",
+      "org": "Cornell University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2551339",
+      "amountUsd": 300000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Today, realistic image synthesis or rendering software creates computer graphics images of real and imaginary worlds for movies and games, helps design buildings and plan renovations, and lets engineers see the products they are creating. To create images that truly depict the world as it would appear in reality, the users of rendering systems have to build elaborate models that include every detail that could contribute to visual appearance. In a human character every hair fiber is represented explicitly; in a meadow every blade of grass is its own separate object. Creating these models is slow and expensive, and rendering them requires a substantial amount of computation time. This project explores a fundamentally new way to represent scenes using machine learning, which learns a description of how objects reflect light directly from real and simulated measurements. These new models will be able to create visually realistic worlds with less complexity in the model, encoding how objects look without having to model very small structures explicitly. The learned model also will provide a single representation for all kinds of objects and materials. This representation is the basis for two further aspects of the project. One goal is to directly predict how light reflects through the scene, without explicit simulation. A second goal is to create generative AI tools that start with coarse models, text, and images, and generate fine-scale scene detail automatically. Together this project aims to transform the way materials and light transport are represented in computer graphics, enabling downstream applications including industrial design, entertainment, advertising, home remodeling, and architecture. The project will also support overhauling widely used classroom content to reflect the impact of machine learning on computer graphics and to introduce these topics through research projects for early-stage undergraduate researchers.\r\n\r\nThe path to develop this new approach involves replacing, one by one, expensive physical models for light transport and materials with compact neural abstractions. Starting with the transport or propagation of light in a scene, neural approaches for light transport will be developed. The project will use data computed by path tracing (a method to explicitly simulate light transport) to train a machine learning transformer on point clouds, which can be applied for general scenes and predicts the light distribution due to global illumination. On the material side, neural materials will be extended from conventional opaque objects to subsurface scattering, where light scatters within the material, and ultimately to a voxel-based light field scattering model that can approximate any kind of scene content. This will lead to a unified neural representation for geometry and materials in which objects and scenes are not represented explicitly but rather abstracted into a model for how they scatter light locally. These unified models in turn will define a latent space for local scattering behaviors that can provide a richer form of input for improved transformer-based global illumination models. Neural light transport and materials also offer new opportunities in content creation, including novel generative appearance models that can take in a simple text prompt or image to create rich visual appearance of natural or synthetic worlds, and can fill in detail conditioned on existing larger-scale content. The ultimate goal is to easily specify and manipulate appearance from the smallest visible details all the way up to full virtual environments.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Steve Marschner"
+      ],
+      "venue": "Artificial Intelligence (AI), BRAZIL, Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "cornell university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2615553",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: Understanding the Wide-scale Impact of Generative AI on Online Communities",
+      "org": "Regents of the University of Michigan - Ann Arbor",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2615553",
+      "amountUsd": 286177,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Online communities are essential for social support, knowledge creation, creativity, and other social goods. However, the rapid adoption of generative artificial intelligence (GenAI) tools poses challenges to these vital social structures. GenAI’s ability to generate human-quality text, images, and videos is changing how content is created and consumed online in ways that could disrupt online communities. This project will study the impact GenAI might have on creation of content and participation in online communities; on the practice and effectiveness of community governance; on how people evaluate content posted to online communities; and on the effects on outcomes for both community members and the community as a whole. These findings will suggest potential improvements for both the design and governance of online communities and AI systems, both technologies of significant social importance.\r\n \r\nThis project will consider these aspects -- the shifts in participation, governance, evaluation, and outcomes -- as a framework to study GenAI's effect on online communities and our society. The project team will assess these questions by studying several widely-used online community platforms with a range of platform designs and community goals, in order to create generalizable insights about the impact of GenAI on online communities. For each site, the project will follow research questions aligned with the framework, using multiple methods and techniques, from qualitative semi-structured interviews of participants and community leaders to quantitative methods like interrupted time series analysis of communities’ activity logs. Because robust detection and identification of AI-generated content will likely remain an unsolved problem, the project will use other techniques such as temporal analysis, community responses, and expert judgments by community leaders as key indicators of the presence of AI-generated content. Taken together, this research aims to inform and transform our understanding of GenAI in online communities, leading to advancement in numerous academic fields while informing the design and governance of these new technologies.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Eric Gilbert"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "regents of the university of michigan ann arbor",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2551510",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "HCC: Responsible AI Guidance for Visual Data Analysis",
+      "org": "Georgia Tech Research Corporation",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2551510",
+      "amountUsd": 400173,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Artificial intelligence (AI) tools are being rapidly integrated into the software that people use to explore and make sense of data. These tools can suggest charts, highlight patterns, and even guide users toward conclusions automatically. While such assistance can be helpful, it is not yet well understood when AI guidance improves decision-making versus when it leads people to over-rely on automated suggestions and potentially miss important insights. This project addresses that gap by studying how different forms of AI guidance affect the way people analyze data and draw conclusions, with the goal of ensuring that future AI-powered visual data tools are designed responsibly. The findings will benefit anyone who uses visual data analysis software in fields ranging from business and healthcare to national security, and will help establish design practices that keep humans meaningfully in control even as AI capabilities continue to advance.\r\n\r\nThis project pursues four interconnected research activities. First, the research team will develop a software testbed with modular AI guidance components focused on chart creation and visual analysis of tabular data. Second, the team will develop computational metrics capable of measuring, in real time and after the fact, how much a person relies on AI guidance while performing analysis tasks, enabling detection of both under-reliance and over-reliance. Third, a series of controlled user studies will be conducted using this testbed to determine which types of visual analytics tasks are most and least suited to AI guidance, and to establish baselines for appropriate guidance utilization. Fourth, the team will design and evaluate user interface components that use these metrics to detect suboptimal guidance usage and prompt users toward more effective engagement. The testbed and associated code will be released as open-source resources for the broader research and development communities.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Alexander Endert"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "georgia tech research",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2616890",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: Trustworthy Web Interaction for People with Visual Impairments through Intelligent Detection and Management of Deceptive Web Designs",
+      "org": "Old Dominion University Research Foundation",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2616890",
+      "amountUsd": 391332,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "The internet plays a central role in most areas of society, including, but not limited to communication, education, employment, healthcare, government services, and commerce. However, some websites use deceptive design practices, often called dark patterns, that manipulate users into making unintended decisions, sharing personal information, or spending money. These practices can pose unique challenges for people with visual impairments who rely on screen readers and other nonvisual technologies, because important visual and spatial cues may be inaccessible or misleading. This project seeks to make web interaction safer and more trustworthy by developing intelligent technologies that help people with visual impairments recognize, understand, and manage deceptive web designs. The project will benefit people with visual impairments by reducing risks, such as unintended purchases or privacy violations, and decrease cognitive burden during everyday online activities. The resulting knowledge and technologies will also contribute to more effective and ethical digital design practices, support the training of students in human-computer interaction and trustworthy artificial intelligence, and inform the development of digital tools and design practices that improve transparency, user protection, and trustworthiness across the broader Web.\r\n\r\nThis project investigates how artificial intelligence can be used to detect and mitigate deceptive web design patterns that disproportionately affect screen reader users. The research combines advances in large language model–based agentic artificial intelligence, accessibility research, and human-centered design. First, the project will develop intelligent detection algorithms that automatically analyze webpage layouts, interaction workflows, user actions, and accessible navigation paths to identify deceptive patterns, including those that arise from mismatches between visual webpage structure and screen reader navigation. Second, the project will design and develop customizable nonvisual assistive interfaces that help users understand and manage detected deceptive patterns, with interface requirements and refinements informed through iterative studies involving people with visual impairments. Third, the project will integrate these technologies into a browser extension and evaluate their real world effectiveness, usability, privacy implications, cost, and latency through controlled experiments and user studies. More broadly, the project will investigate how intelligent agents can model screen reader navigation behavior to identify deceptive patterns, explain associated risks, and support informed user decision making under real-world constraints. The project will generate new knowledge on trustworthy artificial intelligence, accessible computing, and human-centered web technologies, while advancing methods for protecting users from online deception in real-world digital environments.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Vikas Ganjigunte Ashok"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "old dominion university research foundation",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2616891",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: Enabling Screen Reader Users to Navigate Deceptive Web Design Patterns",
+      "org": "Michigan State University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2616891",
+      "amountUsd": 372611,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "The internet plays a central role in most areas of society, including, but not limited to communication, education, employment, healthcare, government services, and commerce. However, some websites use deceptive design practices, often called dark patterns, that manipulate users into making unintended decisions, sharing personal information, or spending money. These practices can pose unique challenges for people with visual impairments who rely on screen readers and other nonvisual technologies, because important visual and spatial cues may be inaccessible or misleading. This project seeks to make web interaction safer and more trustworthy by developing intelligent technologies that help people with visual impairments recognize, understand, and manage deceptive web designs. The project will benefit people with visual impairments by reducing risks, such as unintended purchases or privacy violations, and decrease cognitive burden during everyday online activities. The resulting knowledge and technologies will also contribute to more effective and ethical digital design practices, support the training of students in human-computer interaction and trustworthy artificial intelligence, and inform the development of digital tools and design practices that improve transparency, user protection, and trustworthiness across the broader Web.\r\n\r\nThis project investigates how artificial intelligence can be used to detect and mitigate deceptive web design patterns that disproportionately affect screen reader users. The research combines advances in large language model–based agentic artificial intelligence, accessibility research, and human-centered design. First, the project will develop intelligent detection algorithms that automatically analyze webpage layouts, interaction workflows, user actions, and accessible navigation paths to identify deceptive patterns, including those that arise from mismatches between visual webpage structure and screen reader navigation. Second, the project will design and develop customizable nonvisual assistive interfaces that help users understand and manage detected deceptive patterns, with interface requirements and refinements informed through iterative studies involving people with visual impairments. Third, the project will integrate these technologies into a browser extension and evaluate their real world effectiveness, usability, privacy implications, cost, and latency through controlled experiments and user studies. More broadly, the project will investigate how intelligent agents can model screen reader navigation behavior to identify deceptive patterns, explain associated risks, and support informed user decision making under real-world constraints. The project will generate new knowledge on trustworthy artificial intelligence, accessible computing, and human-centered web technologies, while advancing methods for protecting users from online deception in real-world digital environments.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Hae-Na Lee"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "michigan state university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2541551",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "CAREER: Reliable and Communication-aware Ad-hoc Teaming and Collaborative Computing for Cloudless AI at the edge",
+      "org": "University of Houston",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2541551",
+      "amountUsd": 293442,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Many smart devices such as sensors, phones, and small robots often depend on distant cloud servers to process data and run complex tasks such as artificial intelligence. When these connections fail, such as during outages or in rural areas with weak networks, many systems stop working. This project develops a new way for nearby devices to form teams on the fly, share their computing power, and solve complex problems together without relying on the cloud. The goal is to make technology more reliable, especially in places where internet access is limited or unreliable, and to support critical applications like disaster response and remote healthcare.\r\n\r\nThe research investigates how distributed edge devices can dynamically coordinate computing and communication under resource constraints and intermittent connectivity. The work is organized into several interconnected research thrusts. One thrust studies decentralized decision-making mechanisms that enable devices to form cooperative groups while balancing efficiency, incentives, and resource availability. It also explores adaptive approaches for partitioning and scheduling large-scale artificial intelligence workloads across heterogeneous devices in real time. Additional efforts focus on improving robustness and trustworthiness through learning-based reliability modeling and distributed validation mechanisms that can identify faulty or adversarial behavior. A final thrust examines communication-efficient machine learning techniques that reduce overhead while maintaining performance in constrained environments.\r\n\r\nThe project has broad benefits across education, society, and the economy. It enables reliable computing in areas with limited connectivity, helping applications such as rural communication, disaster recovery, transportation systems, and space exploration. Educational activities include hands on learning with robotics and embedded systems, outreach programs for pre college students, and interactive events that increase interest in science and engineering. The work also contributes to workforce development by training students in emerging areas of edge computing and artificial intelligence. In the long term, this research can support new business opportunities, strengthen national security by reducing reliance on centralized infrastructure, and help create more resilient and accessible technology systems.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Biresh Kumar Joardar"
+      ],
+      "venue": "Artificial Intelligence (AI), CAREER-Faculty Erly Career Dev, COMPUTER SYSTEMS",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "university of houston",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2615552",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: Understanding the Wide-scale Impact of Generative AI on Online Communities",
+      "org": "Cornell University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2615552",
+      "amountUsd": 413823,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Online communities are essential for social support, knowledge creation, creativity, and other social goods. However, the rapid adoption of generative artificial intelligence (GenAI) tools poses challenges to these vital social structures. GenAI’s ability to generate human-quality text, images, and videos is changing how content is created and consumed online in ways that could disrupt online communities. This project will study the impact GenAI might have on creation of content and participation in online communities; on the practice and effectiveness of community governance; on how people evaluate content posted to online communities; and on the effects on outcomes for both community members and the community as a whole. These findings will suggest potential improvements for both the design and governance of online communities and AI systems, both technologies of significant social importance.\r\n \r\nThis project will consider these aspects -- the shifts in participation, governance, evaluation, and outcomes -- as a framework to study GenAI's effect on online communities and our society. The project team will assess these questions by studying several widely-used online community platforms with a range of platform designs and community goals, in order to create generalizable insights about the impact of GenAI on online communities. For each site, the project will follow research questions aligned with the framework, using multiple methods and techniques, from qualitative semi-structured interviews of participants and community leaders to quantitative methods like interrupted time series analysis of communities’ activity logs. Because robust detection and identification of AI-generated content will likely remain an unsolved problem, the project will use other techniques such as temporal analysis, community responses, and expert judgments by community leaders as key indicators of the presence of AI-generated content. Taken together, this research aims to inform and transform our understanding of GenAI in online communities, leading to advancement in numerous academic fields while informing the design and governance of these new technologies.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Mor Naaman"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "cornell university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2629849",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "EAGER: Language as Interface: Toward Integrated Multimodal Architectures for Grounded Intelligence",
+      "org": "University of Pennsylvania",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2629849",
+      "amountUsd": 376493,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Large language models have changed how artificial intelligence is understood because success in language is easily mistaken for success in general intelligence. Earlier advances in computer vision were interpreted as progress in machine perception: systems became better at recognizing, detecting, segmenting, and tracking visual information. By contrast, fluent language output creates the impression that a system can reason, explain, plan, imagine, and reflect, because these forms of intelligence become visible to people through language. This project explores a new research paradigm in which language is treated not as the foundation of intelligence, but as an interface to other forms of intelligence, specifically, perception and reasoning. The project is high risk because it tests an early-stage architectural hypothesis rather than improving existing systems through standard methods such as larger datasets, fine-tuning, or prompting. It is potentially transformative because it may establish a new architectural direction for multimodal artificial intelligence: systems in which language does not merely describe or explain outputs but is explicitly coupled with structured presentations of perception and reasoning. This work can contribute to building robust, reliable and transparent artificial intelligence systems for education, science, medicine, robotics, and human-computer interaction, while training students in interdisciplinary methods that connect language, vision, cognitive science, and artificial intelligence evaluation.\r\n\r\nThis project investigates the hypothesis that language can serve as an effective interface to intelligence only when linguistic expressions are connected to structured, inspectable, and updateable non-linguistic representations. The research will define a minimal language-facing representation that includes objects, attributes, relations, spatial structure, grounded predicates, uncertainty estimates, and update operations. It will then develop and evaluate three prototype interface designs: a) an object-centered interface in which referring expressions bind to persistent object representations, b) a predicate-grounding interface in which terms such as \"behind,\" \"blocking,\" \"supporting,\" and \"more than\" map to perceptual or reasoning operations, and c) a bidirectional constraint interface in which a structured scene states guide language generation and explanation. These prototypes will be compared with standard multimodal prompting and tool-calling approaches. Evaluation will measure answer accuracy, reference stability, predicate grounding, spatial reasoning, and explanation faithfulness. If successful, the project will provide preliminary evidence and design principles for artificial intelligence systems in which language does not merely verbalize plausible outputs, but interfaces with structured perception and reasoning.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Eleni Miltsakaki"
+      ],
+      "venue": "Artificial Intelligence (AI), ROBUST INTELLIGENCE, EAGER",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "university of pennsylvania",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2619509",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: Designing Civic AI to Connect Residents, Communities, and Local Governments",
+      "org": "Tulane University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2619509",
+      "amountUsd": 449868,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Cities collect large amounts of information about public services, including 311 reports, open datasets, and records from public meetings. Currently, this information is often hard for residents to find, understand, and use effectively. Citizens report problems, such as street flooding, parking, unsafe streets, or limited mobility options, without knowing whether others have raised the same issue, without feedback on the city’s actions, and without information on how they might take part in decisions or actions around these reports. This project studies how artificial intelligence (AI) can help turn scattered civic information into actionable community knowledge. The goal is to help residents, community organizations, and local governments better understand public problems, connect individual reports to broader patterns, and identify practical next steps. The work will support more transparent, responsive, and accountable public services, while also training students and strengthening partnerships among universities, local governments, and community groups in New Orleans and Pittsburgh.\r\n\r\nThis project will develop and evaluate community-centered civic AI systems that support public participation, shared sensemaking, and city communication around civic data. The team will conduct participatory design activities with residents, civic organizations, people with disabilities, and municipal staff to identify what successful civic AI should do, what kinds of information it should make visible, and what privacy and accountability concerns it must address. Building on these activities, the project will develop and study AI tools that connect resident questions and complaints to relevant evidence, including prior service reports, public meeting records, policy discussions, community contributions, and opportunities for participation. These tools will use source documentation, grounded summaries, uncertainty information, and methods for preserving different viewpoints so that the system does not present a single consensus answer that might leave out important factors. The project will also deploy an interactive civic dashboard and social platform that allows residents, organizations, and city staff to view, discuss, contest, and update shared civic knowledge over time. The research will evaluate both technical performance and social outcomes, including whether the systems help people understand civic issues, find relevant meetings or organizations, contribute local knowledge, calibrate trust in AI outputs, and identify meaningful next steps for action. The project will produce design principles, evaluation methods, reusable tools, and evidence about how AI can support civic participation without flattening community disagreement or replacing public deliberation.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Saad Hassan"
+      ],
+      "venue": "Artificial Intelligence (AI), SOUTH AFRICA, Cyber-Human Systems, EXP PROG TO STIM COMP RES, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "tulane university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2616058",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "HCC: Theoretical Foundations and Infrastructure for Creating Infographics in Science Communication",
+      "org": "University of Maryland, College Park",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2616058",
+      "amountUsd": 559048,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Effective science communication helps people understand research, trust scientific discovery, and make informed decisions. Infographics are widely used in journals and news stories to convey complex scientific findings. Yet creating effective infographics is very challenging. Many scientists, journalists, and other communicators lack clear design guidance and dedicated tools to create effective infographics. This project addresses these challenges by developing new theories and tools to support the creation of infographics for science communication. The project will help communicators explain science more clearly and engagingly, support science education, and strengthen public understanding of research in natural sciences such as physics and life science.\r\n\r\nThis project will develop theoretical foundations, empirical guidelines, and software tools for designing and evaluating infographics. The research activities include creating a grammar of infographics that describes data components, visual components, mappings between them, and rhetorical devices. This grammar will be implemented as a declarative JavaScript toolkit for authoring infographics. The project will also study how professional designers translate communicative intentions into design choices through surveys, interviews, and longitudinal observations. These studies will produce a taxonomy of design intentions and a model of infographic design workflows. In addition, the project will develop a measurement framework that connects different design intentions to evaluation methods. The final research activity will integrate the grammar, intention taxonomy, and evaluation methods into a design toolkit, which will be studied through deployments with scientists and journalists. The outcomes of this project will provide reusable infrastructure for infographic design, science communication, and future work on computational and AI-assisted visual communication.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Zhicheng Liu"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "university of maryland college park",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2534172",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "HCC: Small: Transformation-driven Material Appearance Modeling",
+      "org": "College of William and Mary",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2534172",
+      "amountUsd": 600000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Realistic digital 3D representations of imaginary worlds, as well as the world around us, support many downstream applications ranging from civilian and military virtual training simulators (for example, flight simulators to train pilots and virtual fire drills for first-aid responders) to applications that help to navigate and explore unfamiliar places (for example, Google Street View).  Modeling the appearance of realistic, rich, complex materials is an essential component OF creating realistic virtual worlds; without realistic looking materials, the virtual world will feel synthetic, which in turn reduces the immersive effect of applications.  Creating digital representations of real-world materials remains a labor-intensive task that often requires skilled artists and specialized measurements.  This project aims to democratize this process by creating a new AI-enhanced framework for authoring rich digital materials from ordinary photographs of the target material. Furthermore, this project supports workforce development and transferability of skills through training of graduate students in AI, computer graphics, and computer vision.\r\n\r\nThe central hypothesis of this research agenda is that digital material creation can be made substantially more efficient by starting from a reasonable approximation and then progressively refining it towards the desired material appearance.  Inspired by recent learned image-to-image (Img2Img) transformations in image processing, this project will investigate learned material-to-material (Mat2Mat) transformations that convert one digital material representation into another.  The main research thrust aims to explore different types of transformations and leverage generative models to frame Mat2Mat transformations as sampling from a conditional distribution.  The overarching vision is a transformation-driven material appearance modeling framework where an input image is first transformed by an Img2Mat transformation and then modified to meet the users' expectations via a sequence of Mat2Mat transformations.  In addition to the main research thrust, this project also endeavors to address shortcomings in current diffusion-based Img2Mat models by better leveraging the embedded priors in pretrained generative image diffusion models, as well as investigating automatic transformation inference and appearance models beyond spatially-varying reflectance distribution functions.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Pieter Peers"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, SMALL PROJECT, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "college of william and mary",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2616182",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "HCC: Foundations of Automated Evaluation and Monitoring of AR Guidance in Pervasive AR and Human-Robot Collaboration (HRC) Applications",
+      "org": "Duke University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2616182",
+      "amountUsd": 500000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Augmented reality places computer-generated directions, labels, and warnings into a person's view of the real world. These systems are becoming useful for navigation, training, maintenance, health care, warehouse work, and human-robot collaboration. However, augmented reality guidance can be hard to read, appear in the wrong place, provide incorrect instructions, hide important real-world information, or encourage actions that are unsafe, intrusive, or poorly suited to the surrounding environment. A user may not always notice these problems before acting on the guidance. This project will develop new ways to automatically check whether augmented reality guidance is clear, correct, safe, and appropriate in the physical setting where it appears. The work will help make augmented reality systems more trustworthy and easier to use in everyday and safety-sensitive settings, including settings where humans and robots work alongside each other. It will also support education and workforce development by training students in augmented reality, robotics, artificial intelligence, edge computing, and human-centered system design, and by sharing datasets, software, and demonstrations with researchers, industry, and the public.\r\n\r\nThis project will create foundations for automated evaluation and continuous monitoring of augmented reality (AR) guidance, including AR used in human-robot collaboration. The research will focus on five common kinds of guidance failures: poor legibility, inaccurate spatial alignment, incorrect guidance, unsafe guidance, and guidance that is not contextually appropriate. The team will collect and annotate large datasets of AR guidance examples across varied physical environments, lighting conditions, tasks, and robotic collaboration settings. The project will develop evaluation methods that combine AR device data, auxiliary computer vision models, and large multimodal models that can reason about images, text, and scene context. For robotic settings, these methods will also incorporate robot perception, planning, motion, and prediction data to assess whether AR guidance supports safe and effective human-robot coordination. The project will create real-time monitoring platforms that run across AR headsets, edge servers, cloud systems, and, in human-robot collaboration settings, robots. The research will also study how to notify users, adapt AR content, or adjust robot behavior when guidance quality is degraded. Additional work will reduce computation, communication, latency, and cost through data-efficient processing, temporal memory, prediction, and resource-aware system design. The resulting datasets, open-source tools, and evaluation methods will provide a practical foundation for safer and more reliable AR guidance in both pervasive AR applications and AR-mediated human-robot collaboration.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Maria Gorlatova"
+      ],
+      "venue": "Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "duke university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2551340",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: A General Neural Light Transport and Material Framework",
+      "org": "University of California-San Diego",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2551340",
+      "amountUsd": 300000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Today, realistic image synthesis or rendering software creates computer graphics images of real and imaginary worlds for movies and games, helps design buildings and plan renovations, and lets engineers see the products they are creating. To create images that truly depict the world as it would appear in reality, the users of rendering systems have to build elaborate models that include every detail that could contribute to visual appearance. In a human character every hair fiber is represented explicitly; in a meadow every blade of grass is its own separate object. Creating these models is slow and expensive, and rendering them requires a substantial amount of computation time. This project explores a fundamentally new way to represent scenes using machine learning, which learns a description of how objects reflect light directly from real and simulated measurements. These new models will be able to create visually realistic worlds with less complexity in the model, encoding how objects look without having to model very small structures explicitly. The learned model also will provide a single representation for all kinds of objects and materials. This representation is the basis for two further aspects of the project. One goal is to directly predict how light reflects through the scene, without explicit simulation. A second goal is to create generative AI tools that start with coarse models, text, and images, and generate fine-scale scene detail automatically. Together this project aims to transform the way materials and light transport are represented in computer graphics, enabling downstream applications including industrial design, entertainment, advertising, home remodeling, and architecture. The project will also support overhauling widely used classroom content to reflect the impact of machine learning on computer graphics and to introduce these topics through research projects for early-stage undergraduate researchers.\r\n\r\nThe path to develop this new approach involves replacing, one by one, expensive physical models for light transport and materials with compact neural abstractions. Starting with the transport or propagation of light in a scene, neural approaches for light transport will be developed. The project will use data computed by path tracing (a method to explicitly simulate light transport) to train a machine learning transformer on point clouds, which can be applied for general scenes and predicts the light distribution due to global illumination. On the material side, neural materials will be extended from conventional opaque objects to subsurface scattering, where light scatters within the material, and ultimately to a voxel-based light field scattering model that can approximate any kind of scene content. This will lead to a unified neural representation for geometry and materials in which objects and scenes are not represented explicitly but rather abstracted into a model for how they scatter light locally. These unified models in turn will define a latent space for local scattering behaviors that can provide a richer form of input for improved transformer-based global illumination models. Neural light transport and materials also offer new opportunities in content creation, including novel generative appearance models that can take in a simple text prompt or image to create rich visual appearance of natural or synthetic worlds, and can fill in detail conditioned on existing larger-scale content. The ultimate goal is to easily specify and manipulate appearance from the smallest visible details all the way up to full virtual environments.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Ravi Ramamoorthi"
+      ],
+      "venue": "Artificial Intelligence (AI), FRANCE, Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "university of california san diego",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2619510",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: HCC: Designing Civic AI to Connect Residents, Communities, and Local Governments",
+      "org": "Carnegie Mellon University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2619510",
+      "amountUsd": 450000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Cities collect large amounts of information about public services, including 311 reports, open datasets, and records from public meetings. Currently, this information is often hard for residents to find, understand, and use effectively. Citizens report problems, such as street flooding, parking, unsafe streets, or limited mobility options, without knowing whether others have raised the same issue, without feedback on the city’s actions, and without information on how they might take part in decisions or actions around these reports. This project studies how artificial intelligence (AI) can help turn scattered civic information into actionable community knowledge. The goal is to help residents, community organizations, and local governments better understand public problems, connect individual reports to broader patterns, and identify practical next steps. The work will support more transparent, responsive, and accountable public services, while also training students and strengthening partnerships among universities, local governments, and community groups in New Orleans and Pittsburgh.\r\n\r\nThis project will develop and evaluate community-centered civic AI systems that support public participation, shared sensemaking, and city communication around civic data. The team will conduct participatory design activities with residents, civic organizations, people with disabilities, and municipal staff to identify what successful civic AI should do, what kinds of information it should make visible, and what privacy and accountability concerns it must address. Building on these activities, the project will develop and study AI tools that connect resident questions and complaints to relevant evidence, including prior service reports, public meeting records, policy discussions, community contributions, and opportunities for participation. These tools will use source documentation, grounded summaries, uncertainty information, and methods for preserving different viewpoints so that the system does not present a single consensus answer that might leave out important factors. The project will also deploy an interactive civic dashboard and social platform that allows residents, organizations, and city staff to view, discuss, contest, and update shared civic knowledge over time. The research will evaluate both technical performance and social outcomes, including whether the systems help people understand civic issues, find relevant meetings or organizations, contribute local knowledge, calibrate trust in AI outputs, and identify meaningful next steps for action. The project will produce design principles, evaluation methods, reusable tools, and evidence about how AI can support civic participation without flattening community disagreement or replacing public deliberation.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "John Zimmerman"
+      ],
+      "venue": "Artificial Intelligence (AI), Cyber-Human Systems, GRADUATE INVOLVEMENT",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "carnegie mellon university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2615188",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: SHF: FlexScale: Exploiting Workload Elasticity to Increase HPC Throughput while Lowering Cost via Dynamic Power Steering",
+      "org": "North Carolina State University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2615188",
+      "amountUsd": 500000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "High-performance computing (HPC) facilities are critical infrastructure for scientific discovery, engineering design, and large-scale artificial intelligence (AI). However, these facilities require power budgets in the tens of megawatts and face growing pressure from limited grid capacity, rising electricity costs, and variable renewable energy supply. Today’s HPC systems are largely managed using fixed power budgets and rigid job allocations, leaving substantial opportunities for improved performance, energy efficiency, and cost savings untapped. This project develops FlexScale, a new approach for operating HPC systems under changing power availability and electricity prices. FlexScale helps computing centers make better use of available power by directing it where it is most needed and adjusting less urgent or more flexible work when power is limited or expensive. By helping HPC centers do more scientific and AI computation with existing power infrastructure, FlexScale supports more affordable and scalable national cyberinfrastructure.\r\n\r\nFlexScale establishes new abstractions, models, and algorithms for coordinating job elasticity, scheduling, resource allocation, and power control under time-varying power availability and electricity cost. FlexScale introduces innovations in: (1) workload classification by priority class, execution elasticity, and performance requirements; (2) fine-grained management of malleable jobs through resource expansion, shrinkage, and power control under varying power constraints; (3) application-agnostic power shifting to reduce critical-path execution time while respecting hierarchical power limits; and (4) safe hardware overprovisioning to increase job capacity under existing power budgets. The project evaluates these methods using representative HPC and AI workloads and integrates the resulting approaches with open-source resource-management software. The expected contribution is a principled and practical foundation for power-adaptive HPC scheduling that improves throughput, utilization, and cost effectiveness under real-world power constraints.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Frank Mueller"
+      ],
+      "venue": "Microelectronics and Semiconductors, SOFTWARE & HARDWARE FOUNDATION, HIGH-PERFORMANCE COMPUTING",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "north carolina state university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2615187",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: SHF: FlexScale: Exploiting Workload Elasticity to Increase HPC Throughput while Lowering Cost via Dynamic Power Steering",
+      "org": "Clemson University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2615187",
+      "amountUsd": 499999,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "High-performance computing (HPC) facilities are critical infrastructure for scientific discovery, engineering design, and large-scale artificial intelligence (AI). However, these facilities require power budgets in the tens of megawatts and face growing pressure from limited grid capacity, rising electricity costs, and variable renewable energy supply. Today’s HPC systems are largely managed using fixed power budgets and rigid job allocations, leaving substantial opportunities for improved performance, energy efficiency, and cost savings untapped. This project develops FlexScale, a new approach for operating HPC systems under changing power availability and electricity prices. FlexScale helps computing centers make better use of available power by directing it where it is most needed and adjusting less urgent or more flexible work when power is limited or expensive. By helping HPC centers do more scientific and AI computation with existing power infrastructure, FlexScale supports more affordable and scalable national cyberinfrastructure.\r\n\r\nFlexScale establishes new abstractions, models, and algorithms for coordinating job elasticity, scheduling, resource allocation, and power control under time-varying power availability and electricity cost. FlexScale introduces innovations in: (1) workload classification by priority class, execution elasticity, and performance requirements; (2) fine-grained management of malleable jobs through resource expansion, shrinkage, and power control under varying power constraints; (3) application-agnostic power shifting to reduce critical-path execution time while respecting hierarchical power limits; and (4) safe hardware overprovisioning to increase job capacity under existing power budgets. The project evaluates these methods using representative HPC and AI workloads and integrates the resulting approaches with open-source resource-management software. The expected contribution is a principled and practical foundation for power-adaptive HPC scheduling that improves throughput, utilization, and cost effectiveness under real-world power constraints.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Rong Ge"
+      ],
+      "venue": "Microelectronics and Semiconductors, SOFTWARE & HARDWARE FOUNDATION, HIGH-PERFORMANCE COMPUTING, EXP PROG TO STIM COMP RES",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "clemson university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2608980",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: Elements: Unifying Framework for Multiphysics Spray Simulation with AI-Enhanced Usability",
+      "org": "Regents of the University of Michigan - Ann Arbor",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2608980",
+      "amountUsd": 296983,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Sprays are found everywhere in modern life, from fuel injection into engines and medicine delivery by inhalers, to painting and coating processes on consumer goods and the manufacturing of powders in food and pharmaceutical industries. The performance of these systems, in terms of energy use, emissions, product quality, and manufacturing cost, is directly governed by the spray. The central challenge is predicting the spray itself, which involves many physical processes that unfold at once and across vastly different sizes: a liquid sheet first tears into thin threads and then into a fine mist of droplets, which then disperse, evaporate, react, or form solid particles. Because no single predictive tool captures all these effects, engineers and scientists have long relied on simplified trial-and-error models.  The most capable simulation methods are scattered across separate tools usable only by a small number of experts. This project addresses this critical gap by unifying these advanced capabilities into a single open-source framework. A built-in artificial intelligence (AI) assistant lowers the expertise barrier and shortens the time needed to set up a realistic simulation from weeks to hours. By making predictive spray simulation practical and widely usable, the project advances the national interest through improved energy efficiency and reduced emissions in transportation and power, better manufacturing of medicines, foods, and coatings, and stronger competitiveness for American industry. The project also develops students and the broader workforce through undergraduate and graduate course modules and through workshops held at the leading professional conference for liquid atomization and spray systems.\r\n\r\nThis project develops a unified, open-source, high-performance simulation framework for predictive multiphysics spray modeling that brings together capabilities currently available only in separate, specialized codes. Within a single discretely conservative formulation, the framework couples sharp capture of the liquid-gas interface, sub-grid models for the breakup of thin films and threads into droplets, tracking of individual droplets and particles as they disperse through a turbulent gas, multicomponent evaporation and phase change, and automatically reduced chemical kinetics, spanning both low-speed and compressible flow regimes. The framework integrates these individually mature components into a production-grade, scalable code with documented, reproducible benchmarks and measurable performance. To make the resulting tool broadly usable, a retrieval-augmented AI assistant is deployed that draws on documentation to perform parameter checks and generate simulation cases from natural-language descriptions, reducing setup time from weeks to hours. The framework is validated against partner-provided experimental datasets across a set of flagship applications, including spray combustion, spray drying, surface coating, and droplet impact and erosion. The work delivers a reproducible, openly available research solver, validated benchmarks, and an accessible interface, providing shared infrastructure that enables new multiphysics research and engineering design beyond the duration of the award.\r\n\r\nThis award by the Office of Advanced Cyberinfrastructure is supported by the Section of Civil, Mechanical, and Manufacturing Innovation, and the Section of Chemical, Bioengineering, Environmental and Transport Systems in the Directorate for Engineering.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Jesse A Capecelatro"
+      ],
+      "venue": "Artificial Intelligence (AI), Software Institutes",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "regents of the university of michigan ann arbor",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2534851",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "RI: Formal Verification of Answer Set Programs",
+      "org": "University of Nebraska at Omaha",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2534851",
+      "amountUsd": 596558,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Modern society increasingly depends on software to make important decisions in areas such as logistics, transportation, manufacturing, and scientific research. Ensuring that this software behaves correctly is essential because errors can have significant societal and economic consequences. This project will strengthen the reliability of software developed using answer set programming, a widely used artificial intelligence (AI) technology for solving complex planning and reasoning problems. By creating methods that enable software developers to demonstrate that their programs are mathematically correct, the project will improve confidence in systems used in critical applications. The project will also contribute to the education of undergraduate and graduate students in AI, and help prepare a workforce with expertise in developing dependable planning and reasoning software systems that benefit science, industry, and society.\r\n\r\nThe project will develop a methodology and supporting software tools for proving the correctness of answer set programs. Research activities include extending formal foundations for modern answer set programming language features, establishing and streamlining formal verification techniques for this prominent knowledge representation and reasoning paradigm. Within the project scope, the team will develop methods that exploit program modularity to simplify correctness proofs and integrate these advances into an interactive proof environment that assists developers throughout the verification process. The resulting framework will combine automated reasoning with user-guided proof construction to make formal verification practical for real world answer set programming applications. By providing rigorous verification techniques together with usable software tools, the project is expected to advance the state of the art in knowledge representation and reasoning, enable the development of more reliable AI software, and broaden the adoption of formally verified answer set programming-based systems in scientific and engineering applications.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Yuliya Lierler"
+      ],
+      "venue": "ROBUST INTELLIGENCE, SMALL PROJECT, EXP PROG TO STIM COMP RES",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "university of nebraska at omaha",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2608979",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: Elements: Unifying Framework for Multiphysics Spray Simulation with AI-Enhanced Usability",
+      "org": "Cornell University",
+      "date": "2026-07-26",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2608979",
+      "amountUsd": 303017,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Sprays are found everywhere in modern life, from fuel injection into engines and medicine delivery by inhalers, to painting and coating processes on consumer goods and the manufacturing of powders in food and pharmaceutical industries. The performance of these systems, in terms of energy use, emissions, product quality, and manufacturing cost, is directly governed by the spray. The central challenge is predicting the spray itself, which involves many physical processes that unfold at once and across vastly different sizes: a liquid sheet first tears into thin threads and then into a fine mist of droplets, which then disperse, evaporate, react, or form solid particles. Because no single predictive tool captures all these effects, engineers and scientists have long relied on simplified trial-and-error models.  The most capable simulation methods are scattered across separate tools usable only by a small number of experts. This project addresses this critical gap by unifying these advanced capabilities into a single open-source framework. A built-in artificial intelligence (AI) assistant lowers the expertise barrier and shortens the time needed to set up a realistic simulation from weeks to hours. By making predictive spray simulation practical and widely usable, the project advances the national interest through improved energy efficiency and reduced emissions in transportation and power, better manufacturing of medicines, foods, and coatings, and stronger competitiveness for American industry. The project also develops students and the broader workforce through undergraduate and graduate course modules and through workshops held at the leading professional conference for liquid atomization and spray systems.\r\n\r\nThis project develops a unified, open-source, high-performance simulation framework for predictive multiphysics spray modeling that brings together capabilities currently available only in separate, specialized codes. Within a single discretely conservative formulation, the framework couples sharp capture of the liquid-gas interface, sub-grid models for the breakup of thin films and threads into droplets, tracking of individual droplets and particles as they disperse through a turbulent gas, multicomponent evaporation and phase change, and automatically reduced chemical kinetics, spanning both low-speed and compressible flow regimes. The framework integrates these individually mature components into a production-grade, scalable code with documented, reproducible benchmarks and measurable performance. To make the resulting tool broadly usable, a retrieval-augmented AI assistant is deployed that draws on documentation to perform parameter checks and generate simulation cases from natural-language descriptions, reducing setup time from weeks to hours. The framework is validated against partner-provided experimental datasets across a set of flagship applications, including spray combustion, spray drying, surface coating, and droplet impact and erosion. The work delivers a reproducible, openly available research solver, validated benchmarks, and an accessible interface, providing shared infrastructure that enables new multiphysics research and engineering design beyond the duration of the award.\r\n\r\nThis award by the Office of Advanced Cyberinfrastructure is supported by the Section of Civil, Mechanical, and Manufacturing Innovation, and the Section of Chemical, Bioengineering, Environmental and Transport Systems in the Directorate for Engineering.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Olivier Desjardins"
+      ],
+      "venue": "Artificial Intelligence (AI), Software Institutes",
+      "ingestedAt": "2026-07-27T06:38:14.447Z",
+      "orgId": "cornell university",
+      "relevanceScore": 0.85
     }
   ],
   "trend": [
@@ -98100,10 +98499,10 @@
         "innovation": 3446,
         "scaling": 15,
         "adoption": 34,
-        "investment": 240
+        "investment": 259
       },
-      "fundingUsd": 135174231,
-      "totalEntries": 4557
+      "fundingUsd": 143063755,
+      "totalEntries": 4576
     }
   ],
   "notes": [
@@ -98139,7 +98538,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -98160,28 +98559,28 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
     },
     {
       "sourceName": "SAM.gov Opportunities (federal solicitations)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
@@ -98195,35 +98594,35 @@
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-27T02:22:34.162Z",
+      "lastSuccessfulPull": "2026-07-27T06:38:14.447Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -98234,329 +98633,329 @@
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5009871640000,
-      "asOf": "2026-07-27T02:10:35.298Z",
+      "asOf": "2026-07-27T06:26:03.168Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "TSM",
       "name": "Taiwan Semiconductor Manufacturing Company Ltd.",
       "marketCapUsd": 2092275481584.33,
-      "asOf": "2026-07-27T02:10:50.342Z",
+      "asOf": "2026-07-27T06:26:18.320Z",
       "url": "https://www.tsmc.com"
     },
     {
       "symbol": "AVGO",
       "name": "Broadcom Inc. Common Stock",
       "marketCapUsd": 1817015029220.1602,
-      "asOf": "2026-07-27T02:11:05.433Z",
+      "asOf": "2026-07-27T06:26:33.469Z",
       "url": "https://www.broadcom.com"
     },
     {
       "symbol": "AMD",
       "name": "Advanced Micro Devices",
       "marketCapUsd": 851092003526.05,
-      "asOf": "2026-07-27T02:11:20.502Z",
+      "asOf": "2026-07-27T06:26:48.563Z",
       "url": "https://www.amd.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 674898269000,
-      "asOf": "2026-07-27T02:11:35.637Z",
+      "asOf": "2026-07-27T06:27:03.771Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "ARM",
       "name": "Arm Holdings plc American Depositary Shares",
       "marketCapUsd": 277711158387.6,
-      "asOf": "2026-07-27T02:11:50.690Z",
+      "asOf": "2026-07-27T06:27:18.904Z",
       "url": "https://www.arm.com"
     },
     {
       "symbol": "MRVL",
       "name": "Marvell Technology, Inc. Common Stock",
       "marketCapUsd": 174330053279.28998,
-      "asOf": "2026-07-27T02:12:05.837Z",
+      "asOf": "2026-07-27T06:27:33.973Z",
       "url": "https://www.marvell.com"
     },
     {
       "symbol": "QCOM",
       "name": "Qualcomm Inc",
       "marketCapUsd": 175986380000,
-      "asOf": "2026-07-27T02:12:20.910Z",
+      "asOf": "2026-07-27T06:27:49.111Z",
       "url": "https://www.qualcomm.com"
     },
     {
       "symbol": "MU",
       "name": "Micron Technology, Inc.",
       "marketCapUsd": 1040114622413.4501,
-      "asOf": "2026-07-27T02:12:36.022Z",
+      "asOf": "2026-07-27T06:28:04.256Z",
       "url": "https://www.micron.com"
     },
     {
       "symbol": "SMCI",
       "name": "Super Micro Computer, Inc. Common Stock",
       "marketCapUsd": 19470878112.7,
-      "asOf": "2026-07-27T02:12:51.066Z",
+      "asOf": "2026-07-27T06:28:19.407Z",
       "url": "https://www.supermicro.com"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 2835433526516.8,
-      "asOf": "2026-07-27T02:13:06.123Z",
+      "asOf": "2026-07-27T06:28:34.533Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3910399362863.94,
-      "asOf": "2026-07-27T02:13:21.169Z",
+      "asOf": "2026-07-27T06:28:49.586Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2496832671189.96,
-      "asOf": "2026-07-27T02:13:36.224Z",
+      "asOf": "2026-07-27T06:29:04.641Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "META",
       "name": "Meta Platforms, Inc. Class A Common Stock",
       "marketCapUsd": 1510844166307.7603,
-      "asOf": "2026-07-27T02:13:51.271Z",
+      "asOf": "2026-07-27T06:29:19.715Z",
       "url": "https://about.meta.com"
     },
     {
       "symbol": "CRWV",
       "name": "CoreWeave, Inc. Class A Common Stock",
       "marketCapUsd": 39215596470.479996,
-      "asOf": "2026-07-27T02:14:06.327Z",
+      "asOf": "2026-07-27T06:29:34.775Z",
       "url": "https://www.coreweave.com"
     },
     {
       "symbol": "NBIS",
       "name": "Nebius Group N.V. Class A Ordinary Shares",
       "marketCapUsd": 47674463887.380005,
-      "asOf": "2026-07-27T02:14:21.382Z",
+      "asOf": "2026-07-27T06:29:49.867Z",
       "url": "https://www.group.nebius.com"
     },
     {
       "symbol": "ORCL",
       "name": "Oracle Corp",
       "marketCapUsd": 331225360290,
-      "asOf": "2026-07-27T02:14:36.426Z",
+      "asOf": "2026-07-27T06:30:04.924Z",
       "url": "https://www.oracle.com"
     },
     {
       "symbol": "PLTR",
       "name": "Palantir Technologies Inc. Class A Common Stock",
       "marketCapUsd": 294677588212.84,
-      "asOf": "2026-07-27T02:14:51.470Z",
+      "asOf": "2026-07-27T06:30:19.998Z",
       "url": "https://www.palantir.com"
     },
     {
       "symbol": "AI",
       "name": "C3.ai, Inc.",
       "marketCapUsd": 1266911607.55,
-      "asOf": "2026-07-27T02:15:06.523Z",
+      "asOf": "2026-07-27T06:30:35.086Z",
       "url": "https://www.c3.ai"
     },
     {
       "symbol": "SOUN",
       "name": "SoundHound AI, Inc. Class A Common Stock",
       "marketCapUsd": 2683752948.8,
-      "asOf": "2026-07-27T02:15:21.584Z",
+      "asOf": "2026-07-27T06:30:50.152Z",
       "url": "https://www.soundhound.com"
     },
     {
       "symbol": "BBAI",
       "name": "BigBear.ai Holdings, Inc.",
       "marketCapUsd": 1321900482,
-      "asOf": "2026-07-27T02:15:36.696Z",
+      "asOf": "2026-07-27T06:31:05.210Z",
       "url": "https://www.bigbear.ai"
     },
     {
       "symbol": "INOD",
       "name": "Innodata Inc.",
       "marketCapUsd": 1825107958.6200001,
-      "asOf": "2026-07-27T02:15:51.775Z",
+      "asOf": "2026-07-27T06:31:20.298Z",
       "url": "https://www.innodata.com"
     },
     {
       "symbol": "PATH",
       "name": "UiPath, Inc.",
       "marketCapUsd": 5616423683.44,
-      "asOf": "2026-07-27T02:16:06.922Z",
+      "asOf": "2026-07-27T06:31:35.365Z",
       "url": "https://www.uipath.com"
     },
     {
       "symbol": "APP",
       "name": "Applovin Corporation Class A Common Stock",
       "marketCapUsd": 131681573441.58,
-      "asOf": "2026-07-27T02:16:21.968Z",
+      "asOf": "2026-07-27T06:31:50.421Z",
       "url": "https://www.applovin.com"
     },
     {
       "symbol": "CRM",
       "name": "Salesforce, Inc.",
       "marketCapUsd": 134037540000,
-      "asOf": "2026-07-27T02:16:37.089Z",
+      "asOf": "2026-07-27T06:32:05.489Z",
       "url": "https://www.salesforce.com"
     },
     {
       "symbol": "NOW",
       "name": "SERVICENOW, INC.",
       "marketCapUsd": 102124888360,
-      "asOf": "2026-07-27T02:16:52.219Z",
+      "asOf": "2026-07-27T06:32:20.546Z",
       "url": "https://www.servicenow.com"
     },
     {
       "symbol": "ADBE",
       "name": "Adobe Inc.",
       "marketCapUsd": 89481225000,
-      "asOf": "2026-07-27T02:17:07.270Z",
+      "asOf": "2026-07-27T06:32:35.720Z",
       "url": "https://www.adobe.com"
     },
     {
       "symbol": "SNOW",
       "name": "Snowflake Inc.",
       "marketCapUsd": 92909596000,
-      "asOf": "2026-07-27T02:17:22.325Z",
+      "asOf": "2026-07-27T06:32:50.807Z",
       "url": "https://www.snowflake.com"
     },
     {
       "symbol": "SAP",
       "name": "SAP SE",
       "marketCapUsd": 186809447680,
-      "asOf": "2026-07-27T02:17:37.375Z",
+      "asOf": "2026-07-27T06:33:05.886Z",
       "url": "https://www.sap.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 201795764994.1,
-      "asOf": "2026-07-27T02:17:52.504Z",
+      "asOf": "2026-07-27T06:33:20.945Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "MDB",
       "name": "MongoDB, Inc. Class A",
       "marketCapUsd": 23986409269.940002,
-      "asOf": "2026-07-27T02:18:07.557Z",
+      "asOf": "2026-07-27T06:33:36.136Z",
       "url": "https://www.mongodb.com"
     },
     {
       "symbol": "WDAY",
       "name": "Workday, Inc. Class A Common Stock",
       "marketCapUsd": 33425390647.86,
-      "asOf": "2026-07-27T02:18:22.629Z",
+      "asOf": "2026-07-27T06:33:51.284Z",
       "url": "https://www.workday.com"
     },
     {
       "symbol": "CRWD",
       "name": "CrowdStrike Holdings, Inc. Class A Common Stock",
       "marketCapUsd": 186626560838.4,
-      "asOf": "2026-07-27T02:18:37.740Z",
+      "asOf": "2026-07-27T06:34:06.372Z",
       "url": "https://www.crowdstrike.com"
     },
     {
       "symbol": "PANW",
       "name": "Palo Alto Networks, Inc. Common Stock",
       "marketCapUsd": 263888850000.00003,
-      "asOf": "2026-07-27T02:18:52.867Z",
+      "asOf": "2026-07-27T06:34:21.429Z",
       "url": "https://www.paloaltonetworks.com"
     },
     {
       "symbol": "DDOG",
       "name": "Datadog, Inc. Class A Common Stock",
       "marketCapUsd": 87872332256.54001,
-      "asOf": "2026-07-27T02:19:07.949Z",
+      "asOf": "2026-07-27T06:34:36.530Z",
       "url": "https://www.datadog.com"
     },
     {
       "symbol": "BABA",
       "name": "Alibaba Group Holding Limited American Depositary Shares, each represents eight Ordinary Shares",
       "marketCapUsd": 268785252096.48,
-      "asOf": "2026-07-27T02:19:23.058Z",
+      "asOf": "2026-07-27T06:34:51.611Z",
       "url": "https://www.alibabagroup.com"
     },
     {
       "symbol": "BIDU",
       "name": "Baidu, Inc.",
       "marketCapUsd": 35842215099.06,
-      "asOf": "2026-07-27T02:19:38.130Z",
+      "asOf": "2026-07-27T06:35:06.724Z",
       "url": "https://ir.baidu.com"
     },
     {
       "symbol": "VRT",
       "name": "Vertiv Holdings Co Class A Common Stock",
       "marketCapUsd": 111529835813.76001,
-      "asOf": "2026-07-27T02:19:53.162Z",
+      "asOf": "2026-07-27T06:35:21.920Z",
       "url": "https://www.vertiv.com"
     },
     {
       "symbol": "DELL",
       "name": "Dell Technologies Inc.",
       "marketCapUsd": 282687312250,
-      "asOf": "2026-07-27T02:20:08.220Z",
+      "asOf": "2026-07-27T06:35:37.074Z",
       "url": "https://www.dell.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 63151265916.49,
-      "asOf": "2026-07-27T02:20:23.308Z",
+      "asOf": "2026-07-27T06:35:52.167Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "ANET",
       "name": "Arista Networks",
       "marketCapUsd": 219082890517.62003,
-      "asOf": "2026-07-27T02:20:38.388Z",
+      "asOf": "2026-07-27T06:36:07.222Z",
       "url": "https://www.arista.com"
     },
     {
       "symbol": "CRDO",
       "name": "Credo Technology Group Holding Ltd Ordinary Shares",
       "marketCapUsd": 39747763958.700005,
-      "asOf": "2026-07-27T02:20:53.445Z",
+      "asOf": "2026-07-27T06:36:22.278Z",
       "url": "https://www.credosemi.com"
     },
     {
       "symbol": "ALAB",
       "name": "Astera Labs, Inc. Common Stock",
       "marketCapUsd": 49979126853.619995,
-      "asOf": "2026-07-27T02:21:08.584Z",
+      "asOf": "2026-07-27T06:36:37.395Z",
       "url": "https://www.asteralabs.com"
     },
     {
       "symbol": "LRCX",
       "name": "Lam Research Corp",
       "marketCapUsd": 381686774910,
-      "asOf": "2026-07-27T02:21:23.708Z",
+      "asOf": "2026-07-27T06:36:52.453Z",
       "url": "https://www.lamresearch.com"
     },
     {
       "symbol": "KLAC",
       "name": "KLA Corporation Common Stock",
       "marketCapUsd": 274997057209.2,
-      "asOf": "2026-07-27T02:21:38.825Z",
+      "asOf": "2026-07-27T06:37:07.527Z",
       "url": "https://www.kla.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 425760744337.5,
-      "asOf": "2026-07-27T02:21:53.934Z",
+      "asOf": "2026-07-27T06:37:22.733Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "TER",
       "name": "Teradyne, Inc. Common Stock",
       "marketCapUsd": 54777233327.04,
-      "asOf": "2026-07-27T02:22:08.990Z",
+      "asOf": "2026-07-27T06:37:37.865Z",
       "url": "https://www.teradyne.com"
     }
   ],
