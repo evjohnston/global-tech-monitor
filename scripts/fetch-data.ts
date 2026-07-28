@@ -56,6 +56,7 @@ import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
 import { fetchRdSpendByYear } from "../src/lib/sources/secEdgar.ts";
 import { CAPIQ_RD_SPEND } from "../data/capiq/rd-spend.ts";
 import { CAPIQ_VC_FUNDING } from "../data/capiq/vc-funding.ts";
+import { PITCHBOOK_VC_FUNDING } from "../data/pitchbook/vc-funding.ts";
 import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
 import { asArray } from "../src/lib/sources/util.ts";
 import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
@@ -454,10 +455,21 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const allEntries = [...byId.values()];
   const trend = live.length > 0 ? [...history, trendPoint(live, allEntries, history[history.length - 1])] : history;
 
-  const vcFundingAll = CAPIQ_VC_FUNDING.filter((c) => c.vertical === v.id).map(({ vertical: _vertical, ...rest }) => rest);
+  // Two real, independently-imported providers, concatenated rather than
+  // merged by company identity — a company can legitimately appear once
+  // per provider (each keeps its own real orgId scheme), distinguished by
+  // each deal's own `source` field. See scripts/import-pitchbook.ts's
+  // header comment for why cross-provider entity resolution isn't
+  // attempted. Re-sorted after concatenation so the cap below is an
+  // honest top-N across both providers, not "all of CapIQ's list, then
+  // whatever PitchBook slots fit."
+  const vcFundingAll = [
+    ...CAPIQ_VC_FUNDING.filter((c) => c.vertical === v.id).map(({ vertical: _vertical, ...rest }) => rest),
+    ...PITCHBOOK_VC_FUNDING.filter((c) => c.vertical === v.id).map(({ vertical: _vertical, ...rest }) => rest),
+  ].sort((a, b) => b.totalRaisedUsd - a.totalRaisedUsd);
   const vcFundingForVertical = vcFundingAll.slice(0, VC_FUNDING_CAP);
   if (vcFundingAll.length > VC_FUNDING_CAP) {
-    console.log(`CapIQ VC funding: capped ${vcFundingAll.length} companies to top ${VC_FUNDING_CAP} for the public data file`);
+    console.log(`VC funding (CapIQ + PitchBook): capped ${vcFundingAll.length} companies to top ${VC_FUNDING_CAP} for the public data file`);
   }
 
   const sourceMeta = buildSourceMeta(prev?.sourceMeta, {
@@ -471,6 +483,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     "sec-edgar": secEdgarOk,
     capiq: capiqTickers.length > 0, // a static hand-imported file, not a live fetch — see data/capiq/rd-spend.ts
     "capiq-transactions": CAPIQ_VC_FUNDING.some((c) => c.vertical === v.id), // see data/capiq/vc-funding.ts
+    "pitchbook-transactions": PITCHBOOK_VC_FUNDING.some((c) => c.vertical === v.id), // see data/pitchbook/vc-funding.ts + scripts/import-pitchbook.ts
     "rss-news": rssNewsOk,
     "rss-investment": rssInvestmentOk,
     seed: seed.length > 0, // a static import, not a fetch — always "succeeds" when configured

@@ -90,6 +90,13 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
     coverageGaps: "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history",
   },
   {
+    key: "pitchbook-transactions",
+    sourceName: "PitchBook via WRDS (VC + PE funding)",
+    pollCadence: "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
+    structuralLag: "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
+    coverageGaps: "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match",
+  },
+  {
     key: "seed",
     sourceName: "Hand-verified seed",
     pollCadence: "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",

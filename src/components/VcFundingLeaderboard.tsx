@@ -2,13 +2,19 @@ import { Fragment, useState } from "react";
 import type { VcCompanyFunding } from "../lib/types.ts";
 import { fmtUsd } from "../lib/format.ts";
 
-// Real, entity-consolidated VC/growth financing data from S&P Capital IQ's
-// Transactions screener (data/capiq/vc-funding.ts) — which companies are
-// getting which money, not just an aggregate sector total. A manual,
-// periodic import (see CLAUDE.md), not a live fetch. Capped to the top N
-// by disclosed total raised — real data, not hidden, just not all
-// rendered at once; the remainder's own real combined total is shown
-// rather than silently dropped.
+// Real, entity-consolidated VC/growth financing data from two real,
+// manually-imported sources — S&P Capital IQ's Transactions screener
+// (data/capiq/vc-funding.ts) and PitchBook via WRDS (data/pitchbook/
+// vc-funding.ts, see scripts/import-pitchbook.ts) — which companies are
+// getting which money, not just an aggregate sector total. Both are
+// manual, periodic imports (see CLAUDE.md), never a live fetch. A company
+// may legitimately appear once per provider rather than one merged row —
+// no cross-provider entity/deal resolution is attempted (a known,
+// disclosed limitation, not solved here) — so each deal's own real source
+// is shown rather than presented as one blended, uniform-provenance
+// figure. Capped to the top N by disclosed total raised — real data, not
+// hidden, just not all rendered at once; the remainder's own real
+// combined total is shown rather than silently dropped.
 const TOP_N = 25;
 
 export function VcFundingLeaderboard({ companies, onSelect }: { companies: VcCompanyFunding[]; onSelect?: (name: string) => void }) {
@@ -68,6 +74,9 @@ export function VcFundingLeaderboard({ companies, onSelect }: { companies: VcCom
                               <span className="num right">{d.amountUsd != null ? fmtUsd(d.amountUsd) : "undisclosed"}</span>
                               <span className="vc-deal-investors" title={d.investors.join(", ")}>
                                 {d.investors.length > 0 ? `${d.investors.length} investor${d.investors.length > 1 ? "s" : ""}` : ""}
+                              </span>
+                              <span className="vc-deal-source" title="Real disclosed source for this specific deal">
+                                {d.source === "pitchbook" ? "PitchBook" : "CapIQ"}
                               </span>
                             </div>
                           ))}

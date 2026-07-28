@@ -61,7 +61,16 @@ function normalizeKey(raw: string): string {
 export function canonicalizeOrg(raw: string): { id: string; name: string } {
   const key = normalizeKey(raw);
   if (!key) return { id: raw, name: raw }; // nothing left after stripping — fall back to the raw string as its own id
-  const aliasedName = ALIASES[key];
+  // Object.hasOwn, not a bare ALIASES[key] lookup — a real company can
+  // normalize to a key that collides with an inherited Object.prototype
+  // property name. Confirmed live (2026-07-26): a real PitchBook company
+  // named "Constructor" normalizes to the key "constructor", and a plain
+  // object literal's ["constructor"] returns Object's own constructor
+  // function (not undefined) via the prototype chain — canonicalizeOrg
+  // then tried to normalizeKey() that function and crashed calling
+  // .replace() on it. hasOwn only matches real entries this table
+  // actually declared.
+  const aliasedName = Object.hasOwn(ALIASES, key) ? ALIASES[key] : undefined;
   if (aliasedName) return { id: normalizeKey(aliasedName), name: aliasedName };
   const displayName = raw.replace(LEGAL_SUFFIX, "").trim() || raw;
   return { id: key, name: displayName };

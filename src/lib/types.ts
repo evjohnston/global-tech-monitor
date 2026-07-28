@@ -206,15 +206,25 @@ export interface RdSpendPoint {
 // disclosed figure ("NA" in the export) — an undisclosed round is real
 // information (the deal happened), not a zero.
 export interface VcDeal {
-  dealId: string; // CapIQ's SPTR_MI_TRANSACTION_ID — the real dedup key when
-  // the same vertical gets imported from more than one tag search (e.g.
-  // "Machine Learning" merged into "artificial-intelligence") and the same
-  // real transaction shows up in both exports.
+  dealId: string; // CapIQ's SPTR_MI_TRANSACTION_ID, or PitchBook's own real
+  // dealid — the real dedup key when the same vertical gets imported from
+  // more than one tag search (e.g. "Machine Learning" merged into
+  // "artificial-intelligence") and the same real transaction shows up in
+  // both exports.
   date: string; // ISO, from the export's announcement date
   type: string;
   status: string;
   amountUsd: number | null;
   investors: string[];
+  // Which real provider this deal came from — undefined means CapIQ (the
+  // only provider when this field was added; every CapIQ-imported deal
+  // predates it, so absence defaults to that rather than every existing
+  // committed row needing a hand-edit). PitchBook-imported deals always
+  // set this explicitly. Same provenance-auditing principle as
+  // RdSpendPoint.companies[].source — a company appearing in both
+  // providers' exports is a real, disclosed limitation (see
+  // scripts/import-pitchbook.ts), not silently merged into one figure.
+  source?: "capiq" | "pitchbook";
 }
 
 // One company's real, entity-consolidated VC funding history within a
