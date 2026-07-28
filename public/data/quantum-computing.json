@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-07-28T13:49:26.870Z",
+  "generatedAt": "2026-07-28T16:35:23.062Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -3709,7 +3709,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -3812,7 +3812,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -4197,13 +4197,13 @@
       "country": "US",
       "provenance": "live",
       "source": "paper",
-      "title": "Geometric analysis of Variational Quantum Eigensolver",
+      "title": "Geometric analysis of variational quantum eigensolver",
       "org": "University of Michigan",
       "date": "2026-07-15",
       "url": "https://doi.org/10.1088/1751-8121/ae8b60",
       "countryEvidence": "institution country codes [US] → US",
       "citations": 0,
-      "abstract": "Abstract The Variational Quantum Eigensolver (VQE) is a fundamental algorithm in quantum computing, yet its theoretical understanding remains fragmented across fixed-ansatz and adaptive-circuit formulations, which are typically analyzed using different frameworks. As a result, a coherent geometric characterization of the VQE remains missing. In this paper, we establish a geometric analysis of VQE in terms of optimization landscape, initialization guarantee, and noise robustness. First, from a Riemannian geometric perspective, we study the optimization landscape via an ansatz-free product-unitary formulation over the unitary group, where each layer unitary is treated as an independent optimization variable, thereby capturing both fixed-ansatz and adaptive-circuit paradigms. For the single-unitary case, we establish explicit linear convergence guarantees for Riemannian gradient descent (RGD) under proper initialization and characterize the global landscape by proving that every critical point is either a global minimum or a strict saddle point. For the product-unitary case, we extend the convergence analysis of RGD and show that the convergence rate deteriorates polynomially with circuit depth, providing a convergence-theoretic explanation of the barren plateau (BP) phenomenon through the interplay between Hilbert-space geometry, target-unitary complexity, per-layer expressivity, and circuit depth. Second, we analyze initialization guarantees for the above convergence results. We consider a practical variational circuit composed of small-angle random Pauli rotations and prove that this initialization scheme satisfies the required geometric conditions with high probability. We further characterize how the resulting initialization error depends on the reference state, circuit depth, and random angles. Third, we study robustness under finite-shot measurements for VQE with Pauli-decomposed Hamiltonians. We show that RGD retains linear convergence up to a noise-dominated neighborhood of the global minimizer. Moreover, we extend the analysis to non-uniform measurement allocation under a fixed measurement budget and show that coefficient-adaptive allocation achieves strictly lower statistical error than uniform sampling.",
+      "abstract": "Abstract The variational quantum eigensolver (VQE) is a fundamental algorithm in quantum computing, yet its theoretical understanding remains fragmented across fixed-ansatz and adaptive-circuit formulations, which are typically analyzed using different frameworks. As a result, a coherent geometric characterization of the VQE remains missing. In this paper, we establish a geometric analysis of VQE in terms of optimization landscape, initialization guarantee, and noise robustness. First, from a Riemannian geometric perspective, we study the optimization landscape via an ansatz-free product-unitary formulation over the unitary group, where each layer unitary is treated as an independent optimization variable, thereby capturing both fixed-ansatz and adaptive-circuit paradigms. For the single-unitary case, we establish explicit linear convergence guarantees for Riemannian gradient descent (RGD) under proper initialization and characterize the global landscape by proving that every critical point is either a global minimum or a strict saddle point. For the product-unitary case, we extend the convergence analysis of RGD and show that the convergence rate deteriorates polynomially with circuit depth, providing a convergence-theoretic explanation of the barren plateau phenomenon through the interplay between Hilbert-space geometry, target-unitary complexity, per-layer expressivity, and circuit depth. Second, we analyze initialization guarantees for the above convergence results. We consider a practical variational circuit composed of small-angle random Pauli rotations and prove that this initialization scheme satisfies the required geometric conditions with high probability. We further characterize how the resulting initialization error depends on the reference state, circuit depth, and random angles. Third, we study robustness under finite-shot measurements for VQE with Pauli-decomposed Hamiltonians. We show that RGD retains linear convergence up to a noise-dominated neighborhood of the global minimizer. Moreover, we extend the analysis to non-uniform measurement allocation under a fixed measurement budget and show that coefficient-adaptive allocation achieves strictly lower statistical error than uniform sampling. Together, these results provide a systematic geometric characterization of the optimization, initialization, and measurement behavior of VQE, offering new insights into its trainability and robustness.",
       "authors": [
         "Zhen Qin"
       ],
@@ -4570,7 +4570,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -4610,7 +4610,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -4648,7 +4648,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -4811,7 +4811,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -4984,7 +4984,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -5225,7 +5225,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -5346,7 +5346,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -5891,7 +5891,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -6089,20 +6089,25 @@
     {
       "id": "oa-W7167901265",
       "stage": "innovation",
-      "country": null,
+      "country": "CN",
       "provenance": "live",
       "source": "paper",
       "title": "Decomposing fractional quantum Hall wave functions via operator contraction multiplication",
-      "org": "",
+      "org": "Nanjing University",
       "date": "2026-07-10",
       "url": "https://doi.org/10.1103/13ll-4k18",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN] → CN",
       "citations": 0,
       "authors": [
-        "Anonymous"
+        "Anonymous",
+        "Licheng Wang",
+        "Yuan Zhou",
+        "Ai-Lei He",
+        "Yi-Fei Wang"
       ],
       "venue": "Physical review. B./Physical review. B",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
+      "orgId": "nanjing university",
       "relevanceScore": 0.6
     },
     {
@@ -6156,7 +6161,7 @@
       "country": "JP",
       "provenance": "live",
       "source": "paper",
-      "title": "Quantum Computing Calculations of Protein–Ligand Binding Energies Using Decomposition Methods on Simulated and Real Quantum Hardware",
+      "title": "Quantum ComputingCalculations of Protein–LigandBinding Energies Using Decomposition Methods on Simulated and RealQuantum Hardware",
       "org": "Fujitsu (Japan)",
       "date": "2026-07-09",
       "url": "https://doi.org/10.1021/acs.jcim.6c00544",
@@ -6218,7 +6223,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -6291,7 +6296,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -6344,7 +6349,7 @@
         "Tommaso Macrì",
         "Ugo Varetto"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "collaboratingCountries": [
         "AU",
         "US"
@@ -7346,7 +7351,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -7365,7 +7370,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -7428,20 +7433,22 @@
     {
       "id": "oa-W7167624340",
       "stage": "innovation",
-      "country": null,
+      "country": "FI",
       "provenance": "live",
       "source": "paper",
       "title": "Two-gate extensions of Free Axis and Free Quaternion Selection for sequential optimization of parameterized quantum circuits",
-      "org": "",
+      "org": "Aalto University",
       "date": "2026-07-07",
       "url": "https://doi.org/10.1016/j.physo.2026.100444",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [FI] → FI",
       "citations": 0,
+      "abstract": "We propose two-gate extensions of the sequential single-qubit optimizers, Free Axis Selection (Fraxis) and Free Quaternion Selection (FQS), termed Two-Gate Fraxis (TGF) and Two-Gate FQS (TGFQS), respectively. In contrast to Fraxis and FQS, which update one single-qubit gate at a time via a quadratic local cost function and matrix diagonalization, TGF and TGFQS optimize two parameterized single-qubit gates simultaneously by constructing an exact quartic local cost function and optimizing it using classical optimizers. We further investigate how different gate pairing strategies affect optimization performance. Using numerical experiments on lattice Hamiltonians, molecular Hamiltonians, and quantum state preparation tasks, we find that TGF and TGFQS frequently achieve a lower final relative error to the ground state energy or infidelity than their single-gate counterparts. We observe that the random and half-shifted gate pairing strategies for TGF and TGFQS perform best across many of the tested settings. In the additional finite-shot experiments on Fermi–Hubbard and transverse-field Ising model Hamiltonians, the best gate pairing strategies retain their advantage across the tested shot counts in shallow circuits. These improvements come at the cost of increased circuit evaluations per gate update, highlighting a trade-off between the power of local optimization and measurement overhead.",
       "authors": [
         "Joona  Valtteri Pankkonen"
       ],
       "venue": "Physics Open",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
+      "orgId": "aalto university",
       "relevanceScore": 0.6
     },
     {
@@ -7459,7 +7466,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -7719,7 +7726,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -7810,7 +7817,7 @@
         "Jonathan Warrell",
         "Mark Gerstein"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "orgId": "yale university",
       "relevanceScore": 0.6
@@ -23005,7 +23012,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -23049,7 +23056,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -23059,7 +23066,7 @@
       "country": "DE",
       "provenance": "live",
       "source": "paper",
-      "title": "The QTF Backbone: proposal for a nationwide optical fibre backbone in germany for quantum technology and time and frequency metrology",
+      "title": "The QTF Backbone: proposal for a nationwide optical fibre backbone in Germany for quantum technology and time and frequency metrology",
       "org": "Physikalisch-Technische Bundesanstalt",
       "date": "2026-07-16",
       "url": "https://doi.org/10.1140/epjs/s11734-026-02451-3",
@@ -23117,7 +23124,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -23305,7 +23312,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -23629,7 +23636,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -23905,7 +23912,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -24058,7 +24065,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -24096,7 +24103,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -24153,7 +24160,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -24265,7 +24272,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -24423,7 +24430,7 @@
         "Zhiguo Huang",
         "Ming Xue"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "orgId": "nanjing university of aeronautics and astronautics",
       "relevanceScore": 0.6
@@ -24704,7 +24711,7 @@
         "K. El Anouz",
         "Isaac Pérez Castillo"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "collaboratingCountries": [
         "FR",
         "JP",
@@ -25378,20 +25385,22 @@
     {
       "id": "oa-W7167622406",
       "stage": "innovation",
-      "country": null,
+      "country": "IN",
       "provenance": "live",
       "source": "paper",
       "title": "Full Schmidt characterization of spatiotemporally entangled states produced from spontaneous parametric down-conversion",
-      "org": "",
+      "org": "Indian Institute of Technology Ropar",
       "date": "2026-07-07",
       "url": "https://doi.org/10.1103/rfgp-kfhb",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [IN, IN] → IN",
       "citations": 0,
       "authors": [
-        "Anonymous"
+        "Anonymous",
+        "Girish Kulkarni"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
+      "orgId": "indian institute of technology ropar",
       "relevanceScore": 0.6
     },
     {
@@ -25511,7 +25520,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -25633,7 +25642,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -25671,7 +25680,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "relevanceScore": 0.6
     },
@@ -25702,20 +25711,29 @@
     {
       "id": "oa-W7167598775",
       "stage": "innovation",
-      "country": null,
+      "country": "DE",
       "provenance": "live",
       "source": "paper",
       "title": "Enhanced multiphoton ionization driven by quantum light",
-      "org": "",
+      "org": "Max Planck Institute for the Structure and Dynamics of Matter",
       "date": "2026-07-07",
       "url": "https://doi.org/10.1103/pkjw-kh43",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [DE, DE, DE, DE, US, DE, DE] → DE",
       "citations": 0,
+      "abstract": "We present a first-principles <a:math xmlns:a=\"http://www.w3.org/1998/Math/MathML\"> <a:mrow> <a:mi>S</a:mi> </a:mrow> </a:math> -matrix framework for multiphoton ionization driven by arbitrary quantum states of light, retaining the full spatial structure of the light fields. Within this framework, we show that the utilization of momentum-entangled photon pairs emitted by ultrathin nonlinear crystals can enhance resonant two-photon ionization cross sections by more than two orders of magnitude relative to an uncorrelated reference state. The enhancement stems from the broad distribution of the transverse momentum and is captured only by a nonparaxial treatment, while strongly underestimated in the paraxial approximation. Atom-specific estimates for resonant two-photon ionization in sodium indicate that the predicted effect should be observable with currently available photon-pair sources.",
       "authors": [
-        "Anonymous"
+        "Valeriia P. Kosheleva",
+        "S. Panahiyan",
+        "Ángel Rubio",
+        "Frank Schlawin"
       ],
       "venue": "Physical Review Research",
+      "collaboratingCountries": [
+        "DE",
+        "US"
+      ],
       "ingestedAt": "2026-07-20T18:11:32.058Z",
+      "orgId": "max planck institute for the structure and dynamics of matter",
       "relevanceScore": 0.6
     },
     {
@@ -25760,7 +25778,7 @@
         "P. Chen",
         "Jun Jing"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "orgId": "zhejiang university",
       "relevanceScore": 0.6
@@ -25783,7 +25801,7 @@
         "R. Goncharov",
         "Alexei D. Kiselev"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T18:11:32.058Z",
       "orgId": "itmo university",
       "relevanceScore": 0.6
@@ -31558,7 +31576,7 @@
       "date": "2024-12-09",
       "url": "https://doi.org/10.1038/s41586-024-08449-y",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, GB, GB, US, GB, GB, US, US, GB, GB, US, GB, GB, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, GB, GB, US, GB, GB, US, US, US, US, US, US, US, US, US, US, US, GB, GB, US, GB, GB, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, GB, GB, US, GB, GB, US, US, US, US, US, GB, GB, US, GB, GB, US, US, US] → US",
-      "citations": 606,
+      "citations": 607,
       "authors": [
         "Google Quantum AI and Collaborators",
         "Rajeev Acharya",
@@ -31613,7 +31631,7 @@
       "date": "2024-03-16",
       "url": "https://doi.org/10.1016/j.physrep.2024.03.002",
       "countryEvidence": "institution country codes [GR, ZA, IT, TW, US, IN, IE] → GR",
-      "citations": 362,
+      "citations": 364,
       "authors": [
         "Kostas Blekos",
         "Dean Brand",
@@ -31673,7 +31691,7 @@
       "date": "2024-03-26",
       "url": "https://doi.org/10.1038/s41566-024-01403-4",
       "countryEvidence": "institution country codes [FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR, FR] → FR",
-      "citations": 218,
+      "citations": 220,
       "abstract": "Abstract Quantum computing aims at exploiting quantum phenomena to efficiently perform computations that are unfeasible even for the most powerful classical supercomputers. Among the promising technological approaches, photonic quantum computing offers the advantages of low decoherence, information processing with modest cryogenic requirements, and native integration with classical and quantum networks. So far, quantum computing demonstrations with light have implemented specific tasks with specialized hardware, notably Gaussian boson sampling, which permits the quantum computational advantage to be realized. Here we report a cloud-accessible versatile quantum computing prototype based on single photons. The device comprises a high-efficiency quantum-dot single-photon source feeding a universal linear optical network on a reconfigurable chip for which hardware errors are compensated by a machine-learned transpilation process. Our full software stack allows remote control of the device to perform computations via logic gates or direct photonic operations. For gate-based computation, we benchmark one-, two- and three-qubit gates with state-of-the art fidelities of 99.6 ± 0.1%, 93.8 ± 0.6% and 86 ± 1.2%, respectively. We also implement a variational quantum eigensolver, which we use to calculate the energy levels of the hydrogen molecule with chemical accuracy. For photon native computation, we implement a classifier algorithm using a three-photon-based quantum neural network and report a six-photon boson sampling demonstration on a universal reconfigurable integrated circuit. Finally, we report on a heralded three-photon entanglement generation, a key milestone toward measurement-based quantum computing.",
       "authors": [
         "Nicolas Maring",
@@ -31699,7 +31717,7 @@
       "date": "2024-07-09",
       "url": "https://doi.org/10.1103/revmodphys.96.031001",
       "countryEvidence": "institution country codes [IT, MK, AU, IT, AU, AU, IT, ES, IT, ES, ES, FR, ES] → IT",
-      "citations": 220,
+      "citations": 223,
       "abstract": "Storage of energy in quantum devices is of practical relevance for applications in quantum technologies. The topic attracts attention also of a more foundational character due to the possibility that the charging power and work extraction can benefit from quantum coherence and collective effects. This Colloquium reviews theoretical concepts and experimental implementations of energy storage in quantum batteries drawing on work in quantum thermodynamics and quantum information science.",
       "authors": [
         "Francesco Campaioli",
@@ -31731,7 +31749,7 @@
       "date": "2024-08-08",
       "url": "https://doi.org/10.1016/j.comnet.2024.110672",
       "countryEvidence": "institution country codes [IT, IT] → IT",
-      "citations": 199,
+      "citations": 200,
       "abstract": "Nowadays, quantum computing has reached the engineering phase, with fully-functional quantum processors integrating hundreds of noisy qubits. Yet – to fully unveil the potential of quantum computing out of the labs into the business reality – the challenge ahead is to substantially scale the qubit number, reaching orders of magnitude exceeding thousands of fault-tolerant qubits. To this aim, the distributed quantum computing paradigm is recognized as the key solution for scaling the number of qubits. Indeed, accordingly to such a paradigm, multiple small-to-moderate-scale quantum processors communicate and cooperate for executing computational tasks exceeding the computational power of single processing devices. The aim of this survey is to provide the reader with an overview about the main challenges and open problems arising with distributed quantum computing from a computer and communications engineering perspective. Furthermore, this survey provides an easy access and guide towards the relevant literature and the prominent results in the field.",
       "authors": [
         "Marcello Caleffi",
@@ -33643,7 +33661,7 @@
       "date": "2023-02-22",
       "url": "https://doi.org/10.1038/s41586-022-05434-1",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, AU, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 1073,
+      "citations": 1074,
       "abstract": "Abstract Practical quantum computing will require error rates well below those achievable with physical qubits. Quantum error correction 1,2 offers a path to algorithmically relevant error rates by encoding logical qubits within many physical qubits, for which increasing the number of physical qubits enhances protection against physical errors. However, introducing more qubits also increases the number of error sources, so the density of errors must be sufficiently low for logical performance to improve with increasing code size. Here we report the measurement of logical qubit performance scaling across several code sizes, and demonstrate that our system of superconducting qubits has sufficient performance to overcome the additional errors from increasing qubit number. We find that our distance-5 surface code logical qubit modestly outperforms an ensemble of distance-3 logical qubits on average, in terms of both logical error probability over 25 cycles and logical error per cycle ((2.914 ± 0.016)% compared to (3.028 ± 0.023)%). To investigate damaging, low-probability error sources, we run a distance-25 repetition code and observe a 1.7 × 10 −6 logical error per cycle floor set by a single high-energy event (1.6 × 10 −7 excluding this event). We accurately model our experiment, extracting error budgets that highlight the biggest challenges for future systems. These results mark an experimental demonstration in which quantum error correction begins to improve performance with increasing qubit number, illuminating the path to reaching the logical error rates required for computation.",
       "authors": [
         "Google Quantum AI",
@@ -33761,7 +33779,7 @@
       "date": "2023-12-20",
       "url": "https://doi.org/10.1103/revmodphys.95.045006",
       "countryEvidence": "institution country codes [JP, JP, US, JP, JP, NL, NL, JP, FR, US, US, JP, CA, JP, HK, CA, JP] → JP",
-      "citations": 507,
+      "citations": 508,
       "abstract": "Quantum technology is now at a point where practical work can begin on creating the quantum internet. However, numerous challenges must be overcome before this vision becomes a reality. A global-scale quantum internet requires the development of the quantum repeater, a device that stores and manipulates qubits while interacting with or emitting entangled photons. This review examines different approaches to quantum repeaters and networks, covering their conceptual frameworks, architectures, and current progress in experimental implementation.",
       "authors": [
         "Koji Azuma",
@@ -33821,7 +33839,7 @@
       "date": "2023-03-22",
       "url": "https://doi.org/10.1038/s41586-023-05782-6",
       "countryEvidence": "institution country codes [US, US, US, CA, US, CA, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 405,
+      "citations": 406,
       "authors": [
         "Volodymyr Sivak",
         "Alec Eickbusch",
@@ -33879,7 +33897,7 @@
       "date": "2023-05-25",
       "url": "https://doi.org/10.1103/physrevlett.130.210801",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 359,
+      "citations": 360,
       "abstract": "Quantum key distribution (QKD) aims to generate secure private keys shared by two remote parties. With its security being protected by principles of quantum mechanics, some technology challenges remain towards practical application of QKD. The major one is the distance limit, which is caused by the fact that a quantum signal cannot be amplified while the channel loss is exponential with the distance for photon transmission in optical fiber. Here using the 3-intensity sending-or-not-sending protocol with the actively-odd-parity-pairing method, we demonstrate a fiber-based twin-field QKD over 1002 km. In our experiment, we developed a dual-band phase estimation and ultra-low noise superconducting nanowire single-photon detectors to suppress the system noise to around 0.02 Hz. The secure key rate is 9.53×10^{-12} per pulse through 1002 km fiber in the asymptotic regime, and 8.75×10^{-12} per pulse at 952 km considering the finite size effect. Our work constitutes a critical step towards the future large-scale quantum network.",
       "authors": [
         "Yang Liu",
@@ -33994,7 +34012,7 @@
       "date": "2023-03-13",
       "url": "https://doi.org/10.1038/s41566-023-01166-4",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 292,
+      "citations": 293,
       "authors": [
         "Wei Li",
         "Likang Zhang",
@@ -34098,7 +34116,7 @@
       "date": "2023-05-24",
       "url": "https://doi.org/10.1038/s42254-023-00588-x",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN] → CN",
-      "citations": 249,
+      "citations": 250,
       "authors": [
         "Xiao‐Min Hu",
         "Yu Guo",
@@ -34364,7 +34382,7 @@
       "date": "2023-05-26",
       "url": "https://doi.org/10.1038/s42254-023-00583-2",
       "countryEvidence": "institution country codes [FR, FR, DE, DE, FR, FR, FR, FR, US, GB, DE, GB, GB, AT] → FR",
-      "citations": 208,
+      "citations": 209,
       "authors": [
         "Christophe Couteau",
         "Stefanie Barz",
@@ -34485,7 +34503,7 @@
       "date": "2023-02-03",
       "url": "https://doi.org/10.3390/e25020287",
       "countryEvidence": "institution country codes [MA, MA, FR, FR] → MA",
-      "citations": 193,
+      "citations": 194,
       "abstract": "Despite its undeniable success, classical machine learning remains a resource-intensive process. Practical computational efforts for training state-of-the-art models can now only be handled by high speed computer hardware. As this trend is expected to continue, it should come as no surprise that an increasing number of machine learning researchers are investigating the possible advantages of quantum computing. The scientific literature on Quantum Machine Learning is now enormous, and a review of its current state that can be comprehended without a physics background is necessary. The objective of this study is to present a review of Quantum Machine Learning from the perspective of conventional techniques. Departing from giving a research path from fundamental quantum theory through Quantum Machine Learning algorithms from a computer scientist's perspective, we discuss a set of basic algorithms for Quantum Machine Learning, which are the fundamental components for Quantum Machine Learning algorithms. We implement the Quanvolutional Neural Networks (QNNs) on a quantum computer to recognize handwritten digits, and compare its performance to that of its classical counterpart, the Convolutional Neural Networks (CNNs). Additionally, we implement the QSVM on the breast cancer dataset and compare it to the classical SVM. Finally, we implement the Variational Quantum Classifier (VQC) and many classical classifiers on the Iris dataset to compare their accuracies.",
       "authors": [
         "Amine Zeguendry",
@@ -35845,7 +35863,7 @@
       "date": "2021-08-12",
       "url": "https://doi.org/10.1038/s42254-021-00348-9",
       "countryEvidence": "institution country codes [US, US, US, US, US, GB, JP, JP, SE, JP, US, JP, SE, JP, CN, US, US, US, US, US] → US",
-      "citations": 3068,
+      "citations": 3071,
       "authors": [
         "M. Cerezo",
         "Andrew Arrasmith",
@@ -35877,7 +35895,7 @@
       "date": "2021-05-19",
       "url": "https://doi.org/10.1103/revmodphys.93.025005",
       "countryEvidence": "institution country codes [CA, CA, CA, AU, CA, AU, CA, CA, US, CA, CA, CH] → CA",
-      "citations": 1914,
+      "citations": 1919,
       "abstract": "This review surveys the development over the last 15 years of circuit quantum electrodynamics, the nonlinear quantum optics of microwave electrical circuits. In analogy to cavity quantum electrodynamics, lasers are replaced by rf signal generators, optical cavities by superconducting resonators, and atoms by superconducting qubits. Circuit QED offers enhanced light-matter coupling in which strong quantum optical nonlinearities are observable at the level of individual photons. This new parameter regime leads to unique capabilities for fundamental studies in quantum optics, nearly ideal quantum-limited measurements, and quantum computation.",
       "authors": [
         "Alexandre Blais",
@@ -35907,7 +35925,7 @@
       "date": "2022-02-15",
       "url": "https://doi.org/10.1103/revmodphys.94.015004",
       "countryEvidence": "institution country codes [SG, SG, SG, SG, CA, SG, SG, CA, SG, SG, GB, SG, SG, CA, SG, SG, CA, SG, SG, CA, SG, SG, SG, SG, CA, SG, SG, US, SG, SG, SG, US, SG, SG, SG, SG, SG, SG, CA, CA] → SG",
-      "citations": 1692,
+      "citations": 1694,
       "abstract": "Noisy quantum computers can in principle perform reliable quantum computations, but truly scalable systems require noise levels lower than are presently achieved. Still, moderate-complexity computations can be performed. This review discusses what is possible in this ``noisy intermediate scale'' quantum (NISQ) era. Topic areas include the simulation of many-body physics and chemistry, combinatorial optimization, and machine learning. It is evident that the NISQ era has produced new paradigms for programming that will be built upon as quantum computers are further perfected.",
       "authors": [
         "Kishor Bharti",
@@ -36020,7 +36038,7 @@
       "date": "2021-01-06",
       "url": "https://doi.org/10.1038/s41586-020-03093-8",
       "countryEvidence": "institution country codes [CN, CN, SE, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, SE, CN, CN, CN, CN] → CN",
-      "citations": 1019,
+      "citations": 1021,
       "authors": [
         "Yu-Ao Chen",
         "Qiang Zhang",
@@ -36049,7 +36067,7 @@
       "date": "2022-09-23",
       "url": "https://doi.org/10.1016/j.physrep.2022.08.003",
       "countryEvidence": "institution country codes [GB, GB, GB, GB, CN, GB, GB, GB, GB, GB] → GB",
-      "citations": 1024,
+      "citations": 1025,
       "abstract": "The variational quantum eigensolver (or VQE), first developed by Peruzzo et al. (2014), has received significant attention from the research community in recent years. It uses the variational principle to compute the ground state energy of a Hamiltonian, a problem that is central to quantum chemistry and condensed matter physics. Conventional computing methods are constrained in their accuracy due to the computational limits facing exact modeling of the exponentially growing electronic wavefunction for these many-electron systems. The VQE may be used to model these complex wavefunctions in polynomial time, making it one of the most promising near-term applications for quantum computing. One important advantage is that variational algorithms have been shown to present some degree of resilience to the noise in the quantum hardware. Finding a path to navigate the relevant literature has rapidly become an overwhelming task, with many methods promising to improve different parts of the algorithm, but without clear descriptions of how the diverse parts fit together. The potential practical advantages of the algorithm are also widely discussed in the literature, but with varying conclusions. Despite strong theoretical underpinnings suggesting excellent scaling of individual VQE components, studies have pointed out that their various pre-factors could be too large to reach a quantum computing advantage over conventional methods. This review aims at disentangling the relevant literature to provide a comprehensive overview of the progress that has been made on the different parts of the algorithm, and to discuss future areas of research that are fundamental for the VQE to deliver on its promises. All the different components of the algorithm are reviewed in detail. These include the representation of Hamiltonians and wavefunctions on a quantum computer, the optimization process to find ground state energies, the post processing mitigation of quantum errors, and suggested best practices. We identify four main areas of future research: (1) optimal measurement schemes for reduction of circuit repetitions required; (2) large scale parallelization across many quantum computers; (3) ways to overcome the potential appearance of vanishing gradients in the optimization process for large systems, and how the number of iterations required for the optimization scales with system size; (4) the extent to which VQE suffers for quantum noise, and whether this noise can be mitigated in a tractable manner. The answers to these open research questions will determine the routes for the VQE to achieve quantum advantage as the quantum computing hardware scales up and as the noise levels are reduced.",
       "authors": [
         "Jules Tilly",
@@ -36165,7 +36183,7 @@
         "Ryan Sweke",
         "Johannes Jakob Meyer"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "collaboratingCountries": [
         "CA",
         "DE"
@@ -36273,7 +36291,7 @@
       "date": "2021-04-15",
       "url": "https://doi.org/10.22331/q-2021-04-15-433",
       "countryEvidence": "institution country codes [US, SE, SE] → SE",
-      "citations": 678,
+      "citations": 679,
       "abstract": "We significantly reduce the cost of factoring integers and computing discrete logarithms in finite fields on a quantum computer by combining techniques from Shor 1994, Griffiths-Niu 1996, Zalka 2006, Fowler 2012, Ekerå-Håstad 2017, Ekerå 2017, Ekerå 2018, Gidney-Fowler 2019, Gidney 2019. We estimate the approximate cost of our construction using plausible physical assumptions for large-scale superconducting qubit platforms: a planar grid of qubits with nearest-neighbor connectivity, a characteristic physical gate error rate of <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:msup><mml:mn>10</mml:mn><mml:mrow class=\"MJX-TeXAtom-ORD\"><mml:mo>−</mml:mo><mml:mn>3</mml:mn></mml:mrow></mml:msup></mml:math>, a surface code cycle time of 1 microsecond, and a reaction time of 10 microseconds. We account for factors that are normally ignored such as noise, the need to make repeated attempts, and the spacetime layout of the computation. When factoring 2048 bit RSA integers, our construction's spacetime volume is a hundredfold less than comparable estimates from earlier works (Van Meter et al. 2009, Jones et al. 2010, Fowler et al. 2012, Gheorghiu et al. 2019). In the abstract circuit model (which ignores overheads from distillation, routing, and error correction) our construction uses <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mn>3</mml:mn><mml:mi>n</mml:mi><mml:mo>+</mml:mo><mml:mn>0.002</mml:mn><mml:mi>n</mml:mi><mml:mi>lg</mml:mi><mml:mo>⁡</mml:mo><mml:mi>n</mml:mi></mml:math> logical qubits, <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mn>0.3</mml:mn><mml:msup><mml:mi>n</mml:mi><mml:mn>3</mml:mn></mml:msup><mml:mo>+</mml:mo><mml:mn>0.0005</mml:mn><mml:msup><mml:mi>n</mml:mi><mml:mn>3</mml:mn></mml:msup><mml:mi>lg</mml:mi><mml:mo>⁡</mml:mo><mml:mi>n</mml:mi></mml:math> Toffolis, and <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mn>500</mml:mn><mml:msup><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>+</mml:mo><mml:msup><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>lg</mml:mi><mml:mo>⁡</mml:mo><mml:mi>n</mml:mi></mml:math> measurement depth to factor <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mi>n</mml:mi></mml:math>-bit RSA integers. We quantify the cryptographic implications of our work, both for RSA and for schemes based on the DLP in finite fields.",
       "authors": [
         "Craig Gidney",
@@ -36299,7 +36317,7 @@
       "date": "2022-09-15",
       "url": "https://doi.org/10.1038/s43588-022-00311-3",
       "countryEvidence": "institution country codes [US, US, CA, US, US, US, US, US] → US",
-      "citations": 669,
+      "citations": 670,
       "authors": [
         "M. Cerezo",
         "Guillaume Verdon",
@@ -36377,7 +36395,7 @@
       "date": "2022-04-25",
       "url": "https://doi.org/10.1016/j.physrep.2022.03.002",
       "countryEvidence": "institution country codes [NL, CN, CN, ES, NL, NO, NL, CN, CN] → CN",
-      "citations": 591,
+      "citations": 592,
       "abstract": "Spintronics and quantum information science are two promising candidates for innovating information processing technologies. The combination of these two fields enables us to build solid-state platforms for studying quantum phenomena and for realizing multi-functional quantum tasks. For a long time, however, the intersection of these two fields was limited due to the distinct properties of the classical magnetization, that is manipulated in spintronics, and quantum bits, that are utilized in quantum information science. This situation has changed significantly over the last few years because of the remarkable progress in coding and processing information using magnons. On the other hand, significant advances in understanding the entanglement of quasi-particles and in designing high-quality qubits and photonic cavities for quantum information processing provide physical platforms to integrate magnons with quantum systems. From these endeavours, the highly interdisciplinary field of quantum magnonics emerges, which combines spintronics, quantum optics and quantum information science. Here, we give an overview of the recent developments concerning the quantum states of magnons and their hybridization with mature quantum platforms. First, we review the basic concepts of magnons and quantum entanglement and discuss the generation and manipulation of quantum states of magnons, such as single-magnon states, squeezed states and quantum many-body states including Bose–Einstein condensation and the resulting spin superfluidity. We discuss how magnonic systems can be integrated and entangled with quantum platforms including cavity photons, superconducting qubits, nitrogen-vacancy centers, and phonons for coherent information transfer and collaborative information processing. The implications of these hybrid quantum systems for non-Hermitian physics and parity-time symmetry are highlighted, together with applications in quantum memories and high-precision measurements. Finally, we present an outlook on some of the challenges and opportunities in quantum magnonics.",
       "authors": [
         "H. Y. Yuan",
@@ -36488,7 +36506,7 @@
       "date": "2022-05-04",
       "url": "https://doi.org/10.1038/s42254-022-00440-8",
       "countryEvidence": "institution country codes [DE, DE, CN, US, CN, US, CN, JP] → CN",
-      "citations": 536,
+      "citations": 537,
       "authors": [
         "Naeimeh Mohseni",
         "Peter L. McMahon",
@@ -36607,7 +36625,7 @@
       "date": "2022-06-09",
       "url": "https://doi.org/10.1126/science.abn7293",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, GB, US, US, US, AT, US, US] → US",
-      "citations": 523,
+      "citations": 524,
       "abstract": "Quantum technology promises to revolutionize how we learn about the physical world. An experiment that processes quantum data with a quantum computer could have substantial advantages over conventional experiments in which quantum states are measured and outcomes are processed with a classical computer. We proved that quantum machines could learn from exponentially fewer experiments than the number required by conventional experiments. This exponential advantage is shown for predicting properties of physical systems, performing quantum principal component analysis, and learning about physical dynamics. Furthermore, the quantum resources needed for achieving an exponential advantage are quite modest in some cases. Conducting experiments with 40 superconducting qubits and 1300 quantum gates, we demonstrated that a substantial quantum advantage is possible with today's quantum processors.",
       "authors": [
         "Hsin-Yuan Huang",
@@ -36690,7 +36708,7 @@
       "date": "2022-01-17",
       "url": "https://doi.org/10.1038/s41566-021-00928-2",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 501,
+      "citations": 502,
       "authors": [
         "Shuang Wang",
         "Zhen-Qiang Yin",
@@ -37005,7 +37023,7 @@
       "date": "2022-09-28",
       "url": "https://doi.org/10.1038/s41586-022-05117-x",
       "countryEvidence": "institution country codes [NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, NL] → NL",
-      "citations": 409,
+      "citations": 410,
       "abstract": "Abstract Future quantum computers capable of solving relevant problems will require a large number of qubits that can be operated reliably 1 . However, the requirements of having a large qubit count and operating with high fidelity are typically conflicting. Spins in semiconductor quantum dots show long-term promise 2,3 but demonstrations so far use between one and four qubits and typically optimize the fidelity of either single- or two-qubit operations, or initialization and readout 4–11 . Here, we increase the number of qubits and simultaneously achieve respectable fidelities for universal operation, state preparation and measurement. We design, fabricate and operate a six-qubit processor with a focus on careful Hamiltonian engineering, on a high level of abstraction to program the quantum circuits, and on efficient background calibration, all of which are essential to achieve high fidelities on this extended system. State preparation combines initialization by measurement and real-time feedback with quantum-non-demolition measurements. These advances will enable testing of increasingly meaningful quantum protocols and constitute a major stepping stone towards large-scale quantum computers.",
       "authors": [
         "Stephan G. J. Philips",
@@ -37267,7 +37285,7 @@
       "date": "2021-07-14",
       "url": "https://doi.org/10.1038/s41586-021-03602-3",
       "countryEvidence": "institution country codes [AT, AT, AT, AT, AT, AT, AT, DE, DE, AT, AT, AT, AT, AT, AT] → AT",
-      "citations": 365,
+      "citations": 366,
       "authors": [
         "Lorenzo Magrini",
         "Philipp Rosenzweig",
@@ -37368,7 +37386,7 @@
       "date": "2022-05-25",
       "url": "https://doi.org/10.1038/s41586-022-04697-y",
       "countryEvidence": "institution country codes [NL, NL, NL, NL, NL, NL, AT, NL, NL, NL, NL, NL, NL] → NL",
-      "citations": 360,
+      "citations": 361,
       "abstract": "Abstract Future quantum internet applications will derive their power from the ability to share quantum information across the network 1,2 . Quantum teleportation allows for the reliable transfer of quantum information between distant nodes, even in the presence of highly lossy network connections 3 . Although many experimental demonstrations have been performed on different quantum network platforms 4–10 , moving beyond directly connected nodes has, so far, been hindered by the demanding requirements on the pre-shared remote entanglement, joint qubit readout and coherence times. Here we realize quantum teleportation between remote, non-neighbouring nodes in a quantum network. The network uses three optically connected nodes based on solid-state spin qubits. The teleporter is prepared by establishing remote entanglement on the two links, followed by entanglement swapping on the middle node and storage in a memory qubit. We demonstrate that, once successful preparation of the teleporter is heralded, arbitrary qubit states can be teleported with fidelity above the classical bound, even with unit efficiency. These results are enabled by key innovations in the qubit readout procedure, active memory qubit protection during entanglement generation and tailored heralding that reduces remote entanglement infidelities. Our work demonstrates a prime building block for future quantum networks and opens the door to exploring teleportation-based multi-node protocols and applications 2,11–13 .",
       "authors": [
         "Sophie Hermans",
@@ -37458,7 +37476,7 @@
         "David McKay",
         "Jay Gambetta"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-20T19:44:32.653Z",
       "orgId": "ibm research thomas j watson research center",
       "relevanceScore": 0.6
@@ -37677,7 +37695,7 @@
       "date": "2022-07-11",
       "url": "https://doi.org/10.1103/physrevlett.129.030501",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 322,
+      "citations": 323,
       "abstract": "Quantum error correction is a critical technique for transitioning from noisy intermediate-scale quantum devices to fully fledged quantum computers. The surface code, which has a high threshold error rate, is the leading quantum error correction code for two-dimensional grid architecture. So far, the repeated error correction capability of the surface code has not been realized experimentally. Here, we experimentally implement an error-correcting surface code, the distance-three surface code which consists of 17 qubits, on the Zuchongzhi 2.1 superconducting quantum processor. By executing several consecutive error correction cycles, the logical error can be significantly reduced after applying corrections, achieving the repeated error correction of surface code for the first time. This experiment represents a fully functional instance of an error-correcting surface code, providing a key step on the path towards scalable fault-tolerant quantum computing.",
       "authors": [
         "Youwei Zhao",
@@ -37759,7 +37777,7 @@
       "date": "2021-10-11",
       "url": "https://doi.org/10.1103/prxquantum.2.040101",
       "countryEvidence": "institution country codes [GB, DE] → GB",
-      "citations": 315,
+      "citations": 316,
       "abstract": "Quantum error correction is an indispensable ingredient for scalable quantum computing. In this Perspective we discuss a particular class of quantum codes called \"quantum low-density parity-check (LDPC) codes.\" The codes we discuss are alternatives to the surface code, which is currently the leading candidate to implement quantum fault tolerance. We introduce the zoo of quantum LDPC codes and discuss their potential for making quantum computers robust with regard to noise. In particular, we explain recent advances in the theory of quantum LDPC codes related to certain product constructions and discuss open problems in the field.",
       "authors": [
         "Nikolas P. Breuckmann",
@@ -37785,7 +37803,7 @@
       "date": "2021-05-10",
       "url": "https://doi.org/10.1063/5.0045990",
       "countryEvidence": "institution country codes [SE, NL, SE, NL, SE, NL, SE, NL, SE, NL, SE, NL, SE, NL, SE, NL] → SE",
-      "citations": 311,
+      "citations": 314,
       "abstract": "Two decades after their demonstration, superconducting nanowire single-photon detectors (SNSPDs) have become indispensable tools for quantum photonics as well as for many other photon-starved applications. This invention has not only led to a burgeoning academic field with a wide range of applications but also triggered industrial efforts. Current state-of-the-art SNSPDs combine near-unity detection efficiency over a wide spectral range, low dark counts, short dead times, and picosecond time resolution. The present perspective discusses important milestones and progress of SNSPDs research, emerging applications, and future challenges and gives an outlook on technological developments required to bring SNSPDs to the next level: a photon-counting, fast time-tagging imaging, and multi-pixel technology that is also compatible with quantum photonic integrated circuits.",
       "authors": [
         "Iman Esmaeil Zadeh",
@@ -37874,7 +37892,7 @@
       "date": "2021-09-23",
       "url": "https://doi.org/10.1038/s41578-021-00370-4",
       "countryEvidence": "institution country codes [US, US] → US",
-      "citations": 303,
+      "citations": 305,
       "authors": [
         "Irfan Siddiqi"
       ],
@@ -37894,7 +37912,7 @@
       "date": "2022-07-27",
       "url": "https://doi.org/10.1038/s41586-022-04891-y",
       "countryEvidence": "institution country codes [DE, DE, DE, DE, DE, DE, DE, DE, SG, DE, DE, DE, DE, DE, DE, DE, DE, SG, SG, SG, US, SG, DE, DE, DE] → DE",
-      "citations": 298,
+      "citations": 299,
       "abstract": "Abstract Device-independent quantum key distribution (DIQKD) enables the generation of secret keys over an untrusted channel using uncharacterized and potentially untrusted devices 1–9 . The proper and secure functioning of the devices can be certified by a statistical test using a Bell inequality 10–12 . This test originates from the foundations of quantum physics and also ensures robustness against implementation loopholes 13 , thereby leaving only the integrity of the users’ locations to be guaranteed by other means. The realization of DIQKD, however, is extremely challenging—mainly because it is difficult to establish high-quality entangled states between two remote locations with high detection efficiency. Here we present an experimental system that enables for DIQKD between two distant users. The experiment is based on the generation and analysis of event-ready entanglement between two independently trapped single rubidium atoms located in buildings 400 metre apart 14 . By achieving an entanglement fidelity of $$ {\\mathcal F} \\,\\ge 0.892(23)$$ <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow> <mml:mi>ℱ</mml:mi> <mml:mspace/> <mml:mo>≥</mml:mo> <mml:mn>0.892</mml:mn> <mml:mrow> <mml:mo>(</mml:mo> <mml:mrow> <mml:mn>23</mml:mn> </mml:mrow> <mml:mo>)</mml:mo> </mml:mrow> </mml:mrow> </mml:math> and implementing a DIQKD protocol with random key basis 15 , we observe a significant violation of a Bell inequality of S = 2.578(75)—above the classical limit of 2—and a quantum bit error rate of only 0.078(9). For the protocol, this results in a secret key rate of 0.07 bits per entanglement generation event in the asymptotic limit, and thus demonstrates the system’s capability to generate secret keys. Our results of secure key exchange with potentially untrusted devices pave the way to the ultimate form of quantum secure communications in future quantum networks.",
       "authors": [
         "Wei Zhang",
@@ -38170,7 +38188,7 @@
       "date": "2021-07-08",
       "url": "https://doi.org/10.1103/prxquantum.2.030305",
       "countryEvidence": "institution country codes [US, AU, US, US, US, US, US, US] → US",
-      "citations": 284,
+      "citations": 285,
       "abstract": "We describe quantum circuits with only O(N ) Toffoli complexity that block encode the spectra of quantum chemistry Hamiltonians in a basis of N arbitrary (e.g., molecular) orbitals. With O(/ ) repetitions of these circuits one can use phase estimation to sample in the molecular eigenbasis, where is the 1-norm of Hamiltonian coefficients and is the target precision. This is the lowest complexity shown for quantum computations of chemistry within an arbitrary basis. Furthermore, up to logarithmic factors, this matches the scaling of the most efficient prior block encodings that can work only with orthogonal-basis functions diagonalizing the Coloumb operator (e.g., the plane-wave dual basis). Our key insight is to factorize the Hamiltonian using a method known as tensor hypercontraction (THC) and then to transform the Coulomb operator into an isospectral diagonal form with a nonorthogonal basis defined by the THC factors. We then use qubitization to simulate the nonorthogonal THC Hamiltonian, in a fashion that avoids most complications of the nonorthogonal basis. We also reanalyze and reduce the cost of several of the best prior algorithms for these simulations in order to facilitate a clear comparison to the present work. In addition to having lower asymptotic scaling space-time volume, compilation of our algorithm for challenging finitesized molecules such as FeMoCo reveals that our method requires the least fault-tolerant resources of any known approach. By laying out and optimizing the surface-code resources required of our approach we show that FeMoCo can be simulated using about four million physical qubits and under 4 days of runtime, assuming 1-s cycle times and physical gate-error rates no worse than 0.1%.",
       "authors": [
         "Joonho Lee",
@@ -38317,7 +38335,7 @@
       "date": "2021-01-08",
       "url": "https://doi.org/10.1103/physrevlett.126.010503",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 279,
+      "citations": 280,
       "abstract": "High-quality long-distance entanglement is essential for both quantum communication and scalable quantum networks. Entanglement purification is to distill high-quality entanglement from low-quality entanglement in a noisy environment and it plays a key role in quantum repeaters. The previous significant entanglement purification experiments require two pairs of low-quality entangled states and were demonstrated in tabletop. Here we propose and report a high-efficiency and long-distance entanglement purification using only one pair of hyperentangled state. We also demonstrate its practical application in entanglement-based quantum key distribution (QKD). One pair of polarization spatial-mode hyperentanglement was distributed over 11 km multicore fiber (noisy channel). After purification, the fidelity of polarization entanglement arises from 0.771 to 0.887 and the effective key rate in entanglement-based QKD increases from 0 to 0.332. The values of Clauser-Horne-Shimony-Holt inequality of polarization entanglement arises from 1.829 to 2.128. Moreover, by using one pair of hyperentanglement and deterministic controlled-NOT gates, the total purification efficiency can be estimated as 6.6×10^{3} times than the experiment using two pairs of entangled states with spontaneous parametric down-conversion sources. Our results offer the potential to be implemented as part of a full quantum repeater and large-scale quantum network.",
       "authors": [
         "Xiao‐Min Hu",
@@ -38673,7 +38691,7 @@
       "date": "2021-07-19",
       "url": "https://doi.org/10.1049/qtc2.12015",
       "countryEvidence": "institution country codes [GB, GB, GB, DE, GB, GB, GB, US, DE, GB, US, IT, IT, IT, SG, SG, CA, US, GB, GB, GB, GB, GB] → GB",
-      "citations": 257,
+      "citations": 258,
       "abstract": "Abstract Concerted efforts are underway to establish an infrastructure for a global quantum Internet to realise a spectrum of quantum technologies. This will enable more precise sensors, secure communications, and faster data processing. Quantum communications are a front‐runner with quantum networks already implemented in several metropolitan areas. A number of recent proposals have modelled the use of space segments to overcome range limitations of purely terrestrial networks. Rapid progress in the design of quantum devices have enabled their deployment in space for in‐orbit demonstrations. We review developments in this emerging area of space‐based quantum technologies and provide a roadmap of key milestones towards a complete, global quantum networked landscape. Small satellites hold increasing promise to provide a cost effective coverage required to realise the quantum Internet. The state of art in small satellite missions is reviewed and the most current in‐field demonstrations of quantum cryptography are collated. The important challenges in space quantum technologies that must be overcome and recent efforts to mitigate their effects are summarised. A perspective on future developments that would improve the performance of space quantum communications is included. The authors conclude with a discussion on fundamental physics experiments that could take advantage of a global, space‐based quantum network.",
       "authors": [
         "Jasminder S. Sidhu",
@@ -38733,7 +38751,7 @@
       "date": "2022-01-12",
       "url": "https://doi.org/10.1038/s42254-021-00408-0",
       "countryEvidence": "institution country codes [FI, GB, FI, FI, GB, GB, DE, FI, GB] → FI",
-      "citations": 256,
+      "citations": 257,
       "authors": [
         "Mikko Turunen",
         "Mauro Brotons‐Gisbert",
@@ -38931,7 +38949,7 @@
       "date": "2022-08-22",
       "url": "https://doi.org/10.1103/physrevd.106.046007",
       "countryEvidence": "institution country codes [BE, US, PL, BE, US, US] → US",
-      "citations": 244,
+      "citations": 245,
       "abstract": "Complexity plays an important role in the study of black holes in quantum gravity, and of interacting many-body systems in condensed matter physics. The authors propose a definition of quantum state complexity, which agrees with earlier definitions under certain conditions. They compute the complexity in various models and show physically reasonable behaviors which can be connected with quantum chaos.",
       "authors": [
         "Vijay Balasubramanian",
@@ -39701,7 +39719,7 @@
       "date": "2021-04-20",
       "url": "https://doi.org/10.1021/acscentsci.0c00737",
       "countryEvidence": "institution country codes [US, US, US, US] → US",
-      "citations": 212,
+      "citations": 213,
       "abstract": "The second quantum revolution hinges on the creation of materials that unite atomic structural precision with electronic and structural tunability. A molecular approach to quantum information science (QIS) promises to enable the bottom-up creation of quantum systems. Within the broad reach of QIS, which spans fields ranging from quantum computation to quantum communication, we will focus on quantum sensing. Quantum sensing harnesses quantum control to interrogate the world around us. A broadly applicable class of quantum sensors would feature adaptable environmental compatibility, control over distance from the target analyte, and a tunable energy range of interaction. Molecules enable customizable \"designer\" quantum sensors with tunable functionality and compatibility across a range of environments. These capabilities offer the potential to bring unmatched sensitivity and spatial resolution to address a wide range of sensing tasks from the characterization of dynamic biological processes to the detection of emergent phenomena in condensed matter. In this Outlook, we outline the concepts and design criteria central to quantum sensors and look toward the next generation of designer quantum sensors based on new classes of molecular sensors.",
       "authors": [
         "Chung-Jui Yu",
@@ -39863,7 +39881,7 @@
       "date": "2022-06-02",
       "url": "https://doi.org/10.1038/s41928-022-00774-2",
       "countryEvidence": "institution country codes [US, IT, IT, US, US, US, IT, US] → US",
-      "citations": 209,
+      "citations": 210,
       "authors": [
         "Navid Anjum Aadit",
         "Andrea Grimaldi",
@@ -40164,7 +40182,7 @@
       "date": "2022-06-01",
       "url": "https://doi.org/10.1103/prxquantum.3.020101",
       "countryEvidence": "institution country codes [FR, FR, FR, FR] → FR",
-      "citations": 202,
+      "citations": 203,
       "abstract": "Quantum technologies are currently the object of high expectations from governments and private companies, as they hold the promise to shape safer and faster ways to extract, exchange, and treat information. However, despite its major potential impact for industry and society, the question of their energetic footprint has remained in a blind spot of current deployment strategies. In this Perspective, I argue that quantum technologies must urgently plan for the creation and structuration of a transverse quantum energy initiative, connecting quantum thermodynamics, quantum information science, quantum physics, and engineering. Such an initiative is the only path towards energy-efficient, sustainable quantum technologies, and to possibly bring out an energetic quantum advantage.",
       "authors": [
         "Alexia Auffèves"
@@ -40661,7 +40679,7 @@
       "date": "2021-09-14",
       "url": "https://doi.org/10.1103/prxquantum.2.030203",
       "countryEvidence": "institution country codes [FR, FR, FR, FR, FR, FR, FR, FR, FR, FR] → FR",
-      "citations": 191,
+      "citations": 192,
       "abstract": "Optimal control theory is a powerful mathematical tool, which has known a rapid development since the 1950s, mainly for engineering applications. More recently, it has become a widely used method to improve process performance in quantum technologies by means of highly efficient control of quantum dynamics. This tutorial aims at providing an introduction to key concepts of optimal control theory that is accessible to physicists and engineers working in quantum control or in related fields. The different mathematical results are introduced intuitively, before being rigorously stated. This tutorial describes modern aspects of optimal control theory, with a particular focus on the Pontryagin maximum principle, which is the main tool for determining open-loop control laws without experimental feedback. The different steps to solve an optimal control problem are discussed, before moving on to more advanced topics such as the existence of optimal solutions or the definition of the different types of extremals, namely normal, abnormal, and singular. The tutorial covers various quantum control issues and describes their mathematical formulation suitable for optimal control. The connection between the Pontryagin maximum principle and gradient-based optimization algorithms used for high-dimensional quantum systems is described. The optimal solution of different low-dimensional quantum systems is presented in detail, illustrating how the mathematical tools are applied in a practical way.",
       "authors": [
         "U. Boscain",
@@ -40750,7 +40768,7 @@
         "Annie E. Paine",
         "Vincent E. Elfving"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "collaboratingCountries": [
         "GB",
         "NL"
@@ -41083,7 +41101,7 @@
       "date": "2021-09-01",
       "url": "https://doi.org/10.1103/physrevd.104.066001",
       "countryEvidence": "institution country codes [JP, GB, US, US, AT, AT] → US",
-      "citations": 177,
+      "citations": 178,
       "abstract": "The problem of time in quantum gravity calls for a relational solution. Using quantum reduction maps, we establish a previously unknown equivalence between three approaches to relational quantum dynamics: (1) relational observables in the clock-neutral picture of Dirac quantization, (2) Page and Wootters' (PW) Schr\\\"odinger picture formalism, and (3) the relational Heisenberg picture obtained via symmetry reduction. Constituting three faces of the same dynamics, we call this equivalence the trinity. In the process, we develop a quantization procedure for relational Dirac observables using covariant positive operator-valued measures which encompass nonideal clocks and resolve the nonmonotonicity issue of realistic quantum clocks reported by Unruh and Wald. The quantum reduction maps reveal this procedure as the quantum analog of gauge-invariantly extending gauge-fixed quantities. We establish algebraic properties of these relational observables. We extend a recent ``clock-neutral'' approach to changing temporal reference frames, transforming relational observables and states, and demonstrate a clock dependent temporal nonlocality effect. We show that Kucha\\ifmmode \\check{r}\\else \\v{r}\\fi{}'s criticism, alleging that the conditional probabilities of the PW formalism violate the constraint, is incorrect. They are a quantum analog of a gauge-fixed description of a gauge-invariant quantity and equivalent to the manifestly gauge-invariant evaluation of relational observables in the physical inner product. The trinity furthermore resolves a previously reported normalization ambiguity and clarifies the role of entanglement in the PW formalism. The trinity finally permits us to resolve Kucha\\ifmmode \\check{r}\\else \\v{r}\\fi{}'s criticism that the PW formalism yields wrong propagators by showing how conditional probabilities of relational observables give the correct transition probabilities. Unlike previous proposals, our resolution does not invoke approximations, ideal clocks or ancilla systems, is manifestly gauge invariant, and easily extends to an arbitrary number of conditionings.",
       "authors": [
         "Philipp A. Höhn",
@@ -41112,7 +41130,7 @@
       "date": "2022-07-26",
       "url": "https://doi.org/10.1088/2058-9565/ac8444",
       "countryEvidence": "institution country codes [CN, CN, CN, BR, DE, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, FR, BR, FR, FR, BR, SE, BR, SE, CN, CN] → CN",
-      "citations": 178,
+      "citations": 179,
       "abstract": "Abstract Quantum batteries are miniature energy storage devices and play a very important role in quantum thermodynamics. In recent years, quantum batteries have been extensively studied, but limited in theoretical level. Here we report the experimental realization of a quantum battery based on superconducting qutrit. Our model explores dark and bright states to achieve stable and powerful charging processes, respectively. Our scheme makes use of the quantum adiabatic brachistochrone, which allows us to speed up the battery ergotropy injection. Due to the inherent interaction of the system with its surrounding, the battery exhibits a self-discharge, which is shown to be described by a supercapacitor-like self-discharging mechanism. Our results paves the way for proposals of new superconducting circuits able to store extractable work for further usage.",
       "authors": [
         "Chang-Kang Hu",
@@ -41469,7 +41487,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-21T10:57:55.160Z",
       "relevanceScore": 0.6
     },
@@ -41618,7 +41636,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-21T10:57:55.160Z",
       "relevanceScore": 0.6
     },
@@ -41687,7 +41705,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-21T10:57:55.160Z",
       "relevanceScore": 0.6
     },
@@ -42611,7 +42629,7 @@
         "Zlatko Minev",
         "Kristan Temme"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-21T10:57:55.160Z",
       "orgId": "ibm research thomas j watson research center",
       "relevanceScore": 0.6
@@ -46509,7 +46527,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-22T16:15:17.285Z",
       "relevanceScore": 0.6
     },
@@ -46551,7 +46569,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-22T16:15:17.285Z",
       "relevanceScore": 0.6
     },
@@ -47747,7 +47765,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-23T19:01:14.671Z",
       "relevanceScore": 0.6
     },
@@ -47766,7 +47784,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-23T19:01:14.671Z",
       "relevanceScore": 0.6
     },
@@ -47996,7 +48014,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-23T19:01:14.671Z",
       "relevanceScore": 0.6
     },
@@ -48015,7 +48033,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-23T19:01:14.671Z",
       "relevanceScore": 0.6
     },
@@ -48034,7 +48052,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-23T19:01:14.671Z",
       "relevanceScore": 0.6
     },
@@ -48394,7 +48412,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-23T19:01:14.671Z",
       "relevanceScore": 0.6
     },
@@ -53201,7 +53219,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53342,7 +53360,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53476,7 +53494,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53495,7 +53513,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53698,7 +53716,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53717,7 +53735,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53736,7 +53754,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53939,7 +53957,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -53979,7 +53997,7 @@
       "authors": [
         "Anonymous"
       ],
-      "venue": "Physical review. A/Physical review, A",
+      "venue": "Physical Review A",
       "ingestedAt": "2026-07-25T19:01:17.676Z",
       "relevanceScore": 0.6
     },
@@ -55537,14 +55555,14 @@
     {
       "id": "oa-W7171316086",
       "stage": "innovation",
-      "country": null,
+      "country": "CN",
       "provenance": "live",
       "source": "paper",
       "title": "Polarization self-compensation quantum key distribution system with 5 GHz modulation",
-      "org": "",
+      "org": "University of Science and Technology of China",
       "date": "2026-07-21",
       "url": "https://doi.org/10.1007/s11432-025-4933-9",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
       "citations": 0,
       "authors": [
         "Peng-Lei Hao",
@@ -55556,6 +55574,7 @@
       ],
       "venue": "Science China Information Sciences",
       "ingestedAt": "2026-07-27T17:00:14.948Z",
+      "orgId": "university of science and technology of china",
       "relevanceScore": 0.6
     },
     {
@@ -55966,6 +55985,1037 @@
       "countryEvidence": "no location match (auto-classified from Google News RSS, unverified)",
       "abstract": "U.S. National Science Foundation Announces Transformational Award to Connecticut's Quantum Tech Sector UConn Today",
       "ingestedAt": "2026-07-28T13:49:26.870Z",
+      "relevanceScore": 0.7
+    },
+    {
+      "id": "oa-W7171431964",
+      "stage": "innovation",
+      "country": "JP",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Graph Partitioning Based on Pair Interaction Energy Using Quantum Annealer",
+      "org": "Tohoku University",
+      "date": "2026-07-28",
+      "url": "https://doi.org/10.7566/jpsj.95.095001",
+      "countryEvidence": "institution country codes [JP, JP, JP, JP, JP, JP, JP, JP] → JP",
+      "citations": 0,
+      "authors": [
+        "Takako Mashiko",
+        "Yuzo Otomo",
+        "Ikumi Kondo",
+        "Masayuki Ohzeki"
+      ],
+      "venue": "Journal of the Physical Society of Japan",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "tohoku university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171384199",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Uniform Measure for Continuous-Time Quantum Walk on Hypercube",
+      "org": "",
+      "date": "2026-07-28",
+      "url": "https://doi.org/10.1142/s0219025726500153",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "abstract": "In this paper, we introduce a generalized continuous-time quantum walk (CTQW) on a hypercube, which can be interpreted as a CTQW with a “coin”. We examine its properties from a perspective of probability distribution and spectral theory, and obtain formulae for calculating its probability distributions and spectra, respectively. In particular, we prove that, for a wide range of initial states, the walk produces the uniform measure on the hypercube as its a stationary measure. Finally, we show that the time-reversal symmetry of the walk can be described directly by a unitary operator. Some other results are also proven.",
+      "authors": [
+        "Ce Wang"
+      ],
+      "venue": "Infinite Dimensional Analysis Quantum Probability and Related Topics",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171434137",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Approximate recoverability and the quantum data processing inequality",
+      "org": "",
+      "date": "2026-07-28",
+      "url": "https://doi.org/10.1142/s0129055x26500121",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "abstract": "In this paper, we discuss the quantum data processing inequality and its refinements that are physically meaningful in the context of approximate recoverability. An important conjecture regarding this due to Seshadreesan et. al. in J. Phys. A: Math. Theor. 48 (2015) is disproved. We prove some inequalities capturing universal approximate recoverability with the Petz recovery map for the sandwiched quasi and Rényi relative entropies for the parameter t = 2. We also obtain convexity theorems on some parametrized versions of the relative entropy and fidelity, which can be of independent interest.",
+      "authors": [
+        "Saptak Bhattacharya"
+      ],
+      "venue": "Reviews in Mathematical Physics",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171358923",
+      "stage": "innovation",
+      "country": "DZ",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Bose–Einstein Condensate in the Dunkl Formalism: A Study of an Excited Bound State with a Nodal Gaussian Ansatz",
+      "org": "University of Ouargla",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1007/s00601-026-02064-5",
+      "countryEvidence": "institution country codes [DZ, DZ] → DZ",
+      "citations": 0,
+      "authors": [
+        "Salah Zenkhri",
+        "D.E. Zenkhri"
+      ],
+      "venue": "Few-Body Systems",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "university of ouargla",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171469804",
+      "stage": "innovation",
+      "country": "IN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Comprehensive survey of global research trends, challenges, and comparative advances in quantum cryptography and post-quantum cryptographic algorithms",
+      "org": "Manipal University Jaipur",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1007/s44163-026-01841-9",
+      "countryEvidence": "institution country codes [IN, IN] → IN",
+      "citations": 0,
+      "abstract": "Quantum computing provides the pathway to dismantle the security provided by cryptography especially classical public-key systems due to the emergence of Shor’s algorithm. This emerging threat necessitates the development of new security paradigms that are quantum-resistant. Consequently, two new approaches have emerged as prominent solutions, namely Quantum Key Distribution (QKD), which relies on quantum mechanical principles for security, and Post-Quantum Cryptography (PQC), which relies on classical cryptography for quantum resistance. This paper presents an extensive analysis of the global research trends in quantum cryptography and post-quantum cryptographic algorithms by incorporating the use of both bibliometric analysis and comparative analysis. The paper relies on a dataset collected from the Web of Science database from 2010 to 2025. The findings of the paper demonstrate an increase in scientific production in the field of quantum cryptography, with post-quantum cryptography emerging as a new dominant area coinciding with standardization by NIST, whereas quantum key distribution continues to evolve with new developments in quantum communication.",
+      "authors": [
+        "Anubhav Saxena",
+        "Dinesh Kumar Saini",
+        "Satpal Singh Kushwaha"
+      ],
+      "venue": "Discover Artificial Intelligence",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "manipal university jaipur",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171386556",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Experimental realization of a bidirectional quantum analog-to-digital converter between photonic wavefront and qubits",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1038/s41467-026-75903-y",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Lei Chen",
+        "Gong-Chu Li",
+        "Xu-Song Hong",
+        "Si-Qi Zhang",
+        "H. Xu",
+        "Yuancheng Liu"
+      ],
+      "venue": "Nature Communications",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171350763",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum fluctuation-response inequality and its application in quantum hypothesis testing",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/ptvc-pcjh",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical review. E",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171366663",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Trembling Photons in Non-Abelian Electric Fields",
+      "org": "Northwest Normal University",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/physics.19.89",
+      "countryEvidence": "institution country codes [CN, CN] → CN",
+      "citations": 0,
+      "authors": [
+        "Xin Qiao",
+        "Xiaobo Zhang"
+      ],
+      "venue": "Physics",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "northwest normal university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171353128",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Privacy in continuous-variable distributed quantum sensing",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/1zsz-clqx",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "PRX Quantum",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171391569",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Noise-robustness for delegated quantum computation in the circuit model",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/9wt6-ht5z",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171449620",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Invariant-based master equation applied to a driven qutrit coupled to a bath and a leaky cavity",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/lp44-ll2f",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical review. B./Physical review. B",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171461930",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Physics-informed cross-layer adaptive optimization for continuous-variable quantum key distribution",
+      "org": "Changchun University of Science and Technology",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1088/1402-4896/ae9143",
+      "countryEvidence": "institution country codes [CN, CN, CN] → CN",
+      "citations": 0,
+      "abstract": "Abstract In practical continuous-variable quantum key distribution (CVQKD) systems, the co-fiber transmission of classical and quantum signals introduces complex noise and crosstalk, leading to inaccurate parameter estimation, modulation mismatch, and key rate degradation, threatening security. Existing methods struggle to determine whether the model output conforms to physical laws and security requirements. This paper proposes a Deep Semantic Model (DSM) that integrates a Physics-Informed Neural Network (PINN) and a Transformer, embedding channel physics into the learning process to achieve adaptive modulation variance adjustment under noise. A key innovation is the introduction of a \"semantic credibility\" metric to measure whether the model output conforms to the physical mechanisms and security boundaries of CVQKD, ensuring the adjustment process remains secure. The adaptive strategy under the GG02 protocol achieves an absolute gain of approximately 0.082bits/pulse , representing a relative improvement of 21%. This verifies that the proposed theory effectively improves the practicality and robustness of CVQKD, providing reliable support for its practical application.",
+      "authors": [
+        "Ruixue Yang",
+        "Lin Bi",
+        "Gopal Verma"
+      ],
+      "venue": "Physica Scripta",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "changchun university of science and technology",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171435617",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Regularized counterdiabatic driving for the quantum Rabi model",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/7wnd-t4xy",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review Research",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171448555",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Intelligent Quantum Computing Communication Interfaces for Secure and Scalable Distributed Quantum Systems",
+      "org": "Nanchang Hangkong University",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.55041/ijsmt.v2i7.101",
+      "countryEvidence": "institution country codes [CN, CN, CN] → CN",
+      "citations": 0,
+      "abstract": "Quantum computing communication interfaces are emerging as a fundamental technology for enabling seamless interaction between quantum processors, classical computing systems, cloud infrastructures, and distributed quantum networks. The development of efficient communication interfaces is essential to address challenges such as quantum state transmission, synchronization, error correction, latency, scalability, and interoperability across heterogeneous computing environments. This paper presents a comprehensive study of quantum computing communication interfaces by examining their architecture, communication protocols, hardware components, and software integration mechanisms. The proposed framework incorporates quantum-classical hybrid communication, quantum networking principles, secure quantum key distribution, adaptive resource management, and intelligent error mitigation techniques to improve communication reliability and computational efficiency. Furthermore, the study investigates the role of emerging technologies such as quantum internet, photonic interconnects, edge-cloud integration, and artificial intelligence in enhancing interface performance. Performance evaluation demonstrates that the proposed communication interface architecture achieves reduced communication latency, improved transmission fidelity, enhanced scalability, optimized resource utilization, and stronger security compared with conventional quantum communication approaches. The findings indicate that intelligent quantum communication interfaces can significantly accelerate the practical deployment of distributed quantum computing systems and future large-scale quantum applications.",
+      "authors": [
+        "Bojjam Tejasri",
+        "Busa Praneeth",
+        "Dr T Anvesh"
+      ],
+      "venue": "International Journal of Science Strategic Management and Technology",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "nanchang hangkong university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171359507",
+      "stage": "innovation",
+      "country": "MX",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Mean-field and fluctuation dynamics in off-resonant two-mode atom–field interactions",
+      "org": "Universidad Nacional Autónoma de México",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1088/1402-4896/ae913b",
+      "countryEvidence": "institution country codes [FR, MX, MX, MX] → MX",
+      "citations": 0,
+      "abstract": "Abstract We study a two-level system coupled to two quantized electromagnetic modes within the Jaynes–Cummings framework. While the single-mode model is exactly solvable due to its conserved excitation number, yielding finite-dimensional invariant subspaces, the two-mode model extension presents a fundamental challenge: although the total excitation number remains conserved, each invariant subspace is infinite-dimensional, preventing a closed-form analytical solution. Our scheme separates the dynamics into a dominant, exactly solvable semiclassical component—the atom interacting with the mean fields of both modes—and treats the remaining quantum fluctuations through a sequence of unitary transformations that preserve essential quantum features. We validate our approach through direct comparison with numerical solutions, focusing on the non-resonant regime where multiple detunings give rise to rich interference effects and multi-timescale dynamics inaccessible to standard approximations. The method accurately reproduces atomic inversion, field observables, and fidelity over relevant timescales, while remaining computationally efficient.",
+      "authors": [
+        "L. Medina-Dozal",
+        "Alejandro R. Urzúa",
+        "Carlos Andres Gonzalez-Gutierrez",
+        "José Récamier"
+      ],
+      "venue": "Physica Scripta",
+      "collaboratingCountries": [
+        "FR",
+        "MX"
+      ],
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "universidad nacional autónoma de méxico",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171394272",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Rydberg-Mediated Nonlinear Quantum Optics",
+      "org": "Shanxi University of Traditional Chinese Medicine",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1088/1674-1056/ae9073",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN] → CN",
+      "citations": 0,
+      "abstract": "Abstract Rydberg atoms have emerged as a versatile platform for quantum optics due to their exaggerated properties, particularly their strong long-range interactions, which enable a new regime of light-matter interaction. By mapping the interactions between Rydberg atoms onto photons, effective photon-photon interactions can be realized at the single-photon level, thereby overcoming the intrinsic weakness of conventional optical nonlinearities. In this review, we first introduce the fundamental physical principles of Rydberg-mediated quantum optics, and then discuss some key developments, including single-photon engineering, photonic quantum gates, contactless nonlinear optics, and quantum entanglement, providing a comprehensive overview of the current state and prospects of this rapidly developing field.",
+      "authors": [
+        "Yun-Hui He",
+        "Chang-Cheng Li",
+        "Xu Shen",
+        "Jing-Xu Bai",
+        "Xiaofeng Shi",
+        "Li Li"
+      ],
+      "venue": "Chinese Physics B",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "shanxi university of traditional chinese medicine",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171468963",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Construction of asymmetric quantum codes via two subsets",
+      "org": "Qinghai University",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1007/s11128-026-05303-0",
+      "countryEvidence": "institution country codes [CN, CN, CN] → CN",
+      "citations": 0,
+      "authors": [
+        "Guohui Wang",
+        "Yucheng Chen",
+        "Chunming Tang"
+      ],
+      "venue": "Quantum Information Processing",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "qinghai university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171396840",
+      "stage": "innovation",
+      "country": "DE",
+      "provenance": "live",
+      "source": "paper",
+      "title": "<i>paces</i> : Parallelized application of co-evolving subspaces. A method for computing quantum dynamics on GPUs",
+      "org": "Universität Ulm",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1063/5.0325590",
+      "countryEvidence": "institution country codes [DE, US, DE] → DE",
+      "citations": 0,
+      "abstract": "An efficient method of solving the time-dependent Schrödinger equation for pure states is described: At each time step, a restricted subspace of the total Hilbert space is systematically and naturally constructed via the image of repeated applications of the Hamiltonian operator and the time evolution is computed exactly within the restricted subspace. The subspace is dynamically recomputed such that it co-evolves with the state vector. The method is built from the ground up as a parallel algorithm for graphics processing units and suited to Hamiltonians that are sparse in a given basis. We benchmark the method by comparing its results for a 1D Holstein model with previously published multiset-matrix-product state results and then apply the method to compute optical spectra and non-equilibrium dynamics of one-, two-, and three-dimensional model chromophore nanoaggregates.",
+      "authors": [
+        "R. Kevin Kessing"
+      ],
+      "venue": "The Journal of Chemical Physics",
+      "collaboratingCountries": [
+        "DE",
+        "US"
+      ],
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "universität ulm",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171423333",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Single-photon frequency conversion in a giant-atom waveguide QED system",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/s8vc-s6db",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171445501",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Extreme points of absolutely PPT states with exactly three distinct eigenvalues",
+      "org": "Beihang University",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1088/1402-4896/ae9148",
+      "countryEvidence": "institution country codes [CN, CN, CN] → CN",
+      "citations": 0,
+      "abstract": "Abstract Whether the sets of absolutely separable (AS) and absolutely two-qutrit positive-partial-transpose (AP) states are the same has been an open problem in entanglement theory for decades. Since they are both convex sets, we investigate the boundary and extreme points of full-rank two-qutrit AP states with exactly three distinct eigenvalues. We show that every boundary point is an extreme point, with exactly one exception. We explicitly characterize the expressions of such points, each of which turns out to contain at most one parameter in some intervals. When the parameter approaches the ends of intervals, most points become the known extreme points of exactly two distinct eigenvalues.MSC: 15A21",
+      "authors": [
+        "Nalan Wang",
+        "Lin Chen",
+        "Zhiwei Song"
+      ],
+      "venue": "Physica Scripta",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "beihang university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171457119",
+      "stage": "innovation",
+      "country": "NL",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Learning from radio using variational quantum RF sensing",
+      "org": "Eindhoven University of Technology",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1088/2632-2153/ae911c",
+      "countryEvidence": "institution country codes [NL] → NL",
+      "citations": 0,
+      "abstract": "Abstract In modern wireless networks, radio channels serve a dual role. Whilst their primary function is to carry bits of information from a transmitter to a receiver, the intrinsic sensitivity of transmitted signals to the physical structure of the environment makes the channel a powerful source of knowledge about the world. In this paper, we consider an agent that learns about its environment using a quantum sensing probe, optimised using a quantum circuit, which interacts with the radio-frequency (RF) electromagnetic field. We use data obtained from a raytracer to train the quantum circuit and learning model and we provide extensive experiments under realistic conditions on a localisation task. We show that using quantum sensors to learn from radio signals can enable intelligent systems that require no channel measurements at deployment, remain sensitive to weak and obstructed RF signals, and can learn about the world despite operating with strictly less information than classical baselines.",
+      "authors": [
+        "Ivana Nikoloska"
+      ],
+      "venue": "Machine Learning Science and Technology",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "eindhoven university of technology",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171465469",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Reaching the intrinsic performance limits of superconducting nanowire single-photon detectors up to 0.1 mm wide",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1364/optica.599984",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Kristen Parzuchowski",
+        "Eli Mueller",
+        "Bakhrom Oripov",
+        "Benedikt Hampel",
+        "Ravin Chowdhury",
+        "Sahil Patel"
+      ],
+      "venue": "Optica",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171381681",
+      "stage": "innovation",
+      "country": "BD",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Time-fractional Schrödinger evolution in coupled double quantum dots: Memory effects on quantum resources",
+      "org": "Premier University",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1088/1402-4896/ae90fa",
+      "countryEvidence": "institution country codes [BD, MA, BD] → BD",
+      "citations": 0,
+      "abstract": "Abstract Our work explore the time evolution of entanglement, local quantum uncertainty, and correlated coherence, within a system modeled by two double quantum dots. The dynamics is represented using a time-fractional Schrödinger equation, which includes memory effects in a non-Markovian regime. We vary the fractional parameter τ , the tunneling amplitudes δA and δB, as well as the inter-dot interaction strength V, to investigate how these key parameters govern the generation, stabilization, and decay of quantum resources within the system. The obtained results reveal that, for both initial states, fractional dynamics with a low τ rapidly generates entanglement expecting maximal values LN ≈ 1 and non-classical correlations quantified by local quantum uncertainty. Conversely, higher values of τ lead to slower entanglement but memory effects allow quantum resources to remain significant for a longer time, with the negativity remaining above (≈ 0.6). We also find that higher interaction frequencies V accelerate correlations and stabilize coherence, while a strong tunneling asymmetry degrades entanglement and coherence despite the initial benefits of increasing quantum resources.",
+      "authors": [
+        "chhieb abdessamie",
+        "Mostafa Mansour",
+        "Ouchrif Mohamed"
+      ],
+      "venue": "Physica Scripta",
+      "collaboratingCountries": [
+        "BD",
+        "MA"
+      ],
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "premier university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171443027",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Photon state evolution in arbitrary time-varying media",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/bx2r-psdf",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review Letters",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171406725",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Polarization Bell state analysis using orbital angular momentum entanglement in linear optics",
+      "org": "Dalian University of Technology",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1007/s11128-026-05265-3",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN] → CN",
+      "citations": 0,
+      "authors": [
+        "Z L Yang",
+        "Shi-Wen He",
+        "Zheng Liu",
+        "S. Jin",
+        "Xiao‐Ming Xiu",
+        "Lincheng Wang"
+      ],
+      "venue": "Quantum Information Processing",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "dalian university of technology",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171424785",
+      "stage": "innovation",
+      "country": "AL",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Linear Algebraic Framework of Quantum State Representation",
+      "org": "University of Arts",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.55041/ijcope.v2i7.241",
+      "countryEvidence": "institution country codes [AL] → AL",
+      "citations": 0,
+      "abstract": "Linear algebra provides the mathematical foundation of quantum mechanics by rep-resenting physical states as vectors in complex Hilbert spaces and observables as linear operators. The concepts of vector spaces, basis, orthogonality, inner products, and matrix transformations enable a rigorous description of quantum systems. This paper presents a concise overview of the linear algebraic principles underlying quantum state representa-tion. The study discusses Hilbert spaces, Dirac notation, state normalization, superposition, the Born probability rule, Hermitian operators, and quantum measurement. Furthermore, the role of tensor products and matrix representations in quantum computing is briefly highlighted. An illustrative example demonstrates the application of these mathematical concepts in representing and analysing a quantum state. The paper emphasizes that linear algebra not only provides the language of quantum mechanics but also serves as the compu-tational framework for modern quantum technologies such as quantum computing, quantum information, and quantum communication. Keywords: Linear Algebra, Quantum Mechanics, Hilbert Space, Quantum State, Hermitian Operator, Superposition, Quantum Computing.",
+      "authors": [
+        "S Sathyapriya"
+      ],
+      "venue": "International Journal of Creative and Open Research in Engineering and Management",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "university of arts",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171405753",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Probing false vacuum decay on a cold-atom gauge-theory quantum simulator",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/vhnm-j9bw",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review Letters",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171381269",
+      "stage": "innovation",
+      "country": "IN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Integrating quantum machine learning and deep learning for the classification of cardiovascular diseases",
+      "org": "Gandhigram Rural Institute",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1080/14786435.2026.2704638",
+      "countryEvidence": "institution country codes [IN] → IN",
+      "citations": 0,
+      "authors": [
+        "Eliahim Jeevaraj P S",
+        "Shanmugavadivu P"
+      ],
+      "venue": "The Philosophical Magazine A Journal of Theoretical Experimental and Applied Physics",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "gandhigram rural institute",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171433034",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Experimental realization of an orthogonal-state-encoding quantum cryptography system driven by broadband quantum memory",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/zh3y-95j9",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171418386",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Fisher information of complete quantum measurements",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/9xzl-1xkp",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171434009",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Exact entanglement dynamics beyond nearest-neighbor dual-unitary Floquet systems",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1103/qpsz-pvxm",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical review. B./Physical review. B",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171428323",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "$$(1,1-2v)$$-constacyclic codes over $$\\mathbb {F}_q\\times (\\mathbb {F}_q+v\\mathbb {F}_q)$$ and their applications to QEC codes",
+      "org": "Hubei Normal University",
+      "date": "2026-07-27",
+      "url": "https://doi.org/10.1007/s11128-026-05298-8",
+      "countryEvidence": "institution country codes [CN, CN] → CN",
+      "citations": 0,
+      "authors": [
+        "Xiusheng Liu",
+        "Jie Liu"
+      ],
+      "venue": "Quantum Information Processing",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "hubei normal university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4415917264",
+      "stage": "innovation",
+      "country": "MX",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Post-selected flavor entanglement in pion–pion scattering",
+      "org": "Autonomous University of San Luis Potosí",
+      "date": "2026-07-26",
+      "url": "https://doi.org/10.1140/epjc/s10052-026-16005-3",
+      "countryEvidence": "institution country codes [MX, MX, MX] → MX",
+      "citations": 0,
+      "abstract": "Abstract Quantum entanglement provides a quantitative measure of nonclassical correlations and plays a central role in quantum information theory. Identifying and quantifying the mechanisms by which fundamental interactions generate or suppress entanglement is therefore of conceptual interest. In this work, flavor entanglement generated in pion–pion scattering is analyzed within a post-selected framework, in which the outgoing two-pion state is conditioned on fixed asymptotic momenta. The analysis is carried out in the isospin-symmetric limit using chiral perturbation theory, including one-loop corrections to the scattering amplitude. A general formalism is developed to quantify post-selected flavor entanglement through the von Neumann entropy of the reduced flavor density matrix, expressed in terms of a flavor tensor characterizing the initial state. This framework is applied to initially unentangled charged two-pion states. Except for the $${|{++}\\rangle }$$ <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow> <mml:mo>|</mml:mo> <mml:mrow> <mml:mo>+</mml:mo> <mml:mo>+</mml:mo> </mml:mrow> <mml:mo>⟩</mml:mo> </mml:mrow> </mml:math> and $${|{--}\\rangle }$$ <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow> <mml:mo>|</mml:mo> <mml:mrow> <mml:mo>-</mml:mo> <mml:mo>-</mml:mo> </mml:mrow> <mml:mo>⟩</mml:mo> </mml:mrow> </mml:math> channels, which remain unentangled due to isospin conservation, the post-selected final states exhibit nontrivial flavor entanglement and behave effectively as entangled qubits or qutrits. The entanglement is maximal near threshold and typically peaks at scattering angles close to $$\\theta =\\pi /2$$ <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow> <mml:mi>θ</mml:mi> <mml:mo>=</mml:mo> <mml:mi>π</mml:mi> <mml:mo>/</mml:mo> <mml:mn>2</mml:mn> </mml:mrow> </mml:math> . The analysis demonstrates that isospin-channel dominance plays a central role in shaping the entanglement structure: the $$I=0$$ <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"> <mml:mrow> <mml:mi>I</mml:mi> <mml:mo>=</mml:mo> <mml:mn>0</mml:mn> </mml:mrow> </mml:math> channel drives generic initial states toward highly entangled qutrit configurations after scattering and post-selection. Conversely, suitably chosen initial superpositions can undergo a reduction of entanglement, showing that the strong interaction can act both as a generator and a suppressor of quantum correlations. One-loop corrections quantitatively redistribute entanglement across phase space, sharpening angular structures that appear more diffuse at tree level.",
+      "authors": [
+        "Víctor Miguel Banda Guzmán",
+        "Rubén Flores Mendieta",
+        "Johann Hernández"
+      ],
+      "venue": "The European Physical Journal C",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "autonomous university of san luis potosí",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171451445",
+      "stage": "innovation",
+      "country": "FR",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Nanoscale Stray Fields from Micromagnets for Optimal Spin Qubit Architecture",
+      "org": "Institut Jean Lamour",
+      "date": "2026-07-26",
+      "url": "https://doi.org/10.1021/acs.nanolett.6c01469",
+      "countryEvidence": "institution country codes [FR, FR, FR, FR, FR, FR, FR, FR] → FR",
+      "citations": 0,
+      "abstract": "denotes the charge-photon coupling strength of the underlying charge qubit, highlighting the potential for high-fidelity operations in circuit QED architectures.",
+      "authors": [
+        "Sofia Lopes",
+        "Q. Schaeverbeke",
+        "M. M. Desjardins",
+        "D. Lacour",
+        "M. Hehn",
+        "F. Montaigne"
+      ],
+      "venue": "Nano Letters",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "institut jean lamour",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171385858",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum Speed Limits and the Ultimate Scaling of the Quantum Sensors",
+      "org": "Texas A&M University",
+      "date": "2026-07-26",
+      "url": "https://doi.org/10.3390/e28080836",
+      "countryEvidence": "institution country codes [US] → US",
+      "citations": 0,
+      "abstract": "Quantum metrology promises sensitivity beyond classical strategies, yet it remains unsettled how quantum-enabled precision should scale with physical resources and how to interpret quantum advantage. We provide a physically grounded resource accounting that clarifies the true Heisenberg limit and resolves apparent super-Heisenberg paradoxes. We demonstrate that the Heisenberg limit is best viewed as an information-theoretic manifestation of the quantum speed limit. We illustrate these ideas with a simple, super-resolving phase estimation protocol based on Rabi oscillations in two-level atoms driven on an m-photon resonance. In this setting, the phase error scales as n−m/2, where n is the average photon number. Recasting metrological sensitivity through quantum dynamical speed limits yields operational bounds that reconcile such super-resolution strategies with the standard Heisenberg interpretation and identify the relevant resources in the norm of the generator. We also revisit the common attribution of the NOON state’s 1/n scaling to quantum entanglement. We show that such an attribution is not generic and the Heisenberg 1/n scaling does not, by itself, certify entanglement as the enabling resource.",
+      "authors": [
+        "Yusef Maleki"
+      ],
+      "venue": "Entropy",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "texas a m university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171359563",
+      "stage": "innovation",
+      "country": "HU",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Numerical Design of Plasmonic Structure Integrated Superconducting Nanowire Single-Photon Detector Constructed with BSCCO Patterns",
+      "org": "University of Szeged",
+      "date": "2026-07-25",
+      "url": "https://doi.org/10.3390/mi17080887",
+      "countryEvidence": "institution country codes [HU, HU, HU, HU, HU, HU, HU] → HU",
+      "citations": 0,
+      "abstract": "Superconducting nanowire single-photon detectors (SNSPDs) were numerically designed by integrating periodic plasmonic structures onto hBN-protected superconducting BSCCO patterns to enhance absorptance. The numerical investigation of optimized nanocavity array (NCAI) and nanocavity trench array (NCTAI) SNSPDs has revealed that more than one-order-of-magnitude higher absorptance can be achieved at perpendicular incidence, compared to the corresponding meandered BSCCO pattern in a simple resonant optical cavity. The presented SNSPD designs are considerably improved via first and third quarter wavelength nanocavity resonances, as evidenced by the near-field maps and validated by the standard retrieval method. Although the NCAI-SNSPD exhibits a slightly larger absorptance, the NCTAI-SNSPD remains potentially competitive due to its smaller filling factor, which may be beneficial for reduced charge-crowding effect.",
+      "authors": [
+        "András Szenes",
+        "László Pothorcki",
+        "Balázs Bánhelyi",
+        "Mária Csete"
+      ],
+      "venue": "Micromachines",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "university of szeged",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171458631",
+      "stage": "innovation",
+      "country": "IR",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Symmetry resolved entanglement in Lifshitz field theories",
+      "org": "University of Guilan",
+      "date": "2026-07-24",
+      "url": "https://doi.org/10.1007/jhep07(2026)234",
+      "countryEvidence": "institution country codes [IR, IR] → IR",
+      "citations": 0,
+      "abstract": "A bstract We investigate symmetry-resolved entanglement in non-relativistic quantum field theories, including complex Lifshitz scalar chains and Lifshitz fermionic models. Using charged moments and the correlator method, we compute symmetry-resolved Rényi and von Neumann entropies and analyze their dependence on subsystem size, charge, mass, and the dynamical exponent z . Our results reveal distinct features of non-relativistic entanglement. In Lifshitz scalar theories, approximate equipartition among charge sectors emerges in the large- z regime, with configurational entropy dominating, whereas Lifshitz fermionic models exhibit genuine equipartition only in the relativistic limit, with fluctuation entropy prevailing. These findings highlight a rich interplay between conserved charges, subsystem size, mass, and dynamical scaling, and provide a framework to explore operationally accessible entanglement in non-relativistic systems. Our study offers insights relevant to experimental platforms such as cold atom setups and mesoscopic systems, where particle-number-resolved measurements can probe symmetry-resolved entanglement.",
+      "authors": [
+        "M. Reza Mohammadi Mozaffar",
+        "Ali Mollabashi"
+      ],
+      "venue": "Journal of High Energy Physics",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "university of guilan",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7170036118",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantifying high-dimensional non-Markovianity via quantum Fisher information matrix",
+      "org": "Xihua University",
+      "date": "2026-07-22",
+      "url": "https://doi.org/10.1016/j.physa.2026.131834",
+      "countryEvidence": "institution country codes [CN, CN] → CN",
+      "citations": 0,
+      "authors": [
+        "Liang Tang",
+        "Fan Wu"
+      ],
+      "venue": "Physica A Statistical Mechanics and its Applications",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "xihua university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171458250",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "A Fine-Grained and Efficient Reliability Analysis Framework for Noisy Quantum Circuits",
+      "org": "William & Mary",
+      "date": "2026-07-20",
+      "url": "https://doi.org/10.1145/3820171.3806854",
+      "countryEvidence": "institution country codes [US, US, US] → US",
+      "citations": 0,
+      "abstract": "Evaluating the reliability of noisy quantum circuits is essential for implementing quantum algorithms on noisy quantum devices. While state fidelity is the most faithful indicator of circuit reliability, it is experimentally and computationally prohibitive to obtain. Alternative metrics, although easier to compute, often fail to accurately reflect circuit reliability. We propose a fine-grained, scalable, and interpretable framework for efficient reliability evaluation of noisy quantum circuits. We introduce the Noise Proxy Circuit (NPC), which removes all logical operations while preserving the complete sequence of noise channels, thereby providing an abstraction of cumulative noise effects. Based on the NPC, we define Proxy Fidelity, a reliability metric that quantifies both qubit-level and circuit-level reliability. We further develop an analytical algorithm to estimate Proxy Fidelity under depolarizing, thermal relaxation, and SPAM error channels. The proposed framework achieves fidelity-level reliability estimation while remaining execution-free, scalable, and interpretable. Experimental results on real and simulated IBM quantum devices show that our method accurately estimates circuit fidelity, with an average absolute difference (AAD) ranging from 0.031 to 0.069 across diverse circuits and devices.",
+      "authors": [
+        "Jindi Wu",
+        "Tianjie Hu",
+        "Qun Li"
+      ],
+      "venue": "ACM SIGMETRICS Performance Evaluation Review",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "william mary",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171433677",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "<scp>ObliQ:</scp> Solving Quadratic Unconstrained Binary Optimization Problems on Real Photonic Quantum Machines",
+      "org": "Northeastern University",
+      "date": "2026-07-20",
+      "url": "https://doi.org/10.1145/3820171.3806895",
+      "countryEvidence": "institution country codes [US, US, US, US, US] → US",
+      "citations": 0,
+      "abstract": "Quadratic Unconstrained Binary Optimization (QUBO) problems are central to combinatorial optimization but challenging due to their exponential solution space. We aim to solve QUBO problems on photonic quantum computers via novel problem-customized optimizations and exploiting unique aspects of photonic quantum machine architecture. We present a novel solution, ObliQ, that creates a hybrid quantum circuit composed of two parts: a theoretically grounded, non-tunable, problem-customized quantum circuit and a parameterized variational quantum circuit -- underlined by the co-design of photonic quantum hardware and software.",
+      "authors": [
+        "Aditya Ranjan",
+        "Daniel J. Silver",
+        "Tirthak Patel",
+        "Bhargav Chickmagalurnanjun",
+        "Devesh Tiwari"
+      ],
+      "venue": "ACM SIGMETRICS Performance Evaluation Review",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "northeastern university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7171349571",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "<scp>Anchor:</scp> Reducing Temporal and Spatial Output Performance Variability on Quantum Computers",
+      "org": "Rice University",
+      "date": "2026-07-20",
+      "url": "https://doi.org/10.1145/3820171.3806845",
+      "countryEvidence": "institution country codes [US, US, US, US, US] → US",
+      "citations": 0,
+      "abstract": "Quantum computing, which has the power to accelerate many computing applications, is currently a technology under development. As a result, the existing noisy intermediate-scale quantum (NISQ) computers suffer from different hardware noise effects, which cause errors in the output of quantum programs. These errors cause a high degree of variability in the performance (i.e., output fidelity) of quantum programs, which varies from one computer to another and from one day to another. Consequently, users are unable to get consistent results even when running the same program multiple times. Current solutions, while focusing on reducing the errors faced by quantum programs, do not address the variability challenge. To address this challenge, we propose Anchor, a first-of-its-kind technique that leverages linear programming to reduce the performance variability by 73% on average over the state-of-the-art implementation focused on error reduction.",
+      "authors": [
+        "Yuqian Huo",
+        "Daniel Leeds",
+        "Jason Ludmir",
+        "Nicholas S. DiBrita",
+        "Tirthak Patel"
+      ],
+      "venue": "ACM SIGMETRICS Performance Evaluation Review",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "orgId": "rice university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "rss-zeitgeist-com-university-science-technology-beijing-qudit-entanglement",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Fidelity of Qudit Entanglement Rises With Iterated Purification",
+      "org": "",
+      "date": "2026-07-28",
+      "url": "https://quantumzeitgeist.com/university-science-technology-beijing-qudit-entanglement/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "High-dimensional qudit systems, which are -level or -state systems, outperform two-dimensional qubit systems in some quantum information processing tasks. Researchers exploit entanglement purification protocols for extracting high quality arbitrary -dimensional -partite Greenberger-Horne-Zeilinger states, improving the fidelity of the output state to unity by iterating the process and correcting qudit-flip and phase-flip errors.",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-https-quantumzeitgeist-com-bell-ssp-qst-cuts-shot-photonic",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "SSP-QST Cuts Photonic Quantum State Tomography Shot Count 8×",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://quantumzeitgeist.com/bell-ssp-qst-cuts-shot-photonic/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Spectral Subspace Purification (SSP-QST) improves quantum state tomography efficiency, achieving up to an 8× reduction in required shots.",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-eist-com-how-invertible-tqfts-yield-scalable-quantum-cellular-automata",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "How Invertible TQFTs Yield Scalable Quantum Cellular Automata",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://quantumzeitgeist.com/how-invertible-tqfts-yield-scalable-quantum-cellular-automata/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Constructing quantum cellular automata (QCAs) from topological quantum field theories, specifically invertible TQFTs, remains a challenge.",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-https-quantumzeitgeist-com-quantum-interconnect-research-qtrex-gains",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "QTREX Gains First Look at Quantum Interconnect IP from Research",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://quantumzeitgeist.com/quantum-interconnect-research-qtrex-gains/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "QTREX Quantum Ltd. launched a Quantum Interconnect Research Program with Northeastern University in Massachusetts, focused on advanced micro-system structures for cryogenic quantum interconnects. Pursuant to the collaboration agreement, QTREX has a first option to negotiate a commercial license to Northeastern-owned or jointly developed intellectual property (“Project IP”) arising from the joint research.",
+      "deploymentStatus": "deployed",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-tps-quantumzeitgeist-com-duke-quantum-center-entanglement-computer-log",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Log-Law Scaling of Entanglement Confirmed on Quantum Computer",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://quantumzeitgeist.com/duke-quantum-center-entanglement-computer-log/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "The investigation of strongly-correlated quantum matter is difficult due to the curse of dimensionality and intricate entanglement structures, particularly near continuous quantum phase transitions. Researchers demonstrate log-law scaling of subsystem entanglement entropies at criticality on a digital quantum computer, using the multiscale entanglement renormalization ansatz (MERA) and a holographic scheme on a fully-connected trapped-ion quantum computer.",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-umzeitgeist-com-bloq-quantum-partnership-qclairvoyance-talent-pipeline",
+      "stage": "adoption",
+      "country": null,
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Bloq Quantum, QClairvoyance Partner to Build Quantum Talent Pipeline",
+      "org": "",
+      "date": "2026-07-27",
+      "url": "https://quantumzeitgeist.com/bloq-quantum-partnership-qclairvoyance-talent-pipeline/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Bloq Quantum and QClairvoyance are collaborating to build a quantum talent pipeline, integrating Bloq Quantum’s platforms into QClairvoyance’s training programs.",
+      "deploymentStatus": "announced",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "gnews-JpYWs3Z0xKZnM2d3pkTHhvTk8ta1JEc2NuNXYzTVF6V1V1SWtIOW8tV1hqNFRORGc-oc-5",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "auto",
+      "source": "news",
+      "title": "Pittsburgh Supercomputing Center earned NSF funding to build a new hybrid quantum-classical computer",
+      "org": "",
+      "date": "2026-07-28",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOOElENlpTOWU0ZzVQYlJmVS0xeUI2TGRoU2VIYmRHNGJqRjVTMnk1UWR3VGhYLWgzQjA4RHFWaXk5ZllJNTJBUTNWQTZsUWFoS1JIc3ZPYjh2YV9nM3hXZEdjbnFULTZ1NW1pRGZLQjJpYWs3Z0xKZnM2d3pkTHhvTk8ta1JEc2NuNXYzTVF6V1V1SWtIOW8tV1hqNFRORGc?oc=5",
+      "publisher": "University of Pittsburgh",
+      "countryEvidence": "matched \"NSF\" (auto-classified from Google News RSS, unverified)",
+      "abstract": "Pittsburgh Supercomputing Center earned NSF funding to build a new hybrid quantum-classical computer University of Pittsburgh",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
+      "relevanceScore": 0.7
+    },
+    {
+      "id": "gnews-UxJQUY2ZWU1bGJEOTdwMTlmbzFjQzY2M3BHaWw2eVBPMnBQbmcyZnYtYVVHWjViMA-oc-5",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "auto",
+      "source": "news",
+      "title": "The Ohio State University Secures $4 Million NSF Phase II Award to Lead National Quantum Sensing Testbed",
+      "org": "",
+      "date": "2026-07-03",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQdC1OYTZJZWp3QzBWc0dfZlRtdVgwN1RSLXQxa1d2T1pCMGdHNW5XRkVnZEZkUDVNbHF3WUhIYUFfa3BYeWo2U01QdmZobE5tT2xZTmMwendyc1h3dkNXUHVMay1tT1p4SS0wRzBOTDRoOUNSOWJuWDNOZWxRTmR2VW5LQmlxcDdfMHpkTi1hQlFWQm1JaHNzYnZFTVJNTjhqMHRPRzNZRF9FLWRELUo5ZkFCaDk2ZS1EOVRjRmdoUEZ2RDVpVnlvTThKcEEzcnZCV3plcjR30gHbAUFVX3lxTE9XR0RkbW1iOWlTX0dMdFNSTU5tck9tM2drRmNycVB4YXRCM2hKd3Y3aWVnZUNmUmpTeTFBeVhYSzhtMGhFQ0V5RS1HcE9yN3pXQXJEdDMzakV5dVM5c21TUVVvT3AzWTBXcHYtMGoyMlBhMjRUaUxNR1Y0RTRodWtMejZPS3JCYjVtZmgxSEMzVnJBYjNmRHRkNTRDYi0tVFNkT0diR3JaRDFFNUxJQUY2ZWU1bGJEOTdwMTlmbzFjQzY2M3BHaWw2eVBPMnBQbmcyZnYtYVVHWjViMA?oc=5",
+      "publisher": "Quantum Computing Report",
+      "countryEvidence": "matched \"NSF\" (auto-classified from Google News RSS, unverified)",
+      "abstract": "The Ohio State University Secures $4 Million NSF Phase II Award to Lead National Quantum Sensing Testbed Quantum Computing Report",
+      "ingestedAt": "2026-07-28T16:35:23.062Z",
       "relevanceScore": 0.7
     }
   ],
@@ -58595,70 +59645,70 @@
     {
       "date": "2026-07-28",
       "counts": {
-        "CN": 94,
+        "JP": 20,
+        "DZ": 1,
+        "IN": 39,
+        "CN": 101,
+        "MX": 6,
+        "DE": 22,
+        "NL": 3,
+        "BD": 6,
+        "AL": 1,
+        "FR": 12,
+        "US": 56,
         "NO": 1,
         "IQ": 2,
         "RO": 2,
-        "IN": 39,
         "AT": 3,
-        "CA": 10,
+        "CA": 9,
+        "HU": 2,
         "ZA": 3,
-        "US": 58,
-        "TW": 3,
+        "TW": 2,
         "LB": 2,
-        "FR": 13,
         "GB": 8,
-        "JP": 19,
+        "IR": 7,
         "ES": 3,
         "LK": 1,
-        "IT": 11,
+        "IT": 9,
         "PK": 3,
-        "TR": 5,
+        "TR": 4,
         "PE": 2,
         "BR": 6,
         "MY": 1,
         "ER": 1,
-        "MX": 4,
-        "IR": 6,
-        "DE": 20,
-        "RU": 9,
-        "AU": 7,
+        "RU": 8,
+        "AU": 6,
         "CL": 1,
-        "CH": 4,
-        "ID": 4,
-        "PL": 5,
+        "CH": 3,
+        "ID": 3,
+        "PL": 4,
         "PT": 1,
         "TH": 1,
         "LY": 1,
         "VE": 1,
         "HK": 3,
-        "BD": 5,
         "KR": 6,
         "SG": 3,
         "VN": 2,
-        "HU": 1,
-        "SE": 2,
-        "NL": 2,
+        "SE": 1,
         "DK": 1,
         "IL": 1,
         "GR": 1,
-        "SA": 4,
+        "SA": 1,
         "MA": 1,
-        "FI": 1,
+        "FI": 2,
         "UA": 1,
         "AR": 1,
-        "SI": 1,
-        "CO": 1,
-        "BH": 1
+        "SI": 1
       },
       "stageCounts": {
-        "innovation": 927,
-        "scaling": 96,
-        "adoption": 66,
-        "investment": 132
+        "innovation": 968,
+        "scaling": 100,
+        "adoption": 68,
+        "investment": 133
       },
       "fundingUsd": 94016556,
-      "totalEntries": 2757
+      "totalEntries": 2806
     }
   ],
   "notes": [
@@ -58694,7 +59744,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -58715,14 +59765,14 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
@@ -58736,56 +59786,56 @@
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-07-28T13:49:26.870Z",
+      "lastSuccessfulPull": "2026-07-28T16:35:23.062Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -58796,182 +59846,182 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 13407856532.16,
-      "asOf": "2026-07-28T13:42:48.452Z",
+      "asOf": "2026-07-28T16:28:49.313Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 5198717341.4800005,
-      "asOf": "2026-07-28T13:43:03.702Z",
+      "asOf": "2026-07-28T16:29:04.399Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc. Common Stock",
       "marketCapUsd": 7227385266.700001,
-      "asOf": "2026-07-28T13:43:18.949Z",
+      "asOf": "2026-07-28T16:29:19.525Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
       "marketCapUsd": 1795258496.52,
-      "asOf": "2026-07-28T13:43:34.194Z",
+      "asOf": "2026-07-28T16:29:34.575Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
       "marketCapUsd": 316375831.98,
-      "asOf": "2026-07-28T13:43:49.406Z",
+      "asOf": "2026-07-28T16:29:49.633Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
       "marketCapUsd": 552479517.52,
-      "asOf": "2026-07-28T13:44:04.663Z",
+      "asOf": "2026-07-28T16:30:04.742Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 203764825869.2,
-      "asOf": "2026-07-28T13:44:19.894Z",
+      "asOf": "2026-07-28T16:30:19.914Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 3993807518411.36,
-      "asOf": "2026-07-28T13:44:35.104Z",
+      "asOf": "2026-07-28T16:30:35.089Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 2890403943326.4004,
-      "asOf": "2026-07-28T13:44:50.318Z",
+      "asOf": "2026-07-28T16:30:50.160Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2489087552396.04,
-      "asOf": "2026-07-28T13:45:05.519Z",
+      "asOf": "2026-07-28T16:31:05.241Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 77888007457.5,
-      "asOf": "2026-07-28T13:45:20.756Z",
+      "asOf": "2026-07-28T16:31:20.290Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
       "marketCapUsd": 462383480000,
-      "asOf": "2026-07-28T13:45:36.030Z",
+      "asOf": "2026-07-28T16:31:35.339Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 4759668710000,
-      "asOf": "2026-07-28T13:45:51.297Z",
+      "asOf": "2026-07-28T16:31:50.480Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 133858636740,
-      "asOf": "2026-07-28T13:46:06.572Z",
+      "asOf": "2026-07-28T16:32:05.530Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 77790871777.08,
-      "asOf": "2026-07-28T13:46:21.757Z",
+      "asOf": "2026-07-28T16:32:20.595Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 294377333812.48,
-      "asOf": "2026-07-28T13:46:36.964Z",
+      "asOf": "2026-07-28T16:32:35.647Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 105235202969.18,
-      "asOf": "2026-07-28T13:46:52.205Z",
+      "asOf": "2026-07-28T16:32:50.787Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 56536791729.48,
-      "asOf": "2026-07-28T13:47:07.411Z",
+      "asOf": "2026-07-28T16:33:05.843Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 14459039316.7,
-      "asOf": "2026-07-28T13:47:22.593Z",
+      "asOf": "2026-07-28T16:33:20.914Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
       "marketCapUsd": 8592074697.24,
-      "asOf": "2026-07-28T13:47:37.824Z",
+      "asOf": "2026-07-28T16:33:35.968Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 410389689772.7,
-      "asOf": "2026-07-28T13:47:53.053Z",
+      "asOf": "2026-07-28T16:33:51.055Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 635785366000,
-      "asOf": "2026-07-28T13:48:08.370Z",
+      "asOf": "2026-07-28T16:34:06.098Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 63813367676.99,
-      "asOf": "2026-07-28T13:48:23.605Z",
+      "asOf": "2026-07-28T16:34:21.177Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
       "marketCapUsd": 451570169569.05,
-      "asOf": "2026-07-28T13:48:38.791Z",
+      "asOf": "2026-07-28T16:34:36.228Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
       "marketCapUsd": 51805917106.88,
-      "asOf": "2026-07-28T13:48:54.041Z",
+      "asOf": "2026-07-28T16:34:51.376Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
       "marketCapUsd": 13528217630.720001,
-      "asOf": "2026-07-28T13:49:09.257Z",
+      "asOf": "2026-07-28T16:35:06.451Z",
       "url": "https://www.sktelecom.com"
     }
   ],
