@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-08-02T13:07:50.664Z",
+  "generatedAt": "2026-08-02T16:00:41.814Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -33732,7 +33732,7 @@
       "date": "2023-12-06",
       "url": "https://doi.org/10.1038/s41586-023-06927-3",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 1046,
+      "citations": 1048,
       "abstract": "Abstract Suppressing errors is the central challenge for useful quantum computing 1 , requiring quantum error correction (QEC) 2–6 for large-scale processing. However, the overhead in the realization of error-corrected ‘logical’ qubits, in which information is encoded across many physical qubits for redundancy 2–4 , poses substantial challenges to large-scale logical quantum computing. Here we report the realization of a programmable quantum processor based on encoded logical qubits operating with up to 280 physical qubits. Using logical-level control and a zoned architecture in reconfigurable neutral-atom arrays 7 , our system combines high two-qubit gate fidelities 8 , arbitrary connectivity 7,9 , as well as fully programmable single-qubit rotations and mid-circuit readout 10–15 . Operating this logical processor with various types of encoding, we demonstrate improvement of a two-qubit logic gate by scaling surface-code 6 distance from d = 3 to d = 7, preparation of colour-code qubits with break-even fidelities 5 , fault-tolerant creation of logical Greenberger–Horne–Zeilinger (GHZ) states and feedforward entanglement teleportation, as well as operation of 40 colour-code qubits. Finally, using 3D [[8,3,2]] code blocks 16,17 , we realize computationally complex sampling circuits 18 with up to 48 logical qubits entangled with hypercube connectivity 19 with 228 logical two-qubit gates and 48 logical CCZ gates 20 . We find that this logical encoding substantially improves algorithmic performance with error detection, outperforming physical-qubit fidelities at both cross-entropy benchmarking and quantum simulations of fast scrambling 21,22 . These results herald the advent of early error-corrected quantum computation and chart a path towards large-scale logical processors.",
       "authors": [
         "Dolev Bluvstein",
@@ -33854,7 +33854,7 @@
       "date": "2023-10-11",
       "url": "https://doi.org/10.1038/s41586-023-06481-y",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 499,
+      "citations": 500,
       "abstract": "Abstract The ability to perform entangling quantum operations with low error rates in a scalable fashion is a central element of useful quantum information processing 1 . Neutral-atom arrays have recently emerged as a promising quantum computing platform, featuring coherent control over hundreds of qubits 2,3 and any-to-any gate connectivity in a flexible, dynamically reconfigurable architecture 4 . The main outstanding challenge has been to reduce errors in entangling operations mediated through Rydberg interactions 5 . Here we report the realization of two-qubit entangling gates with 99.5% fidelity on up to 60 atoms in parallel, surpassing the surface-code threshold for error correction 6,7 . Our method uses fast, single-pulse gates based on optimal control 8 , atomic dark states to reduce scattering 9 and improvements to Rydberg excitation and atom cooling. We benchmark fidelity using several methods based on repeated gate applications 10,11 , characterize the physical error sources and outline future improvements. Finally, we generalize our method to design entangling gates involving a higher number of qubits, which we demonstrate by realizing low-error three-qubit gates 12,13 . By enabling high-fidelity operation in a scalable, highly connected system, these advances lay the groundwork for large-scale implementation of quantum algorithms 14 , error-corrected circuits 7 and digital simulations 15 .",
       "authors": [
         "Simon J. Evered",
@@ -33938,7 +33938,7 @@
       "date": "2023-05-25",
       "url": "https://doi.org/10.1103/physrevlett.130.210801",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 361,
+      "citations": 362,
       "abstract": "Quantum key distribution (QKD) aims to generate secure private keys shared by two remote parties. With its security being protected by principles of quantum mechanics, some technology challenges remain towards practical application of QKD. The major one is the distance limit, which is caused by the fact that a quantum signal cannot be amplified while the channel loss is exponential with the distance for photon transmission in optical fiber. Here using the 3-intensity sending-or-not-sending protocol with the actively-odd-parity-pairing method, we demonstrate a fiber-based twin-field QKD over 1002 km. In our experiment, we developed a dual-band phase estimation and ultra-low noise superconducting nanowire single-photon detectors to suppress the system noise to around 0.02 Hz. The secure key rate is 9.53×10^{-12} per pulse through 1002 km fiber in the asymptotic regime, and 8.75×10^{-12} per pulse at 952 km considering the finite size effect. Our work constitutes a critical step towards the future large-scale quantum network.",
       "authors": [
         "Yang Liu",
@@ -34263,7 +34263,7 @@
       "date": "2023-10-11",
       "url": "https://doi.org/10.1038/s41586-023-06438-1",
       "countryEvidence": "institution country codes [US, US, US, US, FR, FR, US, US, US, FR, FR, US, US] → US",
-      "citations": 220,
+      "citations": 221,
       "authors": [
         "Shuo Ma",
         "Genyue Liu",
@@ -35904,7 +35904,7 @@
       "date": "2021-08-12",
       "url": "https://doi.org/10.1038/s42254-021-00348-9",
       "countryEvidence": "institution country codes [US, US, US, US, US, GB, JP, JP, SE, JP, US, JP, SE, JP, CN, US, US, US, US, US] → US",
-      "citations": 3089,
+      "citations": 3092,
       "authors": [
         "M. Cerezo",
         "Andrew Arrasmith",
@@ -36049,7 +36049,7 @@
       "date": "2022-06-01",
       "url": "https://doi.org/10.1038/s41586-022-04725-x",
       "countryEvidence": "institution country codes [CA, CA, CA, CA, CA, CA, CA, CA, CA, CA, US, US, US, CA, CA, CA, CA, CA, CA] → CA",
-      "citations": 1039,
+      "citations": 1040,
       "abstract": "Abstract A quantum computer attains computational advantage when outperforming the best classical computers running the best-known algorithms on well-defined tasks. No photonic machine offering programmability over all its quantum gates has demonstrated quantum computational advantage: previous machines 1,2 were largely restricted to static gate sequences. Earlier photonic demonstrations were also vulnerable to spoofing 3 , in which classical heuristics produce samples, without direct simulation, lying closer to the ideal distribution than do samples from the quantum hardware. Here we report quantum computational advantage using Borealis, a photonic processor offering dynamic programmability on all gates implemented. We carry out Gaussian boson sampling 4 (GBS) on 216 squeezed modes entangled with three-dimensional connectivity 5 , using a time-multiplexed and photon-number-resolving architecture. On average, it would take more than 9,000 years for the best available algorithms and supercomputers to produce, using exact methods, a single sample from the programmed distribution, whereas Borealis requires only 36 μs. This runtime advantage is over 50 million times as extreme as that reported from earlier photonic machines. Ours constitutes a very large GBS experiment, registering events with up to 219 photons and a mean photon number of 125. This work is a critical milestone on the path to a practical quantum computer, validating key technological features of photonics as a platform for this goal.",
       "authors": [
         "Lars S. Madsen",
@@ -36079,7 +36079,7 @@
       "date": "2021-01-06",
       "url": "https://doi.org/10.1038/s41586-020-03093-8",
       "countryEvidence": "institution country codes [CN, CN, SE, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, SE, CN, CN, CN, CN] → CN",
-      "citations": 1025,
+      "citations": 1026,
       "authors": [
         "Yu-Ao Chen",
         "Qiang Zhang",
@@ -41433,7 +41433,7 @@
       "date": "2021-03-10",
       "url": "https://doi.org/10.1038/s41586-021-03242-7",
       "countryEvidence": "institution country codes [AT, AT, AT, AT, AT, AT, AT, AT, AT, NL, AT, AT, US, US, US, US, AT, DE, DE, AT, AT, AT, AT] → AT",
-      "citations": 170,
+      "citations": 173,
       "authors": [
         "Valeria Saggio",
         "Beate E. Asenbeck",
@@ -41443,6 +41443,12 @@
         "Vedran Dunjko"
       ],
       "venue": "Nature",
+      "collaboratingCountries": [
+        "AT",
+        "DE",
+        "NL",
+        "US"
+      ],
       "ingestedAt": "2026-07-20T19:44:32.653Z",
       "orgId": "university of vienna",
       "relevanceScore": 0.6
@@ -41499,9 +41505,9 @@
       "org": "",
       "date": "2026-07-20",
       "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNOFdQZUM3NDVHRklkNEZGbWhERTFNQU9hU1RJWHowLWhFYlNKYVJ6VFFwdmt4OVhqZXlBN2NSSGxhNjU4WDlXelpKaGI2dGU3NTM0Y0Z6WnFILWF4a01BS3RLc0xKR2dtZEhOWFMzLTFKX0N5clk3Zk45cVJYdnpMU2ZGS2ZoOVpkUmR0VVcxcExrQQ?oc=5",
-      "publisher": "ibm.com",
+      "publisher": "IBM",
       "countryEvidence": "matched \"IBM\" (auto-classified from Google News RSS, unverified)",
-      "abstract": "IBM Ventures: Leading the quantum investment landscape ibm.com",
+      "abstract": "IBM Ventures: Leading the quantum investment landscape IBM",
       "ingestedAt": "2026-07-21T01:51:00.992Z",
       "relevanceScore": 0.7
     },
@@ -59445,9 +59451,9 @@
       "org": "",
       "date": "2026-07-29",
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNY0p3bU02TFZSaE11MWY0WUxfSG83eGJKUlV0Xy10cDRxclQ2cHhKRXZ1YnNKMVdUdkc1amowc2RBWnc4T2c4MEVkSDJ0OGxUY2dwXzdZYXJ2M3A3THRLMU5XSm1tTnlNdHhXSU14QVVoZTV1a0h2MHRQMmtsY3d2ckxBUW5YSDlwNGh2NE80Y3RPVkl4UVJOdzl3VWVOdw?oc=5",
-      "publisher": "EY",
+      "publisher": "ey.com",
       "countryEvidence": "matched \"Canada\" (auto-classified from Google News RSS, unverified)",
-      "abstract": "EY Canada makes leading investment in Quantum Computing EY",
+      "abstract": "EY Canada makes leading investment in Quantum Computing ey.com",
       "ingestedAt": "2026-07-30T16:27:43.862Z",
       "relevanceScore": 0.7
     },
@@ -66596,7 +66602,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -66617,14 +66623,14 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
@@ -66638,56 +66644,56 @@
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-08-02T13:07:50.664Z",
+      "lastSuccessfulPull": "2026-08-02T16:00:41.814Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -66698,182 +66704,182 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 13601956905.119999,
-      "asOf": "2026-08-02T13:01:16.338Z",
+      "asOf": "2026-08-02T15:54:09.696Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 4969362164.65,
-      "asOf": "2026-08-02T13:01:31.522Z",
+      "asOf": "2026-08-02T15:54:24.766Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc. Common Stock",
       "marketCapUsd": 6697648673.599999,
-      "asOf": "2026-08-02T13:01:46.699Z",
+      "asOf": "2026-08-02T15:54:39.889Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
       "marketCapUsd": 1826833394.6999998,
-      "asOf": "2026-08-02T13:02:01.779Z",
+      "asOf": "2026-08-02T15:54:55.001Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
       "marketCapUsd": 298103300.43,
-      "asOf": "2026-08-02T13:02:16.965Z",
+      "asOf": "2026-08-02T15:55:10.107Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
       "marketCapUsd": 525746637.64,
-      "asOf": "2026-08-02T13:02:32.049Z",
+      "asOf": "2026-08-02T15:55:25.171Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 210708356323.5,
-      "asOf": "2026-08-02T13:02:47.134Z",
+      "asOf": "2026-08-02T15:55:40.236Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 4355446691364.03,
-      "asOf": "2026-08-02T13:03:02.271Z",
+      "asOf": "2026-08-02T15:55:55.303Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 3450799500577.52,
-      "asOf": "2026-08-02T13:03:17.382Z",
+      "asOf": "2026-08-02T15:56:10.428Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2921415780628.88,
-      "asOf": "2026-08-02T13:03:32.500Z",
+      "asOf": "2026-08-02T15:56:25.621Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 77032269430.5,
-      "asOf": "2026-08-02T13:03:47.635Z",
+      "asOf": "2026-08-02T15:56:40.713Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
       "marketCapUsd": 454968800000,
-      "asOf": "2026-08-02T13:04:02.719Z",
+      "asOf": "2026-08-02T15:56:55.769Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 4862365750000,
-      "asOf": "2026-08-02T13:04:17.803Z",
+      "asOf": "2026-08-02T15:57:10.882Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 134491003403.22,
-      "asOf": "2026-08-02T13:04:32.882Z",
+      "asOf": "2026-08-02T15:57:25.936Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 77066350344.48,
-      "asOf": "2026-08-02T13:04:48.112Z",
+      "asOf": "2026-08-02T15:57:40.998Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 290064507751.68,
-      "asOf": "2026-08-02T13:05:03.287Z",
+      "asOf": "2026-08-02T15:57:56.093Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 103737039706.90001,
-      "asOf": "2026-08-02T13:05:18.429Z",
+      "asOf": "2026-08-02T15:58:11.250Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 51592621508.96,
-      "asOf": "2026-08-02T13:05:33.550Z",
+      "asOf": "2026-08-02T15:58:26.349Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 14540799869.599998,
-      "asOf": "2026-08-02T13:05:48.785Z",
+      "asOf": "2026-08-02T15:58:41.422Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
       "marketCapUsd": 8386268317.559999,
-      "asOf": "2026-08-02T13:06:03.906Z",
+      "asOf": "2026-08-02T15:58:56.480Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 403069383828.10004,
-      "asOf": "2026-08-02T13:06:19.118Z",
+      "asOf": "2026-08-02T15:59:11.570Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 625698900000,
-      "asOf": "2026-08-02T13:06:34.204Z",
+      "asOf": "2026-08-02T15:59:26.637Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 63429348655.9,
-      "asOf": "2026-08-02T13:06:49.332Z",
+      "asOf": "2026-08-02T15:59:41.734Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
       "marketCapUsd": 457167006793.35,
-      "asOf": "2026-08-02T13:07:04.499Z",
+      "asOf": "2026-08-02T15:59:56.832Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
       "marketCapUsd": 51024362322.94,
-      "asOf": "2026-08-02T13:07:19.610Z",
+      "asOf": "2026-08-02T16:00:11.929Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
       "marketCapUsd": 12142381488.64,
-      "asOf": "2026-08-02T13:07:34.818Z",
+      "asOf": "2026-08-02T16:00:27.005Z",
       "url": "https://www.sktelecom.com"
     }
   ],

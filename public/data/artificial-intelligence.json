@@ -1,6 +1,6 @@
 {
   "technology": "artificial-intelligence",
-  "generatedAt": "2026-08-02T13:20:35.787Z",
+  "generatedAt": "2026-08-02T16:12:58.810Z",
   "entries": [
     {
       "id": "seed-china-ai-plan-2017",
@@ -37338,7 +37338,7 @@
       "date": "2024-11-20",
       "url": "https://doi.org/10.1145/3703155",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 1747,
+      "citations": 1750,
       "abstract": "The emergence of large language models (LLMs) has marked a significant breakthrough in natural language processing (NLP), fueling a paradigm shift in information acquisition. Nevertheless, LLMs are prone to hallucination, generating plausible yet nonfactual content. This phenomenon raises significant concerns over the reliability of LLMs in real-world information retrieval (IR) systems and has attracted intensive research to detect and mitigate such hallucinations. Given the open-ended general-purpose attributes inherent to LLMs, LLM hallucinations present distinct challenges that diverge from prior task-specific models. This divergence highlights the urgency for a nuanced understanding and comprehensive overview of recent advances in LLM hallucinations. In this survey, we begin with an innovative taxonomy of hallucination in the era of LLM and then delve into the factors contributing to hallucinations. Subsequently, we present a thorough overview of hallucination detection methods and benchmarks. Our discussion then transfers to representative methodologies for mitigating LLM hallucinations. Additionally, we delve into the current limitations faced by retrieval-augmented LLMs in combating hallucinations, offering insights for developing more robust IR systems. Finally, we highlight the promising research directions on LLM hallucinations, including hallucination in large vision-language models and understanding of knowledge boundaries in LLM hallucinations.",
       "authors": [
         "Lei Huang",
@@ -37412,7 +37412,7 @@
       "date": "2024-03-01",
       "url": "https://doi.org/10.1038/s41591-024-02857-3",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 1252,
+      "citations": 1254,
       "authors": [
         "Richard J. Chen",
         "Tong Ding",
@@ -37460,7 +37460,7 @@
       "date": "2024-07-22",
       "url": "https://doi.org/10.1016/j.media.2024.103280",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, CN, AU, AU, US, CN, US, CN, US, US, US, US] → US",
-      "citations": 1094,
+      "citations": 1095,
       "abstract": "Medical image segmentation is crucial for healthcare, yet convolution-based methods like U-Net face limitations in modeling long-range dependencies. To address this, Transformers designed for sequence-to-sequence predictions have been integrated into medical image segmentation. However, a comprehensive understanding of Transformers' self-attention in U-Net components is lacking. TransUNet, first introduced in 2021, is widely recognized as one of the first models to integrate Transformer into medical image analysis. In this study, we present the versatile framework of TransUNet that encapsulates Transformers' self-attention into two key modules: (1) a Transformer encoder tokenizing image patches from a convolution neural network (CNN) feature map, facilitating global context extraction, and (2) a Transformer decoder refining candidate regions through cross-attention between proposals and U-Net features. These modules can be flexibly inserted into the U-Net backbone, resulting in three configurations: Encoder-only, Decoder-only, and Encoder+Decoder. TransUNet provides a library encompassing both 2D and 3D implementations, enabling users to easily tailor the chosen architecture. Our findings highlight the encoder's efficacy in modeling interactions among multiple abdominal organs and the decoder's strength in handling small targets like tumors. It excels in diverse medical applications, such as multi-organ segmentation, pancreatic tumor segmentation, and hepatic vessel segmentation. Notably, our TransUNet achieves a significant average Dice improvement of 1.06% and 4.30% for multi-organ segmentation and pancreatic tumor segmentation, respectively, when compared to the highly competitive nn-UNet, and surpasses the top-1 solution in the BrasTS2021 challenge. 2D/3D Code and models are available at https://github.com/Beckschen/TransUNet and https://github.com/Beckschen/TransUNet-3D, respectively.",
       "authors": [
         "Jieneng Chen",
@@ -37632,7 +37632,7 @@
       "date": "2024-02-29",
       "url": "https://doi.org/10.1016/j.hcc.2024.100211",
       "countryEvidence": "institution country codes [US, US, US, US, US, US] → US",
-      "citations": 918,
+      "citations": 920,
       "abstract": "Large Language Models (LLMs), such as ChatGPT and Bard, have revolutionized natural language understanding and generation. They possess deep language comprehension, human-like text generation capabilities, contextual awareness, and robust problem-solving skills, making them invaluable in various domains (e.g., search engines, customer support, translation). In the meantime, LLMs have also gained traction in the security community, revealing security vulnerabilities and showcasing their potential in security-related tasks. This paper explores the intersection of LLMs with security and privacy. Specifically, we investigate how LLMs positively impact security and privacy, potential risks and threats associated with their use, and inherent vulnerabilities within LLMs. Through a comprehensive literature review, the paper categorizes the papers into “The Good” (beneficial LLM applications), “The Bad” (offensive applications), and “The Ugly” (vulnerabilities of LLMs and their defenses). We have some interesting findings. For example, LLMs have proven to enhance code security (code vulnerability detection) and data privacy (data confidentiality protection), outperforming traditional methods. However, they can also be harnessed for various attacks (particularly user-level attacks) due to their human-like reasoning abilities. We have identified areas that require further research efforts. For example, Research on model and parameter extraction attacks is limited and often theoretical, hindered by LLM parameter scale and confidentiality. Safe instruction tuning, a recent development, requires more exploration. We hope that our work can shed light on the LLMs’ potential to both bolster and jeopardize cybersecurity.",
       "authors": [
         "Yifan Yao",
@@ -37658,7 +37658,7 @@
       "date": "2024-02-26",
       "url": "https://doi.org/10.1109/tpami.2024.3367329",
       "countryEvidence": "institution country codes [CN, CN, CN, CN] → CN",
-      "citations": 849,
+      "citations": 850,
       "abstract": "To cope with real-world dynamics, an intelligent system needs to incrementally acquire, update, accumulate, and exploit knowledge throughout its lifetime. This ability, known as continual learning, provides a foundation for AI systems to develop themselves adaptively. In a general sense, continual learning is explicitly limited by catastrophic forgetting, where learning a new task usually results in a dramatic performance drop of the old tasks. Beyond this, increasingly numerous advances have emerged in recent years that largely extend the understanding and application of continual learning. The growing and widespread interest in this direction demonstrates its realistic significance as well as complexity. In this work, we present a comprehensive survey of continual learning, seeking to bridge the basic settings, theoretical foundations, representative methods, and practical applications. Based on existing theoretical and empirical results, we summarize the general objectives of continual learning as ensuring a proper stability-plasticity trade-off and an adequate intra/inter-task generalizability in the context of resource efficiency. Then we provide a state-of-the-art and elaborated taxonomy, extensively analyzing how representative strategies address continual learning, and how they are adapted to particular challenges in various applications. Through an in-depth discussion of promising directions, we believe that such a holistic perspective can greatly facilitate subsequent exploration in this field and beyond.",
       "authors": [
         "Liyuan Wang",
@@ -37682,7 +37682,7 @@
       "date": "2024-01-01",
       "url": "https://doi.org/10.1109/tip.2024.3354108",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 805,
+      "citations": 807,
       "abstract": "Single image dehazing is a challenging ill-posed problem which estimates latent haze-free images from observed hazy images. Some existing deep learning based methods are devoted to improving the model performance via increasing the depth or width of convolution. The learning ability of Convolutional Neural Network (CNN) structure is still under-explored. In this paper, a Detail-Enhanced Attention Block (DEAB) consisting of Detail-Enhanced Convolution (DEConv) and Content-Guided Attention (CGA) is proposed to boost the feature learning for improving the dehazing performance. Specifically, the DEConv contains difference convolutions which can integrate prior information to complement the vanilla one and enhance the representation capacity. Then by using the re-parameterization technique, DEConv is equivalently converted into a vanilla convolution to reduce parameters and computational cost. By assigning the unique Spatial Importance Map (SIM) to every channel, CGA can attend more useful information encoded in features. In addition, a CGA-based mixup fusion scheme is presented to effectively fuse the features and aid the gradient flow. By combining above mentioned components, we propose our Detail-Enhanced Attention Network (DEA-Net) for recovering high-quality haze-free images. Extensive experimental results demonstrate the effectiveness of our DEA-Net, outperforming the state-of-the-art (SOTA) methods by boosting the PSNR index over 41 dB with only 3.653 M parameters. (The source code of our DEA-Net is available at https://github.com/cecret3350/DEA-Net.).",
       "authors": [
         "Zixuan Chen",
@@ -39371,7 +39371,7 @@
       "date": "2023-07-26",
       "url": "https://doi.org/10.1145/3592433",
       "countryEvidence": "institution country codes [FR, FR, FR, FR, FR, DE, FR] → FR",
-      "citations": 4740,
+      "citations": 4750,
       "abstract": "Radiance Field methods have recently revolutionized novel-view synthesis of scenes captured with multiple photos or videos. However, achieving high visual quality still requires neural networks that are costly to train and render, while recent faster methods inevitably trade off speed for quality. For unbounded and complete scenes (rather than isolated objects) and 1080p resolution rendering, no current method can achieve real-time display rates. We introduce three key elements that allow us to achieve state-of-the-art visual quality while maintaining competitive training times and importantly allow high-quality real-time (≥ 30 fps) novel-view synthesis at 1080p resolution. First, starting from sparse points produced during camera calibration, we represent the scene with 3D Gaussians that preserve desirable properties of continuous volumetric radiance fields for scene optimization while avoiding unnecessary computation in empty space; Second, we perform interleaved optimization/density control of the 3D Gaussians, notably optimizing anisotropic covariance to achieve an accurate representation of the scene; Third, we develop a fast visibility-aware rendering algorithm that supports anisotropic splatting and both accelerates training and allows realtime rendering. We demonstrate state-of-the-art visual quality and real-time rendering on several established datasets.",
       "authors": [
         "Bernhard Kerbl",
@@ -39514,7 +39514,7 @@
       "date": "2023-09-22",
       "url": "https://doi.org/10.1186/s12909-023-04698-z",
       "countryEvidence": "institution country codes [SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA, SA] → SA",
-      "citations": 2921,
+      "citations": 2923,
       "abstract": "INTRODUCTION: Healthcare systems are complex and challenging for all stakeholders, but artificial intelligence (AI) has transformed various fields, including healthcare, with the potential to improve patient care and quality of life. Rapid AI advancements can revolutionize healthcare by integrating it into clinical practice. Reporting AI's role in clinical practice is crucial for successful implementation by equipping healthcare providers with essential knowledge and tools. RESEARCH SIGNIFICANCE: This review article provides a comprehensive and up-to-date overview of the current state of AI in clinical practice, including its potential applications in disease diagnosis, treatment recommendations, and patient engagement. It also discusses the associated challenges, covering ethical and legal considerations and the need for human expertise. By doing so, it enhances understanding of AI's significance in healthcare and supports healthcare organizations in effectively adopting AI technologies. MATERIALS AND METHODS: The current investigation analyzed the use of AI in the healthcare system with a comprehensive review of relevant indexed literature, such as PubMed/Medline, Scopus, and EMBASE, with no time constraints but limited to articles published in English. The focused question explores the impact of applying AI in healthcare settings and the potential outcomes of this application. RESULTS: Integrating AI into healthcare holds excellent potential for improving disease diagnosis, treatment selection, and clinical laboratory testing. AI tools can leverage large datasets and identify patterns to surpass human performance in several healthcare aspects. AI offers increased accuracy, reduced costs, and time savings while minimizing human errors. It can revolutionize personalized medicine, optimize medication dosages, enhance population health management, establish guidelines, provide virtual health assistants, support mental health care, improve patient education, and influence patient-physician trust. CONCLUSION: AI can be used to diagnose diseases, develop personalized treatment plans, and assist clinicians with decision-making. Rather than simply automating tasks, AI is about developing technologies that can enhance patient care across healthcare settings. However, challenges related to data privacy, bias, and the need for human expertise must be addressed for the responsible and effective implementation of AI in healthcare.",
       "authors": [
         "Shuroug A. Alowais",
@@ -39540,7 +39540,7 @@
       "date": "2023-11-20",
       "url": "https://doi.org/10.3390/make5040083",
       "countryEvidence": "institution country codes [MX, MX, MX] → MX",
-      "citations": 2671,
+      "citations": 2674,
       "abstract": "YOLO has become a central real-time object detection system for robotics, driverless cars, and video monitoring applications. We present a comprehensive analysis of YOLO’s evolution, examining the innovations and contributions in each iteration from the original YOLO up to YOLOv8, YOLO-NAS, and YOLO with transformers. We start by describing the standard metrics and postprocessing; then, we discuss the major changes in network architecture and training tricks for each model. Finally, we summarize the essential lessons from YOLO’s development and provide a perspective on its future, highlighting potential research directions to enhance real-time object detection systems.",
       "authors": [
         "Juan Terven",
@@ -39676,7 +39676,7 @@
       "date": "2023-04-12",
       "url": "https://doi.org/10.1038/s41586-023-05881-4",
       "countryEvidence": "institution country codes [US, US, CA, CA, US, US, US, US, US, US] → US",
-      "citations": 1712,
+      "citations": 1714,
       "abstract": "The exceptionally rapid development of highly flexible, reusable artificial intelligence (AI) models is likely to usher in newfound capabilities in medicine. We propose a new paradigm for medical AI, which we refer to as generalist medical AI (GMAI). GMAI models will be capable of carrying out a diverse set of tasks using very little or no task-specific labelled data. Built through self-supervision on large, diverse datasets, GMAI will flexibly interpret different combinations of medical modalities, including data from imaging, electronic health records, laboratory results, genomics, graphs or medical text. Models will in turn produce expressive outputs such as free-text explanations, spoken recommendations or image annotations that demonstrate advanced medical reasoning abilities. Here we identify a set of high-impact potential applications for GMAI and lay out specific technical capabilities and training datasets necessary to enable them. We expect that GMAI-enabled applications will challenge current strategies for regulating and validating AI devices for medicine and will shift practices associated with the collection of large medical datasets. This review discusses generalist medical artificial intelligence, identifying potential applications and setting out specific technical capabilities and training datasets necessary to enable them, as well as highlighting challenges to its implementation.",
       "authors": [
         "Michael Moor",
@@ -39738,7 +39738,7 @@
       "date": "2023-11-24",
       "url": "https://doi.org/10.1016/j.neucom.2023.127063",
       "countryEvidence": "inferred from raw affiliation text \"Zhuiyi Technology Co., Ltd. Shenzhen, China\" → CN",
-      "citations": 1455,
+      "citations": 1456,
       "authors": [
         "Jianlin Su",
         "Murtadha Ahmed",
@@ -39795,7 +39795,7 @@
       "date": "2023-05-01",
       "url": "https://doi.org/10.1109/jas.2023.123618",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, AU, CN] → CN",
-      "citations": 1416,
+      "citations": 1417,
       "abstract": "ChatGPT, an artificial intelligence generated content (AIGC) model developed by OpenAI, has attracted world-wide attention for its capability of dealing with challenging language understanding and generation tasks in the form of conversations. This paper briefly provides an overview on the history, status quo and potential future development of ChatGPT, helping to provide an entry point to think about ChatGPT. Specifically, from the limited open-accessed resources, we conclude the core techniques of ChatGPT, mainly including large-scale language models, in-context learning, reinforcement learning from human feedback and the key technical steps for developing Chat-GPT. We further analyze the pros and cons of ChatGPT and we rethink the duality of ChatGPT in various fields. Although it has been widely acknowledged that ChatGPT brings plenty of opportunities for various fields, mankind should still treat and use ChatGPT properly to avoid the potential threat, e.g., academic integrity and safety challenge. Finally, we discuss several open problems as the potential development of ChatGPT.",
       "authors": [
         "Tianyu Wu",
@@ -39875,7 +39875,7 @@
       "date": "2023-07-29",
       "url": "https://doi.org/10.1007/s10462-023-10562-9",
       "countryEvidence": "institution country codes [DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, GB, DE, DE, CN, DE, DE] → DE",
-      "citations": 1229,
+      "citations": 1231,
       "abstract": "Abstract Over the last decade, neural networks have reached almost every field of science and become a crucial part of various real world applications. Due to the increasing spread, confidence in neural network predictions has become more and more important. However, basic neural networks do not deliver certainty estimates or suffer from over- or under-confidence, i.e. are badly calibrated. To overcome this, many researchers have been working on understanding and quantifying uncertainty in a neural network’s prediction. As a result, different types and sources of uncertainty have been identified and various approaches to measure and quantify uncertainty in neural networks have been proposed. This work gives a comprehensive overview of uncertainty estimation in neural networks, reviews recent advances in the field, highlights current challenges, and identifies potential research opportunities. It is intended to give anyone interested in uncertainty estimation in neural networks a broad overview and introduction, without presupposing prior knowledge in this field. For that, a comprehensive introduction to the most crucial sources of uncertainty is given and their separation into reducible model uncertainty and irreducible data uncertainty is presented. The modeling of these uncertainties based on deterministic neural networks, Bayesian neural networks (BNNs), ensemble of neural networks, and test-time data augmentation approaches is introduced and different branches of these fields as well as the latest developments are discussed. For a practical application, we discuss different measures of uncertainty, approaches for calibrating neural networks, and give an overview of existing baselines and available implementations. Different examples from the wide spectrum of challenges in the fields of medical image analysis, robotics, and earth observation give an idea of the needs and challenges regarding uncertainties in the practical applications of neural networks. Additionally, the practical limitations of uncertainty quantification methods in neural networks for mission- and safety-critical real world applications are discussed and an outlook on the next steps towards a broader usage of such methods is given.",
       "authors": [
         "Jakob Gawlikowski",
@@ -39906,7 +39906,7 @@
       "date": "2023-03-27",
       "url": "https://doi.org/10.1080/14703297.2023.2195846",
       "countryEvidence": "institution country codes [NL, NL, NL, NL, NL] → NL",
-      "citations": 1217,
+      "citations": 1218,
       "abstract": "ChatGPT is an AI tool that has sparked debates about its potential implications for education. We used the SWOT analysis framework to outline ChatGPT’s strengths and weaknesses and to discuss its opportunities for and threats to education. The strengths include using a sophisticated natural language model to generate plausible answers, self-improving capability, and providing personalised and real-time responses. As such, ChatGPT can increase access to information, facilitate personalised and complex learning, and decrease teaching workload, thereby making key processes and tasks more efficient. The weaknesses are a lack of deep understanding, difficulty in evaluating the quality of responses, a risk of bias and discrimination, and a lack of higher-order thinking skills. Threats to education include a lack of understanding of the context, threatening academic integrity, perpetuating discrimination in education, democratising plagiarism, and declining high-order cognitive skills. We provide agenda for educational practice and research in times of ChatGPT.",
       "authors": [
         "Mohammadreza Farrokhnia",
@@ -40060,7 +40060,7 @@
       "date": "2023-02-12",
       "url": "https://doi.org/10.1108/lhtn-01-2023-0009",
       "countryEvidence": "institution country codes [US, US] → US",
-      "citations": 1126,
+      "citations": 1127,
       "abstract": "Purpose This paper aims to provide an overview of key definitions related to ChatGPT, a public tool developed by OpenAI, and its underlying technology, Generative Pretrained Transformer (GPT). Design/methodology/approach This paper includes an interview with ChatGPT on its potential impact on academia and libraries. The interview discusses the benefits of ChatGPT such as improving search and discovery, reference and information services; cataloging and metadata generation; and content creation, as well as the ethical considerations that need to be taken into account, such as privacy and bias. Findings ChatGPT has considerable power to advance academia and librarianship in both anxiety-provoking and exciting new ways. However, it is important to consider how to use this technology responsibly and ethically, and to uncover how we, as professionals, can work alongside this technology to improve our work, rather than to abuse it or allow it to abuse us in the race to create new scholarly knowledge and educate future professionals. Originality/value This paper discusses the history and technology of GPT, including its generative pretrained transformer model, its ability to perform a wide range of language-based tasks and how ChatGPT uses this technology to function as a sophisticated chatbot.",
       "authors": [
         "Brady Lund",
@@ -40131,7 +40131,7 @@
       "date": "2023-01-01",
       "url": "https://doi.org/10.1109/tip.2023.3256763",
       "countryEvidence": "institution country codes [CN, CN, CN, CN] → CN",
-      "citations": 1053,
+      "citations": 1054,
       "abstract": "Image dehazing is a representative low-level vision task that estimates latent haze-free images from hazy images. In recent years, convolutional neural network-based methods have dominated image dehazing. However, vision Transformers, which has recently made a breakthrough in high-level vision tasks, has not brought new dimensions to image dehazing. We start with the popular Swin Transformer and find that several of its key designs are unsuitable for image dehazing. To this end, we propose DehazeFormer, which consists of various improvements, such as the modified normalization layer, activation function, and spatial information aggregation scheme. We train multiple variants of DehazeFormer on various datasets to demonstrate its effectiveness. Specifically, on the most frequently used SOTS indoor set, our small model outperforms FFA-Net with only 25% #Param and 5% computational cost. To the best of our knowledge, our large model is the first method with the PSNR over 40 dB on the SOTS indoor set, dramatically outperforming the previous state-of-the-art methods. We also collect a large-scale realistic remote sensing dehazing dataset for evaluating the method's capability to remove highly non-homogeneous haze. We share our code and dataset at https://github.com/IDKiro/DehazeFormer.",
       "authors": [
         "Yuda Song",
@@ -40155,7 +40155,7 @@
       "date": "2023-01-01",
       "url": "https://doi.org/10.1109/tmm.2023.3240881",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, GB] → CN",
-      "citations": 1044,
+      "citations": 1047,
       "abstract": "Recently, Multi-Object Tracking (MOT) has attracted rising attention, and accordingly, remarkable progresses have been achieved. However, the existing methods tend to use various basic models (e.g, detector and embedding model), and different training or inference tricks, etc. As a result, the construction of a good baseline for a fair comparison is essential. In this paper, a classic tracker, i.e., DeepSORT, is first revisited, and then is significantly improved from multiple perspectives such as object detection, feature embedding, and trajectory association. The proposed tracker, named StrongSORT, contributes a strong and fair baseline for the MOT community. Moreover, two lightweight and plug-and-play algorithms are proposed to address two inherent “missing” problems of MOT: missing association and missing detection. Specifically, unlike most methods, which associate short tracklets into complete trajectories at high computation complexity, we propose an appearance-free link model (AFLink) to perform global association without appearance information, and achieve a good balance between speed and accuracy. Furthermore, we propose a Gaussian-smoothed interpolation (GSI) based on Gaussian process regression to relieve the missing detection. AFLink and GSI can be easily plugged into various trackers with a negligible extra computational cost (1.7 ms and 7.1 ms per image, respectively, on MOT17). Finally, by fusing StrongSORT with AFLink and GSI, the final tracker (StrongSORT++) achieves state-of-the-art results on multiple public benchmarks, i.e., MOT17, MOT20, DanceTrack and KITTI. Codes are available athttps://github.com/dyhBUPT/StrongSORTandhttps://github.com/open-mmlab/mmtracking.",
       "authors": [
         "Yunhao Du",
@@ -40210,7 +40210,7 @@
       "date": "2023-04-17",
       "url": "https://doi.org/10.1007/s10462-023-10466-8",
       "countryEvidence": "institution country codes [BD, TH, BD, US, CA, GB, AU, SA, FJ, AU, HU, AU] → AU",
-      "citations": 1005,
+      "citations": 1007,
       "abstract": "Abstract Deep learning (DL) is revolutionizing evidence-based decision-making techniques that can be applied across various sectors. Specifically, it possesses the ability to utilize two or more levels of non-linear feature transformation of the given data via representation learning in order to overcome limitations posed by large datasets. As a multidisciplinary field that is still in its nascent phase, articles that survey DL architectures encompassing the full scope of the field are rather limited. Thus, this paper comprehensively reviews the state-of-art DL modelling techniques and provides insights into their advantages and challenges. It was found that many of the models exhibit a highly domain-specific efficiency and could be trained by two or more methods. However, training DL models can be very time-consuming, expensive, and requires huge samples for better accuracy. Since DL is also susceptible to deception and misclassification and tends to get stuck on local minima, improved optimization of parameters is required to create more robust models. Regardless, DL has already been leading to groundbreaking results in the healthcare, education, security, commercial, industrial, as well as government sectors. Some models, like the convolutional neural network (CNN), generative adversarial networks (GAN), recurrent neural network (RNN), recursive neural networks, and autoencoders, are frequently used, while the potential of other models remains widely unexplored. Pertinently, hybrid conventional DL architectures have the capacity to overcome the challenges experienced by conventional models. Considering that capsule architectures may dominate future DL models, this work aimed to compile information for stakeholders involved in the development and use of DL models in the contemporary world.",
       "authors": [
         "Shams Forruque Ahmed",
@@ -40347,7 +40347,7 @@
       "date": "2023-09-15",
       "url": "https://doi.org/10.1007/s11263-023-01891-x",
       "countryEvidence": "institution country codes [CN, US, CN, CN, HK, US, HK, CN] → CN",
-      "citations": 968,
+      "citations": 970,
       "authors": [
         "Peng Gao",
         "Shijie Geng",
@@ -40398,7 +40398,7 @@
       "date": "2023-03-02",
       "url": "https://doi.org/10.1038/s42256-023-00626-4",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 953,
+      "citations": 954,
       "abstract": "Abstract With the prevalence of pre-trained language models (PLMs) and the pre-training–fine-tuning paradigm, it has been continuously shown that larger models tend to yield better performance. However, as PLMs scale up, fine-tuning and storing all the parameters is prohibitively costly and eventually becomes practically infeasible. This necessitates a new branch of research focusing on the parameter-efficient adaptation of PLMs, which optimizes a small portion of the model parameters while keeping the rest fixed, drastically cutting down computation and storage costs. In general, it demonstrates that large-scale models could be effectively stimulated by the optimization of a few parameters. Despite the various designs, here we discuss and analyse the approaches under a more consistent and accessible term ‘delta-tuning’, where ‘delta’ a mathematical notation often used to denote changes, is borrowed to refer to the portion of parameters that are ‘changed’ during training. We formally describe the problem and propose a unified categorization criterion for existing delta-tuning methods to explore their correlations and differences. We also discuss the theoretical principles underlying the effectiveness of delta-tuning and interpret them from the perspectives of optimization and optimal control. Furthermore, we provide a holistic empirical study on over 100 natural language processing tasks and investigate various aspects of delta-tuning. With comprehensive study and analysis, our research demonstrates the theoretical and practical properties of delta-tuning in the adaptation of PLMs.",
       "authors": [
         "Ning Ding",
@@ -40471,7 +40471,7 @@
       "date": "2023-05-11",
       "url": "https://doi.org/10.1109/tpami.2023.3275156",
       "countryEvidence": "institution country codes [CN, GB, GB] → GB",
-      "citations": 904,
+      "citations": 905,
       "abstract": "Transformer is a promising neural network learner, and has achieved great success in various machine learning tasks. Thanks to the recent prevalence of multimodal applications and Big Data, Transformer-based multimodal learning has become a hot topic in AI research. This paper presents a comprehensive survey of Transformer techniques oriented at multimodal data. The main contents of this survey include: (1) a background of multimodal learning, Transformer ecosystem, and the multimodal Big Data era, (2) a systematic review of Vanilla Transformer, Vision Transformer, and multimodal Transformers, from a geometrically topological perspective, (3) a review of multimodal Transformer applications, via two important paradigms, i.e., for multimodal pretraining and for specific multimodal tasks, (4) a summary of the common challenges and designs shared by the multimodal Transformer models and applications, and (5) a discussion of open problems and potential research directions for the community.",
       "authors": [
         "Peng Xu",
@@ -40605,7 +40605,7 @@
       "date": "2023-09-01",
       "url": "https://doi.org/10.7717/peerj-cs.1516",
       "countryEvidence": "institution country codes [US, US, CA, CA, CA, CA, CA, US, US, CH, US, AR, AR, DE, GB] → US",
-      "citations": 822,
+      "citations": 823,
       "abstract": "PyMC is a probabilistic programming library for Python that provides tools for constructing and fitting Bayesian models. It offers an intuitive, readable syntax that is close to the natural syntax statisticians use to describe models. PyMC leverages the symbolic computation library PyTensor, allowing it to be compiled into a variety of computational backends, such as C, JAX, and Numba, which in turn offer access to different computational architectures including CPU, GPU, and TPU. Being a general modeling framework, PyMC supports a variety of models including generalized hierarchical linear regression and classification, time series, ordinary differential equations (ODEs), and non-parametric models such as Gaussian processes (GPs). We demonstrate PyMC's versatility and ease of use with examples spanning a range of common statistical models. Additionally, we discuss the positive role of PyMC in the development of the open-source ecosystem for probabilistic programming.",
       "authors": [
         "Oriol Abril",
@@ -41506,7 +41506,7 @@
       "date": "2021-05-24",
       "url": "https://doi.org/10.1038/s42254-021-00314-5",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US] → US",
-      "citations": 7105,
+      "citations": 7110,
       "authors": [
         "George Em Karniadakis",
         "Ioannis G. Kevrekidis",
@@ -41581,7 +41581,7 @@
       "date": "2021-06-10",
       "url": "https://doi.org/10.1109/tnnls.2021.3084827",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, AU] → CN",
-      "citations": 4950,
+      "citations": 4952,
       "abstract": "A convolutional neural network (CNN) is one of the most significant networks in the deep learning field. Since CNN made impressive achievements in many areas, including but not limited to computer vision and natural language processing, it attracted much attention from both industry and academia in the past few years. The existing reviews mainly focus on CNN's applications in different scenarios without considering CNN from a general perspective, and some novel ideas proposed recently are not covered. In this review, we aim to provide some novel ideas and prospects in this fast-growing field. Besides, not only 2-D convolution but also 1-D and multidimensional ones are involved. First, this review introduces the history of CNN. Second, we provide an overview of various convolutions. Third, some classic and advanced CNN models are introduced; especially those key points making them reach state-of-the-art results. Fourth, through experimental analysis, we draw some conclusions and provide several rules of thumb for functions and hyperparameter selection. Fifth, the applications of 1-D, 2-D, and multidimensional convolution are covered. Finally, some open issues and promising directions for CNN are discussed as guidelines for future work.",
       "authors": [
         "Zewen Li",
@@ -41635,7 +41635,7 @@
       "date": "2022-11-17",
       "url": "https://doi.org/10.1145/3571730",
       "countryEvidence": "institution country codes [HK, HK, HK, HK, HK, HK, HK, HK, HK, HK] → HK",
-      "citations": 3852,
+      "citations": 3857,
       "abstract": "Natural Language Generation (NLG) has improved exponentially in recent years thanks to the development of sequence-to-sequence deep learning technologies such as Transformer-based language models. This advancement has led to more fluent and coherent NLG, leading to improved development in downstream tasks such as abstractive summarization, dialogue generation, and data-to-text generation. However, it is also apparent that deep learning based generation is prone to hallucinate unintended text, which degrades the system performance and fails to meet user expectations in many real-world scenarios. To address this issue, many studies have been presented in measuring and mitigating hallucinated texts, but these have never been reviewed in a comprehensive manner before. In this survey, we thus provide a broad overview of the research progress and challenges in the hallucination problem in NLG. The survey is organized into two parts: (1) a general overview of metrics, mitigation methods, and future directions, and (2) an overview of task-specific research progress on hallucinations in the following downstream tasks, namely abstractive summarization, dialogue generation, generative question answering, data-to-text generation, and machine translation. This survey serves to facilitate collaborative efforts among researchers in tackling the challenge of hallucinated texts in NLG.",
       "authors": [
         "Ziwei Ji",
@@ -41969,7 +41969,7 @@
       "date": "2021-01-01",
       "url": "https://doi.org/10.1109/tip.2021.3051462",
       "countryEvidence": "institution country codes [US, US, US, CN, US] → US",
-      "citations": 2471,
+      "citations": 2475,
       "abstract": "Deep learning-based methods have achieved remarkable success in image restoration and enhancement, but are they still competitive when there is a lack of paired training data? As one such example, this paper explores the low-light image enhancement problem, where in practice it is extremely challenging to simultaneously take a low-light and a normal-light photo of the same visual scene. We propose a highly effective unsupervised generative adversarial network, dubbed EnlightenGAN, that can be trained without low/normal-light image pairs, yet proves to generalize very well on various real-world test images. Instead of supervising the learning using ground truth data, we propose to regularize the unpaired training using the information extracted from the input itself, and benchmark a series of innovations for the low-light image enhancement problem, including a global-local discriminator structure, a self-regularized perceptual loss fusion, and the attention mechanism. Through extensive experiments, our proposed approach outperforms recent methods under a variety of metrics in terms of visual quality and subjective user study. Thanks to the great flexibility brought by unpaired training, EnlightenGAN is demonstrated to be easily adaptable to enhancing real-world images from various domains. Our codes and pre-trained models are available at: https://github.com/VITA-Group/EnlightenGAN.",
       "authors": [
         "Yifan Jiang",
@@ -42115,7 +42115,7 @@
       "date": "2022-03-16",
       "url": "https://doi.org/10.1007/s41095-022-0274-8",
       "countryEvidence": "institution country codes [CN, CN, HK, CN, CH, CN, US, CN, CN, HK, AE] → CN",
-      "citations": 2243,
+      "citations": 2246,
       "abstract": "Transformers have recently lead to encouraging progress in computer vision. In this work, we present new baselines by improving the original Pyramid Vision Transformer (PVT v1) by adding three designs: (i) a linear complexity attention layer, (ii) an overlapping patch embedding, and (iii) a convolutional feed-forward network. With these modifications, PVT v2 reduces the computational complexity of PVT v1 to linearity and provides significant improvements on fundamental vision tasks such as classification, detection, and segmentation. In particular, PVT v2 achieves comparable or better performance than recent work such as the Swin transformer. We hope this work will facilitate state-of-the-art transformer research in computer vision. Code is available at https://github.com/whai362/PVT .",
       "authors": [
         "Wenhai Wang",
@@ -42297,7 +42297,7 @@
       "date": "2022-07-22",
       "url": "https://doi.org/10.1016/j.neucom.2022.07.042",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN] → CN",
-      "citations": 1927,
+      "citations": 1929,
       "authors": [
         "Yifan Zhang",
         "Weiqiang Ren",
@@ -42497,7 +42497,7 @@
       "date": "2021-08-02",
       "url": "https://doi.org/10.1109/tcsvt.2021.3101953",
       "countryEvidence": "institution country codes [DE, US, US, US, US, DE] → US",
-      "citations": 1673,
+      "citations": 1674,
       "abstract": "Versatile Video Coding (VVC) was finalized in July 2020 as the most recent international video coding standard. It was developed by the Joint Video Experts Team (JVET) of the ITU-T Video Coding Experts Group (VCEG) and the ISO/IEC Moving Picture Experts Group (MPEG) to serve an ever-growing need for improved video compression as well as to support a wider variety of today’s media content and emerging applications. This paper provides an overview of the novel technical features for new applications and the core compression technologies for achieving significant bit rate reductions in the neighborhood of 50% over its predecessor for equal video quality, the High Efficiency Video Coding (HEVC) standard, and 75% over the currently most-used format, the Advanced Video Coding (AVC) standard. It is explained how these new features in VVC provide greater versatility for applications. Highlighted applications include video with resolutions beyond standard- and high-definition, video with high dynamic range and wide color gamut, adaptive streaming with resolution changes, computer-generated and screen-captured video, ultralow-delay streaming, 360° immersive video, and multilayer coding e.g., for scalability. Furthermore, early implementations are presented to show that the new VVC standard is implementable and ready for real-world deployment.",
       "authors": [
         "Benjamin Bross",
@@ -43027,7 +43027,7 @@
       "date": "2026-05-09",
       "url": "https://doi.org/10.1007/s11704-026-60308-3",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CA, CN] → CN",
-      "citations": 1424,
+      "citations": 1425,
       "abstract": "Abstract The rapid evolution of large language models (LLMs) has driven a transformative shift in artificial intelligence (AI), reshaping both research paradigms and practical applications. Distinguished from their predecessors by unprecedented scale and advanced capabilities, LLMs necessitate new frameworks for understanding their development, behavior, and societal impact. This survey systematically reviews recent advancements in LLM techniques across four key dimensions: (1) pre-training methodologies, which establish core model capabilities through large-scale self-supervised training, architectural innovations, and data curation strategies; (2) post-training techniques, including supervised fine-tuning and reinforcement learning, which adapt foundational models to downstream tasks and enhance their alignment and safety; (3) utilization strategies, such as in-context learning, prompt engineering, and agentic reasoning, that optimize real-world deployment and enable effective interaction with external environments; and (4) evaluation methods, encompassing benchmarks for key ability dimensions such as core language capabilities, reasoning, and safety, which support comprehensive and reliable assessment of model performance. Additionally, we identify critical research issues, including those concerning theoretical foundations, efficient scaling, alignment, and agentic capability, and highlight the open challenges they present. By synthesizing state-of-the-art insights and emerging trends, this survey aims to provide a systematic and comprehensive framework for understanding the trajectory, current limitations, and future directions of LLM progress.",
       "authors": [
         "Wayne Xin Zhao",
@@ -43532,7 +43532,7 @@
       "date": "2022-01-01",
       "url": "https://doi.org/10.1109/access.2022.3207287",
       "countryEvidence": "institution country codes [ZA, ZA] → ZA",
-      "citations": 1224,
+      "citations": 1228,
       "abstract": "Ensemble learning techniques have achieved state-of-the-art performance in diverse machine learning applications by combining the predictions from two or more base models. This paper presents a concise overview of ensemble learning, covering the three main ensemble methods: bagging, boosting, and stacking, their early development to the recent state-of-the-art algorithms. The study focuses on the widely used ensemble algorithms, including random forest, adaptive boosting (AdaBoost), gradient boosting, extreme gradient boosting (XGBoost), light gradient boosting machine (LightGBM), and categorical boosting (CatBoost). An attempt is made to concisely cover their mathematical and algorithmic representations, which is lacking in the existing literature and would be beneficial to machine learning researchers and practitioners.",
       "authors": [
         "Ibomoiye Domor Mienye",
@@ -43598,7 +43598,7 @@
       "date": "2021-01-14",
       "url": "https://doi.org/10.1038/s43586-020-00001-2",
       "countryEvidence": "institution country codes [NL, US, GB, GB, GB, NL, GB, US, US, US, NL, NL, GB, GB, GB] → GB",
-      "citations": 1190,
+      "citations": 1191,
       "authors": [
         "Rens van de Schoot",
         "Sarah Depaoli",
@@ -44378,7 +44378,7 @@
       "date": "2022-10-13",
       "url": "https://doi.org/10.1007/s10639-022-11316-w",
       "countryEvidence": "institution country codes [FI, NZ, NZ, FI, VN] → FI",
-      "citations": 1049,
+      "citations": 1050,
       "abstract": "The advancement of artificial intelligence in education (AIED) has the potential to transform the educational landscape and influence the role of all involved stakeholders. In recent years, the applications of AIED have been gradually adopted to progress our understanding of students' learning and enhance learning performance and experience. However, the adoption of AIED has led to increasing ethical risks and concerns regarding several aspects such as personal data and learner autonomy. Despite the recent announcement of guidelines for ethical and trustworthy AIED, the debate revolves around the key principles underpinning ethical AIED. This paper aims to explore whether there is a global consensus on ethical AIED by mapping and analyzing international organizations' current policies and guidelines. In this paper, we first introduce the opportunities offered by AI in education and potential ethical issues. Then, thematic analysis was conducted to conceptualize and establish a set of ethical principles by examining and synthesizing relevant ethical policies and guidelines for AIED. We discuss each principle and associated implications for relevant educational stakeholders, including students, teachers, technology developers, policymakers, and institutional decision-makers. The proposed set of ethical principles is expected to serve as a framework to inform and guide educational stakeholders in the development and deployment of ethical and trustworthy AIED as well as catalyze future development of related impact studies in the field.",
       "authors": [
         "Andy Nguyen",
@@ -44434,7 +44434,7 @@
       "date": "2022-06-01",
       "url": "https://doi.org/10.1038/s41586-022-04725-x",
       "countryEvidence": "institution country codes [CA, CA, CA, CA, CA, CA, CA, CA, CA, CA, US, US, US, CA, CA, CA, CA, CA, CA] → CA",
-      "citations": 1039,
+      "citations": 1040,
       "abstract": "Abstract A quantum computer attains computational advantage when outperforming the best classical computers running the best-known algorithms on well-defined tasks. No photonic machine offering programmability over all its quantum gates has demonstrated quantum computational advantage: previous machines 1,2 were largely restricted to static gate sequences. Earlier photonic demonstrations were also vulnerable to spoofing 3 , in which classical heuristics produce samples, without direct simulation, lying closer to the ideal distribution than do samples from the quantum hardware. Here we report quantum computational advantage using Borealis, a photonic processor offering dynamic programmability on all gates implemented. We carry out Gaussian boson sampling 4 (GBS) on 216 squeezed modes entangled with three-dimensional connectivity 5 , using a time-multiplexed and photon-number-resolving architecture. On average, it would take more than 9,000 years for the best available algorithms and supercomputers to produce, using exact methods, a single sample from the programmed distribution, whereas Borealis requires only 36 μs. This runtime advantage is over 50 million times as extreme as that reported from earlier photonic machines. Ours constitutes a very large GBS experiment, registering events with up to 219 photons and a mean photon number of 125. This work is a critical milestone on the path to a practical quantum computer, validating key technological features of photonics as a platform for this goal.",
       "authors": [
         "Lars S. Madsen",
@@ -44716,7 +44716,7 @@
       "date": "2021-12-10",
       "url": "https://doi.org/10.1016/j.cmpb.2021.106584",
       "countryEvidence": "institution country codes [JP, JP, JP, JP, JP, JP] → JP",
-      "citations": 983,
+      "citations": 984,
       "authors": [
         "Yasunobu Nohara",
         "Koutarou Matsumoto",
@@ -45057,7 +45057,7 @@
       "date": "2021-08-17",
       "url": "https://doi.org/10.1021/acs.est.1c01339",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, CN, CN, US, CN, CN, CN, US, US, US, US, US] → US",
-      "citations": 929,
+      "citations": 930,
       "abstract": "The rapid increase in both the quantity and complexity of data that are being generated daily in the field of environmental science and engineering (ESE) demands accompanied advancement in data analytics. Advanced data analysis approaches, such as machine learning (ML), have become indispensable tools for revealing hidden patterns or deducing correlations for which conventional analytical methods face limitations or challenges. However, ML concepts and practices have not been widely utilized by researchers in ESE. This feature explores the potential of ML to revolutionize data analysis and modeling in the ESE field, and covers the essential knowledge needed for such applications. First, we use five examples to illustrate how ML addresses complex ESE problems. We then summarize four major types of applications of ML in ESE: making predictions; extracting feature importance; detecting anomalies; and discovering new materials or chemicals. Next, we introduce the essential knowledge required and current shortcomings in ML applications in ESE, with a focus on three important but often overlooked components when applying ML: correct model development, proper model interpretation, and sound applicability analysis. Finally, we discuss challenges and future opportunities in the application of ML tools in ESE to highlight the potential of ML in this field.",
       "authors": [
         "Shifa Zhong",
@@ -45113,7 +45113,7 @@
       "date": "2022-12-15",
       "url": "https://doi.org/10.1109/tip.2022.3228497",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, FR, CN] → CN",
-      "citations": 933,
+      "citations": 934,
       "abstract": "Learning-based infrared small object detection methods currently rely heavily on the classification backbone network. This tends to result in tiny object loss and feature distinguishability limitations as the network depth increases. Furthermore, small objects in infrared images are frequently emerged bright and dark, posing severe demands for obtaining precise object contrast information. For this reason, we in this paper propose a simple and effective \"U-Net in U-Net\" framework, UIU-Net for short, and detect small objects in infrared images. As the name suggests, UIU-Net embeds a tiny U-Net into a larger U-Net backbone, enabling the multi-level and multi-scale representation learning of objects. Moreover, UIU-Net can be trained from scratch, and the learned features can enhance global and local contrast information effectively. More specifically, the UIU-Net model is divided into two modules: the resolution-maintenance deep supervision (RM-DS) module and the interactive-cross attention (IC-A) module. RM-DS integrates Residual U-blocks into a deep supervision network to generate deep multi-scale resolution-maintenance features while learning global context information. Further, IC-A encodes the local context information between the low-level details and high-level semantic features. Extensive experiments conducted on two infrared single-frame image datasets, i.e., SIRST and Synthetic datasets, show the effectiveness and superiority of the proposed UIU-Net in comparison with several state-of-the-art infrared small object detection methods. The proposed UIU-Net also produces powerful generalization performance for video sequence infrared small object datasets, e.g., ATR ground/air video sequence dataset. The codes of this work are available openly at https://github.com/danfenghong/IEEE.",
       "authors": [
         "Xin Wu",
@@ -45140,7 +45140,7 @@
       "date": "2022-01-01",
       "url": "https://doi.org/10.1109/tkde.2022.3178128",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, US] → CN",
-      "citations": 927,
+      "citations": 928,
       "abstract": "Machine learning systems generally assume that the training and testing distributions are the same. To this end, a key requirement is to develop models that can generalize to unseen distributions. Domain generalization (DG), i.e., out-of-distribution generalization, has attracted increasing interests in recent years. Domain generalization deals with a challenging setting where one or several different but related domain(s) are given, and the goal is to learn a model that can generalize to an unseen test domain. Great progress has been made in the area of domain generalization for years. This paper presents the first review of recent advances in this area. First, we provide a formal definition of domain generalization and discuss several related fields. We then thoroughly review the theories related to domain generalization and carefully analyze the theory behind generalization. We categorize recent algorithms into three classes: data manipulation, representation learning, and learning strategy, and present several popular algorithms in detail for each category. Third, we introduce the commonly used datasets, applications, and our open-sourced codebase for fair evaluation. Finally, we summarize existing literature and present some potential research topics for the future.",
       "authors": [
         "Jindong Wang",
@@ -45272,7 +45272,7 @@
       "date": "2021-10-05",
       "url": "https://doi.org/10.1109/tbme.2021.3117407",
       "countryEvidence": "institution country codes [US, US] → US",
-      "citations": 913,
+      "citations": 914,
       "abstract": "Machine learning techniques used in computer-aided medical image analysis usually suffer from the domain shift problem caused by different distributions between source/reference data and target data. As a promising solution, domain adaptation has attracted considerable attention in recent years. The aim of this paper is to survey the recent advances of domain adaptation methods in medical image analysis. We first present the motivation of introducing domain adaptation techniques to tackle domain heterogeneity issues for medical image analysis. Then we provide a review of recent domain adaptation models in various medical image analysis tasks. We categorize the existing methods into shallow and deep models, and each of them is further divided into supervised, semi-supervised and unsupervised methods. We also provide a brief summary of the benchmark medical image datasets that support current domain adaptation research. This survey will enable researchers to gain a better understanding of the current status, challenges and future directions of this energetic research field.",
       "authors": [
         "Hao Guan",
@@ -45399,7 +45399,7 @@
       "date": "2022-08-17",
       "url": "https://doi.org/10.1007/s10462-022-10246-w",
       "countryEvidence": "institution country codes [ES, ES, ES, ES, ES] → ES",
-      "citations": 905,
+      "citations": 906,
       "abstract": "Abstract Researchers are defining new types of interactions between humans and machine learning algorithms generically called human-in-the-loop machine learning. Depending on who is in control of the learning process, we can identify: active learning, in which the system remains in control; interactive machine learning, in which there is a closer interaction between users and learning systems; and machine teaching, where human domain experts have control over the learning process. Aside from control, humans can also be involved in the learning process in other ways. In curriculum learning human domain experts try to impose some structure on the examples presented to improve the learning; in explainable AI the focus is on the ability of the model to explain to humans why a given solution was chosen. This collaboration between AI models and humans should not be limited only to the learning process; if we go further, we can see other terms that arise such as Usable and Useful AI. In this paper we review the state of the art of the techniques involved in the new forms of relationship between humans and ML algorithms. Our contribution is not merely listing the different approaches, but to provide definitions clarifying confusing, varied and sometimes contradictory terms; to elucidate and determine the boundaries between the different methods; and to correlate all the techniques searching for the connections and influences between them.",
       "authors": [
         "Eduardo Mosqueira-Rey",
@@ -45869,7 +45869,7 @@
       "date": "2021-05-20",
       "url": "https://doi.org/10.1038/s41746-021-00455-y",
       "countryEvidence": "institution country codes [US, CN, US, US, US, US] → US",
-      "citations": 850,
+      "citations": 851,
       "abstract": "Deep learning (DL)-based predictive models from electronic health records (EHRs) deliver impressive performance in many clinical tasks. Large training cohorts, however, are often required by these models to achieve high accuracy, hindering the adoption of DL-based models in scenarios with limited training data. Recently, bidirectional encoder representations from transformers (BERT) and related models have achieved tremendous successes in the natural language processing domain. The pretraining of BERT on a very large training corpus generates contextualized embeddings that can boost the performance of models trained on smaller datasets. Inspired by BERT, we propose Med-BERT, which adapts the BERT framework originally developed for the text domain to the structured EHR domain. Med-BERT is a contextualized embedding model pretrained on a structured EHR dataset of 28,490,650 patients. Fine-tuning experiments showed that Med-BERT substantially improves the prediction accuracy, boosting the area under the receiver operating characteristics curve (AUC) by 1.21-6.14% in two disease prediction tasks from two clinical databases. In particular, pretrained Med-BERT obtains promising performances on tasks with small fine-tuning training sets and can boost the AUC by more than 20% or obtain an AUC as high as a model trained on a training set ten times larger, compared with deep learning models without Med-BERT. We believe that Med-BERT will benefit disease prediction studies with small local training datasets, reduce data collection expenses, and accelerate the pace of artificial intelligence aided healthcare.",
       "authors": [
         "Laila Rasmy",
@@ -46128,7 +46128,7 @@
       "date": "2022-11-15",
       "url": "https://doi.org/10.1016/j.array.2022.100258",
       "countryEvidence": "institution country codes [GH, GH] → GH",
-      "citations": 827,
+      "citations": 828,
       "abstract": "To ensure good performance, modern machine learning models typically require large amounts of quality annotated data. Meanwhile, the data collection and annotation processes are usually performed manually, and consume a lot of time and resources. The quality and representativeness of curated data for a given task is usually dictated by the natural availability of clean data in the particular domain as well as the level of expertise of developers involved. In many real-world application settings it is often not feasible to obtain sufficient training data. Currently, data augmentation is the most effective way of alleviating this problem. The main goal of data augmentation is to increase the volume, quality and diversity of training data. This paper presents an extensive and thorough review of data augmentation methods applicable in computer vision domains. The focus is on more recent and advanced data augmentation techniques. The surveyed methods include deeply learned augmentation strategies as well as feature-level and meta-learning-based data augmentation techniques. Data synthesis approaches based on realistic 3D graphics modeling, neural rendering, and generative adversarial networks are also covered. Different from previous surveys, we cover a more extensive array of modern techniques and applications. We also compare the performance of several state-of-the-art augmentation methods and present a rigorous discussion of the effectiveness of various techniques in different scenarios of use based on performance results on different datasets and tasks.",
       "authors": [
         "Alhassan Mumuni",
@@ -46285,7 +46285,7 @@
       "date": "2021-07-12",
       "url": "https://doi.org/10.1002/widm.1424",
       "countryEvidence": "institution country codes [GB, GB, GB, GB, GB] → GB",
-      "citations": 810,
+      "citations": 811,
       "abstract": "Abstract This paper provides a brief analytical review of the current state‐of‐the‐art in relation to the explainability of artificial intelligence in the context of recent advances in machine learning and deep learning. The paper starts with a brief historical introduction and a taxonomy, and formulates the main challenges in terms of explainability building on the recently formulated National Institute of Standards four principles of explainability. Recently published methods related to the topic are then critically reviewed and analyzed. Finally, future directions for research are suggested. This article is categorized under: Technologies &gt; Artificial Intelligence Fundamental Concepts of Data and Knowledge &gt; Explainable AI",
       "authors": [
         "Plamen Angelov",
@@ -57087,9 +57087,9 @@
       "org": "",
       "date": "2026-07-14",
       "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQdk1wS1FKdFdRV3VhTVpmNlozYUJYa1c2X0JHbXdQSkx4eHFjelpmMkhlQjVRMzJzMXpVSzJPWTdlZlVqTkFoR19QTWlHMl9peWRVTzhpaDdrN3N2ZU1KX1JkTVpOQ21qZFI0bk42VS1hSU8yZ1NHOVh2U015b19GOHF1SDBsdU1uVFlMTE5NOHVqY2NDUjJDYnhtRGxhazQ3M2V2U19NRHRnaXJSWFUwU1RPQll2Y000ZzYyZElnMktGQzhZMG1ycDJtUk5SRVpucU5iYWlR?oc=5",
-      "publisher": "bloomberg.com",
+      "publisher": "Bloomberg.com",
       "countryEvidence": "no location match (auto-classified from Google News RSS, unverified)",
-      "abstract": "AI in investment research: Why the hard part starts after the pilot bloomberg.com",
+      "abstract": "AI in investment research: Why the hard part starts after the pilot Bloomberg.com",
       "ingestedAt": "2026-07-21T16:17:30.483Z",
       "relevanceScore": 0.7
     },
@@ -118023,9 +118023,9 @@
       "org": "",
       "date": "2026-07-08",
       "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQdzlVYXd0bG1lNEV6TUJzOUNyT3gzdWljd05Ha29fLTdXNXp0MnlHTXpCZGpReTRYMWJBVkFidEg1T3lsM1g1d2pudmtaN2hReHotdklVeWpXZHQ1OUxRNkI2NHhmd2pTb3p1Zk5mSWM3U3ZNbXhyYTNSRFhQRHZUakp6cGFQQjQxaG4tejI4NFF5eUhLcnJEVkwwZWZMNlN2M093SVRPcmJTSkp3enQ0bWJuU3pUaG9KUzRmM1J2bVZSazJvdWc?oc=5",
-      "publisher": "Statista",
+      "publisher": "statista.com",
       "countryEvidence": "no location match (auto-classified from Google News RSS, unverified)",
-      "abstract": "Topic: Financial services: AI investment, impact, and re Statista",
+      "abstract": "Topic: Financial services: AI investment, impact, and re statista.com",
       "ingestedAt": "2026-07-30T05:50:53.418Z",
       "relevanceScore": 0.7
     },
@@ -146137,6 +146137,262 @@
       "ingestedAt": "2026-08-02T08:26:22.283Z",
       "orgId": "lawson state community college",
       "relevanceScore": 0.85
+    },
+    {
+      "id": "oa-W4415327325",
+      "stage": "innovation",
+      "country": "CA",
+      "provenance": "live",
+      "source": "paper",
+      "title": "SDLog: A Deep Learning Framework for Detecting Sensitive Information in Software Logs",
+      "org": "Polytechnique Montréal",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1145/3833386",
+      "countryEvidence": "institution country codes [CA, CA, CA, CA, CA, CA] → CA",
+      "citations": 0,
+      "abstract": "Software logs are messages recorded during the execution of a software system that provide crucial run-time information about events and activities. Although software logs have a critical role in software maintenance and operation tasks, publicly accessible log datasets remain limited, hindering advances in log analysis research and practices. The presence of sensitive information, particularly Personally Identifiable Information (PII) and quasi-identifiers , introduces serious privacy and re-identification risks, discouraging the publishing and sharing of real-world logs. In practice, log anonymization techniques primarily rely on regular expression patterns, which involve manually crafting rules to identify and replace sensitive information. However, these regex-based approaches suffer from significant limitations, such as extensive manual efforts and poor generalizability across diverse log formats and datasets. To mitigate these limitations, we introduce SDLog, a deep learning-based framework designed to identify sensitive information in software logs. Our results show that SDLog overcomes regex limitations and outperforms the best-performing regex patterns in identifying sensitive information. With only 100 fine-tuning samples from the target dataset, SDLog can correctly identify 99.5% of sensitive attributes and achieves an F1-score of 98.4%. To the best of our knowledge, this is the first deep learning alternative to regex-based methods in identifying sensitive information in software logs.",
+      "authors": [
+        "Roozbeh Aghili",
+        "Qiaolin Qin",
+        "Xingfang Wu",
+        "Heng Li",
+        "Foutse Khomh",
+        "Heng Li"
+      ],
+      "venue": "ACM Transactions on Software Engineering and Methodology",
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "polytechnique montréal",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4311554030",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "A Review of Off-Policy Evaluation in Reinforcement Learning",
+      "org": "New York Consortium in Evolutionary Primatology",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1214/25-sts985",
+      "countryEvidence": "institution country codes [US, GB, US, US] → US",
+      "citations": 13,
+      "abstract": "Reinforcement learning (RL) is one of the most vibrant research frontiers in machine learning and has been recently applied to solve a number of challenging problems. In this paper, we primarily focus on off-policy evaluation (OPE), one of the most fundamental topics in RL. In recent years, a number of OPE methods have been developed in the statistics and computer science literature. We provide a discussion on the efficiency bound of OPE, some of the existing state-of-the-art OPE methods, their statistical properties and some other related research directions that are currently actively explored.",
+      "authors": [
+        "Masatoshi Uehara",
+        "Chengchun Shi",
+        "Nathan Kallus"
+      ],
+      "venue": "Statistical Science",
+      "collaboratingCountries": [
+        "GB",
+        "US"
+      ],
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "new york consortium in evolutionary primatology",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4389708677",
+      "stage": "innovation",
+      "country": "CA",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Posterior Ramifications of Prior Dependence Structures",
+      "org": "McGill University",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1214/25-sts981",
+      "countryEvidence": "institution country codes [CA, CA] → CA",
+      "citations": 0,
+      "abstract": "Prior elicitation methods for Bayesian analyses transfigure prior information into quantifiable prior distributions. Recently, methods that leverage copulas have been proposed to accommodate more flexible dependence structures when eliciting multivariate priors. We show that the posterior cannot retain many of these flexible prior dependence structures in large-sample settings, and we emphasize that it is our responsibility as statisticians to communicate this to practitioners. We therefore overview objectives for prior specification that guide conversations between statisticians and practitioners to promote alignment between the flexibility in the prior dependence structure and the objectives for posterior analysis. Because correctly specifying the dependence structure a priori can be difficult, we consider how the choice of prior copula impacts the posterior distribution in terms of asymptotic convergence of the posterior mode. Our resulting recommendations clarify when it is useful to elicit intricate prior dependence structures and when it is not.",
+      "authors": [
+        "Luke Hagar",
+        "Nathaniel T. Stevens"
+      ],
+      "venue": "Statistical Science",
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "mcgill university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4417098706",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "J-RAS: Mutual adaptation for medical image segmentation via contrastive retrieval-augmented joint optimization",
+      "org": "",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1016/j.bspc.2026.111078",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Salma J. Ahmed",
+        "Emad A. Mohammed",
+        "Azam Asilian Bidgoli"
+      ],
+      "venue": "Biomedical Signal Processing and Control",
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4403621190",
+      "stage": "innovation",
+      "country": "DE",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Flexible Block-Iterative Analysis for the Frank-Wolfe Algorithm",
+      "org": "Zuse Institute Berlin",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1007/s10957-026-03068-1",
+      "countryEvidence": "institution country codes [DE, DE, DE, US] → DE",
+      "citations": 0,
+      "abstract": "Abstract We prove that the block-coordinate Frank-Wolfe (BCFW) algorithm converges with state-of-the-art rates in both convex and nonconvex settings under a very mild “block-iterative” assumption. This appears to be the first result on BCFW addressing the setting of nonconvex objective functions with Lipschitz-continuous gradients and no additional assumptions. This analysis newly allows for (I) progress without activating the most-expensive linear minimization oracle(s), LMO(s), at every iteration, (II) parallelized updates that do not require all LMOs, and therefore (III) deterministic parallel update strategies that take into account the numerical cost of the problem’s LMOs. Our results apply for short-step BCFW as well as an adaptive method for convex functions. New relationships between updated coordinates and primal progress are proven, and a favorable speedup is demonstrated using .",
+      "authors": [
+        "Gábor Braun",
+        "Jannis Halbey",
+        "Sebastian Pokutta",
+        "Zev C. Woodstock"
+      ],
+      "venue": "Journal of Optimization Theory and Applications",
+      "collaboratingCountries": [
+        "DE",
+        "US"
+      ],
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "zuse institute berlin",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4404989552",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantifying Information Stored in Synaptic Connections Rather Than in Firing Activities of Neural Networks",
+      "org": "Johns Hopkins University",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1162/neco.a.1566",
+      "countryEvidence": "institution country codes [US, US, US, US] → US",
+      "citations": 0,
+      "abstract": "A cornerstone of our understanding of both biological and artificial neural networks is that they store information in the strengths of synaptic connections among the neurons. However, in contrast to the well-established theory for quantifying information encoded by the firing activity of neural networks, there does not exist a framework for quantifying information stored in the network's connection distribution itself. Here, we develop a theoretical framework for synaptic information by using densely connected Hebbian networks performing autoassociative memory tasks and by modeling data patterns to be stored as log-normal distributions. Specifically, we derive analytical approximations for Shannon mutual information between the data and singletons, pairs, and arbitrary n-tuples of synaptic connections within the network. Our framework corroborates well-established insights regarding pattern storage capacity, supports the principle of distributed coding in neural firing activities, and formalizes the heterogeneity inherent in information encoding across synapses in a network. Notably, it discovers synergistic interactions among synapses, revealing that the information encoded jointly by all the synapses exceeds the sum of its parts. Taken together, this study introduces a powerful, interpretable framework for quantitatively understanding information storage in the synapses of neural networks, one that illustrates the duality of synaptic connectivity and neural population activity in learning and memory.",
+      "authors": [
+        "Xinhao Fan",
+        "Shreesh P. Mysore"
+      ],
+      "venue": "Neural Computation",
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "johns hopkins university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4415309576",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Finite-dimensional Gaussian approximation for deep neural networks: Universality in random weights",
+      "org": "University of California, Davis",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.3150/26-bej1978",
+      "countryEvidence": "institution country codes [US, AU] → US",
+      "citations": 0,
+      "abstract": "We study the Finite-Dimensional Distributions (FDDs) of deep neural networks with randomly initialized weights that have finite-order moments. Specifically, we establish Gaussian approximation bounds in the Wasserstein-1 norm between the FDDs and their Gaussian limit assuming a Lipschitz activation function and allowing the layer widths to grow to infinity at arbitrary relative rates. In the special case where all widths are proportional to a common scale parameter n and there are L−1 hidden layers, we obtain convergence rates of order n−(1∕6)L−1+ϵ, for any ϵ&gt;0.",
+      "authors": [
+        "Krishnakumar Balasubramanian",
+        "Nathan Ross"
+      ],
+      "venue": "Bernoulli",
+      "collaboratingCountries": [
+        "AU",
+        "US"
+      ],
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "university of california davis",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4415307269",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Comprehend, Divide, and Conquer: Feature Subspace Exploration via Multi-Agent Hierarchical Reinforcement Learning",
+      "org": "Computer Network Information Center",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1145/3833385",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN, SG] → CN",
+      "citations": 0,
+      "abstract": "Feature selection aims to preprocess the target dataset, find an optimal and most streamlined feature subset, and enhance the downstream machine learning task. Among filter, wrapper, and embedded-based approaches, the reinforcement learning (RL)-based subspace exploration strategy provides a novel objective optimization-directed perspective and promising performance. Nevertheless, even with improved performance, current reinforcement learning approaches face challenges similar to conventional methods when dealing with complex datasets. These challenges stem from the inefficient paradigm of using one agent per feature and the inherent complexities present in the datasets. This observation motivates us to investigate and address the above issue and propose a novel approach, namely HRLFS . Our methodology initially employs a Large Language Model (LLM)-based hybrid state extractor to capture each feature's mathematical and semantic characteristics. Based on this information, features are clustered, facilitating the construction of hierarchical agents for each cluster and sub-cluster. Extensive experiments demonstrate the efficiency, scalability, and robustness of our approach. Compared to contemporary or the one-feature-one-agent RL-based approaches, HRLFS improves the downstream ML performance with iterative feature subspace exploration while accelerating total run time by reducing the number of agents involved. 1",
+      "authors": [
+        "Weiliang Zhang",
+        "Xiaohan Huang",
+        "Ziyue Qiao",
+        "Qingqing Long",
+        "Meng Zhen",
+        "Yuanchun Zhou"
+      ],
+      "venue": "ACM Transactions on Knowledge Discovery from Data",
+      "collaboratingCountries": [
+        "CN",
+        "SG"
+      ],
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "computer network information center",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4387929751",
+      "stage": "innovation",
+      "country": "DE",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Evaluating Machine Learning Models in Nonstandard Settings: An Overview and New Findings",
+      "org": "Ludwig-Maximilians-Universität München",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.1214/25-sts984",
+      "countryEvidence": "institution country codes [NL, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, DE, NL, DE] → DE",
+      "citations": 1,
+      "abstract": "Estimating the generalization error (GE) of machine learning models is fundamental, with resampling methods being the most common approach. However, in nonstandard settings, particularly those where observations are not independently and identically distributed, resampling using simple random data divisions may lead to biased GE estimates. This paper strives to present well-grounded guidelines for GE estimation in various such nonstandard settings: clustered data, spatial data, unequal sampling probabilities, concept drift and hierarchically structured outcomes. Our overview combines well-established methodologies with other existing methods that, to our knowledge, have not been frequently considered in these particular settings. A unifying principle among these techniques is that the test data used in each iteration of the resampling procedure should reflect the new observations to which the model will be applied, while the training data should be representative of the entire data set used to obtain the final model. Beyond providing an overview, we address literature gaps by conducting simulation studies and a real data study. These studies assess the necessity of using GE-estimation methods tailored to the respective setting. Our findings corroborate the concern that standard resampling methods often yield biased GE estimates in nonstandard settings, underscoring the importance of tailored GE estimation.",
+      "authors": [
+        "Roman Hornung",
+        "Malte Nalenz",
+        "Lennart Schneider",
+        "Andreas Bender",
+        "Ludwig Bothmann",
+        "Florian Dumpert"
+      ],
+      "venue": "Statistical Science",
+      "collaboratingCountries": [
+        "DE",
+        "NL"
+      ],
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "ludwig maximilians universität münchen",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W4383173650",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "A note concerning polyhyperbolic and related splines",
+      "org": "Longwood University",
+      "date": "2026-07-31",
+      "url": "https://doi.org/10.64700/mmm.78",
+      "countryEvidence": "institution country codes [US, US, US, US] → US",
+      "citations": 0,
+      "abstract": "This note concerns the interpolation problem with two parametrized families of splines related to polynomial spline interpolation. The authors address the questions of uniqueness and establish basic convergence rates for splines of the form \\(s_\\alpha=p \\cosh (\\alpha \\cdot)+q \\sinh (\\alpha \\cdot)\\) and \\(t_\\alpha=p+q \\tanh (\\alpha \\cdot)\\) between the nodes where \\(p, q \\in \\Pi_{k-1}\\).",
+      "authors": [
+        "Jeff Ledford",
+        "Luke Paris",
+        "Ryan Urban",
+        "Alec Vidanes"
+      ],
+      "venue": "Modern Mathematical Methods",
+      "ingestedAt": "2026-08-02T16:12:58.810Z",
+      "orgId": "longwood university",
+      "relevanceScore": 0.6
     }
   ],
   "trend": [
@@ -147450,32 +147706,32 @@
     {
       "date": "2026-08-02",
       "counts": {
-        "US": 105,
+        "US": 109,
         "PL": 17,
-        "DE": 10,
+        "DE": 11,
         "FR": 8,
         "TH": 4,
         "AU": 3,
         "HK": 6,
-        "CA": 6,
+        "CA": 8,
         "KR": 8,
-        "CN": 108,
+        "CN": 109,
         "TW": 6,
         "BR": 3,
         "CH": 1,
         "AE": 2,
-        "MY": 4,
-        "IN": 23,
+        "MY": 3,
+        "IN": 20,
         "ID": 21,
         "IR": 6,
         "BE": 3,
         "PK": 4,
         "TR": 13,
-        "JP": 6,
+        "JP": 5,
         "SK": 1,
         "SE": 6,
         "SG": 3,
-        "GB": 6,
+        "GB": 7,
         "NO": 3,
         "JO": 1,
         "CO": 1,
@@ -147493,8 +147749,8 @@
         "PT": 2,
         "NG": 5,
         "NP": 1,
-        "NL": 2,
         "KZ": 2,
+        "NL": 2,
         "SA": 2,
         "DZ": 3,
         "HU": 1,
@@ -147504,21 +147760,19 @@
         "AT": 2,
         "QA": 1,
         "NZ": 1,
-        "BD": 1,
         "UZ": 1,
+        "BD": 1,
         "RO": 1,
-        "KW": 1,
-        "DK": 1,
-        "IT": 1
+        "KW": 1
       },
       "stageCounts": {
-        "innovation": 5341,
+        "innovation": 5351,
         "scaling": 12,
         "adoption": 37,
         "investment": 358
       },
       "fundingUsd": 183956680,
-      "totalEntries": 6632
+      "totalEntries": 6642
     }
   ],
   "notes": [
@@ -147554,7 +147808,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -147575,14 +147829,14 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
@@ -147596,56 +147850,56 @@
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-08-02T13:20:35.787Z",
+      "lastSuccessfulPull": "2026-08-02T16:12:58.810Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -147656,329 +147910,329 @@
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 4862365750000,
-      "asOf": "2026-08-02T13:07:55.397Z",
+      "asOf": "2026-08-02T16:00:45.773Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "TSM",
       "name": "Taiwan Semiconductor Manufacturing Company Ltd.",
       "marketCapUsd": 2096632119755.25,
-      "asOf": "2026-08-02T13:08:10.533Z",
+      "asOf": "2026-08-02T16:01:00.981Z",
       "url": "https://www.tsmc.com"
     },
     {
       "symbol": "AVGO",
       "name": "Broadcom Inc. Common Stock",
       "marketCapUsd": 1852030819477.44,
-      "asOf": "2026-08-02T13:08:25.645Z",
+      "asOf": "2026-08-02T16:01:16.153Z",
       "url": "https://www.broadcom.com"
     },
     {
       "symbol": "AMD",
       "name": "Advanced Micro Devices",
       "marketCapUsd": 776410494259.85,
-      "asOf": "2026-08-02T13:08:40.726Z",
+      "asOf": "2026-08-02T16:01:31.243Z",
       "url": "https://www.amd.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 625698900000,
-      "asOf": "2026-08-02T13:08:55.842Z",
+      "asOf": "2026-08-02T16:01:46.318Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "ARM",
       "name": "Arm Holdings plc American Depositary Shares",
       "marketCapUsd": 255988577003.61,
-      "asOf": "2026-08-02T13:09:10.980Z",
+      "asOf": "2026-08-02T16:02:01.415Z",
       "url": "https://www.arm.com"
     },
     {
       "symbol": "MRVL",
       "name": "Marvell Technology, Inc. Common Stock",
       "marketCapUsd": 168343431977.88,
-      "asOf": "2026-08-02T13:09:26.225Z",
+      "asOf": "2026-08-02T16:02:16.547Z",
       "url": "https://www.marvell.com"
     },
     {
       "symbol": "QCOM",
       "name": "Qualcomm Inc",
       "marketCapUsd": 154990500000,
-      "asOf": "2026-08-02T13:10:11.310Z",
+      "asOf": "2026-08-02T16:02:31.658Z",
       "url": "https://www.qualcomm.com"
     },
     {
       "symbol": "MU",
       "name": "Micron Technology, Inc.",
       "marketCapUsd": 929524445067.53,
-      "asOf": "2026-08-02T13:10:26.437Z",
+      "asOf": "2026-08-02T16:02:46.779Z",
       "url": "https://www.micron.com"
     },
     {
       "symbol": "SMCI",
       "name": "Super Micro Computer, Inc. Common Stock",
       "marketCapUsd": 18371193966.8,
-      "asOf": "2026-08-02T13:10:41.646Z",
+      "asOf": "2026-08-02T16:03:01.835Z",
       "url": "https://www.supermicro.com"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 3450799500577.52,
-      "asOf": "2026-08-02T13:10:56.838Z",
+      "asOf": "2026-08-02T16:03:17.050Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 4355446691364.03,
-      "asOf": "2026-08-02T13:11:11.946Z",
+      "asOf": "2026-08-02T16:03:32.110Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2921415780628.88,
-      "asOf": "2026-08-02T13:11:27.035Z",
+      "asOf": "2026-08-02T16:03:47.171Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "META",
       "name": "Meta Platforms, Inc. Class A Common Stock",
       "marketCapUsd": 1418222190519.75,
-      "asOf": "2026-08-02T13:11:42.224Z",
+      "asOf": "2026-08-02T16:04:02.246Z",
       "url": "https://about.meta.com"
     },
     {
       "symbol": "CRWV",
       "name": "CoreWeave, Inc. Class A Common Stock",
       "marketCapUsd": 39155583732.42,
-      "asOf": "2026-08-02T13:11:57.306Z",
+      "asOf": "2026-08-02T16:04:17.351Z",
       "url": "https://www.coreweave.com"
     },
     {
       "symbol": "NBIS",
       "name": "Nebius Group N.V. Class A Ordinary Shares",
       "marketCapUsd": 48344755119.54,
-      "asOf": "2026-08-02T13:12:12.469Z",
+      "asOf": "2026-08-02T16:04:32.417Z",
       "url": "https://www.group.nebius.com"
     },
     {
       "symbol": "ORCL",
       "name": "Oracle Corp",
       "marketCapUsd": 374086768770,
-      "asOf": "2026-08-02T13:12:27.580Z",
+      "asOf": "2026-08-02T16:04:47.478Z",
       "url": "https://www.oracle.com"
     },
     {
       "symbol": "PLTR",
       "name": "Palantir Technologies Inc. Class A Common Stock",
       "marketCapUsd": 295013211889.62,
-      "asOf": "2026-08-02T13:12:42.666Z",
+      "asOf": "2026-08-02T16:05:04.602Z",
       "url": "https://www.palantir.com"
     },
     {
       "symbol": "AI",
       "name": "C3.ai, Inc.",
       "marketCapUsd": 1427024362.86,
-      "asOf": "2026-08-02T13:12:57.872Z",
+      "asOf": "2026-08-02T16:05:19.751Z",
       "url": "https://www.c3.ai"
     },
     {
       "symbol": "SOUN",
       "name": "SoundHound AI, Inc. Class A Common Stock",
       "marketCapUsd": 2670682723.4,
-      "asOf": "2026-08-02T13:13:12.955Z",
+      "asOf": "2026-08-02T16:05:34.821Z",
       "url": "https://www.soundhound.com"
     },
     {
       "symbol": "BBAI",
       "name": "BigBear.ai Holdings, Inc.",
       "marketCapUsd": 1337789635.47,
-      "asOf": "2026-08-02T13:13:28.121Z",
+      "asOf": "2026-08-02T16:05:49.871Z",
       "url": "https://www.bigbear.ai"
     },
     {
       "symbol": "INOD",
       "name": "Innodata Inc.",
       "marketCapUsd": 2051736143.1399999,
-      "asOf": "2026-08-02T13:13:43.226Z",
+      "asOf": "2026-08-02T16:06:04.937Z",
       "url": "https://www.innodata.com"
     },
     {
       "symbol": "PATH",
       "name": "UiPath, Inc.",
       "marketCapUsd": 6611214594.16,
-      "asOf": "2026-08-02T13:13:58.342Z",
+      "asOf": "2026-08-02T16:06:20.017Z",
       "url": "https://www.uipath.com"
     },
     {
       "symbol": "APP",
       "name": "Applovin Corporation Class A Common Stock",
       "marketCapUsd": 132998456363.9,
-      "asOf": "2026-08-02T13:14:13.426Z",
+      "asOf": "2026-08-02T16:06:36.297Z",
       "url": "https://www.applovin.com"
     },
     {
       "symbol": "CRM",
       "name": "Salesforce, Inc.",
       "marketCapUsd": 150712380000,
-      "asOf": "2026-08-02T13:14:28.595Z",
+      "asOf": "2026-08-02T16:06:54.115Z",
       "url": "https://www.salesforce.com"
     },
     {
       "symbol": "NOW",
       "name": "SERVICENOW, INC.",
       "marketCapUsd": 114996470260,
-      "asOf": "2026-08-02T13:14:43.771Z",
+      "asOf": "2026-08-02T16:07:09.169Z",
       "url": "https://www.servicenow.com"
     },
     {
       "symbol": "ADBE",
       "name": "Adobe Inc.",
       "marketCapUsd": 99537975000,
-      "asOf": "2026-08-02T13:14:58.851Z",
+      "asOf": "2026-08-02T16:07:24.242Z",
       "url": "https://www.adobe.com"
     },
     {
       "symbol": "SNOW",
       "name": "Snowflake Inc.",
       "marketCapUsd": 101650847999.99998,
-      "asOf": "2026-08-02T13:15:13.992Z",
+      "asOf": "2026-08-02T16:07:39.323Z",
       "url": "https://www.snowflake.com"
     },
     {
       "symbol": "SAP",
       "name": "SAP SE",
       "marketCapUsd": 211934981079.84,
-      "asOf": "2026-08-02T13:15:29.074Z",
+      "asOf": "2026-08-02T16:07:54.378Z",
       "url": "https://www.sap.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 210708356323.5,
-      "asOf": "2026-08-02T13:15:44.216Z",
+      "asOf": "2026-08-02T16:08:09.432Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "MDB",
       "name": "MongoDB, Inc. Class A",
       "marketCapUsd": 27144166723.960003,
-      "asOf": "2026-08-02T13:15:59.369Z",
+      "asOf": "2026-08-02T16:08:24.529Z",
       "url": "https://www.mongodb.com"
     },
     {
       "symbol": "WDAY",
       "name": "Workday, Inc. Class A Common Stock",
       "marketCapUsd": 39599727622.86,
-      "asOf": "2026-08-02T13:16:14.451Z",
+      "asOf": "2026-08-02T16:08:39.597Z",
       "url": "https://www.workday.com"
     },
     {
       "symbol": "CRWD",
       "name": "CrowdStrike Holdings, Inc. Class A Common Stock",
       "marketCapUsd": 194344966180.80002,
-      "asOf": "2026-08-02T13:16:29.584Z",
+      "asOf": "2026-08-02T16:08:55.534Z",
       "url": "https://www.crowdstrike.com"
     },
     {
       "symbol": "PANW",
       "name": "Palo Alto Networks, Inc. Common Stock",
       "marketCapUsd": 270441450000,
-      "asOf": "2026-08-02T13:16:44.714Z",
+      "asOf": "2026-08-02T16:09:10.686Z",
       "url": "https://www.paloaltonetworks.com"
     },
     {
       "symbol": "DDOG",
       "name": "Datadog, Inc. Class A Common Stock",
       "marketCapUsd": 95386651846.33002,
-      "asOf": "2026-08-02T13:16:59.889Z",
+      "asOf": "2026-08-02T16:09:25.749Z",
       "url": "https://www.datadog.com"
     },
     {
       "symbol": "BABA",
       "name": "Alibaba Group Holding Limited American Depositary Shares, each represents eight Ordinary Shares",
       "marketCapUsd": 293017630362,
-      "asOf": "2026-08-02T13:17:14.971Z",
+      "asOf": "2026-08-02T16:09:40.816Z",
       "url": "https://www.alibabagroup.com"
     },
     {
       "symbol": "BIDU",
       "name": "Baidu, Inc.",
       "marketCapUsd": 37687015459.409996,
-      "asOf": "2026-08-02T13:17:30.062Z",
+      "asOf": "2026-08-02T16:09:55.932Z",
       "url": "https://ir.baidu.com"
     },
     {
       "symbol": "VRT",
       "name": "Vertiv Holdings Co Class A Common Stock",
       "marketCapUsd": 93001592951.61,
-      "asOf": "2026-08-02T13:17:45.150Z",
+      "asOf": "2026-08-02T16:10:11.000Z",
       "url": "https://www.vertiv.com"
     },
     {
       "symbol": "DELL",
       "name": "Dell Technologies Inc.",
       "marketCapUsd": 261926756038.36002,
-      "asOf": "2026-08-02T13:18:00.231Z",
+      "asOf": "2026-08-02T16:10:26.131Z",
       "url": "https://www.dell.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 63429348655.9,
-      "asOf": "2026-08-02T13:18:15.370Z",
+      "asOf": "2026-08-02T16:10:41.197Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "ANET",
       "name": "Arista Networks",
       "marketCapUsd": 227091208143.3,
-      "asOf": "2026-08-02T13:18:30.456Z",
+      "asOf": "2026-08-02T16:10:56.324Z",
       "url": "https://www.arista.com"
     },
     {
       "symbol": "CRDO",
       "name": "Credo Technology Group Holding Ltd Ordinary Shares",
       "marketCapUsd": 38599060107.020004,
-      "asOf": "2026-08-02T13:18:45.580Z",
+      "asOf": "2026-08-02T16:11:11.414Z",
       "url": "https://www.credosemi.com"
     },
     {
       "symbol": "ALAB",
       "name": "Astera Labs, Inc. Common Stock",
       "marketCapUsd": 53347292854.97,
-      "asOf": "2026-08-02T13:19:00.658Z",
+      "asOf": "2026-08-02T16:11:26.513Z",
       "url": "https://www.asteralabs.com"
     },
     {
       "symbol": "LRCX",
       "name": "Lam Research Corp",
       "marketCapUsd": 366649479560,
-      "asOf": "2026-08-02T13:19:15.744Z",
+      "asOf": "2026-08-02T16:11:41.646Z",
       "url": "https://www.lamresearch.com"
     },
     {
       "symbol": "KLAC",
       "name": "KLA Corporation Common Stock",
       "marketCapUsd": 238813233892.19998,
-      "asOf": "2026-08-02T13:19:30.837Z",
+      "asOf": "2026-08-02T16:11:56.752Z",
       "url": "https://www.kla.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 403069383828.10004,
-      "asOf": "2026-08-02T13:19:46.037Z",
+      "asOf": "2026-08-02T16:12:11.801Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "TER",
       "name": "Teradyne, Inc. Common Stock",
       "marketCapUsd": 57558987545.78,
-      "asOf": "2026-08-02T13:20:01.120Z",
+      "asOf": "2026-08-02T16:12:26.897Z",
       "url": "https://www.teradyne.com"
     }
   ],
