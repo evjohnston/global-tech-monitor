@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-08-08T06:43:00.252Z",
+  "generatedAt": "2026-08-08T09:35:17.111Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -73392,6 +73392,248 @@
       "ingestedAt": "2026-08-08T04:12:09.496Z",
       "orgId": "beijing academy of quantum information sciences",
       "relevanceScore": 0.6
+    },
+    {
+      "id": "nsf-2628818",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "EAGER: From Theory to Practice of Quantum Circuit Decidability",
+      "org": "Kansas State University",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2628818",
+      "amountUsd": 400000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Quantum computers are extremely powerful devices capable of solving certain problems much faster than traditional computers. However, programming these advanced systems is challenging, and converting code into instructions that the quantum hardware can interpret often introduces unwanted errors. This project will develop a framework that will automatically analyze code to identify these errors, ensuring that programs run correctly on quantum computer hardware.\r\n\r\nThe intellectual merit of this work lies in the central idea that integrating Weighted Model Counting with a theory propagator that detects Pauli-transfer inconsistencies and commutativity constraints during conflict-driven search may provide a better understanding of error propagation during: high-level code translation into gate-level circuits; optimizing the gate count and depth; routing the circuit onto actual quantum hardware; and embedding the problem space into an error-correcting code. The project will integrate dynamic weighted Pauli-basis reasoning directly into a constraint solver loop to efficiently verify quantum circuits. The project is organized into four specific thrusts. Thrust one develops a formal theory specification and assesses mathematical properties, such as convexity and theory combination compatibility. Thrust two creates a custom Satisfiability Modulo Theories user-propagator within the Conflict-Driven Clause Learning loop to generate dynamic conflict explanations and commutativity lemmas. Thrust three incorporates this propagator with a Weighted Model Counting pipeline. Thrust four conducts comprehensive benchmarking to validate reductions in decision branches and execution runtime.\r\n\r\nThe project will have significant broader impacts by making the entire toolchain and benchmarks fully open source, thereby accelerating scientific discovery in this important field. Detecting errors in code translation will ensure the correctness of quantum programs, saving time and costs in the development and deployment of advanced quantum computer systems. The research findings will be integrated into Kansas State University graduate courses for students with limited backgrounds in quantum computing. Educational outreach will include interactive quantum computing demonstrations for high school students at engineering open houses and technical presentations at major quantum computer and information science and engineering conferences to support workforce development.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Samee U Khan"
+      ],
+      "venue": "COMPUTER SYSTEMS, EAGER, QUANTUM COMPUTING, EXP PROG TO STIM COMP RES",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "kansas state university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2554929",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: SaTC 2.0: RES: Confidentiality and Integrity Assurance for Quantum Computing",
+      "org": "University of California - Merced",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2554929",
+      "amountUsd": 300000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Quantum computing enables the solution of complex problems beyond the capabilities of classical computers, with promising applications in medicine, materials discovery, secure communications, and national security. As quantum computers are increasingly accessed through cloud services, users often rely on outside software and remote machines to prepare and run their computations. Unfortunately, this creates a security problem: the steps of a quantum computing task may reveal valuable designs or sensitive data, and malicious changes may cause a quantum computer to return wrong or misleading results. This project investigates how to keep quantum computations private and trustworthy from the time they are prepared to the time they are executed. The project's novelties are an end-to-end view of security across the steps that prepare and run quantum programs, ways to test how much private information may leak from those steps, and new protections that help detect or prevent theft and tampering. The project contributes to making quantum computing safer to use for science, industry, and government, while supporting education, workforce training, and public awareness in an emerging area of national need.\r\n\r\nThis project develops an end-to-end framework for securing quantum computing workflows across compilation and execution. At the compilation stage, the project examines how untrusted compilers may steal circuit intellectual property, insert malicious changes, or leak circuit information through side channels in the classical computing systems that host quantum software tools. At the execution stage, the project studies timing side-channel leakage in quantum simulators and fault injection in quantum hardware and control systems. In addition to defining threat models and confidentiality and integrity metrics, this project also develops countermeasures for prevention, detection, and mitigation against the identified threats in quantum computing systems. The outcome of this project includes a systematic security methodology for quantum computing workflows, practical defenses against compile-time and run-time attacks, and open tools, benchmarks, and datasets that support reproducible quantum security research.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Qian Wang"
+      ],
+      "venue": "SaTC: Secure and Trustworthy Cyberspace, (QL) Quantum Leap, Nat Security, Secure Border & Pub Safety",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "university of california merced",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2629374",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Conference: NSF Workshop on Security Challenges and Research Directions for Space and Non-Terrestrial Networks",
+      "org": "George Mason University",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2629374",
+      "amountUsd": 49357,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "This workshop identifies critical research gaps and develops a research agenda to advance the cybersecurity of space and non-terrestrial networks. As these networks become increasingly important to global communications and critical infrastructure, their reliance on long-range wireless links and broad signal coverage exposes them to sophisticated cyber and radio-frequency attacks. The workshop convenes researchers from academia, industry, and government, together with junior faculty and students, to foster interdisciplinary collaboration and accelerate the development of innovative cybersecurity solutions. Participants examine the policy, regulatory, and standards implications of securing non-terrestrial networks, including quantum-resistant cryptography, secure cellular access protocols and architectures, and governance frameworks that enable secure, interoperable, and resilient communication systems and infrastructures. The workshop produces a research roadmap, identifies high-impact priorities, and establishes a multidisciplinary community dedicated to securing next-generation space and non-terrestrial network architectures.\r\n\r\nThe workshop examines security challenges across the physical, network, and application layers of future non-terrestrial networks. Participants address threats to the air interface, malicious or compromised space assets, attacks on terrestrial and space-based infrastructure, and emerging risks from quantum computing and artificial intelligence attacks. The workshop also explores opportunities to use quantum-resistant encryption, trustworthy artificial intelligence, and resilient system architectures to strengthen security while addressing challenges in data protection, privacy, identity management, and trust. Through expert panels, lightning talks, and focused breakout sessions, participants identify pressing research challenges, evaluate promising technical approaches, and prioritize research directions that guide future investments in secure, resilient, and interoperable space communication systems.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Edward J Oughton"
+      ],
+      "venue": "SaTC: Secure and Trustworthy Cyberspace, Nat Security, Secure Border & Pub Safety, CONFERENCE AND WORKSHOPS",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "george mason university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2554928",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Collaborative Research: SaTC 2.0: RES: Confidentiality and Integrity Assurance for Quantum Computing",
+      "org": "Lehigh University",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2554928",
+      "amountUsd": 300000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Quantum computing enables the solution of complex problems beyond the capabilities of classical computers, with promising applications in medicine, materials discovery, secure communications, and national security. As quantum computers are increasingly accessed through cloud services, users often rely on outside software and remote machines to prepare and run their computations. Unfortunately, this creates a security problem: the steps of a quantum computing task may reveal valuable designs or sensitive data, and malicious changes may cause a quantum computer to return wrong or misleading results. This project investigates how to keep quantum computations private and trustworthy from the time they are prepared to the time they are executed. The project's novelties are an end-to-end view of security across the steps that prepare and run quantum programs, ways to test how much private information may leak from those steps, and new protections that help detect or prevent theft and tampering. The project contributes to making quantum computing safer to use for science, industry, and government, while supporting education, workforce training, and public awareness in an emerging area of national need.\r\n\r\nThis project develops an end-to-end framework for securing quantum computing workflows across compilation and execution. At the compilation stage, the project examines how untrusted compilers may steal circuit intellectual property, insert malicious changes, or leak circuit information through side channels in the classical computing systems that host quantum software tools. At the execution stage, the project studies timing side-channel leakage in quantum simulators and fault injection in quantum hardware and control systems. In addition to defining threat models and confidentiality and integrity metrics, this project also develops countermeasures for prevention, detection, and mitigation against the identified threats in quantum computing systems. The outcome of this project includes a systematic security methodology for quantum computing workflows, practical defenses against compile-time and run-time attacks, and open tools, benchmarks, and datasets that support reproducible quantum security research.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Yuntao Liu"
+      ],
+      "venue": "SaTC: Secure and Trustworthy Cyberspace, (QL) Quantum Leap, Nat Security, Secure Border & Pub Safety",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "lehigh university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2628938",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Conference: Creating a Year-Round Peer-Learning Model for Emerging Technology Workforce Programs",
+      "org": "University Industry Demonstration Partnership",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2628938",
+      "amountUsd": 1040661,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "The National Science Foundation’s Experiential Learning for Emerging and Novel Technologies (ExLENT) program supports hands-on learning and skill-building experiences in partnership with industry. The program projects help prepare people for careers in fields central to national competitiveness, including artificial intelligence, biotechnology, semiconductors, advanced manufacturing, clean energy, quantum technologies, and related areas. Awardees operate across varied regions, learner pathways, institutional settings, and partner environments. As a result, they face common implementation questions but often have limited opportunities to learn from one another. This project will create a sustained national practice network for principal investigators and project teams so they can exchange practical knowledge, share effective approaches, surface barriers, and adapt promising practices to their own local contexts. The project will advance the national interest by strengthening workforce development programs in emerging technology areas, improving the return on federal investments, and generating lessons that may inform future NSF workforce initiatives.\r\n\r\nThe project will provide a three-year learning and evaluation infrastructure for the NSF ExLENT portfolio. Core activities will include annual principal investigator engagement workshops, monthly calls for program awardees, quarterly newsletters, a moderated, invitation-only online forum, a mechanism for NSF program officers to respond to awardees' questions, case example development, annual activity summaries, and a final synthesis. An external evaluator will conduct a practical mixed-method evaluation using baseline and annual surveys, workshop surveys, selected interviews or focus groups, attendance records, forum and newsletter analytics, call digests, and case examples. The evaluation will examine which engagement mechanisms are most useful, how peer learning supports implementation, what recurring challenges appear across the portfolio, how practices vary across program tracks and institutional contexts, and which elements of the model are sustainable or transferable. Findings will be used formatively to refine workshop design, call topics, forum prompts, newsletter content, and case example development. Expected products will include annual workshop reports, evaluation memos, a case example library, annual community activity summaries, a final evaluation report, and recommendations for sustaining or adapting the model for this and other workforce-development portfolios.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Anthony Boccanfuso"
+      ],
+      "venue": "AI Education/Workforce Develop, Microelectronics and Semiconductors, Quantum Education & Workforce Developmnt, CONFERENCE AND WORKSHOPS, Advanced Manufacturing, Biotechnology, Improv Undergrad STEM Ed(IUSE), EXP PROG TO STIM COMP RES, UNDERGRADUATE EDUCATION",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "university industry demonstration partnership",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2627426",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "EAGER: Predictive Front-Running of U.S. Research Trajectories",
+      "org": "Louisiana State University",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2627426",
+      "amountUsd": 302955,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "The openness of the U.S. research enterprise accelerates discovery by enabling scientists to share preprints, computer code, and data rapidly. At the same time, these disclosures create a publicly accessible record of where U.S. research is headed. Recent advances in artificial intelligence (AI), including large language models, make it possible to analyze this record at scale and may enable outsiders to forecast specific research outputs months in advance. A foreign competitor using these tools could anticipate or preempt U.S. discoveries without relying on personal or institutional relationships that current research security systems are designed to detect. However, no systematic evaluation has established the magnitude of this risk or identified which fields are most exposed. This project develops the first systematic measure of what the investigators term AI-mediated appropriability risk: the extent to which a field’s open scientific record, combined with frontier AI capabilities, allows outsiders to predict and potentially preempt its near-term results. The project serves the national interest by providing federal agencies, preprint platforms, and university research security offices with an empirical basis for decisions that protect the security and competitiveness of the U.S. research enterprise. It also trains graduate students in research security methods, addressing a documented national workforce need.\r\n\r\nThe project addresses three connected research questions. First, how much earlier can AI-based forecasting identify a field’s near-term research outputs as compared to an expert human analyst? The research team develops a measurement instrument that compares forecasts from large language models with those from panels of domain experts and analysts using conventional open-source intelligence methods, yielding estimates of AI's lead-time advantage in months. Second, they analyze which features of a field’s disclosure practices predict the lead-time advantage. The team applies the instrument across approximately 10 U.S. research fields, including semiconductor, quantum information science, and biotechnology domains prioritized by the CHIPS and Science Act. Using 30 years of open publication records from 1995 through 2025, the team tests whether preprint adoption, abstract detail, and norms governing code and data release explain cross-field variation in measured risk. Third, they analyze how AI capabilities change researchers’ disclosure behavior. The team analyzes archival publication data around the release dates of major AI models to identify shifts in disclosure behavior. Project deliverables include a validated measurement instrument, field-level risk estimates expressed in policy-relevant units, and evidence on researchers’ disclosure responses. Together, these outputs will extend theories of knowledge appropriability and scientific disclosure to the era of machine-assisted science.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Ali Ahmed"
+      ],
+      "venue": "Artificial Intelligence (AI), Microelectronics and Semiconductors, Nat Security, Secure Border & Pub Safety, Quantum Education & Workforce Developmnt, EAGER, Biotechnology, Big Data Science &Engineering, EXP PROG TO STIM COMP RES",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "louisiana state university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2629506",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "EAGER: Exploring Quantum-Ready Geoscience Community Benchmark Problems in Atmospheric, Hydrologic, and Earth-System Sciences",
+      "org": "University of Texas at Austin",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2629506",
+      "amountUsd": 242000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Accurate predictions are essential to address natural hazards like hurricanes, floods, and droughts, and such predictions rely on complex and computationally intensive models.  The enormous computational effort required to develop and use such models has prompted interest in quantum computing as a means to overcome resource limitations.  But the practical value of quantum computing for geoscience has yet to be demonstrated. The goal of this project is to allow the geoscience community to evaluate the potential of quantum computing by identifying realistic problems that can benefit from quantum approaches and to identify quantum approaches that can be tested and compared with conventional methods.  In doing so the project addresses the national need for better preparedness and resilience in the face of natural disasters and the need to advance the state of the art in quantum information science.\r\n\r\nMore specifically, the project develops and evaluates a set of “benchmark” problems in atmospheric, hydrologic, and broader Earth-system sciences.  This is accomplished through a series of workshops and interdisciplinary interactions as well as three exploratory quantum-related pilot studies.  The first pilot will investigate quantum methods for solving models used for hydrology and soil moisture.  The second will develop quantum optimization and machine learning techniques for parameter calibration in urban canopy models.  The third will explore uncertainty quantification and reduced-order methods for coastal boundary layer representation in models used for predicting hazardous weather.  Quantum algorithms will be implemented initially using quantum “emulators” running on classical computers, and will be further tested and developed on actual quantum computers as they become available. Through the combination of workshops and research on the three benchmarks the project seeks to create a roadmap to guide geoscientists towards specific problems, or pieces of problems, which are technically suitable for concerted research as quantum hardware and algorithms mature.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Dev Niyogi"
+      ],
+      "venue": "INTERDISCIPLINARY PROPOSALS, QUANTUM INFORMATION SCIENCE, EAGER",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "university of texas at austin",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2626713",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Conference: Group Theory and Representation Theory: Recent Developments and Interactions",
+      "org": "Texas State University - San Marcos",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2626713",
+      "amountUsd": 19926,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "The conference \"Group Theory and Representation Theory: Recent Developments and Interactions\" will be held on April 9-11, 2027, at Kent State University. The conference will bring together researchers working in group theory, representation theory, and closely related areas of mathematics. Group theory is the mathematical study of symmetry and has become an essential tool not only in mathematics but also in fields such as physics, chemistry, computer science, and cryptography. One of the main goals of the meeting is to encourage interaction among researchers whose work is connected through group theory but has developed in different directions over time. By supporting travel for invited speakers, graduate students, postdoctoral researchers, early career faculty, and participants with limited access to other funding, the conference will make it possible for a broad range of researchers to exchange ideas, establish new collaborations, and strengthen the mathematical community.\r\n\r\nIn more detail, the conference will feature recent developments in group theory and its interactions with representation theory, algebraic groups and finite groups of Lie type, character and block theory, group cohomology, computational group theory, and quantum field theory. Beyond presenting new results, a central objective of the meeting is to explore the connections among these areas and to encourage interaction between researchers who often approach related problems from different perspectives. By bringing together communities that do not often meet in a single event, the conference aims to inspire new directions in the study of group theory and its neighboring disciplines. The conference website is https://sites.google.com/view/kellerlewis60conference.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Yong Yang"
+      ],
+      "venue": "CONFERENCE AND WORKSHOPS",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "texas state university san marcos",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2540987",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "CAREER: Algorithmic Spin Glass Theory: Computational and Landscape Phase Transitions",
+      "org": "Harvard University",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2540987",
+      "amountUsd": 243639,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "Modern science and technology increasingly relies on algorithms that must search through enormous spaces of possibilities: training an artificial intelligence model, discovering patterns in data, or producing many independent samples from a complex probability distribution. In many such problems, the underlying landscape is high-dimensional and filled with many competing basins of attraction. This project develops mathematics to explain when such landscapes can be navigated efficiently, and when they contain intrinsic barriers that no broad class of algorithms can overcome. The central models of study originate in spin glass theory, which began in statistical physics to study disordered materials and is now deeply connected to probability, optimization, machine learning, and theoretical computer science. The project will clarify the fundamental limits of algorithms for random optimization and sampling, with implications for diffusion-based generative AI, combinatorial optimization, random matrix theory, and quantum algorithms. The educational component of the project will train students and early-career researchers through mentoring, new course materials, and a summer school on spin glasses and algorithms.\r\n\r\nTechnically, the project develops algorithmic spin glass theory as a framework for computational and landscape phase transitions. It will study optimization and sampling thresholds in mean-field spin glasses, random constraint satisfaction problems, discrepancy and perceptron models, and other related models. A central tool is the branching overlap gap property, which identifies geometric obstructions to stable algorithms and gives sharp thresholds for broad algorithmic classes. The project will connect these obstructions with low-degree polynomial methods as evidence for fine-grained computational hardness, and will use the resulting theory to benchmark recently proposed quantum algorithms for constraint satisfaction problems. It will also study algorithms and barriers to sampling from spin glass Gibbs measures through diffusion methods, motivated in part by their connection to modern generative AI. A second direction will prove universality results for dynamical and landscape phenomena, develop the first rigorous certifiable methods to compute replica-symmetry-breaking structure in mean-field spin glasses, and apply techniques from spin glass theory to problems in random matrix theory.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Mark Sellke"
+      ],
+      "venue": "Artificial Intelligence (AI), CAREER-Faculty Erly Career Dev, QUANTUM INFORMATION SCIENCE",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "harvard university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "nsf-2609853",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "Research in Particle Theory, Cosmology, and Quantum Gravity",
+      "org": "Stanford University",
+      "date": "2026-08-07",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2609853",
+      "amountUsd": 340000,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "This award funds the research activities of Professors Peter W. Graham and Ken Van Tilburg at Stanford University. One of the deepest puzzles in modern science is the nature of dark matter, an invisible substance that makes up most of the mass of the universe but has never been detected in a laboratory, together with the broader question of what physical laws operate beyond those already known. Answering these questions demands both imaginative new theoretical ideas and powerful new ways to measure the faintest signals in nature. Under this award, Professors Graham and Van Tilburg will develop novel experimental and observational strategies to search for dark matter and other new particles and forces, ranging from ultra-sensitive laboratory devices that exploit the quantum behavior of trapped particles and atoms, to new techniques for extracting information from the light of distant stars, supernovae, quasars, and galaxies. This research advances the national interest by promoting the progress of science in one of its most fundamental directions: the discovery and understanding of new physical laws. Because many of these techniques rest on the precise control and readout of quantum systems, the project also strengthens the nation's expertise in Quantum Information Science, with particular benefits for quantum sensing and measurement technologies more broadly. The project will also have significant broader impacts. Professors Graham and Van Tilburg will train graduate students and postdoctoral researchers, providing essential preparation for junior scientists entering the field, and will collaborate closely with experimental groups to turn theoretical ideas into working measurements. They will give public lectures, engage science journalists, and develop educational resources, including a comprehensive review article and an interdisciplinary workshop, that make these frontier topics accessible to students and the wider community, and Professor Graham will continue to strengthen undergraduate physics education at Stanford.\r\n\r\nProfessor Graham will develop new laboratory methods to detect dark matter and other physics beyond the Standard Model. He will extend electron Penning-trap techniques, which use rapid measurement of an electron's quantum cyclotron state, to search for axion and dark-photon dark matter at lower masses through the trap's magnetron and axial modes. He will adapt electron and ion traps, and high-voltage charge accumulators to detect millicharged particles, which could make up (part of) the dark matter and are irreducibly produced by cosmic rays in the atmosphere. He will construct and test dark-sector models motivated by recent cosmological data and will design searches for inelastic and Higgsino dark matter through the \"luminous\" detection channel in large neutrino and dark-matter detectors. Building on the atom-interferometric MAGIS program, he will study the science reach of mid-band (0.01–10 Hz) gravitational-wave detectors, including improved source localization for \"dark siren\" measurements of the cosmic expansion history, and will advance a concept for microhertz gravitational-wave detection using atomic-clock comparisons with asteroid test masses. Professor Van Tilburg will develop intensity-interferometric techniques for particle astrophysics and cosmology, including scientific applications of Extended-Path Intensity Correlation (EPIC) for microarcsecond-level astrometry of compact sources. He will apply this to astrometric microlensing of multiply-imaged quasars to probe dark-matter substructure as small as an Earth mass, and will advance the Expanding Ejecta Method, which uses bright supernovae to obtain geometric distances and an independent calibration and measurement of the Hubble constant. On the theory side, he will study novel dark-sector dynamics, including bosonically enhanced self-interacting dark matter (together with Graham) and long-range scalar-mediated forces, and will refine three precision-frontier search strategies: the piezoaxionic effect, the spin-dependent ferroaxionic force, and scalar-mediated wake forces, carrying out the nuclear, atomic, and cosmological calculations needed to turn these ideas into concrete laboratory observables.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Peter W Graham"
+      ],
+      "venue": "QUANTUM INFORMATION SCIENCE",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "orgId": "stanford university",
+      "relevanceScore": 0.85
+    },
+    {
+      "id": "rss-https-quantumzeitgeist-com-qc-ware-hybrid-quantum-classical-method",
+      "stage": "scaling",
+      "country": "US",
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "QC Ware calculates enzyme energy with hybrid quantum-classical method",
+      "org": "",
+      "date": "2026-08-08",
+      "url": "https://quantumzeitgeist.com/qc-ware-hybrid-quantum-classical-method/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "matched \"IBM\" (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "QC Ware announced a technology demonstration of a hybrid quantum-classical computational chemistry workflow using Promethium and IBM Quantum hardware. The demonstration calculated electrostatic interaction energy for nitric oxide reductase by combining GPU-accelerated molecular modeling and classical chemistry methods with quantum measurements on IBM’s 156-qubit Heron superconducting quantum processor.",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-https-quantumzeitgeist-com-qubits-nasa-disorder-drives",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Researchers find disorder drives quantum system to classical simulation at 576 qubits",
+      "org": "",
+      "date": "2026-08-08",
+      "url": "https://quantumzeitgeist.com/qubits-nasa-disorder-drives/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "We study a square-lattice instantaneous quantum polynomial-time (IQP) architecture subject to two-qubit gate-angle disorder and single-qubit dephasing using exact tensor-network simulations up to 576 qubits. Increasing disorder drives two consecutive crossovers toward classical simulability, with the output distribution first losing anticoncentration and then the tensor-network simulation cost dropping to polynomial as entanglement is suppressed.",
+      "ingestedAt": "2026-08-08T09:35:17.111Z",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -76871,12 +77113,12 @@
       },
       "stageCounts": {
         "innovation": 1036,
-        "scaling": 125,
+        "scaling": 127,
         "adoption": 101,
-        "investment": 235
+        "investment": 245
       },
-      "fundingUsd": 163768084,
-      "totalEntries": 3634
+      "fundingUsd": 167006622,
+      "totalEntries": 3646
     }
   ],
   "notes": [
@@ -76912,7 +77154,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -76933,77 +77175,77 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-08-08T01:04:58.817Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
     },
     {
       "sourceName": "SAM.gov Opportunities (federal solicitations)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-08-08T06:43:00.252Z",
+      "lastSuccessfulPull": "2026-08-08T09:35:17.111Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -77013,183 +77255,183 @@
     {
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
-      "marketCapUsd": 14826282334.56,
-      "asOf": "2026-08-08T06:36:29.739Z",
+      "marketCapUsd": 16584383789.64,
+      "asOf": "2026-08-08T09:28:39.140Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
-      "marketCapUsd": 5494552279.71,
-      "asOf": "2026-08-08T06:36:44.819Z",
+      "marketCapUsd": 5987811321.18,
+      "asOf": "2026-08-08T09:28:54.345Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc. Common Stock",
-      "marketCapUsd": 7188488523.85,
-      "asOf": "2026-08-08T06:37:00.012Z",
+      "marketCapUsd": 7731853009.080001,
+      "asOf": "2026-08-08T09:29:09.583Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
-      "marketCapUsd": 1979069510.9250002,
-      "asOf": "2026-08-08T06:37:15.218Z",
+      "marketCapUsd": 2070411180.6599998,
+      "asOf": "2026-08-08T09:29:24.822Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
-      "marketCapUsd": 373629764.16999996,
-      "asOf": "2026-08-08T06:37:30.352Z",
+      "marketCapUsd": 398515211.9,
+      "asOf": "2026-08-08T09:29:40.034Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
-      "marketCapUsd": 554707257.51,
-      "asOf": "2026-08-08T06:37:45.404Z",
+      "marketCapUsd": 572529177.43,
+      "asOf": "2026-08-08T09:29:55.233Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
-      "marketCapUsd": 219922430657.7,
-      "asOf": "2026-08-08T06:38:00.593Z",
+      "marketCapUsd": 223549648059.2,
+      "asOf": "2026-08-08T09:30:10.438Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
-      "marketCapUsd": 4375259185790.25,
-      "asOf": "2026-08-08T06:38:15.660Z",
+      "marketCapUsd": 4333065910623.3003,
+      "asOf": "2026-08-08T09:30:25.607Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
-      "marketCapUsd": 3711733169131.2603,
-      "asOf": "2026-08-08T06:38:30.788Z",
+      "marketCapUsd": 3712698490045.09,
+      "asOf": "2026-08-08T09:30:40.800Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
-      "marketCapUsd": 2936681733112.7197,
-      "asOf": "2026-08-08T06:38:45.841Z",
+      "marketCapUsd": 2960627349242.56,
+      "asOf": "2026-08-08T09:30:56.011Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
-      "marketCapUsd": 76300138007.40001,
-      "asOf": "2026-08-08T06:39:00.987Z",
+      "marketCapUsd": 78033799862.1,
+      "asOf": "2026-08-08T09:31:11.245Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
-      "marketCapUsd": 503441640000,
-      "asOf": "2026-08-08T06:39:16.127Z",
+      "marketCapUsd": 512722600000,
+      "asOf": "2026-08-08T09:31:26.438Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
-      "marketCapUsd": 5304156790000,
-      "asOf": "2026-08-08T06:39:31.253Z",
+      "marketCapUsd": 5424535160000,
+      "asOf": "2026-08-08T09:31:41.629Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
-      "marketCapUsd": 134516390386.05,
-      "asOf": "2026-08-08T06:39:46.294Z",
+      "marketCapUsd": 135693423226.35,
+      "asOf": "2026-08-08T09:31:56.818Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
-      "marketCapUsd": 80654862381.24,
-      "asOf": "2026-08-08T06:40:01.402Z",
+      "marketCapUsd": 81200384401.08,
+      "asOf": "2026-08-08T09:32:12.003Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
-      "marketCapUsd": 300887005648,
-      "asOf": "2026-08-08T06:40:16.447Z",
+      "marketCapUsd": 300590498856.32,
+      "asOf": "2026-08-08T09:32:27.171Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
-      "marketCapUsd": 104683989889.40001,
-      "asOf": "2026-08-08T06:40:31.530Z",
+      "marketCapUsd": 106071948299.75,
+      "asOf": "2026-08-08T09:32:42.398Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
-      "marketCapUsd": 53914717770.479996,
-      "asOf": "2026-08-08T06:40:46.584Z",
+      "marketCapUsd": 53382143968.72,
+      "asOf": "2026-08-08T09:32:57.598Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
-      "marketCapUsd": 16974076189.339998,
-      "asOf": "2026-08-08T06:41:01.617Z",
+      "marketCapUsd": 17263963192.129997,
+      "asOf": "2026-08-08T09:33:12.802Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
-      "marketCapUsd": 8892668053.890001,
-      "asOf": "2026-08-08T06:41:16.733Z",
+      "marketCapUsd": 9147672196.65,
+      "asOf": "2026-08-08T09:33:28.022Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
-      "marketCapUsd": 418797720136.4,
-      "asOf": "2026-08-08T06:41:31.827Z",
+      "marketCapUsd": 428055287090.2,
+      "asOf": "2026-08-08T09:33:43.320Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
-      "marketCapUsd": 654648517000,
-      "asOf": "2026-08-08T06:41:46.942Z",
+      "marketCapUsd": 668714259000,
+      "asOf": "2026-08-08T09:33:58.475Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
-      "marketCapUsd": 69427990606.03,
-      "asOf": "2026-08-08T06:42:02.092Z",
+      "marketCapUsd": 70474111387.62,
+      "asOf": "2026-08-08T09:34:13.722Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
-      "marketCapUsd": 476440622305.2,
-      "asOf": "2026-08-08T06:42:17.136Z",
+      "marketCapUsd": 478608411370.95,
+      "asOf": "2026-08-08T09:34:28.943Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
-      "marketCapUsd": 52643297232.53,
-      "asOf": "2026-08-08T06:42:32.215Z",
+      "marketCapUsd": 52252519840.56,
+      "asOf": "2026-08-08T09:34:44.141Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
-      "marketCapUsd": 13693289525.76,
-      "asOf": "2026-08-08T06:42:47.264Z",
+      "marketCapUsd": 13152007265.279999,
+      "asOf": "2026-08-08T09:34:59.381Z",
       "url": "https://www.sktelecom.com"
     }
   ],
