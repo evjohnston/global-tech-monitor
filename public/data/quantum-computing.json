@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-08-09T06:46:14.970Z",
+  "generatedAt": "2026-08-09T09:36:58.526Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -33748,7 +33748,7 @@
       "date": "2023-12-06",
       "url": "https://doi.org/10.1038/s41586-023-06927-3",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 1053,
+      "citations": 1054,
       "abstract": "Abstract Suppressing errors is the central challenge for useful quantum computing 1 , requiring quantum error correction (QEC) 2–6 for large-scale processing. However, the overhead in the realization of error-corrected ‘logical’ qubits, in which information is encoded across many physical qubits for redundancy 2–4 , poses substantial challenges to large-scale logical quantum computing. Here we report the realization of a programmable quantum processor based on encoded logical qubits operating with up to 280 physical qubits. Using logical-level control and a zoned architecture in reconfigurable neutral-atom arrays 7 , our system combines high two-qubit gate fidelities 8 , arbitrary connectivity 7,9 , as well as fully programmable single-qubit rotations and mid-circuit readout 10–15 . Operating this logical processor with various types of encoding, we demonstrate improvement of a two-qubit logic gate by scaling surface-code 6 distance from d = 3 to d = 7, preparation of colour-code qubits with break-even fidelities 5 , fault-tolerant creation of logical Greenberger–Horne–Zeilinger (GHZ) states and feedforward entanglement teleportation, as well as operation of 40 colour-code qubits. Finally, using 3D [[8,3,2]] code blocks 16,17 , we realize computationally complex sampling circuits 18 with up to 48 logical qubits entangled with hypercube connectivity 19 with 228 logical two-qubit gates and 48 logical CCZ gates 20 . We find that this logical encoding substantially improves algorithmic performance with error detection, outperforming physical-qubit fidelities at both cross-entropy benchmarking and quantum simulations of fast scrambling 21,22 . These results herald the advent of early error-corrected quantum computation and chart a path towards large-scale logical processors.",
       "authors": [
         "Dolev Bluvstein",
@@ -33925,7 +33925,7 @@
       "date": "2023-03-10",
       "url": "https://doi.org/10.1103/revmodphys.95.015002",
       "countryEvidence": "institution country codes [RU, RU, RU, RU, RU, RU, RU, RU, RU, RU, RU, IL] → RU",
-      "citations": 362,
+      "citations": 363,
       "abstract": "Quantum emitters coupled to waveguides experience long-range interactions mediated by photons. This leads to superradiant and subradiant states, photon bound states, and various mechanisms for the preparation of entangled states of the emitters. This article reviews experiments on a wide range of systems and their description by theoretical methods and insights from different fields of physics.",
       "authors": [
         "A. S. Sheremet",
@@ -34039,7 +34039,7 @@
       "date": "2023-02-17",
       "url": "https://doi.org/10.1038/s41467-023-36493-1",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, MX, US, MX, US, US, US, US] → US",
-      "citations": 318,
+      "citations": 319,
       "abstract": "The standard primitives of quantum computing include deterministic unitary entangling gates, which are not natural operations in many systems including photonics. Here, we present fusion-based quantum computation, a model for fault tolerant quantum computing constructed from physical primitives readily accessible in photonic systems. These are entangling measurements, called fusions, which are performed on the qubits of small constant sized entangled resource states. Probabilistic photonic gates as well as errors are directly dealt with by the quantum error correction protocol. We show that this computational model can achieve a higher threshold than schemes reported in literature. We present a ballistic scheme which can tolerate a 10.4% probability of suffering photon loss in each fusion, which corresponds to a 2.7% probability of loss of each individual photon. The architecture is also highly modular and has reduced classical processing requirements compared to previous photonic quantum computing architectures.",
       "authors": [
         "Sara Bartolucci",
@@ -34752,7 +34752,7 @@
       "date": "2023-07-20",
       "url": "https://doi.org/10.22331/q-2023-07-20-1062",
       "countryEvidence": "institution country codes [DE, DE, AT, DE] → DE",
-      "citations": 177,
+      "citations": 178,
       "abstract": "Quantum software tools for a wide variety of design tasks on and across different levels of abstraction are crucial in order to eventually realize useful quantum applications. This requires practical and relevant benchmarks for new software tools to be empirically evaluated and compared to the current state of the art. Although benchmarks for specific design tasks are commonly available, the demand for an overarching cross-level benchmark suite has not yet been fully met and there is no mutual consolidation in how quantum software tools are evaluated thus far. In this work, we propose the <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mrow class=\"MJX-TeXAtom-ORD\"><mml:mtext class=\"MJX-tex-mathit\" mathvariant=\"italic\">MQT Bench</mml:mtext></mml:mrow></mml:math> benchmark suite (as part of the <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mrow class=\"MJX-TeXAtom-ORD\"><mml:mtext class=\"MJX-tex-mathit\" mathvariant=\"italic\">Munich Quantum Toolkit</mml:mtext></mml:mrow></mml:math>, MQT) based on four core traits: (1) cross-level support for different abstraction levels, (2) accessibility via an easy-to-use web interface (https://www.cda.cit.tum.de/mqtbench/) and a Python package, (3) provision of a broad selection of benchmarks to facilitate generalizability, as well as (4) extendability to future algorithms, gate-sets, and hardware architectures. By comprising more than 70,000 benchmark circuits ranging from 2 to 130 qubits on four abstraction levels, MQT Bench presents a first step towards benchmarking different abstraction levels with a single benchmark suite to increase comparability, reproducibility, and transparency.",
       "authors": [
         "Nils Quetschlich",
@@ -35952,7 +35952,7 @@
       "date": "2021-05-19",
       "url": "https://doi.org/10.1103/revmodphys.93.025005",
       "countryEvidence": "institution country codes [CA, CA, CA, AU, CA, AU, CA, CA, US, CA, CA, CH] → CA",
-      "citations": 1931,
+      "citations": 1932,
       "abstract": "This review surveys the development over the last 15 years of circuit quantum electrodynamics, the nonlinear quantum optics of microwave electrical circuits. In analogy to cavity quantum electrodynamics, lasers are replaced by rf signal generators, optical cavities by superconducting resonators, and atoms by superconducting qubits. Circuit QED offers enhanced light-matter coupling in which strong quantum optical nonlinearities are observable at the level of individual photons. This new parameter regime leads to unique capabilities for fundamental studies in quantum optics, nearly ideal quantum-limited measurements, and quantum computation.",
       "authors": [
         "Alexandre Blais",
@@ -36095,7 +36095,7 @@
       "date": "2021-01-06",
       "url": "https://doi.org/10.1038/s41586-020-03093-8",
       "countryEvidence": "institution country codes [CN, CN, SE, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, CN, SE, CN, CN, CN, CN] → CN",
-      "citations": 1027,
+      "citations": 1028,
       "authors": [
         "Yu-Ao Chen",
         "Qiang Zhang",
@@ -36154,7 +36154,7 @@
       "date": "2021-07-07",
       "url": "https://doi.org/10.1038/s41586-021-03582-4",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, AT, AT, US, US, US, US, US, US, US] → US",
-      "citations": 945,
+      "citations": 946,
       "authors": [
         "Sepehr Ebadi",
         "Tout T. Wang",
@@ -36183,7 +36183,7 @@
       "date": "2021-04-07",
       "url": "https://doi.org/10.1103/revmodphys.93.025001",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 828,
+      "citations": 829,
       "abstract": "Trapped ions have always been among the leading contenders for the realization of a quantum computer. This review reports on progress in the use of these current-day quantum machines for the simulation of hard problems in spin dynamics of one-dimensional chain systems. Considerable acrobatics are needed to hide the real ion-spectroscopy physics and transform it into the quantum dynamics of the condensed matter system; this quantum computer is equally capable of simulating equilibrium spin physics and nonequilibrium dynamics. Prospects for scaling beyond 100 qubits are real, and the exploration of topological phases is on the horizon.",
       "authors": [
         "C. Monroe",
@@ -36317,7 +36317,7 @@
       "date": "2021-07-07",
       "url": "https://doi.org/10.1038/s41586-021-03585-1",
       "countryEvidence": "institution country codes [FR, FR, FR, AT, AT, FR, FR, FR, AT, FR, FR, FR, ES, FR, FR, FR, FR, FR, FR, DE, AT, FR, FR, FR, AT, FR, FR, FR] → FR",
-      "citations": 683,
+      "citations": 684,
       "authors": [
         "Pascal Scholl",
         "Michael Schuler",
@@ -36620,7 +36620,7 @@
       "date": "2021-12-23",
       "url": "https://doi.org/10.1038/s42254-021-00398-z",
       "countryEvidence": "institution country codes [IE, IE, AU, AU, US, US, US, CN, CN, AT, CN, CN, JP, CN, NL, NL, IT, DE, CN, CN, DE] → CN",
-      "citations": 531,
+      "citations": 532,
       "authors": [
         "E. Pelucchi",
         "Giorgos Fagas",
@@ -37447,7 +37447,7 @@
       "date": "2022-05-25",
       "url": "https://doi.org/10.1038/s41586-022-04697-y",
       "countryEvidence": "institution country codes [NL, NL, NL, NL, NL, NL, AT, NL, NL, NL, NL, NL, NL] → NL",
-      "citations": 364,
+      "citations": 365,
       "abstract": "Abstract Future quantum internet applications will derive their power from the ability to share quantum information across the network 1,2 . Quantum teleportation allows for the reliable transfer of quantum information between distant nodes, even in the presence of highly lossy network connections 3 . Although many experimental demonstrations have been performed on different quantum network platforms 4–10 , moving beyond directly connected nodes has, so far, been hindered by the demanding requirements on the pre-shared remote entanglement, joint qubit readout and coherence times. Here we realize quantum teleportation between remote, non-neighbouring nodes in a quantum network. The network uses three optically connected nodes based on solid-state spin qubits. The teleporter is prepared by establishing remote entanglement on the two links, followed by entanglement swapping on the middle node and storage in a memory qubit. We demonstrate that, once successful preparation of the teleporter is heralded, arbitrary qubit states can be teleported with fidelity above the classical bound, even with unit efficiency. These results are enabled by key innovations in the qubit readout procedure, active memory qubit protection during entanglement generation and tailored heralding that reduces remote entanglement infidelities. Our work demonstrates a prime building block for future quantum networks and opens the door to exploring teleportation-based multi-node protocols and applications 2,11–13 .",
       "authors": [
         "Sophie Hermans",
@@ -37553,7 +37553,7 @@
       "date": "2021-11-30",
       "url": "https://doi.org/10.1038/s41586-021-04257-w",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 350,
+      "citations": 351,
       "abstract": "Abstract Quantum many-body systems display rich phase structure in their low-temperature equilibrium states 1 . However, much of nature is not in thermal equilibrium. Remarkably, it was recently predicted that out-of-equilibrium systems can exhibit novel dynamical phases 2–8 that may otherwise be forbidden by equilibrium thermodynamics, a paradigmatic example being the discrete time crystal (DTC) 7,9–15 . Concretely, dynamical phases can be defined in periodically driven many-body-localized (MBL) systems via the concept of eigenstate order 7,16,17 . In eigenstate-ordered MBL phases, the entire many-body spectrum exhibits quantum correlations and long-range order, with characteristic signatures in late-time dynamics from all initial states. It is, however, challenging to experimentally distinguish such stable phases from transient phenomena, or from regimes in which the dynamics of a few select states can mask typical behaviour. Here we implement tunable controlled-phase (CPHASE) gates on an array of superconducting qubits to experimentally observe an MBL-DTC and demonstrate its characteristic spatiotemporal response for generic initial states 7,9,10 . Our work employs a time-reversal protocol to quantify the impact of external decoherence, and leverages quantum typicality to circumvent the exponential cost of densely sampling the eigenspectrum. Furthermore, we locate the phase transition out of the DTC with an experimental finite-size analysis. These results establish a scalable approach to studying non-equilibrium phases of matter on quantum processors.",
       "authors": [
         "Xiao Mi",
@@ -37953,7 +37953,7 @@
       "date": "2021-09-23",
       "url": "https://doi.org/10.1038/s41578-021-00370-4",
       "countryEvidence": "institution country codes [US, US] → US",
-      "citations": 308,
+      "citations": 309,
       "authors": [
         "Irfan Siddiqi"
       ],
@@ -38004,7 +38004,7 @@
       "date": "2021-05-06",
       "url": "https://doi.org/10.1126/science.abf2998",
       "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US, US] → US",
-      "citations": 298,
+      "citations": 297,
       "abstract": "Quantum entanglement of mechanical systems emerges when distinct objects move with such a high degree of correlation that they can no longer be described separately. Although quantum mechanics presumably applies to objects of all sizes, directly observing entanglement becomes challenging as masses increase, requiring measurement and control with a vanishingly small error. Here, using pulsed electromechanics, we deterministically entangle two mechanical drumheads with masses of 70 picograms. Through nearly quantum-limited measurements of the position and momentum quadratures of both drums, we perform quantum state tomography and thereby directly observe entanglement. Such entangled macroscopic systems are poised to serve in fundamental tests of quantum mechanics, enable sensing beyond the standard quantum limit, and function as long-lived nodes of future quantum networks.",
       "authors": [
         "Shlomi Kotler",
@@ -39668,7 +39668,7 @@
       "date": "2021-02-04",
       "url": "https://doi.org/10.1126/science.abe3150",
       "countryEvidence": "institution country codes [DE, DE, DE, ES, DE, DE, DE, DE, DE] → DE",
-      "citations": 216,
+      "citations": 217,
       "abstract": "The big challenge in quantum computing is to realize scalable multi-qubit systems with cross-talk-free addressability and efficient coupling of arbitrarily selected qubits. Quantum networks promise a solution by integrating smaller qubit modules to a larger computing cluster. Such a distributed architecture, however, requires the capability to execute quantum-logic gates between distant qubits. Here we experimentally realize such a gate over a distance of 60 meters. We employ an ancillary photon that we successively reflect from two remote qubit modules, followed by a heralding photon detection, which triggers a final qubit rotation. We use the gate for remote entanglement creation of all four Bell states. Our nonlocal quantum-logic gate could be extended both to multiple qubits and many modules for a tailor-made multi-qubit computing register.",
       "authors": [
         "Severin Daiss",
@@ -40522,7 +40522,7 @@
       "date": "2022-04-21",
       "url": "https://doi.org/10.1038/s42256-022-00468-6",
       "countryEvidence": "institution country codes [US, US] → US",
-      "citations": 198,
+      "citations": 199,
       "authors": [
         "Martin J. A. Schuetz",
         "J. Kyle Brubaker",
@@ -40628,7 +40628,7 @@
       "date": "2021-11-04",
       "url": "https://doi.org/10.1126/science.abk0603",
       "countryEvidence": "institution country codes [NL, NL, NL, NL, NL, NL, NL, NL, NL, NL, GB, GB, US, US, US, US, NL, NL] → NL",
-      "citations": 196,
+      "citations": 197,
       "abstract": "The discrete time crystal (DTC) is a nonequilibrium phase of matter that spontaneously breaks time-translation symmetry. Disorder-induced many-body localization can stabilize the DTC phase by breaking ergodicity and preventing thermalization. Here, we observe the hallmark signatures of the many-body–localized DTC using a quantum simulation platform based on individually controllable carbon-13 nuclear spins in diamond. We demonstrate long-lived period-doubled oscillations and confirm that they are robust for generic initial states, thus showing the characteristic time-crystalline order across the many-body spectrum. Our results are consistent with the realization of an out-of-equilibrium Floquet phase of matter and introduce a programmable quantum simulator based on solid-state spins for exploring many-body physics.",
       "authors": [
         "J. Randall",
@@ -41932,6 +41932,7 @@
       "url": "https://doi.org/10.1103/7vqp-cxmq",
       "countryEvidence": "institution country codes [IR, IR, IR, IR, IR] → IR",
       "citations": 0,
+      "abstract": "We revisit the quantum annealing problem in the non-Hermitian transverse-field Ising model. We determine, both analytically and numerically, the intrinsic transition probabilities and the resulting defect density. Our results reveal that, unlike the Hermitian case where defect production is dominated by modes near the gap-closing point, the non-Hermitian dynamics involve significant contributions from broad momentum sectors. We find that, depending on the dissipation strength, the defect density exhibits standard Kibble-Zurek scaling, anti-Kibble-Zurek behavior, and a suppression faster than the Kibble-Zurek prediction. We demonstrate that these deviations from the standard Kibble-Zurek scaling can be understood in terms of the underlying excitation probabilities. Specifically, the fast decay of the defect density originates from a vanishing excitation probability spanning a range of annealing times across all allowed modes, even at the gap-closing points. In contrast, the anti-Kibble-Zurek behavior arises from supplementary excitations facilitated by dissipation over a broad range of allowed modes, particularly those situated away from the gap-closing region.",
       "authors": [
         "H. Najafzadeh",
         "S. Sadeghizade",
@@ -66922,7 +66923,7 @@
       "source": "paper",
       "title": "Enhancing quantum classification with custom feature maps in variational quantum classifiers",
       "org": "Delhi Technological University",
-      "date": "2026-08-01",
+      "date": "2026-08-04",
       "url": "https://doi.org/10.1016/j.asoc.2026.116164",
       "countryEvidence": "institution country codes [IN, IN, IN] → IN",
       "citations": 0,
@@ -73143,7 +73144,7 @@
       "source": "paper",
       "title": "Conditional optical readout of a residual complementarity coordinate",
       "org": "TH Köln - University of Applied Sciences",
-      "date": "2026-08-01",
+      "date": "2026-08-06",
       "url": "https://doi.org/10.1016/j.optcom.2026.133621",
       "countryEvidence": "institution country codes [DE, US, US] → US",
       "citations": 0,
@@ -74272,35 +74273,42 @@
     {
       "id": "oa-W7201844154",
       "stage": "innovation",
-      "country": null,
+      "country": "BR",
       "provenance": "live",
       "source": "paper",
       "title": "Information-Geometric Quantum Process Tomography in Unital Open Single-Qubit Dynamics",
-      "org": "",
+      "org": "Universidade Federal do Rio de Janeiro",
       "date": "2026-08-01",
       "url": "https://doi.org/10.1016/j.physleta.2026.132074",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [BR, EE] → BR",
       "citations": 0,
+      "abstract": "We derive an exact information-geometric inequality valid for both Markovian and non-Markovian mixed-state dynamics. This inequality saturates into a strict equality for single qubits because they belong to the quantum exponential family. This identity enables a non-iterative linear regression approach to continuous-time quantum process tomography, which, provided the full-rank condition is satisfied, yields a unique global solution and avoids local minima traps typical of standard non-linear optimization. Furthermore, as the formulation is inherently unconstrained, negative dissipation rates provide direct evidence of non-Markovianity. Numerical simulations of the unital diagonal Bloch generator derived from the Gorini-Kossakowski-Sudarshan-Lindblad (GKSL) master equation demonstrate the validity of this geometric estimator and highlight the necessity of error mitigation near the pure-state boundary where the inverse metric becomes singular.",
       "authors": [
         "T. Koide",
         "A. van de Venn"
       ],
       "venue": "Physics Letters A",
+      "collaboratingCountries": [
+        "BR",
+        "EE"
+      ],
       "ingestedAt": "2026-08-08T15:27:18.844Z",
+      "orgId": "universidade federal do rio de janeiro",
       "relevanceScore": 0.6
     },
     {
       "id": "oa-W7201838763",
       "stage": "innovation",
-      "country": null,
+      "country": "CN",
       "provenance": "live",
       "source": "paper",
       "title": "Realizing dynamic decentralized scheduling in high-penetration ADNs through multi-timescale coupling",
-      "org": "",
+      "org": "North China Electric Power University",
       "date": "2026-08-01",
       "url": "https://doi.org/10.1016/j.ijepes.2026.112091",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN] → CN",
       "citations": 0,
+      "abstract": "With the large-scale integration of distributed energy resources (DERs) into distribution networks, traditional centralized scheduling is increasingly challenged. The volatility of source-load outputs, the complexity caused by numerous DERs, and the rising need for real-time, flexible dispatch all contribute to this challenge. Distributed scheduling, which leverages local and neighboring device state information to make near-optimal decisions, offers significant advantages in reducing data transmission overhead and improving computational efficiency, making it highly suitable for modern active distribution systems(ADNs). To enhance the efficiency of distributed optimization, this paper proposes a multi-timescale dynamic distributed scheduling method that specifically addresses three key challenges: uncertainty, regional partitioning, and distributed solving. First, a rolling framework combining day-ahead centralized dispatch and intraday distributed optimization is developed to reduce the adverse effects of uncertainty on distributed scheduling performance. Second, a DR-ADMM algorithm based on a dynamic relaxation mechanism is developed, incorporating a relaxation factor and residual oscillation detection to ensure rapid and stable convergence of both primal and dual residuals. Furthermore, dynamic regional partitioning criteria combining structural and operational aspects are proposed, and an improved genetic algorithm is employed for efficient zone partitioning. Finally, a case study based on the IEEE 69-node test system confirms the proposed method’s superiority in dispatch accuracy and computational efficiency.",
       "authors": [
         "Yusen Yao",
         "Zifa Liu",
@@ -74310,26 +74318,29 @@
       ],
       "venue": "International Journal of Electrical Power & Energy Systems",
       "ingestedAt": "2026-08-08T15:27:18.844Z",
+      "orgId": "north china electric power university",
       "relevanceScore": 0.6
     },
     {
       "id": "oa-W7201844527",
       "stage": "innovation",
-      "country": null,
+      "country": "IN",
       "provenance": "live",
       "source": "paper",
       "title": "An analytics framework for privacy-preserving federated healthcare learning with quantum-inspired perturbation",
-      "org": "",
+      "org": "Amrita Vishwa Vidyapeetham",
       "date": "2026-08-01",
       "url": "https://doi.org/10.1016/j.dajour.2026.100743",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [IN, IN] → IN",
       "citations": 0,
+      "abstract": "Federated learning (FL) and differential privacy (DP) collectively provide a robust framework for preserving privacy in healthcare data analytics. This study extends this architecture by introducing quantum-inspired gradient perturbation and examining the impact of quantum-inspired noise models and their integration order within privacy-preserving federated learning systems. A comprehensive evaluation of federated averaging (FedAvg) and federated proximal (FedProx) optimization strategies is conducted under both independent and identically distributed (IID) and non-independent and identically distributed (non-IID) data settings. A control-variate aggregator (SCAFFOLD) is also evaluated on the core non-IID setting, and the core experiments are run across three random seeds with pairwise paired t-tests for statistical significance. The findings show that all approaches achieve high classification accuracy and macro-F1 performance while preserving privacy guarantees; across seeds, noise ordering and aggregator choice produce no statistically significant difference in final accuracy (all p ≥ 0.33), confirming that the privacy-enhancing tiers preserve utility at a fixed budget. The proposed framework is further compared with classical Gaussian and Laplacian perturbation methods, and controlled ablation experiments confirm the effectiveness of the different configurations. Results indicate that quantum-inspired noise produces smoother convergence behaviour during early communication rounds while maintaining strong predictive performance. An extended evaluation on a lightweight convolutional network with two further imaging modalities (PathMNIST, OrganAMNIST), a four-qubit entangled circuit, and active privacy attacks shows that pre-DP perturbation increases gradient-inversion error by approximately 7.4 × over DP-SGD alone; the budget-neutral quantum-inspired tier matches this gain at equivalent accuracy, its distinctive contribution being a statistically distinct noise distribution rather than a larger reconstruction error, while membership-inference advantage remains near chance. The evaluation includes privacy accounting, convergence stability, computational overhead, accuracy, loss, macro-F1 score, and confusion matrix analysis.",
       "authors": [
         "Arjun P.K.",
         "Gireesh Kumar T"
       ],
       "venue": "Decision Analytics Journal",
       "ingestedAt": "2026-08-08T15:27:18.844Z",
+      "orgId": "amrita vishwa vidyapeetham",
       "relevanceScore": 0.6
     },
     {
@@ -74473,6 +74484,148 @@
       "abstract": "Eaton secured a $7 million Air Force contract to apply quantum computing, machine learning & visualization to power grid security.",
       "ingestedAt": "2026-08-09T04:17:46.184Z",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "oa-W7201980567",
+      "stage": "innovation",
+      "country": "MA",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Phase Transitions and Quantum Correlations in Heisenberg XXZ Spin Chains",
+      "org": "Université Ibn-Tofail",
+      "date": "2026-08-08",
+      "url": "https://doi.org/10.1007/s10773-026-06431-0",
+      "countryEvidence": "institution country codes [MA, MA] → MA",
+      "citations": 0,
+      "authors": [
+        "Mounaim Hamdoune",
+        "M. Daoud"
+      ],
+      "venue": "International Journal of Theoretical Physics",
+      "ingestedAt": "2026-08-09T09:36:58.526Z",
+      "orgId": "université ibn tofail",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7201972574",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum Technologies as a Driver of Future Industrial Policy",
+      "org": "Carnegie Institution for Science",
+      "date": "2026-08-08",
+      "url": "https://doi.org/10.61192/indpol.1829442",
+      "countryEvidence": "institution country codes [US] → US",
+      "citations": 0,
+      "abstract": "Quantum technologies are increasingly recognized as a disruptive frontier that will shape the next generation of industrial strategies. Developments in quantum computing, communication, and sensing promise not only technical breakthroughs but also significant economic and geopolitical consequences. Quantum computing can accelerate drug discovery, materials research, and complex optimization, while quantum communication opens new possibilities for secure data transfer beyond the reach of classical encryption. According to European Commission Reports and National Quantum Initiative Act, leading economies are already investing heavily: the European Union has committed over €1 billion to its Quantum Flagship program, while the United States launched the National Quantum Initiative Act in 2018 to coordinate research and industrial applications. These initiatives underscore the strategic nature of the field. For industrial policy, they also raise important questions: How should governments design roadmaps that foster public–private collaboration? What forms of regulation or incentives are needed to align innovation with competitiveness and security? At the same time, quantum technologies could support sustainability goals, for example through energy-efficient algorithms and advanced climate modeling. Positioning quantum technologies not only as an enabler but as a driver of future industrial policy is essential. Unlike incremental innovations, quantum breakthroughs will actively shape the direction of national strategies, global competitiveness, and sustainability agendas. Recognizing this driver role ensures that policymakers and industries move beyond adaptation, taking a proactive stance in designing resilient and forward-looking industrial ecosystems.",
+      "authors": [
+        "Kerim Tolgahan Narin",
+        "Sabri Öz"
+      ],
+      "venue": "Industrial Policy",
+      "ingestedAt": "2026-08-09T09:36:58.526Z",
+      "orgId": "carnegie institution for science",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7201991202",
+      "stage": "innovation",
+      "country": "SA",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Photonic spin hall shift controlling at three level complex conductive dielectric medium",
+      "org": "Imam Mohammad ibn Saud Islamic University",
+      "date": "2026-08-08",
+      "url": "https://doi.org/10.1007/s11082-026-09046-1",
+      "countryEvidence": "institution country codes [PK, SA, SA] → SA",
+      "citations": 0,
+      "authors": [
+        "Qaisar Khan",
+        "Ibrahim Al-Dayel",
+        "Meraj Ali Khan"
+      ],
+      "venue": "Optical and Quantum Electronics",
+      "collaboratingCountries": [
+        "PK",
+        "SA"
+      ],
+      "ingestedAt": "2026-08-09T09:36:58.526Z",
+      "orgId": "imam mohammad ibn saud islamic university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7201979220",
+      "stage": "innovation",
+      "country": "TW",
+      "provenance": "live",
+      "source": "paper",
+      "title": "QCutSim: Accelerating Quantum Circuit Cutting Simulation on Consumer-Grade Classical Systems",
+      "org": "National Taiwan University",
+      "date": "2026-08-08",
+      "url": "https://doi.org/10.1145/3833423",
+      "countryEvidence": "institution country codes [TW, TW, TW, TW] → TW",
+      "citations": 0,
+      "abstract": "Quantum computing has the potential to accelerate various fields by solving specific problems significantly faster than classical computers. Solving more complex problems generally requires a larger number of qubits. However, current quantum devices are constrained by limited qubit counts and environmental noise. Quantum circuit cutting bridges the gap between the theoretical requirements of large quantum circuits and the practical limitations of current quantum hardware by decomposing large circuits into smaller subcircuits. Tang et al. introduced CutQC, a framework that reduces the number of generated subcircuits and reconstructs the complete quantum state with limited memory consumption. Despite these advances, CutQC faces performance bottlenecks in classical postprocessing, leading to long execution times. To address this limitation, we propose QCutSim, an efficient simulation-based framework guided by insights from the postprocessing stage. It improves performance through optimized simulation and reconstruction strategies, along with computational optimizations such as vectorization and parallelization. QCutSim demonstrates that even consumer-grade systems can efficiently simulate 100-qubit circuits and achieves a speedup of up to 5.1x compared to prior work on the same hardware. In the worst-case scenario of reconstructing dense solution circuits, QCutSim achieves a speedup of 6 to 8 orders of magnitude.",
+      "authors": [
+        "Po-Hsuan Huang",
+        "Chun-Yen Tai",
+        "Chia-Heng Tu",
+        "Shih‐Hao Hung"
+      ],
+      "venue": "ACM Transactions on Design Automation of Electronic Systems",
+      "ingestedAt": "2026-08-09T09:36:58.526Z",
+      "orgId": "national taiwan university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7202002603",
+      "stage": "innovation",
+      "country": "CH",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Hanbury Brown–Twiss interference with massively parallel spectral multiplexing for broadband light",
+      "org": "École Polytechnique Fédérale de Lausanne",
+      "date": "2026-08-08",
+      "url": "https://doi.org/10.1117/1.apn.5.5.056023",
+      "countryEvidence": "institution country codes [CZ, CH, CH, CH] → CH",
+      "citations": 0,
+      "abstract": "Two-photon interference is a fundamental resource for quantum technologies and optical quantum computing, underpinning precision measurements, scalable entanglement distribution, and the operation of photonic circuits and quantum network protocols. Here, we report the first demonstration of massively parallel, wavelength-resolved photon bunching, revealing Hanbury Brown–Twiss correlations across 70 independent spectral channels. These observations are enabled by a fast, data-driven single-photon spectrometer that achieves 48 pm spectral and 48 ps temporal resolution over a 10 nm bandwidth, providing simultaneous access to spectro-temporal photon correlations without the need for narrowband filtering. This approach enables high-dimensional quantum interference measurements across a broad spectrum. Our results establish frequency-multiplexed two-photon interference as a scalable and throughput-efficient platform for quantum-enhanced photonic technologies, offering a practical route toward room-temperature architectures that overcome loss limitations and advance the scalability for a variety of applications.",
+      "authors": [
+        "Lada Radmacherová",
+        "Ermanno Bernasconi",
+        "Claudio Bruschini",
+        "Tommaso Milanese"
+      ],
+      "venue": "Advanced Photonics Nexus",
+      "collaboratingCountries": [
+        "CH",
+        "CZ"
+      ],
+      "ingestedAt": "2026-08-09T09:36:58.526Z",
+      "orgId": "école polytechnique fédérale de lausanne",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7201954432",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum Divisive Hierarchical Clustering Based on Manhattan Distance",
+      "org": "Harbin University",
+      "date": "2026-08-01",
+      "url": "https://doi.org/10.1016/j.physleta.2026.132059",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN] → CN",
+      "citations": 0,
+      "authors": [
+        "He Zhang",
+        "Huanzhang Ling"
+      ],
+      "venue": "Physics Letters A",
+      "ingestedAt": "2026-08-09T09:36:58.526Z",
+      "orgId": "harbin university",
+      "relevanceScore": 0.6
     }
   ],
   "trend": [
@@ -77963,18 +78116,21 @@
     {
       "date": "2026-08-09",
       "counts": {
-        "IT": 15,
+        "MA": 3,
         "US": 59,
+        "SA": 2,
+        "TW": 4,
+        "CH": 4,
+        "IT": 15,
         "HU": 3,
-        "BR": 7,
-        "IN": 40,
-        "CN": 91,
+        "BR": 8,
+        "IN": 41,
+        "CN": 93,
         "ES": 10,
         "GR": 3,
         "TG": 1,
         "TH": 2,
         "HK": 2,
-        "SA": 1,
         "KR": 5,
         "BD": 3,
         "PL": 11,
@@ -77982,7 +78138,7 @@
         "FI": 3,
         "AE": 1,
         "FR": 8,
-        "JP": 19,
+        "JP": 18,
         "AU": 5,
         "GB": 11,
         "VN": 1,
@@ -77990,22 +78146,19 @@
         "BG": 1,
         "IR": 8,
         "CA": 6,
-        "TW": 3,
         "SG": 3,
         "QA": 4,
         "RO": 2,
         "BE": 1,
         "LU": 1,
-        "RU": 8,
+        "RU": 7,
         "ID": 1,
         "LV": 1,
-        "MA": 2,
         "SE": 1,
         "GA": 1,
         "DK": 3,
         "IE": 1,
         "MY": 4,
-        "CH": 3,
         "ET": 2,
         "SI": 1,
         "NL": 2,
@@ -78030,13 +78183,13 @@
         "VE": 1
       },
       "stageCounts": {
-        "innovation": 1041,
+        "innovation": 1047,
         "scaling": 127,
         "adoption": 102,
         "investment": 246
       },
       "fundingUsd": 167006622,
-      "totalEntries": 3684
+      "totalEntries": 3690
     }
   ],
   "notes": [
@@ -78072,7 +78225,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -78093,77 +78246,77 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
     },
     {
       "sourceName": "SAM.gov Opportunities (federal solicitations)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-08-09T06:46:14.970Z",
+      "lastSuccessfulPull": "2026-08-09T09:36:58.526Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -78174,182 +78327,182 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 16584383789.64,
-      "asOf": "2026-08-09T06:39:40.599Z",
+      "asOf": "2026-08-09T09:30:18.629Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 5987811321.18,
-      "asOf": "2026-08-09T06:39:55.780Z",
+      "asOf": "2026-08-09T09:30:33.796Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc. Common Stock",
       "marketCapUsd": 7731853009.080001,
-      "asOf": "2026-08-09T06:40:10.975Z",
+      "asOf": "2026-08-09T09:30:48.914Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
       "marketCapUsd": 2070411180.6599998,
-      "asOf": "2026-08-09T06:40:26.149Z",
+      "asOf": "2026-08-09T09:31:04.123Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
       "marketCapUsd": 398515211.9,
-      "asOf": "2026-08-09T06:40:41.338Z",
+      "asOf": "2026-08-09T09:31:19.354Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
       "marketCapUsd": 572529177.43,
-      "asOf": "2026-08-09T06:40:56.595Z",
+      "asOf": "2026-08-09T09:31:34.464Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 223549648059.2,
-      "asOf": "2026-08-09T06:41:11.739Z",
+      "asOf": "2026-08-09T09:31:49.632Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 4333065910623.3003,
-      "asOf": "2026-08-09T06:41:26.917Z",
+      "asOf": "2026-08-09T09:32:04.861Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 3712698490045.09,
-      "asOf": "2026-08-09T06:41:42.183Z",
+      "asOf": "2026-08-09T09:32:19.947Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2960627349242.56,
-      "asOf": "2026-08-09T06:41:57.320Z",
+      "asOf": "2026-08-09T09:32:35.024Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 78033799862.1,
-      "asOf": "2026-08-09T06:42:12.485Z",
+      "asOf": "2026-08-09T09:32:50.093Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
       "marketCapUsd": 512722600000,
-      "asOf": "2026-08-09T06:42:27.660Z",
+      "asOf": "2026-08-09T09:33:05.207Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5424535160000,
-      "asOf": "2026-08-09T06:42:42.872Z",
+      "asOf": "2026-08-09T09:33:20.313Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 135693423226.35,
-      "asOf": "2026-08-09T06:42:58.017Z",
+      "asOf": "2026-08-09T09:33:35.384Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 81200384401.08,
-      "asOf": "2026-08-09T06:43:13.187Z",
+      "asOf": "2026-08-09T09:33:50.464Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 300590498856.32,
-      "asOf": "2026-08-09T06:43:28.459Z",
+      "asOf": "2026-08-09T09:34:05.604Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 106071948299.75,
-      "asOf": "2026-08-09T06:43:43.671Z",
+      "asOf": "2026-08-09T09:34:20.763Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 53382143968.72,
-      "asOf": "2026-08-09T06:43:58.833Z",
+      "asOf": "2026-08-09T09:34:35.843Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 17263963192.129997,
-      "asOf": "2026-08-09T06:44:13.990Z",
+      "asOf": "2026-08-09T09:34:51.039Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
       "marketCapUsd": 9147672196.65,
-      "asOf": "2026-08-09T06:44:29.129Z",
+      "asOf": "2026-08-09T09:35:06.239Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 428055287090.2,
-      "asOf": "2026-08-09T06:44:44.305Z",
+      "asOf": "2026-08-09T09:35:21.462Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 668714259000,
-      "asOf": "2026-08-09T06:44:59.438Z",
+      "asOf": "2026-08-09T09:35:36.548Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 70474111387.62,
-      "asOf": "2026-08-09T06:45:14.607Z",
+      "asOf": "2026-08-09T09:35:51.628Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
       "marketCapUsd": 478608411370.95,
-      "asOf": "2026-08-09T06:45:29.784Z",
+      "asOf": "2026-08-09T09:36:06.722Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
       "marketCapUsd": 52252519840.56,
-      "asOf": "2026-08-09T06:45:45.067Z",
+      "asOf": "2026-08-09T09:36:21.832Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
       "marketCapUsd": 13152007265.279999,
-      "asOf": "2026-08-09T06:46:00.209Z",
+      "asOf": "2026-08-09T09:36:36.964Z",
       "url": "https://www.sktelecom.com"
     }
   ],
