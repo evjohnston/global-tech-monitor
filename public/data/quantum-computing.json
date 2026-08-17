@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-08-17T03:48:37.298Z",
+  "generatedAt": "2026-08-17T06:42:26.124Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -83154,6 +83154,27 @@
       "deploymentStatus": "deployed",
       "ingestedAt": "2026-08-17T03:48:37.298Z",
       "relevanceScore": 0.75
+    },
+    {
+      "id": "nsf-2600198",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "live",
+      "source": "grant",
+      "title": "National Cybersecurity Training & Education (NCyTE) Center",
+      "org": "Whatcom Community College",
+      "date": "2026-08-16",
+      "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=2600198",
+      "amountUsd": 6750015,
+      "countryEvidence": "NSF awardee country US",
+      "abstract": "The cybersecurity landscape is rapidly evolving, with increasingly sophisticated threats targeting all 16 critical infrastructure sectors (e.g., agriculture, communications, energy, financial, health, transportation, water). As nation-state threats and emerging technologies, such as generative AI and quantum computing, escalate risks across all sectors, the United States faces a widening gap in cybersecurity talent. Without sustained investment in scalable training, curricular innovation, and development of educators, America's national security, economic stability, and global competitiveness are at stake. The National Cybersecurity Training & Education (NCyTE) Center will expand the skilled workforce, develop and disseminate innovative curricula, and strengthen academia-industry partnerships. The center's strategic efforts will boost U.S. economic competitiveness, public digital resilience, and national defense.\r\n\r\nThe NCyTE Center will pursue five strategic goals to strengthen the cybersecurity workforce: forging industry-education partnerships, empowering educators, expanding career pathways, developing secure AI-integrated curricula, and driving applied research. Key initiatives, including a National Cybersecurity Education Articulation Network, Career Guidance Toolkit, and multimedia outreach, will attract new talent and grow the pool of job-ready technicians. Faculty-focused programs such as mentorship networks, fellowships, and virtual learning communities will equip cyber and non-cyber educators across all critical sectors. Innovations such as a Curriculum GPT, national research consortia, and AI-integrated testbeds will elevate cybersecurity education and build a globally competitive STEM workforce. Like other ATE national centers, the NCyTE Center will support systemic reform, provide replicable models, mentor new projects, strengthen collaborations between two-year institutions and other sectors, promote technician careers, address evolving workforce competencies, and develop plans for sustainability beyond federal funding. This project is funded by the Advanced Technological Education program, which focuses on the education of technicians for the advanced-technology fields that drive the nation's economy.\r\n\r\nThis award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.",
+      "authors": [
+        "Michele L Robinson"
+      ],
+      "venue": "Artificial Intelligence (AI), AI Education/Workforce Develop, ADVANCED TECHNOLOGY EDUCATION, Advanced Wireless Ed & Workforce Develop, CONFERENCE AND WORKSHOPS, Workforce Development, UNDERGRADUATE EDUCATION, SCIENCE, MATH, ENG & TECH EDUCATION",
+      "ingestedAt": "2026-08-17T06:42:26.124Z",
+      "orgId": "whatcom community college",
+      "relevanceScore": 0.85
     }
   ],
   "trend": [
@@ -87329,10 +87350,10 @@
         "innovation": 742,
         "scaling": 113,
         "adoption": 109,
-        "investment": 314
+        "investment": 315
       },
-      "fundingUsd": 164731131,
-      "totalEntries": 4101
+      "fundingUsd": 171481146,
+      "totalEntries": 4102
     }
   ],
   "notes": [
@@ -87368,7 +87389,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -87389,77 +87410,77 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call"
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
     },
     {
       "sourceName": "SAM.gov Opportunities (federal solicitations)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-08-17T03:48:37.298Z",
+      "lastSuccessfulPull": "2026-08-17T06:42:26.124Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -87470,182 +87491,182 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 18741575446.559998,
-      "asOf": "2026-08-17T03:42:06.605Z",
+      "asOf": "2026-08-17T06:35:50.098Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 6281527818.54,
-      "asOf": "2026-08-17T03:42:21.712Z",
+      "asOf": "2026-08-17T06:36:05.208Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc. Common Stock",
       "marketCapUsd": 7884553381.610001,
-      "asOf": "2026-08-17T03:42:36.796Z",
+      "asOf": "2026-08-17T06:36:20.329Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
       "marketCapUsd": 2039385217.61,
-      "asOf": "2026-08-17T03:42:51.885Z",
+      "asOf": "2026-08-17T06:36:35.405Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
       "marketCapUsd": 423922731.96,
-      "asOf": "2026-08-17T03:43:07.025Z",
+      "asOf": "2026-08-17T06:36:50.463Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
       "marketCapUsd": 670549736.99,
-      "asOf": "2026-08-17T03:43:22.104Z",
+      "asOf": "2026-08-17T06:37:05.514Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 220760930264.8,
-      "asOf": "2026-08-17T03:43:37.215Z",
+      "asOf": "2026-08-17T06:37:20.563Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 4230334458042.9,
-      "asOf": "2026-08-17T03:43:52.347Z",
+      "asOf": "2026-08-17T06:37:35.613Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 3678615236241.4,
-      "asOf": "2026-08-17T03:44:07.476Z",
+      "asOf": "2026-08-17T06:37:50.731Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2833025259685.8,
-      "asOf": "2026-08-17T03:44:22.610Z",
+      "asOf": "2026-08-17T06:38:05.841Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 74151284739.6,
-      "asOf": "2026-08-17T03:44:37.715Z",
+      "asOf": "2026-08-17T06:38:20.952Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
       "marketCapUsd": 541825789355,
-      "asOf": "2026-08-17T03:44:52.833Z",
+      "asOf": "2026-08-17T06:38:36.002Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5453600360000,
-      "asOf": "2026-08-17T03:45:07.920Z",
+      "asOf": "2026-08-17T06:38:51.127Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 140477715536.03998,
-      "asOf": "2026-08-17T03:45:23.046Z",
+      "asOf": "2026-08-17T06:39:06.175Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 83230465042.62,
-      "asOf": "2026-08-17T03:45:38.231Z",
+      "asOf": "2026-08-17T06:39:21.223Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 300509633367.68,
-      "asOf": "2026-08-17T03:45:53.337Z",
+      "asOf": "2026-08-17T06:39:36.293Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 107081126637.09999,
-      "asOf": "2026-08-17T03:46:08.420Z",
+      "asOf": "2026-08-17T06:39:51.402Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 54341149241.119995,
-      "asOf": "2026-08-17T03:46:23.549Z",
+      "asOf": "2026-08-17T06:40:06.503Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 18049544420.47,
-      "asOf": "2026-08-17T03:46:38.628Z",
+      "asOf": "2026-08-17T06:40:21.544Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
       "marketCapUsd": 9317274008.58,
-      "asOf": "2026-08-17T03:46:53.753Z",
+      "asOf": "2026-08-17T06:40:36.586Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 402680343707.4,
-      "asOf": "2026-08-17T03:47:08.831Z",
+      "asOf": "2026-08-17T06:40:51.643Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 708311128000,
-      "asOf": "2026-08-17T03:47:23.939Z",
+      "asOf": "2026-08-17T06:41:06.751Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 77743988717.91,
-      "asOf": "2026-08-17T03:47:39.022Z",
+      "asOf": "2026-08-17T06:41:21.793Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
       "marketCapUsd": 440179423387.2,
-      "asOf": "2026-08-17T03:47:54.219Z",
+      "asOf": "2026-08-17T06:41:36.836Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
       "marketCapUsd": 60068067679.96,
-      "asOf": "2026-08-17T03:48:09.301Z",
+      "asOf": "2026-08-17T06:41:51.909Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
       "marketCapUsd": 14783531809.279999,
-      "asOf": "2026-08-17T03:48:24.379Z",
+      "asOf": "2026-08-17T06:42:07.097Z",
       "url": "https://www.sktelecom.com"
     }
   ],
