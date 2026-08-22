@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-08-22T00:49:29.357Z",
+  "generatedAt": "2026-08-22T03:41:52.217Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -40295,7 +40295,7 @@
       "url": "https://doi.org/10.22331/q-2021-10-05-557",
       "countryEvidence": "institution country codes [US, GB, US, US, US] → US",
       "citations": 201,
-      "abstract": "Gate set tomography (GST) is a protocol for detailed, predictive characterization of logic operations (gates) on quantum computing processors. Early versions of GST emerged around 2012-13, and since then it has been refined, demonstrated, and used in a large number of experiments. This paper presents the foundations of GST in comprehensive detail. The most important feature of GST, compared to older state and process tomography protocols, is that it is <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mrow class=\"MJX-TeXAtom-ORD\"><mml:mtext class=\"MJX-tex-mathit\" mathvariant=\"italic\">calibration-free</mml:mtext></mml:mrow></mml:math>. GST does not rely on pre-calibrated state preparations and measurements. Instead, it characterizes all the operations in a <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mrow class=\"MJX-TeXAtom-ORD\"><mml:mtext class=\"MJX-tex-mathit\" mathvariant=\"italic\">gate set</mml:mtext></mml:mrow></mml:math> simultaneously and self-consistently, relative to each other. Long sequence GST can estimate gates with very high precision and efficiency, achieving Heisenberg scaling in regimes of practical interest. In this paper, we cover GST's intellectual history, the techniques and experiments used to achieve its intended purpose, data analysis, gauge freedom and fixing, error bars, and the interpretation of gauge-fixed estimates of gate sets. Our focus is fundamental mathematical aspects of GST, rather than implementation details, but we touch on some of the foundational algorithmic tricks used in the <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><mml:mrow class=\"MJX-TeXAtom-ORD\"><mml:mtext mathvariant=\"monospace\">pyGSTi</mml:mtext></mml:mrow></mml:math> implementation.",
+      "abstract": "Gate set tomography (GST) is a protocol for detailed, predictive characterization of logic operations (gates) on quantum computing processors. Early versions of GST emerged around 2012-13, and since then it has been refined, demonstrated, and used in a large number of experiments. This paper presents the foundations of GST in comprehensive detail. The most important feature of GST, compared to older state and process tomography protocols, is that it is calibration-free . GST does not rely on pre-calibrated state preparations and measurements. Instead, it characterizes all the operations in a gate set simultaneously and self-consistently, relative to each other. Long sequence GST can estimate gates with very high precision and efficiency, achieving Heisenberg scaling in regimes of practical interest. In this paper, we cover GST's intellectual history, the techniques and experiments used to achieve its intended purpose, data analysis, gauge freedom and fixing, error bars, and the interpretation of gauge-fixed estimates of gate sets. Our focus is fundamental mathematical aspects of GST, rather than implementation details, but we touch on some of the foundational algorithmic tricks used in the pyGSTi implementation.",
       "authors": [
         "Erik Nielsen",
         "John King Gamble",
@@ -59855,7 +59855,7 @@
       "url": "https://doi.org/10.1038/s41586-022-04986-6",
       "countryEvidence": "institution country codes [JP, JP, JP, JP, JP, JP] → JP",
       "citations": 175,
-      "abstract": "Abstract Future large-scale quantum computers will rely on quantum error correction (QEC) to protect the fragile quantum information during computation 1,2 . Among the possible candidate platforms for realizing quantum computing devices, the compatibility with mature nanofabrication technologies of silicon-based spin qubits offers promise to overcome the challenges in scaling up device sizes from the prototypes of today to large-scale computers 3–5 . Recent advances in silicon-based qubits have enabled the implementations of high-quality one-qubit and two-qubit systems 6–8 . However, the demonstration of QEC, which requires three or more coupled qubits 1 , and involves a three-qubit gate 9–11 or measurement-based feedback, remains an open challenge. Here we demonstrate a three-qubit phase-correcting code in silicon, in which an encoded three-qubit state is protected against any phase-flip error on one of the three qubits. The correction to this encoded state is performed by a three-qubit conditional rotation, which we implement by an efficient single-step resonantly driven iToffoli gate. As expected, the error correction mitigates the errors owing to one-qubit phase-flip, as well as the intrinsic dephasing mainly owing to quasi-static phase noise. These results show successful implementation of QEC and the potential of a silicon-based platform for large-scale quantum computing.",
+      "abstract": "Abstract Future large-scale quantum computers will rely on quantum error correction (QEC) to protect the fragile quantum information during computation1,2. Among the possible candidate platforms for realizing quantum computing devices, the compatibility with mature nanofabrication technologies of silicon-based spin qubits offers promise to overcome the challenges in scaling up device sizes from the prototypes of today to large-scale computers3–5. Recent advances in silicon-based qubits have enabled the implementations of high-quality one-qubit and two-qubit systems6–8. However, the demonstration of QEC, which requires three or more coupled qubits1, and involves a three-qubit gate9–11 or measurement-based feedback, remains an open challenge. Here we demonstrate a three-qubit phase-correcting code in silicon, in which an encoded three-qubit state is protected against any phase-flip error on one of the three qubits. The correction to this encoded state is performed by a three-qubit conditional rotation, which we implement by an efficient single-step resonantly driven iToffoli gate. As expected, the error correction mitigates the errors owing to one-qubit phase-flip, as well as the intrinsic dephasing mainly owing to quasi-static phase noise. These results show successful implementation of QEC and the potential of a silicon-based platform for large-scale quantum computing.",
       "authors": [
         "Kenta Takeda",
         "Akito Noiri",
@@ -93055,6 +93055,722 @@
       "ingestedAt": "2026-08-22T00:49:29.357Z",
       "orgId": "centre for interdisciplinary research and education",
       "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203830802",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Suppression of differential light shifts in ground and metastable trapped-ion qubits",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/sd5z-hhm5",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203824957",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Qudit-native framework for discrete time crystals",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/qbhv-yr3d",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical review. B./Physical review. B",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203828606",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Memory kernel non-additivity in the generalized quantum master equation for a system coupled to multiple heat baths",
+      "org": "University of Michigan",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1063/5.0346129",
+      "countryEvidence": "institution country codes [US, US, US, US] → US",
+      "citations": 0,
+      "abstract": "The generalized quantum master equation provides an exact equation of motion for the reduced density operator of a quantum system coupled to one or more baths, with all bath-induced effects encoded in a memory kernel superoperator. In this paper, we investigate whether the memory kernel for a system coupled simultaneously to multiple independent baths can be written as a sum of memory kernels associated with the corresponding single-bath problems. We show that such additivity holds in the weak system–bath coupling limit, where the second-order memory kernel separates into independent bath contributions. Beyond this limit, however, the baths become dynamically correlated through their mutual coupling to the system, and the exact multi-bath memory kernel is no longer equal to the sum of exact single-bath memory kernels. We demonstrate this non-additivity for a two-level system linearly coupled to hot and cold harmonic baths, using the hierarchical equations of motion method to construct the memory kernels. The results show that non-additivity increases with system–bath coupling strength and is process-dependent: coherence damping remains comparatively well described by an additive kernel, whereas population–coherence and coherence–coherence transfer exhibit pronounced non-additive behavior. These findings clarify the limitations of additive multi-bath descriptions and highlight the ambiguity of decomposing heat flow into independent bath-resolved contributions beyond weak system–bath coupling.",
+      "authors": [
+        "Callie Wilson",
+        "Xiaohan Dan",
+        "Víctor S. Batista",
+        "Eitan Geva"
+      ],
+      "venue": "The Journal of Chemical Physics",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "university of michigan",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203827944",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Dual-Bloch-mode unidirectional reflection lasing via vacuum induced gain in an asymmetric defective atomic lattice",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1364/oe.608834",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Xinfu Zheng",
+        "Chen Peng",
+        "Dong Yan",
+        "Jin-Hui Wu",
+        "Hong Yang"
+      ],
+      "venue": "Optics Express",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203829928",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Super Landau model and Howe duality: From supermonopole harmonics to quantum matrix geometry",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/lvq2-k6x8",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical review. D/Physical review. D.",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203833620",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Improving student understanding via interactive learning tutorial on quantum key distribution using entanglement",
+      "org": "University of Pittsburgh",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1140/epjqt/s40507-026-00552-5",
+      "countryEvidence": "institution country codes [US, US] → US",
+      "citations": 0,
+      "abstract": "We describe the development, validation and implementation of a Quantum Interactive Learning Tutorial (QuILT) on quantum key distribution (QKD) using entanglement, a context which involves a practical application of quantum concepts relevant for the second quantum revolution. The QuILT helps students learn quantum concepts relevant for quantum cryptography using a simple two-particle system. The protocol uses two entangled particles and two Stern-Gerlach Apparati to generate a random shared key over a public channel for encrypting and decrypting information. It actively engages students in the learning process and helps them build links between the concepts learned in class and their real world applications. The QuILT was implemented as a homework in a traditional quantum mechanics course and a quantum computing and quantum information course. The evaluation suggests that the QuILT is helpful in improving students’ understanding of the concepts related to QKD in both courses. Also, the evaluation of the QuILT in both types of courses with or without lecture-based instruction in relevant QKD concepts suggests that the QuILT can be given as a homework after lecture-based instruction on entanglement without in-class discussion on QKD. Therefore, entanglement can be covered without taking up much in-class time, while also providing students with an understanding of the QKD method and how it protects from eavesdroppers.",
+      "authors": [
+        "Liam Doyle",
+        "Chandralekha Singh"
+      ],
+      "venue": "EPJ Quantum Technology",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "university of pittsburgh",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203828401",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Teleporting More Quantum States at Once",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/physics.19.s110",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Sophia Chen"
+      ],
+      "venue": "Physics",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203835791",
+      "stage": "innovation",
+      "country": "FR",
+      "provenance": "live",
+      "source": "paper",
+      "title": "A general framework for differentially private quantum measurements",
+      "org": "Sorbonne Université",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1145/3842143",
+      "countryEvidence": "institution country codes [FR, GB, FR, GB] → FR",
+      "citations": 0,
+      "abstract": "Differential privacy (DP) is a widely used framework for protecting sensitive information in data analysis and machine learning. With growing interest in quantum computing, substantial effort has gone into extending DP to quantum algorithms. However, many existing formulations emphasize global state distinguishability or privacy for channels that output quantum states, which is often misaligned with settings where the final output consists of classical measurement data, as in both fault-tolerant and near-term devices. In this work, we develop an observable-based approach to quantum DP tailored to expectation-value estimation from quantum measurements. We introduce a neighboring relation defined directly in terms of observable expectation values and give general private mechanisms for broad measurement protocols, including classical shadows and eigenbasis measurements. We also show that realistic device noise (e.g., local depolarizing and generalized amplitude damping) can amplify privacy guarantees for k -local observables. Complementing these positive results for private measurements, we establish limitations for differentially private mechanisms that release quantum states. Finally, we show that our neighboring relation is compatible with quantum encodings of classical data, enabling privacy guarantees for the underlying classical inputs.",
+      "authors": [
+        "Armando Angrisani",
+        "Mina Doosti",
+        "Elham Kashefi"
+      ],
+      "venue": "ACM Transactions on Quantum Computing",
+      "collaboratingCountries": [
+        "FR",
+        "GB"
+      ],
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "sorbonne université",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203825540",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Hall viscosity of the Laughlin state on noisy quantum computers",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/2g6v-fqbr",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical review. B./Physical review. B",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203821825",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Correlations and quantum circuits with dynamical causal order",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/bt67-n8kx",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "PRX Quantum",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203824168",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Optimizing continuous-time quantum error correction for Markovian and non-Markovian noise models",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/5zyg-lhjt",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203820682",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum Computing: A Contemporary Review of Qubit Platforms, Algorithms, Error Correction, and Emerging Applications",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.5120/ijca2b2d25a3c082",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Thamer A. Alamoudi"
+      ],
+      "venue": "International Journal of Computer Applications",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203832156",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "A Staged Ablation Study of Quantum Convolution and Variational Quantum Classification Placement in Hybrid CNNs for Brain Tumor MRI Classification",
+      "org": "Vince Lombardi Cancer Clinic",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.55041/isjem08544",
+      "countryEvidence": "institution country codes [US, US] → US",
+      "citations": 0,
+      "abstract": "Abstract Quantum machine learning (QML) has recently been explored as a means of augmenting classical convolutional neural networks (CNNs) for medical image analysis, yet most existing hybrid architectures insert a single quantum component either at the input or the output of an otherwise classical pipeline, and few works empirically isolate which placement is actually responsible for performance change. This paper proposes QCQ-CNN, a Quantum-Classical-Quantum hybrid framework for brain tumor magnetic resonance imaging (MRI) classification in which a quantum convolutional (“quanvolutional”) layer performs early-stage feature extraction, a classical CNN backbone performs hierarchical representation learning, and a variational quantum circuit (VQC) performs final classification, so that quantum processing brackets the classical backbone at both ends. Using a real, held-out four-class brain tumor MRI dataset (glioma, meningioma, pituitary tumor, and no tumor), we implement and train four architectural variants under matched conditions — (A) a fully classical CNN baseline, (B) a quantum-convolution-plus-classical-CNN variant, (C) a classical-CNN-plus-quantum-head variant, and (D) the full proposed QCQ-CNN — and report actual experimental accuracy, precision, recall, and F1-score on a common test set, together with training curves, confusion matrices, and qualitative visualizations of the learned quantum feature maps. Our small-scale experiments show that quantum convolutional preprocessing alone improves macro-F1 over the classical baseline (0.204 to 0.382), while replacing the classical classification head with a variational quantum circuit degrades performance in both the quantum-head-only and the full QCQ-CNN configurations. We discuss this finding in the context of variational quantum circuit trainability at low qubit counts and limited data, and argue that our staged ablation methodology — rather than a single best-accuracy claim — constitutes the paper's principal novelty: a reusable protocol for empirically localizing where, in a CNN pipeline, quantum layers help versus hurt. We conclude with concrete design recommendations and directions for scaling QCQ-style frameworks. Keywords: Quantum Machine Learning, Hybrid Quantum-Classical Neural Networks, Quanvolutional Neural Network, Variational Quantum Circuit, Convolutional Neural Network, Brain Tumor Classification, Medical Image Processing",
+      "authors": [
+        "C. Ramachandran",
+        "Dr. V. Kathiresan"
+      ],
+      "venue": "International Scientific Journal of Engineering and Management",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "vince lombardi cancer clinic",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203835962",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Tensor-network-based unraveling of non-Markovian dynamics in large spin chains via the influence Martingale approach",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/8y3g-jdjx",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203823711",
+      "stage": "innovation",
+      "country": "UA",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Some Remarks on the Gupta–Bleuler and Dirac–Fock Quantization Schemes",
+      "org": "Lesya Ukrainka Volyn National University",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.3390/quantum8030080",
+      "countryEvidence": "institution country codes [UA, PL, IT] → UA",
+      "citations": 0,
+      "abstract": "The classical Gupta–Bleuler quantization scheme in quantum electromagnetic field theory, based on the so-called “weakened” Lorenz subsidiary condition and indefinite metric on the reduced Fock space, is revisited within the context of the canonical Dirac–Fock quantization approach. The latter, as applied to the Fermi–Fock–Podolsky Lagrangian, allows for both satisfaction of the strong Lorenz subsidiary condition on the Fock space and its averaged invariance in time to be shown, as well as the positive energy density definiteness of quantum photon states. The time non-invariance of the averaged \"weakened\" Lorenz subsidiary condition within the Gupta and Bleuler approach is also demonstrated, resulting in energy density positive non-definiteness, which is later replaced by the so-called BRST cohomology condition, imposed on a suitable construction of the Fock space. We also sketch the corresponding variational approach of N.N. Bogolubov (Sr.) to constructing a deformed strong Lorenz-type operator condition, both within the perturbative Scwinger’s S-matrix approach and the Fock multi-temporal paradigm. A short supplement is devoted to analysis of the classical Lorenz-type subsidiary condition and the related temporal invariance of the electric potential energy, providing a derivation of the complete classical system of Maxwell’s equations.",
+      "authors": [
+        "Anatolij K. Prykarpatski",
+        "Nikolai N. Bogolubov"
+      ],
+      "venue": "Quantum Reports",
+      "collaboratingCountries": [
+        "IT",
+        "PL",
+        "UA"
+      ],
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "lesya ukrainka volyn national university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203833097",
+      "stage": "innovation",
+      "country": "MY",
+      "provenance": "live",
+      "source": "paper",
+      "title": "QFRA: a quantum forensic readiness architecture for distributed hybrid classical-quantum networks",
+      "org": "Universiti Putra Malaysia",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1007/s44443-026-01090-x",
+      "countryEvidence": "institution country codes [MY, IN, MY, MY, MY, IT, TR] → MY",
+      "citations": 0,
+      "abstract": "Hybrid classical–quantum networks introduce new forensic challenges due to quantum state collapse, decoherence and the no cloning theorem. These features invalidate traditional evidence preservation assumptions. Existing digital forensic frameworks lack proactive mechanisms which are capable of ensuring integrity and readiness in such hybrid environments. This paper proposes the Quantum Forensic Readiness Architecture (QFRA) which is mainly a distributed framework. The framework consists of four major components. They are (i) Quantum Evidence Objects (QEOs) for structured quantum metadata representation, (ii) Forensic Entanglement Mapping (FEM) for hybrid event correlation, (iii) a Decoherence Aware Replication Protocol (QEPP) for adaptive evidence preservation and (iv) a post quantum cryptography based distributed ledger for tamper evident storage. QFRA is implemented in a NetSquid based hybrid simulation with a Practical Byzantine Fault Tolerance (PBFT) style quantum-safe ledger. It is evaluated across 10-100 nodes against centralized, blockchain-only, and static replication baselines. Results show that QFRA achieves an Evidence Integrity Ratio above 0.97 and a Forensic Readiness Level above 0.91 at 100 nodes while maintaining synchronization latency below 50 ms. Statistical validation confirms significant integrity and readiness improvements under scaling conditions. These improvements exhibit bounded sensitivity to decoherence and network delay variations. These results demonstrate that proactive, quantum aware forensic readiness can be achieved in hybrid networks without excessive coordination overhead.",
+      "authors": [
+        "Tinku Adhikari",
+        "Mahamuda Sultana",
+        "Suman Bhattacharya",
+        "Jadav Chandra Das",
+        "Mohd Hafiz Zakaria",
+        "Norazak Senu"
+      ],
+      "venue": "Journal of King Saud University - Computer and Information Sciences",
+      "collaboratingCountries": [
+        "IN",
+        "IT",
+        "MY",
+        "TR"
+      ],
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "universiti putra malaysia",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203835324",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "High-performance source of indistinguishable polarization-entangled photons with a local oscillator reference for quantum networking",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1364/opticaq.601916",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Michael Grayson",
+        "Shawn Meyer",
+        "Daniel Sörensen",
+        "Abigail Gookin",
+        "Markus Allgaier",
+        "Nicholas Nardelli"
+      ],
+      "venue": "Optica Quantum",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203819090",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Lie-algebra-assisted quantum simulation and quantum optimal control via high-order Magnus expansions",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/jmrn-t4jw",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203828441",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Symmetry speeds up quantum measurements",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/q9lf-cp11",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review Letters",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203822498",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Two-dimensional quantum-lattice-gas algorithm for anisotropic Burger-like equations",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/34zq-6m8d",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review A",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203820226",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Universal weakly fault-tolerant quantum computation via code switching in the [[8,3,2]] code",
+      "org": "",
+      "date": "2026-08-20",
+      "url": "https://doi.org/10.1103/4gwn-6cnx",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review Research",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203796281",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Spatiotemporal Mode Overlap in Seeded Short-Pulse Axion Regeneration",
+      "org": "Beijing University of Technology",
+      "date": "2026-08-19",
+      "url": "https://doi.org/10.1088/1572-9494/ae9b86",
+      "countryEvidence": "institution country codes [CN, SA] → CN",
+      "citations": 0,
+      "abstract": "Abstract We develop a finite-pulse description of seeded photon regeneration in short-pulse light-shining-through-wall searches for axions and axion-like particles. Starting from the axion-modified Maxwell equations in the weak-signal regime, we derive the regenerated electromagnetic field as a paraxial wave packet and show that the observable seeded signal is determined by projection onto a seed-defined detection mode. In the single-mode limit, this reduces to the familiar scalar interference expression, while for finite pulses, the coherent contribution is reduced by incomplete temporal, spectral, transverse, and phase overlap. For separable Gaussian modes, we obtain analytic overlap factors for timing mismatch, carrier detuning, quadratic spectral-phase mismatch, beam-size mismatch, transverse displacement, and phase jitter. We then compare direct detection, balanced homodyne, and heterodyne readout using the same mode-projected signal and simple noise models. The analysis shows that seeded short-pulse regeneration is advantageous only within a restricted operating regime requiring pulse-scale timing control, sub-radian phase stability, and seed power below the technical-noise turnover for direct detection. The framework provides a practical basis for evaluating mode matching and readout choices in short-pulse regeneration experiments.",
+      "authors": [
+        "Bilal Ahmad",
+        "A. K. Althukair"
+      ],
+      "venue": "Communications in Theoretical Physics",
+      "collaboratingCountries": [
+        "CN",
+        "SA"
+      ],
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "beijing university of technology",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203747571",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum Random Walk Path Planning with Coherent Feasibility Marking",
+      "org": "Nanjing University of Information Science and Technology",
+      "date": "2026-08-19",
+      "url": "https://doi.org/10.1088/1402-4896/ae9bf2",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN] → CN",
+      "citations": 0,
+      "abstract": "Abstract Repeated feasibility checks, rather than candidate generation alone, often dominate motion-planning cost in cluttered environments. We propose a quantum pathplanning framework based on discrete-time quantum random walks (QRWs), in which candidate move sequences are generated in coherent superposition and filtered through a reversible in-circuit feasibility-marking routine.Our main contribution is a compute-mark-uncompute operator, SX, that performs coherent collision detection and terminal-condition evaluation on QRW-encoded candidates and selectively phase-marks the feasible subspace while preserving unitarity. On top of this mechanism, we develop two planners: the Quantum Full-Path Motion Planner (QFMP), which performs full-horizon extraction, and the Goal-guided Quantum Motion Planner (QGMP), which reduces circuit scale through staged planning over shorter segments. We also provide a density-dependent interpretation linking obstacle density to the feasible-candidate fraction and to the extraction effort required by the planners.Experiments on synthetic 8 × 8 grid maps and the Longhu Tianjie indoor map dataset show that both planners achieve competitive planning time and high success rates relative to representative classical and quantum-assisted baselines. The results support the view that coherent feasibility marking is a key ingredient for scalable quantum motion planning in obstacle-dense settings. Table 1: Core capability comparison of representative planners.",
+      "authors": [
+        "Wenbin Yu",
+        "Jiaqi Li",
+        "Youle Wang",
+        "Yifan Zhang",
+        "Ran Li",
+        "Chenqi Yin"
+      ],
+      "venue": "Physica Scripta",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "nanjing university of information science and technology",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203795181",
+      "stage": "innovation",
+      "country": "BR",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Grover's Algorithm Using IBM's Fake Providers",
+      "org": "Serviço Nacional de Aprendizagem Industrial",
+      "date": "2026-08-18",
+      "url": "https://doi.org/10.34178/jbth.v9i7.682",
+      "countryEvidence": "institution country codes [BR, BR, BR] → BR",
+      "citations": 0,
+      "abstract": "In this work we will show Grover's algorithm using Fake Providers which are images of real quantum computers to give us an idea of their behavior in the implementation in Qiskit and we will show the fidelities with respect to the quantum simulator which gives us the result closest to the analytical one.",
+      "authors": [
+        "Frank Acasiete",
+        "Anderson Buarque"
+      ],
+      "venue": "Journal of Bioengineering, Technologies and Health",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "serviço nacional de aprendizagem industrial",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203834144",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "From Conventional to Unconventional Geometric Gates: What Can We Learn?",
+      "org": "Shandong University",
+      "date": "2026-08-01",
+      "url": "https://doi.org/10.1002/qute.70395",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN] → CN",
+      "citations": 0,
+      "abstract": "ABSTRACT Geometric quantum gates play crucial role in quantum computation, and the diffident types of geometric gates are constructed, including conventional and unconventional geometric gates. The physical natures of the conventional geometric gates with zero dynamical phase are investigated widely. In this paper, we analyze the physical natures of the unconventional geometric gates, and present the unconventional geometric gate is related with the Levi–Civita connection. We establish its physical constraint, and demonstrate the results by employing two‐level system.",
+      "authors": [
+        "Wenli Zhang",
+        "Daolin Yang",
+        "Yonggang Peng",
+        "Yujun Zheng"
+      ],
+      "venue": "Advanced Quantum Technologies",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "shandong university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203828177",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum‐Classical Physics‐Informed Neural Networks for Permeability Inversion in Single‐Phase Reservoir Flow",
+      "org": "Yangtze University",
+      "date": "2026-08-01",
+      "url": "https://doi.org/10.1002/qute.70409",
+      "countryEvidence": "institution country codes [CN, PK, PL, CN, SA] → CN",
+      "citations": 0,
+      "abstract": "ABSTRACT This work develops a Quantum‐Classical Physics‐Informed Neural Network (QCPINN) integrating quantum computing and physical constraints for single‐phase reservoir permeability inversion. The hybrid framework contains classical pre/post‐processing modules and an Alternate‐topology quantum core, which encodes spatial features through angle embedding and optimizes all hybrid parameters using a composite loss combining measurement, PDE residual and boundary condition losses. Two steady seepage examples compare QCPINN and classical PINN with nearly identical trainable parameters. For linear permeability, QCPINN achieves mean relative errors of 0.50% for permeability and 0.04% for pressure, converging faster with more uniform errors; 4 qubits and one layer provide optimal circuit performance. For strongly nonlinear exponential permeability, the permeability mean relative error rises to 5.02%, while pressure error stays below 0.42%. Although isolated low‐permeability grids show a peak relative error of 48.13%, 78.68% of grids have errors under 5%. QCPINN takes advantage of quantum high‐dimensional approximation and parallelism to outperform PINN in convergence and precision, delivering balanced accuracy and efficiency for heterogeneous reservoir permeability inversion.",
+      "authors": [
+        "Xiang Rao",
+        "Xi Ouyang",
+        "Yina Liu"
+      ],
+      "venue": "Advanced Quantum Technologies",
+      "collaboratingCountries": [
+        "CN",
+        "PK",
+        "PL",
+        "SA"
+      ],
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "yangtze university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203824749",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Multidimensional chiroptical physical unclonable functions based on chiral photonic crystal film",
+      "org": "",
+      "date": "2026-08-01",
+      "url": "https://doi.org/10.1016/j.matt.2026.102974",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Jiang Huang",
+        "Xuefeng Yang",
+        "Xue Jin",
+        "Dong Liu",
+        "Pengfei Duan"
+      ],
+      "venue": "Matter",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7117733980",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Entanglement protection induced by mixed noise",
+      "org": "Fuzhou University",
+      "date": "2026-08-01",
+      "url": "https://doi.org/10.1088/1612-202x/ae8508",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN, CN] → CN",
+      "citations": 0,
+      "abstract": "Abstract Contrary to the conventional view that noise is detrimental, we show that mixed noise can protect entanglement in a two-atom-cavity system. Specifically, the leakage of the cavity and the stochastic atom-cavity couplings are modeled as two types of noises. From the analytical derivation of the dynamical equations, the mechanism of the entanglement protection is revealed as the high-frequency (HF) noise in the atom-cavity couplings could suppress the decoherence caused by the cavity leakage, thus protecting the entanglement. We investigate the entanglement protection induced by mixed noise constructed from diverse noise types, including the Ornstein–Uhlenbeck noise, flicker noise, and telegraph noise. Numerical simulations demonstrate that entanglement protection depends critically on the proportion of HF components in the power spectral density of the mixed noise. Our work establishes that enhanced HF components are essential for effective noise-assisted entanglement protection, offering key insights for noise engineering in practical open quantum systems.",
+      "authors": [
+        "Tengtao Guo",
+        "Yuxuan Zhou",
+        "Jiahui Feng",
+        "Xinyu Zhao",
+        "Yan Xia"
+      ],
+      "venue": "Laser Physics Letters",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "fuzhou university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203834345",
+      "stage": "innovation",
+      "country": "IN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Dimension-adaptive relay-assisted high-dimensional QKD under channel asymmetry",
+      "org": "Vellore Institute of Technology University",
+      "date": "2026-08-01",
+      "url": "https://doi.org/10.1016/j.ijleo.2026.172869",
+      "countryEvidence": "institution country codes [IN, IN, IN] → IN",
+      "citations": 0,
+      "authors": [
+        "R.K. Mugelan",
+        "S. Amith",
+        "N. G Swetha"
+      ],
+      "venue": "Optik",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "orgId": "vellore institute of technology university",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7203827868",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "A survey on Quantum Key Distribution: Foundations and future directions",
+      "org": "",
+      "date": "2026-08-01",
+      "url": "https://doi.org/10.1016/j.comcom.2026.108652",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Ximing Zhang",
+        "Pushpendu Kar",
+        "Chiew Foong Kwong",
+        "David Chieng",
+        "Alejandro Guerra-Manzanares"
+      ],
+      "venue": "Computer Communications",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "rss-https-quantumzeitgeist-com-quantum-shadows-cloud-cover-noise-reduction",
+      "stage": "scaling",
+      "country": "FI",
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Researchers Compute Cloud Cover Models Using Quantum Shadows and Series Approximations",
+      "org": "",
+      "date": "2026-08-21",
+      "url": "https://quantumzeitgeist.com/quantum-shadows-cloud-cover-noise-reduction/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "matched \"IQM\" (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Scientists are building bridges between nascent quantum computing power and practical climate modelling tasks; however, fully realising these benefits requires overcoming significant hurdles integrating limited quantum resources into existing classical infrastructure. The team's development of “shadow” models offers a potential solution by approximating complex calculations originally performed using quantum machine learning programs with purely classical methods. Despite demonstrating error mitigation effects through this technique utilising superconducting qubits, researchers acknowledge difficulty definitively separating those improvements from calibration errors within their experimental setup. Still, acknowledging difficulties definitively isolating improvements from calibration issues within their quantum system, Euro-Q-Exa based on IQM Radiance superconducting qubits, remains crucial work. The team successfully demonstrated classical “shadow” models approximating complex calculations; these offer a pathway towards integrating limited quantum resources with existing high-performance computing infrastructure. Reducing reliance solely on error correction allows for practical application even before fully fault-tolerant machines arrive, specifically benefiting climate modelling tasks requiring substantial computational power. Researchers from Euro-Q-Exa have successfully demonstrated classical models approximating complex quantum calculations; these “shadow” methods reduce computational demands without full error correction. This approach could enable practical climate modelling utilising limited quantum resources within existing high-performance computing systems, allowing development to begin now.",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-tps-quantumzeitgeist-com-quantum-networks-prime-states-perfect-cloning",
+      "stage": "adoption",
+      "country": "CN",
+      "provenance": "auto",
+      "source": "deployment",
+      "title": "Researchers Perfectly Distribute Quantum States across Networks with Minimal Entanglement",
+      "org": "",
+      "date": "2026-08-21",
+      "url": "https://quantumzeitgeist.com/quantum-networks-prime-states-perfect-cloning/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "matched \"China\" (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "Perfectly replicating quantum information across a network unlocks possibilities for distributed computing and ultra-secure communication; however, the researchers acknowledge their protocol’s reliance on specific network characteristics presents practical hurdles. While they demonstrate *sufficient* conditions, a minimum cut within the network graph exceeding a certain threshold, for flawless multicast, it remains unclear whether lower connectivity might still permit successful cloning under less ideal circumstances. This focus on sufficiency leaves open an important question regarding potential optimisation of resource allocation in real-world networks where perfect topologies are rarely achievable. Still, acknowledging that achieving these ideal network conditions may prove difficult in practice does not diminish this work’s significance; it establishes a clear benchmark for performance. The researchers have defined *sufficient* criteria, relating to something called a ‘minimum cut’, which essentially measures how easily information flow can be disrupted within a network, for perfect replication of quantum data across multiple destinations simultaneously. Researchers from the University of Science and Technology of China demonstrated a protocol for replicating quantum information across networks; this relies on network connectivity measured by something called ‘minimum cut’. Future advances could begin to optimise resource allocation within these complex systems, paving the way for genuinely secure communication here.",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "rss-mzeitgeist-com-entanglement-swap-fidelity-zero-added-loss-multiplexing",
+      "stage": "scaling",
+      "country": null,
+      "provenance": "auto",
+      "source": "milestone",
+      "title": "Researchers Achieve 94% Fidelity in Entanglement Swapping",
+      "org": "",
+      "date": "2026-08-21",
+      "url": "https://quantumzeitgeist.com/entanglement-swap-fidelity-zero-added-loss-multiplexing/",
+      "publisher": "Quantum Zeitgeist",
+      "countryEvidence": "no location match (auto-classified from Quantum Zeitgeist RSS, unverified)",
+      "abstract": "The researchers’ success in boosting entanglement swapping rates offers a clear path towards practical quantum networks; however, the current system relies on meticulously controlled laboratory conditions and readily available components which may not translate seamlessly to real-world deployments. While utilising off-the-shelf filters simplifies construction, scaling beyond sixteen frequency modes presents an unresolved challenge, maintaining high fidelity as complexity increases is far from guaranteed. Still, acknowledging the need for more robust and easily deployable systems is crucial; current limitations regarding laboratory control and scaling do not diminish this achievement’s significance as a vital stepping stone towards practical quantum communication networks. The team successfully demonstrated high-fidelity entanglement swapping across sixteen different frequencies using readily available components, representing substantial progress in increasing data transmission rates. Researchers at the University of Bristol have achieved a significant increase in entanglement swapping rates; this crucial process links quantum bits over long distances for secure communication and distributed computing.",
+      "ingestedAt": "2026-08-22T03:41:52.217Z",
+      "relevanceScore": 0.75
     }
   ],
   "trend": [
@@ -97538,27 +98254,28 @@
     {
       "date": "2026-08-22",
       "counts": {
-        "US": 47,
-        "IR": 8,
-        "FR": 7,
+        "US": 44,
+        "IR": 7,
+        "FR": 8,
         "ES": 10,
-        "BR": 9,
+        "UA": 2,
+        "MY": 5,
+        "BR": 10,
         "IL": 3,
         "KR": 8,
-        "IT": 18,
+        "IT": 16,
         "IN": 44,
-        "DE": 20,
+        "DE": 17,
         "PK": 2,
         "CN": 85,
-        "MY": 5,
         "AU": 3,
         "TR": 6,
-        "SG": 5,
-        "JP": 11,
-        "DK": 5,
+        "SG": 4,
+        "JP": 10,
+        "DK": 4,
         "NL": 1,
         "DZ": 1,
-        "GB": 10,
+        "GB": 9,
         "SE": 3,
         "MX": 2,
         "PL": 11,
@@ -97567,19 +98284,18 @@
         "IE": 2,
         "RU": 6,
         "SA": 3,
-        "CH": 4,
+        "CH": 3,
         "GR": 5,
         "MA": 6,
         "CZ": 2,
         "CL": 2,
         "CY": 1,
-        "RO": 2,
         "AR": 1,
+        "RO": 2,
         "CA": 8,
         "ID": 2,
         "LB": 1,
         "FI": 3,
-        "UA": 1,
         "TW": 4,
         "HU": 2,
         "TG": 1,
@@ -97597,18 +98313,16 @@
         "LV": 1,
         "IQ": 2,
         "GA": 1,
-        "MM": 1,
-        "ET": 1,
-        "SI": 1
+        "MM": 1
       },
       "stageCounts": {
-        "innovation": 929,
-        "scaling": 143,
-        "adoption": 116,
+        "innovation": 953,
+        "scaling": 145,
+        "adoption": 117,
         "investment": 278
       },
       "fundingUsd": 126604927,
-      "totalEntries": 4658
+      "totalEntries": 4691
     }
   ],
   "notes": [
@@ -97644,7 +98358,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "nightly (GitHub Actions, ~07:00 UTC) + live browser refresh every ~3 min while a tab is open",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does"
@@ -97672,70 +98386,70 @@
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed"
     },
     {
       "sourceName": "SAM.gov Opportunities (federal solicitations)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example"
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry"
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-08-21T21:21:37.775Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "nightly + live browser refresh",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only"
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "nightly (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space"
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "nightly (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit"
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed"
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history"
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match"
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-08-22T00:49:29.357Z",
+      "lastSuccessfulPull": "2026-08-22T03:41:52.217Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer"
@@ -97746,182 +98460,182 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 16825283793.68,
-      "asOf": "2026-08-22T00:42:40.249Z",
+      "asOf": "2026-08-22T03:35:14.755Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 5361994920.555,
-      "asOf": "2026-08-22T00:42:55.486Z",
+      "asOf": "2026-08-22T03:35:29.883Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc. Common Stock",
       "marketCapUsd": 7001870740.400001,
-      "asOf": "2026-08-22T00:43:10.721Z",
+      "asOf": "2026-08-22T03:35:44.993Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
       "marketCapUsd": 1842463448.5400002,
-      "asOf": "2026-08-22T00:43:25.930Z",
+      "asOf": "2026-08-22T03:36:00.084Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
       "marketCapUsd": 364406486.34000003,
-      "asOf": "2026-08-22T00:43:41.155Z",
+      "asOf": "2026-08-22T03:36:15.256Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
       "marketCapUsd": 556934997.5,
-      "asOf": "2026-08-22T00:43:56.369Z",
+      "asOf": "2026-08-22T03:36:30.388Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 220167385599.1,
-      "asOf": "2026-08-22T00:44:11.586Z",
+      "asOf": "2026-08-22T03:36:45.581Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 4166371898876.77,
-      "asOf": "2026-08-22T00:44:26.806Z",
+      "asOf": "2026-08-22T03:37:00.707Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 3572801212994.65,
-      "asOf": "2026-08-22T00:44:42.033Z",
+      "asOf": "2026-08-22T03:37:15.913Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2805628023212.92,
-      "asOf": "2026-08-22T00:44:57.250Z",
+      "asOf": "2026-08-22T03:37:31.000Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 69194342983.2,
-      "asOf": "2026-08-22T00:45:12.467Z",
+      "asOf": "2026-08-22T03:37:46.095Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
       "marketCapUsd": 487008877788.06,
-      "asOf": "2026-08-22T00:45:27.680Z",
+      "asOf": "2026-08-22T03:38:01.235Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5252323850000,
-      "asOf": "2026-08-22T00:45:42.906Z",
+      "asOf": "2026-08-22T03:38:16.352Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 131892299524.44,
-      "asOf": "2026-08-22T00:45:58.127Z",
+      "asOf": "2026-08-22T03:38:31.444Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 80103657840.36,
-      "asOf": "2026-08-22T00:46:13.357Z",
+      "asOf": "2026-08-22T03:38:46.540Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 286115576389.76,
-      "asOf": "2026-08-22T00:46:28.579Z",
+      "asOf": "2026-08-22T03:39:01.725Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 104454016273.65,
-      "asOf": "2026-08-22T00:46:43.810Z",
+      "asOf": "2026-08-22T03:39:16.840Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 50359880751.04,
-      "asOf": "2026-08-22T00:46:59.030Z",
+      "asOf": "2026-08-22T03:39:31.926Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 17740833586.33,
-      "asOf": "2026-08-22T00:47:14.260Z",
+      "asOf": "2026-08-22T03:39:47.022Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
       "marketCapUsd": 9184960538.28,
-      "asOf": "2026-08-22T00:47:29.490Z",
+      "asOf": "2026-08-22T03:40:02.207Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 393970608760.3,
-      "asOf": "2026-08-22T00:47:44.730Z",
+      "asOf": "2026-08-22T03:40:17.301Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 672294071000,
-      "asOf": "2026-08-22T00:47:59.950Z",
+      "asOf": "2026-08-22T03:40:32.487Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 70037124225.69,
-      "asOf": "2026-08-22T00:48:15.171Z",
+      "asOf": "2026-08-22T03:40:47.576Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
       "marketCapUsd": 431941824937.35004,
-      "asOf": "2026-08-22T00:48:30.400Z",
+      "asOf": "2026-08-22T03:41:02.669Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
       "marketCapUsd": 56662721835.65,
-      "asOf": "2026-08-22T00:48:45.646Z",
+      "asOf": "2026-08-22T03:41:17.822Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
       "marketCapUsd": 14706754183.68,
-      "asOf": "2026-08-22T00:49:00.891Z",
+      "asOf": "2026-08-22T03:41:32.947Z",
       "url": "https://www.sktelecom.com"
     }
   ],
