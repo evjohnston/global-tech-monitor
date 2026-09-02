@@ -2,9 +2,10 @@
 
 A pipeline view of a technology from research through scaling to adoption.
 Multi-vertical: Vertical 01 is **quantum computing**, Vertical 02 is
-**artificial intelligence**, switchable via the tabs in the topbar. Adding a
-vertical is real research work (verified data sources, not a flag) — see
-CLAUDE.md's "Multi-vertical architecture" section before adding one.
+**artificial intelligence**, Vertical 03 is **biotechnology**, switchable via
+the tabs in the topbar. Adding a vertical is real research work (verified
+data sources, not a flag) — see CLAUDE.md's "Multi-vertical architecture"
+section before adding one.
 
 Four stages per vertical, plus data-visualization up top:
 
@@ -140,21 +141,30 @@ root (copy `.env.example`) so the app talks to it.
 
 ## Extend it
 
-**Edit analyst notes** — `data/notes.ts`. One `StageNote` per stage; only the
-most recent per stage is shown. This is the interpretation layer, write it in
-your own voice.
+**Edit analyst notes** — `data/<vertical>/notes.ts` (`quantum`, `ai`,
+`biotech`). One `StageNote` per stage; only the most recent per stage is
+shown. This is the interpretation layer, write it in your own voice.
 
-**Add scaling / adoption entries** — edit `data/seed.ts`. Each entry is one
-typed object; copy a block, change the fields, give it a unique `id`.
+**Add scaling / adoption entries** — edit `data/<vertical>/seed.ts`. Each
+entry is one typed object; copy a block, change the fields, give it a unique
+`id`. Verify the claim against its source URL first — these render as
+curated fact, not as a re-fetchable feed.
 
 **Add a new source** — put the fetch/transform logic in `src/lib/sources/` as
 a runtime-agnostic function (global `fetch`/`btoa` only, no Node- or
 browser-only APIs) so both `scripts/fetch-data.ts` and, if it needs a secret
 or lacks CORS, `worker/src/index.ts` can import the same implementation.
 
-**Add a new technology vertical** — the type system (`src/lib/types.ts`) is
-technology-agnostic. Parameterize `TECH` and the arXiv category in the fetch
-script, duplicate the seed file, and you have Vertical 02.
+**Add a new technology vertical** — the type system (`src/lib/types.ts`) and
+every `src/lib/sources/*` module are technology-agnostic, so the code side is
+one `VerticalConfig` in `src/lib/verticals.ts` plus a
+`data/<dir>/{seed,notes}.ts` pair registered in `scripts/fetch-data.ts`. The
+code is the small part. Each vertical needs a hand-checked OpenAlex topic
+list, a verified EPO CPC query, funding and procurement keywords tested
+against real returned records, curl-verified trade-press feeds, a tuned
+classifier, and a seed floor of individually-verified milestones — read
+CLAUDE.md's "Multi-vertical architecture" and "Biotechnology vertical"
+sections before starting.
 
 ## Files
 
@@ -162,8 +172,10 @@ script, duplicate the seed file, and you have Vertical 02.
 scripts/fetch-data.ts       nightly data build — OpenAlex + arXiv fallback, trend accumulation
 worker/                     Cloudflare Worker — live proxy for EPO + NSF + news RSS (separate deploy, own package.json)
 src/lib/sources/            shared fetch/transform logic — OpenAlex, EPO, NSF, RSS (used by both the script and the Worker)
-data/seed.ts                curated scaling/adoption entries — edit by hand, real country per entry
-data/notes.ts               analyst "so what" notes — edit by hand
+data/<vertical>/seed.ts     curated scaling/adoption entries — edit by hand, real country per entry
+data/<vertical>/notes.ts    analyst "so what" notes — edit by hand
+data/capiq/, data/pitchbook/  manually-imported VC/R&D datasets (see CLAUDE.md; never commit the raw .xlsx)
+src/lib/verticals.ts        the vertical registry — one entry per tracked technology, all per-source query config
 src/lib/types.ts            the data contract — Entry.country is the real ISO code, no Actor bucket type
 src/lib/aggregate.ts        counts, period-over-period deltas, top-N-by-country, linear projection
 src/lib/countries.ts        ISO country names + alpha-2/numeric bridging (wraps i18n-iso-countries)

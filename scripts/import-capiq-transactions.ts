@@ -53,9 +53,29 @@ const OUT_PATH = resolve(__dirname, "../data/capiq/vc-funding.ts");
 // transactions, just not venture/growth financing rounds.
 const VC_TYPE_PREFIXES = ["ROF - Venture", "ROF - Early Stage", "ROF - Mature"];
 
+// Every string this script writes into a .ts source file goes through
+// here. The original inline `.replace(/"/g, '\\"')` handled quotes and
+// nothing else, which was fine until a real export row carried a literal
+// newline inside an investor cell ("Adviser Role: \n...") and the
+// generated file came out with an unterminated string literal — a build
+// break, found 2026-09-02 while re-importing biotechnology. Backslashes
+// have to be escaped before quotes, or the escape character added for a
+// quote gets escaped in turn.
+function tsLit(v: string): string {
+  return v.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\s+/g, " ").trim();
+}
+
+// A blank or zero date cell reads as serial 0, which converts to Excel's
+// own epoch and lands in the data as a real-looking "1899-12-30" — 99 of
+// them, found 2026-09-02 in the biotech import. That's a missing date, not
+// a 19th-century financing round, so it returns null and gets stored as ""
+// like any other absent date. Guarding on `> 0` rather than a specific
+// year keeps it about the actual failure (an empty cell) rather than
+// second-guessing genuinely old real dates — this export does carry real
+// deals back to 1980.
 function excelDateToIso(serial: string): string | null {
   const n = Number(serial);
-  if (!Number.isFinite(n)) return null;
+  if (!Number.isFinite(n) || n <= 0) return null;
   const ms = (n - 25569) * 86400 * 1000; // Excel epoch (1899-12-30) -> Unix epoch
   return new Date(ms).toISOString().slice(0, 10);
 }
@@ -80,9 +100,31 @@ async function main() {
   // companies (Netskope, Lookout, Crypto.com) with zero quantum relevance.
   // Passing "Post-Quantum Cryptography" here keeps the genuinely
   // quantum-adjacent subset and drops the rest.
-  const requireTag = process.argv[4];
+  const requireTag = process.argv[4]?.startsWith("--") ? undefined : process.argv[4];
+  const flags = process.argv.slice(3).filter((a) => a.startsWith("--"));
+  // Some exports have no Topic Tags column at all but DO carry
+  // SPTR_IQ_TARGET_PRIMARY_INDUSTRY, CapIQ's own GICS industry for the
+  // target — a stronger scoping signal than a topic tag when it's
+  // available, because it's a classification of the company rather than a
+  // keyword hit on it. Added 2026-09-02 for exactly the case biotechnology
+  // hit: the tag-scoped biotech import produced a "who's getting the
+  // money" table topped by surgical-robot and cardiac-device companies
+  // (Verily Health, CMR Surgical, Impulse Dynamics, Kardium), because the
+  // only bio-ish CapIQ tag available was "Biomedical Engineering" — which
+  // is medical devices, not biotechnology. The richer raw export has no
+  // tags but does have industries, of which 3,447 of 5,024 VC rows are
+  // GICS "Biotechnology". Comma-separated, matched exactly against the
+  // industry value.
+  const requireIndustry = flags.find((f) => f.startsWith("--industry="))?.slice("--industry=".length);
+  const industries = requireIndustry ? new Set(requireIndustry.split(",").map((s) => s.trim())) : null;
+  // Replace this vertical's existing rows instead of merging into them.
+  // The default merge is right for adding a second tag search to a
+  // vertical (Machine Learning into artificial-intelligence); it's wrong
+  // when a PRIOR import was mis-scoped and needs correcting, since
+  // merging would keep the bad rows forever.
+  const replace = flags.includes("--replace");
   if (!inputPath || !vertical) {
-    console.error("usage: tsx scripts/import-capiq-transactions.ts <path-to-xlsx> <vertical-id> [required-topic-tag-substring]");
+    console.error("usage: tsx scripts/import-capiq-transactions.ts <path-to-xlsx> <vertical-id> [required-topic-tag-substring] [--industry=A,B] [--replace]");
     process.exit(1);
   }
 
@@ -104,22 +146,53 @@ async function main() {
   };
   const nameCol = col("SPTR_TARGET_NAME");
   const transactionIdCol = col("SPTR_MI_TRANSACTION_ID");
-  const dateCol = colOptional("SPTR_ANN_DATE");
-  if (!dateCol) console.error("no SPTR_ANN_DATE column in this export — deals will have no date (real limitation, not a bug)");
+  // SPTR_ANN_DATE (announcement) is preferred; SPTR_CLOSED_DATE
+  // (completion) is the fallback, since some exports carry one and not the
+  // other — the biotech raw export has only the closed date, confirmed by
+  // hand. A completion date is a real date for the same real transaction,
+  // just a later one than the announcement, which beats storing "" and
+  // losing the deal from every time-bucketed view.
+  const dateCol = colOptional("SPTR_ANN_DATE") ?? colOptional("SPTR_CLOSED_DATE");
+  if (!dateCol) console.error("no SPTR_ANN_DATE or SPTR_CLOSED_DATE column in this export — deals will have no date (real limitation, not a bug)");
+  else if (!colOptional("SPTR_ANN_DATE")) console.error("no SPTR_ANN_DATE in this export — falling back to SPTR_CLOSED_DATE (completion, not announcement)");
   const typeCol = col("SPTR_TRANSACTION_TYPE");
   const statusCol = col("SPTR_STATUS");
   const valueCol = col("SPTR_TRANSACTION_VALUE");
   const targetIdCol = colOptional("SPTR_TARGET_ID");
-  // The two investor columns are exposed under CapIQ's raw numeric field
-  // IDs in this export (no friendly header), not stable to hardcode by
-  // letter — collected from whichever columns aren't already claimed above.
+  const industryCol = colOptional("SPTR_IQ_TARGET_PRIMARY_INDUSTRY");
+  if (industries && !industryCol) throw new Error("--industry given but no SPTR_IQ_TARGET_PRIMARY_INDUSTRY column found in this export");
+  // The investor columns carry no SPTR_* code in the main header row (they
+  // sit under CapIQ's raw numeric field IDs), so they have to be found
+  // some other way. Preferred: the super-header row labels them
+  // "Buyers/Investors Name", same place the Topic Tags column is labeled.
+  //
+  // Fallback, and the reason this got rewritten (2026-09-02): the original
+  // implementation took "every column not already claimed above" as an
+  // investor column. That held for the AI and quantum exports, where the
+  // only unclaimed columns WERE the investor ones — and broke badly on the
+  // richer biotech export, which also carries
+  // SPTR_IQ_TARGET_PRIMARY_INDUSTRY, SPTR_TARGET_COUNTRY,
+  // SPTR_TARGET_BUSINESS_DESCRIPTION, SPTR_IMPLIED_EV, SPTR_CURRENCY_CODE,
+  // SPTR_ROUND_TYPE, SPTR_ADVISER_NAME/ROLE and SPTR_DEAL_SUMMARY. Those
+  // all landed in `investors`, producing real deals whose investor list
+  // read ["NA", "EUR", "Mature", "Adviser Role: ..."]. Keep the label-based
+  // path first; the heuristic is only for an export with no super-header.
   const claimed = new Set([nameCol, transactionIdCol, dateCol, typeCol, statusCol, valueCol, targetIdCol].filter((c): c is string => Boolean(c)));
-  const investorCols = Object.keys(header).filter((c) => !claimed.has(c) && header[c] !== undefined);
+  const labeledInvestorCols = Object.entries(superHeader)
+    .filter(([, v]) => v?.startsWith("Buyers/Investors Name"))
+    .map(([c]) => c)
+    .filter((c) => !claimed.has(c));
+  const investorCols = labeledInvestorCols.length > 0
+    ? labeledInvestorCols
+    : Object.keys(header).filter((c) => !claimed.has(c) && header[c] !== undefined);
+  console.log(`investor columns: ${investorCols.join(", ") || "(none)"}${labeledInvestorCols.length > 0 ? " (from super-header label)" : " (fallback: unclaimed columns)"}`);
 
   const byOrg = new Map<string, VcCompanyFunding>();
   let totalRows = 0;
   let vcRows = 0;
   let tagMatchedRows = 0;
+  let industryMatchedRows = 0;
+  const droppedIndustries = new Map<string, number>();
   for (const row of rows.slice(headerRowIdx + 3)) {
     const rawName = row[nameCol];
     if (!rawName) continue;
@@ -131,6 +204,14 @@ async function main() {
       const tags = topicTagsCol ? row[topicTagsCol] ?? "" : "";
       if (!tags.includes(requireTag)) continue;
       tagMatchedRows++;
+    }
+    if (industries && industryCol) {
+      const ind = row[industryCol] ?? "(none)";
+      if (!industries.has(ind)) {
+        droppedIndustries.set(ind, (droppedIndustries.get(ind) ?? 0) + 1);
+        continue;
+      }
+      industryMatchedRows++;
     }
 
     // Real CapIQ entity id wins when present — canonicalizeOrg() still runs
@@ -159,8 +240,15 @@ async function main() {
   console.log(
     `${totalRows} rows scanned, ${vcRows} matched a real VC/growth financing type` +
     (requireTag ? `, ${tagMatchedRows} also tagged "${requireTag}"` : "") +
+    (industries ? `, ${industryMatchedRows} also in industries [${[...industries].join(", ")}]` : "") +
     `, ${byOrg.size} distinct companies after entity consolidation`
   );
+  // Print what the industry filter threw away, so a too-narrow filter is
+  // visible rather than silently costing real companies.
+  if (droppedIndustries.size > 0) {
+    const top = [...droppedIndustries.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
+    console.log(`  dropped by --industry: ${top.map(([k, n]) => `${k} (${n})`).join(", ")}${droppedIndustries.size > 10 ? ", ..." : ""}`);
+  }
 
   // Merge into whatever this vertical already has, rather than replacing
   // it outright — needed for cases like Machine Learning merging into the
@@ -171,7 +259,11 @@ async function main() {
   // double-counted just because two separate exports both contained it.
   const existing = await loadExisting();
   const otherVerticals = existing.filter((e) => (e as any).vertical !== vertical);
-  const priorSameVertical = existing.filter((e) => (e as any).vertical === vertical);
+  const priorSameVertical = replace ? [] : existing.filter((e) => (e as any).vertical === vertical);
+  if (replace) {
+    const dropped = existing.filter((e) => (e as any).vertical === vertical).length;
+    console.log(`--replace: discarding ${dropped} previously-imported ${vertical} companies rather than merging into them`);
+  }
 
   const merged = new Map<string, VcCompanyFunding>();
   for (const e of priorSameVertical) merged.set(e.orgId, { ...e, deals: [...e.deals] });
@@ -201,12 +293,12 @@ async function main() {
   const body = combined
     .map((e: any) => {
       const deals = e.deals
-        .map((d: VcDeal) => `      { dealId: "${d.dealId}", date: "${d.date}", type: "${d.type.replace(/"/g, '\\"')}", status: "${d.status}", amountUsd: ${d.amountUsd ?? "null"}, investors: [${d.investors.map((i) => `"${i.replace(/"/g, '\\"')}"`).join(", ")}] },`)
+        .map((d: VcDeal) => `      { dealId: "${tsLit(d.dealId)}", date: "${tsLit(d.date)}", type: "${tsLit(d.type)}", status: "${tsLit(d.status)}", amountUsd: ${d.amountUsd ?? "null"}, investors: [${d.investors.map((i) => `"${tsLit(i)}"`).join(", ")}] },`)
         .join("\n");
       return `  {
     vertical: "${e.vertical}",
-    orgId: "${e.orgId.replace(/"/g, '\\"')}",
-    name: "${e.name.replace(/"/g, '\\"')}",
+    orgId: "${tsLit(e.orgId)}",
+    name: "${tsLit(e.name)}",
     totalRaisedUsd: ${e.totalRaisedUsd},
     dealCount: ${e.dealCount},
     deals: [

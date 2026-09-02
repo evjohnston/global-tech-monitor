@@ -8,11 +8,13 @@ README, then `src/lib/types.ts` (the data contract) before making changes.
 
 Global Tech Monitor — a pipeline view of a technology from research through
 scaling, adoption, and public investment. Multi-vertical as of 2026-07-19:
-Vertical 01 is quantum computing, Vertical 02 is artificial intelligence, and
-more critical/emerging technologies (biotechnology, semiconductors, space)
-are the intended next additions — see "Multi-vertical architecture" below
-before adding one. It's meant as a research instrument for a policy audience
-(Hoover/TFL), not a consumer dashboard. Reference point for the design and
+Vertical 01 is quantum computing, Vertical 02 is artificial intelligence,
+Vertical 03 is biotechnology (added 2026-09-02 — see "Biotechnology vertical"
+below for the research decisions it forced), and more critical/emerging
+technologies (semiconductors, space) are the intended next additions — see
+"Multi-vertical architecture" below before adding one. It's meant as a
+research instrument for a policy audience (Hoover/TFL), not a consumer
+dashboard. Reference point for the design and
 framing is ASPI's Critical Technology Tracker: lead with country comparison,
 treat data-viz as the hero, look like an instrument.
 
@@ -28,9 +30,11 @@ and `DataFile.technology` value), `number`/`label`/`shortLabel`/`tagline`
 (topbar + pagehead display), `dataDir` (`data/<dataDir>/{seed,notes}.ts`),
 `openAlexFilter` (a raw OpenAlex filter fragment), `arxivCategory` (the
 break-glass fallback if OpenAlex itself is down), `epoCpcQuery` (a raw EPO
-OPS CQL fragment), `fundingKeyword` (NSF Awards API keyword), and
-`rssFeeds`/`rssClassifier` (that vertical's trade press + keyword
-classifier). `src/lib/sources/{openalex,epo,nsf,rss}.ts` are tech-agnostic
+OPS CQL fragment), `fundingKeyword` (NSF Awards API keyword),
+`procurementKeyword` (optional — the USASpending/SAM.gov term, falling back
+to `fundingKeyword`; see "Biotechnology vertical" for the measured reason
+these came apart), and `rssFeeds`/`rssClassifier` (that vertical's trade
+press + keyword classifier). `src/lib/sources/{openalex,epo,nsf,rss}.ts` are tech-agnostic
 machinery that take these as parameters — none of them hardcode a technology
 anymore. `scripts/fetch-data.ts` loops over `VERTICALS` and writes one
 `public/data/<id>.json` per vertical; `App.tsx` has a topbar tab per vertical
@@ -42,22 +46,37 @@ vertical.
 needs, checked by hand before it goes in `VERTICALS`:
 - An OpenAlex filter that actually gets good institution-country coverage on
   a real sample (`primary_location.source.type:journal` restricted) — a
-  Topic id if the field has one cohesive Topic (quantum: T10682), or a
-  broader Subfield id if it doesn't (AI/ML: OpenAlex fragments "AI" across
-  dozens of narrow application Topics with no dominant one, so it uses
-  Subfield 1702 instead — checked institution-data quality by hand, 49/50
-  sampled works had real structured country data).
+  Topic id if the field has one cohesive Topic (quantum: T10682), or an
+  explicit OR'd list of hand-checked Topic ids if it doesn't. Both AI (58
+  topics) and biotechnology (33) needed the list, and in both cases the
+  obvious-looking Subfield was a grab-bag: OpenAlex's own "Biotechnology"
+  subfield is Listeria food safety and marine sponges, and its
+  best-named biotech Topic is Nature news copy. **Sample the real recent
+  works of every topic you add, and record why you excluded the ones you
+  excluded** — that's where the actual work is.
 - A real EPO CPC classification code (or an OR'd pair, if the field spans
   more than one — AI uses `G06N3 OR G06N20`, neural networks + machine
   learning specifically, since there's no single code the way quantum has
   G06N10). Verify against USPTO/WIPO CPC definitions, not from memory.
-- A funding-source keyword for the NSF Awards API (or a different funding
-  API entirely, if NSF's US-centric coverage is a bad fit for the field —
-  biotechnology, for instance, might fit NIH grants better).
+- A funding-source keyword for the NSF Awards API — and check it against
+  real returned awards, not just for a nonzero count. NSF's `keyword`
+  search matches broader-impacts boilerplate, so a topic's own name is
+  often the *worst* query for it (biotech: 59/300 on-topic for
+  "biotechnology" vs. 300/300 for "biomanufacturing"). Check whether the
+  same term also works for `usaSpending.ts`/`samGov.ts`; if it doesn't, set
+  `procurementKeyword` separately rather than compromising on one.
+  (A different funding API entirely is still the right answer for some
+  fields — NIH grants would suit biotechnology better than NSF does, and
+  that remains unbuilt.)
 - Real, hand-verified RSS feeds from actively-publishing trade press (valid
-  RSS 2.0, checked by curl) — see `QUANTUM_RSS_FEEDS`/`AI_RSS_FEEDS` in
-  `verticals.ts` for the bar. Check each feed's `Access-Control-Allow-Origin`
-  header too — the Worker proxies the ones that don't send one.
+  RSS 2.0, checked by curl) — see `QUANTUM_RSS_FEEDS`/`AI_RSS_FEEDS`/
+  `BIOTECH_RSS_FEEDS` in `verticals.ts` for the bar. Check each feed's
+  `Access-Control-Allow-Origin` header too — the Worker proxies the ones
+  that don't send one. Check the `pubDate` format actually parses, too:
+  Fierce Biotech's `"Sep 2, 2026 10:29am"` silently produced zero entries
+  until `rss.ts`'s `parseDate` grew a fallback. And reject journal
+  tables-of-contents however biotech-shaped their titles are — a paper is
+  the Innovation stage's job, not a scaling milestone.
 - A keyword classifier (`relevant`/`scaling`/`adoption` regexes) tuned
   against that vertical's real news vocabulary — reuse
   `DEFAULT_EXCLUDE_WORDS` from `rss.ts` for the generic personnel/podcast/
@@ -76,6 +95,17 @@ needs, checked by hand before it goes in `VERTICALS`:
 - Register the new entries in `scripts/fetch-data.ts`'s
   `SEED_BY_VERTICAL`/`NOTES_BY_VERTICAL` maps (static imports — fine at this
   scale; revisit if the vertical list grows large).
+- Add the vertical's tickers to `src/lib/companyCategory.ts`'s
+  `BY_VERTICAL`, with a `sector` value that means something for that field
+  (adding new `RdSector` values is expected — "semiconductors" is
+  meaningless for biotechnology). The R&D-breakdown chips derive from what
+  a vertical actually uses, so an unregistered vertical silently falls back
+  to "Not yet individually categorized" on every row.
+- Nothing in `.github/workflows/build-and-deploy.yml` needs changing —
+  checked when biotechnology was added. Both regression guards (the one in
+  `fetch-data.ts` and the authoritative one in the commit step) key off "a
+  previous file exists," so a brand-new `public/data/<id>.json` is written
+  unconditionally on its first CI run and starts accumulating from there.
 
 ## Stack and why
 
@@ -158,6 +188,215 @@ needs, checked by hand before it goes in `VERTICALS`:
 
 Every external source fails soft — a missing key or down endpoint drops that
 one source without breaking the build.
+
+## Biotechnology vertical — added 2026-09-02
+
+Vertical 03. Every number below was measured live while building it, not
+recalled — re-measure before changing any of it.
+
+**OpenAlex.** 33 hand-checked topic ids, not a subfield. OpenAlex ships a
+subfield literally called "Biotechnology" (1305) whose 8 topics include
+Listeria in food safety, marine sponges, and microbial inactivation
+methods; "Applied Microbiology and Biotechnology" (2402) is antibiotic
+resistance plus one topic on tannase. Neither is the technology. The single
+most biotech-sounding topic in the whole 4,516-topic list, T14293
+"Biotechnology and Related Fields", turned out on a live sample to be
+Nature/Science *news copy* ("Trump administration has its sights set on
+destroying international research collaborations", "India heatwave",
+"Twistronics founders win 2026 Kavli Prize") with the worst
+institution-country coverage of anything sampled, 7/12 — excluded for that,
+not for its name. The kept list and, just as important, the 20 topics
+deliberately excluded with a stated reason each, are documented inline in
+`verticals.ts`. **Read that comment before adding a topic** — the excluded
+ones were each checked against their real recent works and dropped for a
+specific reason (food-starch science, fuel-cell fluid mechanics, veterinary
+immunology, phytochemistry), and re-adding one on the strength of its name
+is exactly the mistake the comment exists to prevent. Result on a live
+30-day journal-only sample: 9,784 works, 50/50 with structured
+institution-country data (the cleanest of any vertical here), 35 distinct
+countries in that 50-work sample.
+
+**Scope, stated once so it doesn't drift.** This vertical tracks
+biotechnology as a *platform* technology — engineering biology,
+biomanufacturing capacity, gene/cell therapy, omics and molecular-diagnostic
+platforms, biosecurity. It is not clinical medicine and not the
+pharmaceutical industry at large. That single decision is what keeps the
+corpus at ~9.8k works/month instead of the millions all of biomedicine
+would contribute, and it's why the RSS classifier explicitly drops clinical
+readouts, licensing deals and M&A. Biofuel/biomass topics are excluded for
+the same reason the CapIQ VC industry filter drops Commodity Chemicals and
+Packaged Foods — consistency between the two, not squeamishness about
+energy. If a future session wants industrial/energy biotech tracked, that's
+a legitimate scope EXPANSION to argue for explicitly, not something to
+achieve by quietly adding topics on one side.
+
+**EPO.** `cpc=C12N OR cpc=C12Q OR cpc=C12P` — genetic engineering and cells,
+nucleic-acid measurement/diagnostics, and fermentation processes. Verified
+against USPTO's own CPC definitions and then run live: 642,459 results whose
+newest 25 were Intellia's BCMA CAR-T compositions, Arbor Biotechnologies'
+gene-editing system, circular RNA delivery, Sophia Genetics' variant
+detection, UW's cell-free bioproduction. C07K (peptides) was checked and
+left out — it drifts into pure peptide-synthesis organic chemistry.
+
+**One keyword couldn't serve three sources — `procurementKeyword` exists
+because of this vertical.** `fundingKeyword` had been quietly doing double
+duty for NSF *and* for `usaSpending.ts`/`samGov.ts` ever since those two
+were added. That works when the topical term is the same word in a grant
+abstract and a contract line item ("quantum", "artificial intelligence").
+For biotech it isn't, measured both ways:
+- NSF with `keyword=biotechnology`: 300 returned, only 59 naming a real
+  biotech technique ($35.2M of $200.8M obligated). The rest are squid
+  hydrodynamics, wild-bee heat resilience and EPSCoR fellowships that
+  mention biotech once as a downstream benefit. With
+  `keyword=biomanufacturing`: 300 of 300 on-topic ($403.2M) — SBIR
+  fermentation platforms, PURE cell-free expression benchmarking, nanopore
+  QC for adenoviral gene therapy.
+- USASpending and SAM.gov with "biomanufacturing": **zero results, both.**
+  With "biotechnology": real ones — a $73M HHS mRNA-vaccine development
+  award to Moderna, a $1.0M HHS "IPSC ENGINEERING SERVICES" contract to
+  Thermo Fisher, a real DoD BAA biotechnology topic on SAM.gov.
+
+So `fundingKeyword: "biomanufacturing"`, `procurementKeyword:
+"biotechnology"`. `procurementKeyword` is optional and falls back to
+`fundingKeyword`, so quantum and AI are byte-for-byte unchanged. **Don't
+collapse them back into one field** — either choice alone silently zeroes
+out a whole source. The disclosed cost of the NSF side is that this covers
+the bioengineering/biomanufacturing *slice* of NSF's biotech portfolio
+rather than all of it, which `data/biotech/notes.ts`'s investment note says
+out loud.
+
+Adding a third vertical also makes SAM.gov's daily-quota problem worse by
+50% — see the long comment at the top of `samGov.ts`. Expected, not a
+regression: most runs in a UTC day will 429 and soft-fail, and solicitation
+postings don't change every 3 hours anyway. (Every SAM.gov call in this
+session's testing returned 429, so the biotech SAM path is wired and
+soft-failing correctly but has not yet returned a real record in CI.)
+
+**Run time.** 70 tickers at `massive.ts`'s deliberate 15-second gap is
+~17.5 minutes of sleeping for this vertical alone, taking a full
+`fetch-data` run across all three verticals to roughly 40 minutes. Fine on
+a 3-hour cron and well inside GitHub Actions' job limit, but it's the
+reason a local `npm run fetch-data` now takes most of an hour — that's the
+rate limit, not a hang.
+
+**RSS — five verified feeds, and a deliberately low yield.** Fierce Biotech,
+BioPharma Dive, GEN, Labiotech, Drug Discovery Trends; each curl-checked for
+valid RSS 2.0, item count and date format. Six real candidates were checked
+and rejected: endpts.com and genomeweb.com 403 a script, biospace.com and
+synbiobeta.com have no working feed at the usual paths, and nature.com's
+biotechnology subject feed and `nbt.rss` are journal tables-of-contents
+(empty `<description>`, RDF in nbt's case) rather than trade press — running
+research papers through a scaling/adoption classifier would file them as
+manufacturing milestones.
+
+The classifier converts ~100 fetched items into ~4 classified ones. **That
+is correct, not broken.** Biotech trade press is overwhelmingly
+clinical-trial readouts, licensing deals, M&A, layoffs and drug-pricing
+politics — real news, none of it a production-scaling or adoption milestone
+in this app's sense. The classifier's `exclude` extends
+`DEFAULT_EXCLUDE_WORDS` (it doesn't replace it) with those categories
+explicitly, each pattern traced to a real dropped headline. Consequence:
+`data/biotech/seed.ts` carries more of the load for scaling/adoption here
+than in either other vertical. Don't loosen the patterns to make the count
+go up without reading the actual `rss-*` entries produced.
+
+**A real bug this vertical surfaced in shared code.** Fierce Biotech and
+Fierce Pharma emit `pubDate` as `"Sep 2, 2026 10:29am"` — no space before
+the meridiem — which `new Date()` rejects outright. `parseDate` in `rss.ts`
+returned `""` for it, and `fetchOneFeed` skips any item without a date, so
+those feeds would have contributed exactly nothing while looking fine in the
+logs. `parseDate` now retries once with a space inserted. Kept as a general
+normalisation rather than a per-feed hack, since it can only touch a string
+that already failed the direct parse.
+
+**Seed data.** 56 entries (27 scaling, 29 adoption) across 29 countries,
+every one fetched and confirmed against its source URL — the figure, the
+date and any "first" claim each read off the source rather than recalled.
+Weighted toward biomanufacturing capacity in litres (Samsung Biologics'
+785,000 litres across five Songdo plants, Boehringer's 185,000-litre Vienna
+fermenter hall, Lonza's 330,000-litre Vacaville purchase, Grifols' plasma
+fractionation in millions of litres) and toward regulatory approval as the
+adoption gate, which for biotech is where national positions diverge most
+(MHRA three weeks ahead of FDA on the first CRISPR medicine; India's CDSCO
+approving an indigenous CAR-T at an eighth of the US price; Brazil clearing
+the world's first single-dose dengue vaccine; a Philippine court
+withdrawing Golden Rice from the first country that ever approved it).
+Deliberately includes the vaccine-manufacturing capacity of the global
+south as capacity, not as aid — Serum Institute at ~3 billion doses a year,
+Bio Farma at 3.5 billion, Institut Pasteur de Dakar building toward 300
+million, Afrigen's WHO technology-transfer hub, BioNTech's Kigali plant.
+Still a floor rather than a finished set — a third the size of AI's 171,
+and it should keep growing the same way, one verified entry at a time.
+
+**Backfilled 2026-09-02**, so this vertical didn't launch with one day of
+history: `npm run backfill-entries -- biotechnology` took it from 1,364 to
+**6,075 entries across 104 countries** (a 2-year OpenAlex window, 5,000
+works fetched and 4,400 new, plus 611 NSF awards worth $555M against the
+nightly run's 300), and `npm run backfill-trend -- biotechnology` gave it
+7 trend points — enough for the world map's time scrubber, which needs 3.
+Neither script merges `data/biotech/seed.ts`, so a freshly backfilled file
+still reports the seed count from whenever `fetch-data` last ran; the next
+scheduled run reconciles it.
+
+**`backfill-trend` was writing inflated points for every vertical, and
+standing this one up is what exposed it.** Fixed 2026-09-02. The script
+fetched 8 pages (1,600 works) and counted a full rolling 30-day window from
+them, while the nightly query fetches 3 pages (600 works) — so a
+reconstructed point and a recorded point were counting to different
+ceilings and were never comparable. Real shipped consequences, measured
+before the fix:
+- **AI**: leading backfilled points of 1,158 and 1,241 against a real
+  recorded ~470 the same week. A 165% overstatement, rendering as a
+  spike-then-collapse at the left edge of every AI trend chart.
+- **Quantum**: 591-793 against a real ~400. Milder only because quantum's
+  volume sits near the cap, still a 48-95% overstatement.
+- **Biotechnology**: the artefact inverted. Because biotech publishes
+  ~9,800 journal works per 30 days, a 1,600-work sample only reaches back
+  a few days, so early windows were nearly empty — producing a fake ramp
+  from 241 up to 1,425 and then a cliff to the real 487.
+
+The fix is `LIVE_WINDOW_CAP` (exported from `openalex.ts`, imported by the
+backfill) plus two rules: sort each reconstructed day's window
+`publication_date:desc` and truncate to that cap, exactly reproducing what
+a same-day fetch would have SEEN; and skip any day where the fetch neither
+holds the cap's worth of works nor reaches back past the window start,
+rather than writing a partial sample as a count. After the fix the three
+series are coherent — biotech reads 559/564/565/566/496/488 against a real
+487, quantum declines gently from 507 to a real 395.
+
+**Two consequences to know.** First, a high-volume vertical can only be
+backfilled as far as basic paging reaches: quantum reconstructs 30 days
+(its volume is under the cap, so coverage is complete), biotech 6, AI 2,
+and the script now says so on stdout instead of inventing the rest.
+Second, **the deployed data still has the bad points.** `public/data/` is
+gitignored on `main` and CI seeds from `origin/data`, so correcting it
+locally fixes nothing live, and `backfill-trend` is not part of CI. Fixing
+the shipped history means running the corrected backfill against the
+`data` branch's files and pushing — a deliberate history edit that drops
+real (if wrong) recorded dates, so it's a decision to make on purpose
+rather than a cleanup to slip into another commit.
+
+**The VC panel was wrong on day one, and that's the lesson worth keeping.**
+`data/capiq/vc-funding.ts` already held a 3,916-company `biotechnology`
+dataset, imported months earlier as prep work. Because `fetch-data.ts`
+filters purely on `c.vertical === v.id`, it went live the instant the
+vertical existed — no code change, no review. It was scoped by CapIQ's
+"Biomedical Engineering" topic tag, which is *medical devices*, so the
+resulting "who's getting the money in biotechnology" leaderboard was topped
+by surgical robots and cardiac devices and contained a quantum company from
+tag bleed. Re-imported the same day from a richer raw export using a GICS
+industry filter instead — see "VC funding tracking" below for the full
+story and the three importer bugs the re-import exposed. **The general
+lesson: prep data that lands in the UI the moment a vertical is registered
+needs to be re-read at that moment, not trusted from when it was
+imported.**
+
+Two `country` conventions this vertical forced, both written into
+`data/biotech/seed.ts`'s header: a manufacturing milestone gets the country
+the **capacity physically sits in**, not the parent company's domicile
+(Lonza's Vacaville site is US), and a supranational body gets the country it
+**physically sits in** (the European Commission is BE). Nothing is bucketed
+into a synthetic "EU" code — same rule as everywhere else here.
 
 ## Talent vertical — archived 2026-07-25
 
@@ -344,12 +583,22 @@ R&D pull, though: **Transactions**, not Companies.
 intelligence` (21,484 companies, 5-year history 2021-2026, merged from
 both an "Artificial Intelligence"-tagged and a "Machine Learning"-tagged
 export — see dedup below), `quantum-computing` (101 companies — see the
-topic-tag story below), plus **prep data for two verticals that don't
-exist in the app yet**, `defense-tech` (999 companies) and `biotechnology`
-(3,916 companies) — imported at the user's request as groundwork for
-future full verticals, not wired into `VERTICALS`/rendered anywhere yet.
+topic-tag story below), `biotechnology` (1,848 companies, $83.4B disclosed, 2026-09-02 — a full
+re-import that REPLACED the original 3,916-company set, which was
+mis-scoped; see the topic-tag story below, it's the most useful cautionary
+tale in this file), plus **prep data for one vertical that still doesn't
+exist in the app**, `defense-tech` (999 companies) — imported at the user's
+request as groundwork for a future full vertical, not wired into
+`VERTICALS`/rendered anywhere yet.
 
-Four real problems this data has that the import (`scripts/import-capiq-
+Nothing in `fetch-data.ts` had to change to render any of this per
+vertical — it filters on `c.vertical === v.id`, so a vertical whose id
+matches an already-imported key picks the data up for free. That's how
+biotechnology's rows went live the moment the vertical existed, which is
+also exactly how a mis-scoped import reaches the UI without anyone
+re-reading it.
+
+Five real problems this data has that the import (`scripts/import-capiq-
 transactions.ts`) has to handle, not paper over:
 
 - **Mixed transaction types.** Every export includes M&A, stock buybacks,
@@ -386,10 +635,40 @@ transactions.ts`) has to handle, not paper over:
   tags (`Biomedical Engineering`, `Bio-based and Renewable Materials`,
   `Biomass Energy`, `Biofuel`, `Biometrics`) from what was clearly a
   keyword search on "Bio" — the unfiltered result was topped by water
-  utilities and Chinese renewable-energy companies. Filtered to
-  `requireTag: "Biomedical Engineering"` only. **Don't trust an export's
-  topic-tag scoping just because the filename matches the vertical you
-  asked for — check the real tag breakdown by hand before importing.**
+  utilities and Chinese renewable-energy companies. It was filtered to
+  `requireTag: "Biomedical Engineering"` only, and **that turned out to
+  still be wrong, caught 2026-09-02 when the biotechnology vertical went
+  live and this data got rendered for the first time.** "Biomedical
+  Engineering" is medical devices. The resulting "who's getting the money
+  in biotechnology" table was topped by Verily Health, BVI Medical (ophthalmic
+  surgical devices), BrainCo (BCI wearables), Impulse Dynamics and Kardium
+  (cardiac devices), CMR Surgical and Distalmotion (surgical robots) — and
+  contained a *quantum* company, Shanghai TuringQ, from pure tag bleed.
+  Not one of the top 30 was a biotechnology company.
+  **Don't trust an export's topic-tag scoping just because the filename
+  matches the vertical you asked for — check the real tag breakdown by hand
+  before importing, and then check the top of the resulting leaderboard
+  reads like the field you meant.** The tag histogram passing isn't
+  sufficient; "Biomedical Engineering" was a real tag that really was
+  bio-adjacent and still produced a table about something else.
+
+  Re-imported 2026-09-02 from `ciq_data/S&P-Biotechandsyntheticbio.xlsx`
+  (a much richer raw Transactions export already sitting in `ciq_data/`,
+  which the original import didn't use) with a **GICS industry filter
+  instead of a topic tag** — `--industry=Biotechnology,Life Sciences Tools
+  and Services,Pharmaceuticals`, matched against
+  `SPTR_IQ_TARGET_PRIMARY_INDUSTRY`. That export carries no Topic Tags
+  column at all but does carry CapIQ's own industry classification of the
+  target, which is a strictly stronger scoping signal: it classifies the
+  company rather than keyword-matching it. Of 5,024 VC rows, 3,447 are
+  GICS "Biotechnology" alone; the filter keeps 4,207 and drops Health Care
+  Technology/Equipment/Services, Packaged Foods, Commodity Chemicals and
+  Application Software (each logged on every run, so a too-narrow filter is
+  visible). Result: 1,848 real biotech companies, $83.4B disclosed, topped
+  by Ceva Santé Animale, EQRx, Roivant, Samsung Biologics, Moderna, CureVac,
+  Sana, Ginkgo Bioworks, National Resilience, Generate Biomedicines. **Prefer
+  `--industry` over `requireTag` whenever an export has the industry
+  column.**
 - **Deal-level double-counting across multiple tag searches.** Merging
   Machine Learning into the existing `artificial-intelligence` data is
   the case that forced this: the two tag searches share enormous real
@@ -399,7 +678,41 @@ transactions.ts`) has to handle, not paper over:
   step adds a fresh export's deals into whatever a vertical already has,
   skipping any `dealId` already seen, rather than either replacing the
   vertical's data outright or blindly re-summing potentially-duplicate
-  rows.
+  rows. A `--replace` flag exists for the other case, added 2026-09-02:
+  when a PRIOR import was mis-scoped rather than merely incomplete, the
+  default merge would keep the bad rows forever.
+- **Three real importer bugs the richer biotech export exposed** (all
+  fixed 2026-09-02; all latent the whole time, just never triggered by the
+  narrower AI/quantum exports):
+  1. **Investor columns were inferred as "every column not otherwise
+     claimed."** That held when the only unclaimed columns *were* the
+     investor ones. The biotech export also carries
+     `SPTR_IQ_TARGET_PRIMARY_INDUSTRY`, `SPTR_TARGET_COUNTRY`,
+     `SPTR_TARGET_BUSINESS_DESCRIPTION`, `SPTR_IMPLIED_EV`,
+     `SPTR_CURRENCY_CODE`, `SPTR_ROUND_TYPE`, `SPTR_ADVISER_NAME`/`_ROLE`
+     and `SPTR_DEAL_SUMMARY` — so real deals came out with
+     `investors: ["NA", "EUR", "Mature", "Adviser Role: ..."]`. Now read
+     from the super-header's own `Buyers/Investors Name` label, with the
+     old heuristic kept only as a fallback and which path was taken logged
+     on every run.
+  2. **Generated-file escaping only handled double quotes.** One investor
+     cell containing a literal newline produced an unterminated string
+     literal in `data/capiq/vc-funding.ts` — a hard build break, not a
+     data smell. All emitted strings now go through one `tsLit()` helper
+     that escapes backslashes first, then quotes, then collapses
+     whitespace. Side effect worth knowing when reading that commit's
+     diff: regenerating the file also ran the carried-over quantum/AI/
+     defense-tech rows through `tsLit()`, which collapsed double spaces
+     inside 7 of 21,484 AI investor names (a stray double space in
+     "Korea Biotech Investment Capital", "EEC Ventures Sp. z o.o." and
+     five others). Verified by diffing every row against `HEAD` — all
+     amounts, deal counts and deal ids identical, and the normalisation
+     helps entity resolution rather than hurting it.
+  3. **`excelDateToIso` mapped an empty date cell to Excel's own epoch**,
+     putting 99 deals in the data dated `1899-12-30`. Serial `<= 0` now
+     returns null and stores `""` like any other missing date. Guarded on
+     the actual failure (an empty cell) rather than on an implausible
+     year — this export does carry real financing rounds back to 1980.
 
 Rendered as `VcFundingLeaderboard.tsx`, a real entity-consolidated "who's
 getting the money" table (top 25 by disclosed total raised, click a row
@@ -418,6 +731,25 @@ defense-tech are this deep) lives in the committed `data/capiq/vc-
 funding.ts` regardless, since `VcFundingLeaderboard.tsx` only ever renders
 a top-25 table anyway. Don't remove this cap without reconsidering payload
 size — an uncapped AI export alone generated an 8.9MB source file.
+
+**PitchBook has no biotechnology coverage yet, and it's blocked on a
+credential, not on work.** `data/pitchbook/vc-funding.ts` carries quantum
+and AI, so biotechnology is the one vertical with a single VC provider
+where the others have two. Adding it needs a real PitchBook vertical-tag or
+keyword query checked live against WRDS first — their taxonomy has no plain
+"Biotechnology" vertical any more than it has a quantum one, so this is a
+research step, not a config line, and a guessed value must not be
+committed. Attempted 2026-09-02 and stopped: WRDS rejects the stored
+credential with `FATAL: PAM authentication failed for user "ejohnston"`
+(SQLSTATE 28000), confirmed by completing the Postgres startup handshake
+by hand against the live server — TCP and SSL negotiate fine, so it's the
+password, not the network. WRDS rotates passwords and locks idle accounts.
+Reset it at wrds-www.wharton.upenn.edu, update `WRDS_PASSWORD` in
+`.env.local`, then probe `vc_glb_companyverticalrelation` /
+`vc_glb_companyindustryrelation` for the real bio-adjacent values before
+adding a `VERTICAL_QUERIES` entry. `import-pitchbook.ts` now names this
+remedy on any auth-shaped connection failure rather than leaving you to
+debug a phantom network problem.
 
 **Known gap, not yet resolved**: even the AI/ML data's 5-year span is
 recent-heavy by construction (most VC activity in any dataset skews to
@@ -817,7 +1149,7 @@ npm run import-capiq-rd-export -- <path-to-xlsx>  # one-off/periodic: parses a m
                           # S&P Capital IQ Pro Companies-screener report (IQ_RD_EXP_FN field) and
                           # writes data/capiq/rd-spend.ts — see "Foreign R&D spend (S&P Capital IQ)"
                           # above. Re-run after a fresh export; never commit the raw .xlsx itself.
-npm run import-capiq-transactions -- <path-to-xlsx> <vertical-id> [required-topic-tag]  # one-off/
+npm run import-capiq-transactions -- <path-to-xlsx> <vertical-id> [required-topic-tag] [--industry=A,B] [--replace]  # one-off/
                           # periodic: parses a manually-exported S&P Capital IQ Pro Transactions-
                           # screener report and writes data/capiq/vc-funding.ts — see "VC funding
                           # tracking (S&P Capital IQ Transactions)" above. <vertical-id> tags which
@@ -829,7 +1161,13 @@ npm run import-capiq-transactions -- <path-to-xlsx> <vertical-id> [required-topi
                           # substring — necessary when CapIQ's tag search was broader than the real
                           # target (e.g. quantum computing has no dedicated tag, only "Encryption"/
                           # "Post-Quantum Cryptography" — pass the latter to exclude unrelated
-                          # cybersecurity companies the broader tag swept in).
+                          # cybersecurity companies the broader tag swept in). `--industry=A,B`
+                          # filters on SPTR_IQ_TARGET_PRIMARY_INDUSTRY (CapIQ's own GICS industry
+                          # for the target) instead, and is the BETTER filter when the export has
+                          # that column — it classifies the company rather than keyword-matching it.
+                          # `--replace` discards this vertical's previously-imported rows instead of
+                          # merging into them; use it to correct a mis-scoped earlier import, not to
+                          # add a second tag search (that's what the default merge is for).
 npm run dev
 npm run build
 npm run typecheck

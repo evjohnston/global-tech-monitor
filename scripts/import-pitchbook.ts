@@ -232,7 +232,31 @@ async function main() {
     console.error("WRDS_USERNAME/WRDS_PASSWORD not set in .env.local");
     process.exit(1);
   }
-  await client.connect();
+  // A rejected WRDS login surfaces as `PAM authentication failed for user
+  // "<you>"` (SQLSTATE 28000) — confirmed live 2026-09-02, where the
+  // stored WRDS_PASSWORD had gone stale and blocked a biotechnology
+  // import. Depending on client options the same rejection can instead
+  // come back as the generic "Connection terminated unexpectedly" (seen
+  // while diagnosing this), which reads like a network or schema fault
+  // and sends you looking in the wrong place. This handler names the
+  // actual remedy either way: WRDS rotates passwords and locks idle
+  // accounts, so a credential that worked last month is the first thing
+  // to suspect, not the query.
+  try {
+    await client.connect();
+  } catch (err) {
+    const msg = (err as Error).message;
+    if (/Connection terminated|password|authentication/i.test(msg)) {
+      console.error(
+        `WRDS connection failed (${msg}).\n` +
+        `Almost always an expired or rotated WRDS_PASSWORD in .env.local, NOT a network problem — ` +
+        `the server's real reply in this case is 'FATAL: PAM authentication failed'. ` +
+        `Sign in at https://wrds-www.wharton.upenn.edu to reset/confirm the account, update .env.local, and re-run.`
+      );
+      process.exit(1);
+    }
+    throw err;
+  }
 
   const byOrg = new Map<string, VcCompanyFunding>();
   // Real fund-level linkage, for the separate data/pitchbook/funds.ts prep

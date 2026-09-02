@@ -68,16 +68,20 @@ import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
 import { NOTES as QUANTUM_NOTES } from "../data/quantum/notes.ts";
 import { SEED as AI_SEED } from "../data/ai/seed.ts";
 import { NOTES as AI_NOTES } from "../data/ai/notes.ts";
+import { SEED as BIOTECH_SEED } from "../data/biotech/seed.ts";
+import { NOTES as BIOTECH_NOTES } from "../data/biotech/notes.ts";
 
 // Static imports rather than a dynamic-import registry — fine at this scale
 // (a handful of verticals); revisit if this list grows large.
 const SEED_BY_VERTICAL: Record<string, Entry[]> = {
   "quantum-computing": QUANTUM_SEED,
   "artificial-intelligence": AI_SEED,
+  biotechnology: BIOTECH_SEED,
 };
 const NOTES_BY_VERTICAL: Record<string, StageNote[]> = {
   "quantum-computing": QUANTUM_NOTES,
   "artificial-intelligence": AI_NOTES,
+  biotechnology: BIOTECH_NOTES,
 };
 
 // Which of data/capiq/rd-spend.ts's foreign companies (real, named quantum/
@@ -88,6 +92,15 @@ const NOTES_BY_VERTICAL: Record<string, StageNote[]> = {
 // the current plan tier, so they're excluded from the market panel but
 // still real, disclosed, individually-verified companies worth counting
 // here.
+// No biotechnology entry yet, deliberately rather than by oversight: that
+// vertical has exactly the same problem (RHHBY/Roche and NVZMY/Novonesis
+// both resolve on Massive but carry no market cap, and both are genuinely
+// major — Roche is one of the largest biologics manufacturers in the
+// world, Novonesis the largest industrial-enzyme company), but
+// data/capiq/rd-spend.ts predates the vertical and contains neither
+// company. Adding them needs a fresh manual CapIQ Companies-screener
+// export, which is Windows-only and can't be done from here. Listing them
+// here without the underlying data would just merge nothing.
 const CAPIQ_TICKERS_BY_VERTICAL: Record<string, string[]> = {
   "quantum-computing": ["ARRXF", "BAESY", "FJTSY", "NTTYY", "NIPNF", "MIELY", "EADSY", "THLLY", "SSNLF"],
   "artificial-intelligence": ["TCEHY", "SFTBY", "SSNLF"],
@@ -308,9 +321,14 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   // instead of serialized behind it costs nothing (trackedFetch never
   // rejects, so an early, not-yet-awaited failure just sits resolved until
   // collected).
+  // `procurementKeyword` (falling back to fundingKeyword) rather than
+  // fundingKeyword directly — see verticals.ts for the measured reason the
+  // two came apart for biotechnology. Quantum and AI leave it unset and so
+  // behave exactly as before.
+  const procurementKeyword = v.procurementKeyword ?? v.fundingKeyword;
   const samPromise = trackedFetch(
     "SAM.gov",
-    () => fetchSamOpportunities(SAM_KEY, v.fundingKeyword),
+    () => fetchSamOpportunities(SAM_KEY, procurementKeyword),
     [] as Entry[]
   );
 
@@ -352,7 +370,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   // companies. No API key needed.
   const { value: usaSpendingAwards, ok: usaSpendingOk } = await trackedFetch(
     "USASpending",
-    () => fetchUsaSpendingAwards(companies.map((c) => canonicalizeOrg(c.name).name), v.fundingKeyword),
+    () => fetchUsaSpendingAwards(companies.map((c) => canonicalizeOrg(c.name).name), procurementKeyword),
     [] as Entry[]
   );
   if (usaSpendingOk) console.log(`USASpending: ${usaSpendingAwards.length} federal contract awards`);

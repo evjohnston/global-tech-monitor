@@ -20,7 +20,7 @@ import { MethodNote } from "../components/MethodNote.tsx";
 import { SectionHeader } from "../components/ChartFrame.tsx";
 import { FindingsPanel } from "../components/FindingsPanel.tsx";
 import { computeDashboardFindings } from "../lib/findingsEngine.ts";
-import { tickerProfile, RD_SECTOR_LABEL, type RdSector } from "../lib/companyCategory.ts";
+import { tickerProfile, rdSectorsFor, RD_SECTOR_LABEL, type RdSector } from "../lib/companyCategory.ts";
 import type { MoneyFlowView } from "../lib/urlState.ts";
 
 type Route = "grants" | "private" | "rd" | "public";
@@ -30,8 +30,6 @@ const ROUTES: { key: Route; label: string }[] = [
   { key: "rd", label: "Corporate R&D" },
   { key: "public", label: "Public companies" },
 ];
-
-const RD_SECTORS: RdSector[] = ["all", "pure-play", "semiconductors", "software-platforms", "defense-aerospace"];
 
 // Money flow default is "Attributable amount — ranked bars," never the
 // Sankey — the deal-count Sankey stays available as a secondary,
@@ -193,7 +191,7 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
               <div className="panel">
                 <SectionHeader title="Which companies report the most R&D spend?" />
                 <div className="tab-bar" style={{ marginBottom: 8 }}>
-                  {RD_SECTORS.map((s) => (
+                  {rdSectorsFor(vertical.id).map((s) => (
                     <button key={s} className="chip" aria-pressed={rdSector === s} onClick={() => setRdSector(s)}>{RD_SECTOR_LABEL[s]}</button>
                   ))}
                 </div>

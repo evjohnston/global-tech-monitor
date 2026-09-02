@@ -22,6 +22,21 @@
 import type { Entry } from "../types.ts";
 import { inferInstitutionCountry } from "../institutionCountry.ts";
 
+// The nightly build's real per-run ceiling on the rolling-window query:
+// OA_N (200, OpenAlex's per-page max) x OA_PAGES (3) in
+// scripts/fetch-data.ts. Exported here rather than left as two private
+// constants in that script because scripts/backfill-trend.ts has to
+// reconstruct what a same-day fetch would GENUINELY have counted, and that
+// is only comparable to a live point if it applies the identical cap.
+// Getting this wrong is not a rounding error: before it was shared
+// (2026-09-02), the backfill counted an 8-page sample against the live
+// query's 3-page one and produced leading trend points inflated by 48% for
+// quantum and ~165% for AI (1,241 works on a day whose real recorded value
+// was ~470), plus a spurious ramp for biotechnology, whose 30-day volume is
+// so far above the cap that an 8-page sample only reaches back a few days.
+// If fetch-data.ts's OA_N/OA_PAGES change, change this with them.
+export const LIVE_WINDOW_CAP = 600;
+
 export interface OpenAlexOpts {
   filter: string; // raw OpenAlex filter fragment, e.g. "topics.id:T10682" or "primary_topic.subfield.id:1702"
   key?: string; // OPENALEX_KEY — optional, raises the rate limit

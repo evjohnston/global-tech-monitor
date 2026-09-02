@@ -158,8 +158,18 @@ export function classifyDeploymentStatus(text: string): Entry["deploymentStatus"
   return undefined;
 }
 
+// Most feeds send RFC 822 ("Wed, 02 Sep 2026 11:22:00 -0400"), which
+// `new Date()` parses directly. Fierce Biotech and Fierce Pharma send
+// "Sep 2, 2026 10:29am" instead — no space before the meridiem, which
+// `new Date()` rejects outright (confirmed by hand, 2026-09-02: it returns
+// Invalid Date, so parseDate returned "" and fetchOneFeed silently skipped
+// every single item from those two feeds). Inserting the missing space is
+// enough to make it parse. Kept as a general normalisation rather than a
+// per-feed special case, since it can only ever affect a string that
+// already failed the direct parse.
 function parseDate(pubDate: string): string {
-  const d = new Date(pubDate);
+  let d = new Date(pubDate);
+  if (Number.isNaN(d.getTime())) d = new Date(pubDate.replace(/(\d)(am|pm)\b/i, "$1 $2"));
   return Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 10);
 }
 
@@ -269,8 +279,13 @@ const FUNDING_RELEVANT =
 // already applies to VC rounds elsewhere) — checked by hand against real
 // quantum and AI queries, the latter noticeably noisier (stock-picking
 // content is common AI-news-query filler in a way it isn't for quantum).
+// "investment narrative"/"thesis"/"case" added 2026-09-02 from a real
+// biotech query result — "Is Sana Biotechnology (SANA) Turning Cost
+// Discipline Into a More Durable Investment Narrative?" is the exact shape
+// of stock-commentary this gate exists for, and slipped past every other
+// pattern here. Vertical-agnostic, so it applies to all three.
 const STOCK_NOISE_WORDS =
-  /\b(stocks?|shares?|ticker|buy\s+now|sell\s+rating|price\s+target|investors?\s+in|investment\s+(?:opportunity|bubble|moves|advice)|portfolio|\bIPO\b|nasdaq|nyse|earnings\s+(?:call|report)|real\s+estate|best[- ]performing|smartest|money\s+moves|valuation|funding\s+round|raise[sd]?\s+(?:strategic\s+)?funding|returns?\s+(?:on|from)\s+.{0,20}invest)\b/i;
+  /\b(stocks?|shares?|ticker|buy\s+now|sell\s+rating|price\s+target|investors?\s+in|investment\s+(?:opportunity|bubble|moves|advice)|portfolio|\bIPO\b|nasdaq|nyse|earnings\s+(?:call|report)|real\s+estate|best[- ]performing|smartest|money\s+moves|valuation|funding\s+round|raise[sd]?\s+(?:strategic\s+)?funding|returns?\s+(?:on|from)\s+.{0,20}invest|investment\s+(?:narrative|thesis|case))\b/i;
 
 // Google News RSS titles carry " - Outlet Name" appended to the real
 // headline — split it so `org` reflects the actual outlet, not a mangled
