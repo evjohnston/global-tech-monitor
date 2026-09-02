@@ -325,8 +325,10 @@ Deliberately includes the vaccine-manufacturing capacity of the global
 south as capacity, not as aid — Serum Institute at ~3 billion doses a year,
 Bio Farma at 3.5 billion, Institut Pasteur de Dakar building toward 300
 million, Afrigen's WHO technology-transfer hub, BioNTech's Kigali plant.
-Still a floor rather than a finished set — a third the size of AI's 171,
-and it should keep growing the same way, one verified entry at a time.
+Still a floor rather than a finished set — quantum's seed is at 260 and
+AI's at 205, so this is roughly a fifth of the mature ones, and it has no
+`funding-round` entries at all where those two have 15 and 17. It should
+grow the same way they did, one verified entry at a time.
 
 **Backfilled 2026-09-02**, so this vertical didn't launch with one day of
 history: `npm run backfill-entries -- biotechnology` took it from 1,364 to
