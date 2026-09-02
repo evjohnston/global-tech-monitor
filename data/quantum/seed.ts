@@ -18,6 +18,17 @@ import type { Entry } from "../../src/lib/types.ts";
 
 export const SEED: Entry[] = [
   // ── Stage 02: production / scaling ──────────────────────────────
+  // ── Historical anchors, added 2026-09-02 ────────────────────────
+  // This seed set ran 2016-2026 with a single 2016 entry, so the pipeline
+  // view couldn't show a decade — the earliest years of the field's real
+  // commercialisation were simply absent. These push the record back.
+  {
+    id: "seed-micius-quess-2016",
+    stage: "scaling", country: "CN", provenance: "seeded", source: "milestone",
+    title: "China launches Micius, the world's first satellite dedicated entirely to quantum experiments, on a Long March-2D from Jiuquan — satellite-to-ground key distribution, entanglement distribution and ground-to-satellite teleportation all achieved the following year",
+    org: "Chinese Academy of Sciences", date: "2016-08",
+    url: "https://www.eoportal.org/satellite-missions/quess",
+  },
   {
     id: "seed-ibm-roadmap-2025",
     stage: "scaling", country: "US", provenance: "seeded", source: "milestone",
@@ -244,6 +255,23 @@ export const SEED: Entry[] = [
   },
 
   // ── Stage 03: adoption ──────────────────────────────────────────
+  // ── Historical anchors, added 2026-09-02 — see the scaling section ──
+  {
+    id: "seed-lockheed-dwave-one-2011",
+    stage: "adoption", country: "US", provenance: "seeded", source: "deployment",
+    title: "Lockheed Martin becomes the first customer for a commercial quantum computer, buying D-Wave's 128-qubit D-Wave One at a reported price near $10 million, later installed at USC",
+    org: "Lockheed Martin", date: "2011-05", amountUsd: 10_000_000,
+    url: "https://phys.org/news/2011-06-d-wave-commercial-quantum.html",
+    deploymentStatus: "procurement",
+  },
+  {
+    id: "seed-uk-nqtp-2013",
+    stage: "adoption", country: "GB", provenance: "seeded", source: "deployment",
+    title: "The UK commits £270 million in the Autumn Statement to a National Quantum Technologies Programme, funding four hubs led by Birmingham, Glasgow, Oxford and York across 17 universities and 132 companies",
+    org: "UK Government / EPSRC", date: "2013-12",
+    url: "https://www.hpcwire.com/2013/12/11/uk-invests-270-million-quantum-computing/",
+    deploymentStatus: "announced",
+  },
   {
     id: "seed-aws-braket-2025",
     stage: "adoption", country: "US", provenance: "seeded", source: "deployment",

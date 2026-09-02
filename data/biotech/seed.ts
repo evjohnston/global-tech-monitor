@@ -242,6 +242,26 @@ export const SEED: Entry[] = [
     url: "https://www.grifols.com/en/view-news/-/news/grifols-will-build-new-manufacturing-site-in-spain-to-double-its-plasma-fractionation-capacity-in-europe",
   },
   // ── Stage 03: adoption ──────────────────────────────────────────
+  // ── Historical anchors, added 2026-09-02 ────────────────────────
+  // Same reason as quantum's and AI's: this set started in 2018, so the
+  // pipeline view opened mid-story. Both of these are the "first ever" that
+  // every later approval in this file is measured against.
+  {
+    id: "seed-fda-humulin-1982",
+    stage: "adoption", country: "US", provenance: "seeded", source: "deployment",
+    title: "The FDA approves Eli Lilly's Humulin, human insulin grown in recombinant E. coli licensed from Genentech — the first marketed healthcare product of any kind derived from recombinant DNA, cleared five months after filing",
+    org: "Eli Lilly / Genentech", date: "1982-10-29",
+    url: "https://www.acsh.org/news/2019/10/28/record-time-fda-approval-human-insulin-1982-when-genetic-engineering-came-age-14362",
+    deploymentStatus: "deployed",
+  },
+  {
+    id: "seed-fda-kymriah-2017",
+    stage: "adoption", country: "US", provenance: "seeded", source: "deployment",
+    title: "The FDA approves Novartis' Kymriah for relapsed or refractory B-cell ALL in patients up to 25, the first CAR-T cell immunotherapy and the first gene therapy of any kind cleared in the United States, on a trial where 83% of 63 patients reached remission within three months",
+    org: "Novartis", date: "2017-08-30",
+    url: "https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-tisagenlecleucel-b-cell-all-and-tocilizumab-cytokine-release-syndrome",
+    deploymentStatus: "deployed",
+  },
   // Regulatory approval is biotech's real adoption gate: it is the moment a
   // platform stops being research and starts being something a health system
   // can buy. `deploymentStatus: "deployed"` for an approval that opens

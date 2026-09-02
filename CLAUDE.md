@@ -309,7 +309,8 @@ logs. `parseDate` now retries once with a space inserted. Kept as a general
 normalisation rather than a per-feed hack, since it can only touch a string
 that already failed the direct parse.
 
-**Seed data.** 56 entries (27 scaling, 29 adoption) across 29 countries,
+**Seed data.** 68 entries (27 scaling, 31 adoption, 10 private funding
+rounds) across 29 countries, spanning 1982 to 2026,
 every one fetched and confirmed against its source URL — the figure, the
 date and any "first" claim each read off the source rather than recalled.
 Weighted toward biomanufacturing capacity in litres (Samsung Biologics'
@@ -325,9 +326,8 @@ Deliberately includes the vaccine-manufacturing capacity of the global
 south as capacity, not as aid — Serum Institute at ~3 billion doses a year,
 Bio Farma at 3.5 billion, Institut Pasteur de Dakar building toward 300
 million, Afrigen's WHO technology-transfer hub, BioNTech's Kigali plant.
-Still a floor rather than a finished set — quantum's seed is at 260 and
-AI's at 205, so this is roughly a fifth of the mature ones, and it has no
-`funding-round` entries at all where those two have 15 and 17. It should
+Still a floor rather than a finished set — quantum's seed is at 263 and
+AI's at 209, so this is roughly a quarter of the mature ones. It should
 grow the same way they did, one verified entry at a time.
 
 **Backfilled 2026-09-02**, so this vertical didn't launch with one day of
@@ -399,6 +399,35 @@ the **capacity physically sits in**, not the parent company's domicile
 (Lonza's Vacaville site is US), and a supranational body gets the country it
 **physically sits in** (the European Commission is BE). Nothing is bucketed
 into a synthetic "EU" code — same rule as everywhere else here.
+
+## Seed history: the sets were recency-biased, and partly still are
+
+All three seed sets were built by researching what's happening now, which
+produced a real and measurable skew. Measured 2026-09-02 before fixing:
+quantum had 1 entry in 2016, 5 in 2017, and 70 in 2025; AI had exactly one
+pre-2019 entry; biotech started in 2018. The pipeline view therefore opened
+mid-story, and none of the three could show a decade of anything.
+
+Historical anchors added, each verified the same way as any other seed
+entry — the events every later entry is implicitly measured against:
+- **quantum** back to 2011: Lockheed Martin buying D-Wave One (the first
+  commercial quantum computer sale, ~$10M), the UK's £270M National Quantum
+  Technologies Programme in the 2013 Autumn Statement, and China's Micius
+  satellite launch.
+- **AI** back to 2011: Watson winning Jeopardy!, AlphaGo beating Lee Sedol,
+  Google revealing TPU v1 (already a year old in its own data centres), and
+  Canada's Pan-Canadian AI Strategy — the world's first national AI
+  strategy, which the set was missing entirely.
+- **biotech** back to 1982: Humulin's approval, the first marketed product
+  of any kind from recombinant DNA, and Kymriah in 2017, the first CAR-T
+  and the first gene therapy cleared in the US.
+
+**The skew is reduced, not gone.** The middle years are still thin —
+quantum has single-digit entries per year before 2019, AI nothing between
+2017 and 2019 — and the fix for that is the same slow, additive,
+verify-every-claim work, not a bulk import. When adding entries, check the
+year distribution rather than only the country list; it's the easier gap to
+miss because recency bias in a research pass feels like thoroughness.
 
 ## Talent vertical — archived 2026-07-25
 

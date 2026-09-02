@@ -6,6 +6,40 @@ import type { Entry } from "../../src/lib/types.ts";
 // entry). Same rules apply here for the artificial-intelligence vertical.
 
 export const SEED: Entry[] = [
+  // ── Historical anchors, added 2026-09-02 ────────────────────────
+  // This seed set had exactly one pre-2019 entry, so the pipeline view
+  // began mid-story — the events that made AI a strategic subject for
+  // governments in the first place were missing. These push the record
+  // back to 2011.
+  {
+    id: "seed-ibm-watson-jeopardy-2011",
+    stage: "scaling", country: "US", provenance: "seeded", source: "milestone",
+    title: "IBM's Watson beats Ken Jennings and Brad Rutter at Jeopardy!, scoring $77,147 against $24,000 and $21,600 — the first time a question-answering machine outperformed champion humans on open-domain natural language on television",
+    org: "IBM", date: "2011-02",
+    url: "https://www.ibm.com/history/watson-jeopardy",
+  },
+  {
+    id: "seed-alphago-lee-sedol-2016",
+    stage: "scaling", country: "GB", provenance: "seeded", source: "milestone",
+    title: "DeepMind's AlphaGo beats Lee Sedol 4-1 in Seoul in front of more than 200 million viewers, every win by resignation, and game two's Move 37 — a play with a 1-in-10,000 chance of being chosen by a human — upends centuries of Go theory",
+    org: "Google DeepMind", date: "2016-03",
+    url: "https://deepmind.google/research/alphago/",
+  },
+  {
+    id: "seed-google-tpu-v1-2016",
+    stage: "scaling", country: "US", provenance: "seeded", source: "milestone",
+    title: "Google reveals the Tensor Processing Unit at I/O, a custom inference ASIC it had already been running in its own data centres for more than a year, at 15-30x the performance and 30-80x the performance-per-watt of contemporary CPUs and GPUs",
+    org: "Google", date: "2016-05",
+    url: "https://cloud.google.com/blog/products/ai-machine-learning/google-supercharges-machine-learning-tasks-with-custom-chip",
+  },
+  {
+    id: "seed-pan-canadian-ai-strategy-2017",
+    stage: "adoption", country: "CA", provenance: "seeded", source: "deployment",
+    title: "Canada's federal budget commits $125 million to the Pan-Canadian Artificial Intelligence Strategy, administered through CIFAR across Montreal, Toronto-Waterloo and Edmonton — the world's first national AI strategy",
+    org: "Government of Canada / CIFAR", date: "2017-03-22", amountUsd: 125_000_000,
+    url: "https://ised-isde.canada.ca/site/ised/en/pan-canadian-artificial-intelligence-strategy",
+    deploymentStatus: "announced",
+  },
   {
     id: "seed-china-ai-plan-2017",
     stage: "scaling", country: "CN", provenance: "seeded", source: "milestone",
