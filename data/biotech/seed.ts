@@ -493,4 +493,84 @@ export const SEED: Entry[] = [
     url: "https://investors.biocerescrops.com/news/news-details/2020/Bioceres-Crop-Solutions-Corp.-Announces-Regulatory-Approval-of-Drought-Tolerant-HB4-Wheat-in-Argentina/default.aspx",
     deploymentStatus: "deployed",
   },
+
+  // ── Stage 04: investment (private capital) ──────────────────────
+  // Real, individually-verified private raises. `source: "funding-round"`
+  // keeps these OUT of fundingByCountry/periodFunding, which filter to
+  // source === "grant" so the Investment KPI stays the NSF/public number —
+  // see aggregate.ts and CLAUDE.md's "Private funding rounds" section.
+  // Public companies in this vertical's `tickers` list are deliberately
+  // excluded: their capital story is the market panel and the R&D chart,
+  // not a seeded round. Biotechnology had none of these at launch while
+  // quantum had 15 and AI 17, so this is the layer catching up.
+  {
+    id: "seed-isomorphic-600m-2025",
+    stage: "investment", country: "GB", provenance: "seeded", source: "funding-round",
+    title: "Isomorphic Labs raises $600 million in its first external round, led by Thrive Capital with GV and existing investor Alphabet, to push its AI drug-design engine toward the clinic",
+    org: "Isomorphic Labs", date: "2025-03-31", amountUsd: 600_000_000,
+    url: "https://www.isomorphiclabs.com/articles/isomorphic-labs-announces-600m-external-investment-round",
+  },
+  {
+    id: "seed-isomorphic-series-b-2026",
+    stage: "investment", country: "GB", provenance: "seeded", source: "funding-round",
+    title: "Isomorphic Labs secures a $2.1 billion Series B led by Thrive Capital, joined by Alphabet, GV, MGX, Temasek, CapitalG and the UK Sovereign AI Fund",
+    org: "Isomorphic Labs", date: "2026-05-12", amountUsd: 2_100_000_000,
+    url: "https://www.isomorphiclabs.com/articles/isomorphic-labs-announces-series-b-investment-round",
+  },
+  {
+    id: "seed-xaira-launch-2024",
+    stage: "investment", country: "US", provenance: "seeded", source: "funding-round",
+    title: "Xaira Therapeutics launches with more than $1 billion from ARCH Venture Partners and Foresite Labs, ARCH's largest investment in its 39-year history, built around the team behind the RFdiffusion and RFantibody protein-design models",
+    org: "Xaira Therapeutics", date: "2024-04-24", amountUsd: 1_000_000_000,
+    url: "https://www.fiercebiotech.com/biotech/new-ai-drug-discovery-powerhouse-xaira-rises-1b-funding",
+  },
+  {
+    id: "seed-altos-labs-2022",
+    stage: "investment", country: "US", provenance: "seeded", source: "funding-round",
+    title: "Altos Labs launches with $3 billion in seed funding for cellular rejuvenation programming, backed by Jeff Bezos, Yuri Milner and ARCH Venture Partners — the largest seed round ever raised",
+    org: "Altos Labs", date: "2022-01-19", amountUsd: 3_000_000_000,
+    url: "https://cen.acs.org/business/start-ups/Altos-Labs-launches-3-billion/100/i3",
+  },
+  {
+    id: "seed-evolutionaryscale-2024",
+    stage: "investment", country: "US", provenance: "seeded", source: "funding-round",
+    title: "EvolutionaryScale emerges from stealth with more than $142 million in seed funding and ESM3, a protein language model trained on 2.78 billion proteins that generated a novel green fluorescent protein",
+    org: "EvolutionaryScale", date: "2024-06-25", amountUsd: 142_000_000,
+    url: "https://www.businesswire.com/news/home/20240625717839/en/EvolutionaryScale-Launches-with-ESM3-A-Milestone-AI-Model-for-Biology",
+  },
+  {
+    id: "seed-dna-script-series-c-2021",
+    stage: "investment", country: "FR", provenance: "seeded", source: "funding-round",
+    title: "DNA Script raises a $165 million first tranche of an oversubscribed Series C, later closed at $200 million, to commercialise its SYNTAX benchtop enzymatic DNA printer",
+    org: "DNA Script", date: "2021-10-26", amountUsd: 165_000_000,
+    url: "https://www.dnascript.com/press-releases/dna-script-raises-165m-in-oversubscribed-series-c-financing-to-accelerate-commercialization-of-enzymatic-dna-printing-platform/",
+  },
+  {
+    id: "seed-cradle-series-b-2024",
+    stage: "investment", country: "NL", provenance: "seeded", source: "funding-round",
+    title: "Cradle raises a $73 million Series B led by IVP for AI protein engineering, taking the Amsterdam and Zürich company past $100 million total",
+    org: "Cradle", date: "2024-11-26", amountUsd: 73_000_000,
+    url: "https://www.cradle.bio/blog/series-b",
+  },
+  {
+    id: "seed-bota-bio-series-b-2021",
+    stage: "investment", country: "CN", provenance: "seeded", source: "funding-round",
+    title: "Bota Bio raises a $100 million Series B led by Sequoia Capital China to scale synthetic-biology and enzyme-engineering manufacturing from its Hangzhou base, taking total funding to $145 million",
+    org: "Bota Bio", date: "2021-07-29", amountUsd: 100_000_000,
+    url: "https://www.prnewswire.com/news-releases/bota-bio-raises-100-million-series-b-financing-to-advance-sustainable-biomanufacturing-301343566.html",
+  },
+  {
+    id: "seed-aleph-farms-series-b-2021",
+    stage: "investment", country: "IL", provenance: "seeded", source: "funding-round",
+    title: "Aleph Farms closes a $105 million Series B led by L Catterton's Growth Fund and Abu Dhabi's DisruptAD, with Thai Union, BRF, CJ CheilJedang and Cargill participating, three years before its cultivated beef won the world's first regulatory approval",
+    org: "Aleph Farms", date: "2021-07-07", amountUsd: 105_000_000,
+    url: "https://www.prnewswire.com/il/news-releases/aleph-farms-completes-105-million-series-b-funding-round-301326759.html",
+  },
+  {
+    id: "seed-spiber-2024",
+    stage: "investment", country: "JP", provenance: "seeded", source: "funding-round",
+    title: "Spiber raises over ¥10 billion (about $65 million) to scale fermentation production of its Brewed Protein materials, taking total funding near $489 million — and entered private liquidation in March 2026, the clearest case in this dataset of capital raised not being capacity delivered",
+    org: "Spiber", date: "2024-04-12", amountUsd: 65_000_000,
+    url: "https://www.businesswire.com/news/home/20240412872292/en/Spiber-Inc.-Raises-Over-JPY-10-Billion-in-Funding-to-Strengthen-Mass-Production-and-Sales-Initiatives",
+  },
 ];

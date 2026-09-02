@@ -180,7 +180,7 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
       {route === "rd" && (
         <div>
           <div className="drawer-note">
-            <strong>Total company R&D among firms with tracked activity in this field.</strong> These are company-wide R&D totals, not estimated Quantum- or AI-specific spending — a diversified company's real total R&D budget covers far more than this one field.
+            <strong>Total company R&D among firms with tracked activity in this field.</strong> These are company-wide R&D totals, not estimated {vertical.shortLabel}-specific spending — a diversified company's real total R&D budget covers far more than this one field. Narrow it with the categories below: the pure-play groups are the ones where a company's whole R&D budget really is this field.
           </div>
           {data?.rdSpend && data.rdSpend.length > 0 ? (
             <>

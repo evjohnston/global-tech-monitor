@@ -21,6 +21,7 @@
 // as a "fresher" alternate feed.
 import type { Entry } from "../types.ts";
 import { inferInstitutionCountry } from "../institutionCountry.ts";
+import { truncateAbstract } from "./util.ts";
 
 // The nightly build's real per-run ceiling on the rolling-window query:
 // OA_N (200, OpenAlex's per-page max) x OA_PAGES (3) in
@@ -34,8 +35,10 @@ import { inferInstitutionCountry } from "../institutionCountry.ts";
 // quantum and ~165% for AI (1,241 works on a day whose real recorded value
 // was ~470), plus a spurious ramp for biotechnology, whose 30-day volume is
 // so far above the cap that an 8-page sample only reaches back a few days.
-// If fetch-data.ts's OA_N/OA_PAGES change, change this with them.
-export const LIVE_WINDOW_CAP = 600;
+// If fetch-data.ts's OA_N/OA_PAGES change, change this with them. Raised
+// with them from 600 to 10,000 on 2026-09-02 — see OA_PAGES for the
+// coverage measurements that forced it.
+export const LIVE_WINDOW_CAP = 10_000;
 
 export interface OpenAlexOpts {
   filter: string; // raw OpenAlex filter fragment, e.g. "topics.id:T10682" or "primary_topic.subfield.id:1702"
@@ -161,7 +164,7 @@ function mapWork(w: OAWork): Entry {
     source: "paper", title, org, date: (w.publication_date ?? "").slice(0, 10),
     url: workUrl, countryEvidence: evidence,
     citations: w.cited_by_count,
-    abstract: abstractText,
+    abstract: truncateAbstract(abstractText),
     authors: authorNames.length > 0 ? authorNames.slice(0, 6) : undefined,
     venue: w.primary_location?.source?.display_name ?? undefined,
     collaboratingCountries,

@@ -15,6 +15,7 @@
 // rather than guessed into the wrong stage.
 import type { Entry, Stage } from "../types.ts";
 import { inferInstitutionCountry } from "../institutionCountry.ts";
+import { truncateAbstract } from "./util.ts";
 
 export interface RssFeedConfig {
   url: string;
@@ -200,7 +201,7 @@ async function fetchOneFeed(feed: RssFeedConfig, cutoffMs: number, classifier: R
       // the acting organization.
       title: item.title, org: "", date, url: item.link, publisher: feed.name,
       countryEvidence: `${evidence} (auto-classified from ${feed.name} RSS, unverified)`,
-      abstract: item.description || undefined,
+      abstract: truncateAbstract(item.description),
       deploymentStatus: stage === "adoption" ? classifyDeploymentStatus(`${item.title} ${item.description}`) : undefined,
     });
   }
@@ -325,7 +326,7 @@ export async function fetchInvestmentNews(cfg: InvestmentNewsConfig, sinceDays =
       stage: "investment", country, provenance: "auto", source: "news",
       title, org: "", date, url: item.link, publisher: publisher || undefined,
       countryEvidence: `${evidence} (auto-classified from Google News RSS, unverified)`,
-      abstract: item.description || undefined,
+      abstract: truncateAbstract(item.description),
     });
   }
   const byId = new Map<string, Entry>();

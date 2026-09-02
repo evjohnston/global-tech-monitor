@@ -48,7 +48,7 @@ config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env.local")
 import { inferInstitutionCountry } from "../src/lib/institutionCountry.ts";
 import type { DataFile, Entry, StageNote, TrendPoint, RdSpendPoint } from "../src/lib/types.ts";
 import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/openalex.ts";
-import { fetchPatents } from "../src/lib/sources/epo.ts";
+import { fetchPatents, NON_COUNTRY_PATENT_AUTHORITIES } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchUsaSpendingAwards } from "../src/lib/sources/usaSpending.ts";
 import { fetchSamOpportunities } from "../src/lib/sources/samGov.ts";
@@ -58,12 +58,13 @@ import { CAPIQ_RD_SPEND } from "../data/capiq/rd-spend.ts";
 import { CAPIQ_VC_FUNDING } from "../data/capiq/vc-funding.ts";
 import { PITCHBOOK_VC_FUNDING } from "../data/pitchbook/vc-funding.ts";
 import { fetchNewsRss, fetchInvestmentNews } from "../src/lib/sources/rss.ts";
-import { asArray } from "../src/lib/sources/util.ts";
+import { asArray, truncateAbstract } from "../src/lib/sources/util.ts";
 import { VERTICALS, type VerticalConfig } from "../src/lib/verticals.ts";
 import { canonicalizeOrg } from "../src/lib/entityResolution.ts";
 import { relevanceScoreFor } from "../src/lib/relevanceScore.ts";
 import { buildSourceMeta } from "../src/lib/sourceMeta.ts";
 import { periodCounts, periodFunding } from "../src/lib/aggregate.ts";
+import { LIVE_WINDOW_CAP } from "../src/lib/sources/openalex.ts";
 import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
 import { NOTES as QUANTUM_NOTES } from "../data/quantum/notes.ts";
 import { SEED as AI_SEED } from "../data/ai/seed.ts";
@@ -118,7 +119,33 @@ const OUT_DIR = resolve(__dirname, "../public/data");
 // rpp up to at least 500 (confirmed), EPO OPS search caps around 100 per
 // request on the free tier (per their docs).
 const OA_N = 200;
-const OA_PAGES = 3; // up to 600 works/run, covers the great majority of a 30-day window
+// 50 pages x 200 = 10,000, which is OpenAlex's hard ceiling for basic
+// (page-number) paging — past that it requires cursor paging. Raised from 3
+// on 2026-09-02 after measuring what the old 600-work ceiling actually
+// covered of each vertical's real 30-day journal corpus:
+//   quantum   727 works -> 82.5% covered
+//   AI     10,763 works ->  5.6% covered
+//   biotech 9,784 works ->  6.1% covered
+// Every country chart, the world map, the institution leaderboard and the
+// stage breakdown are computed from entries[] (see aggregate.ts's
+// countByCountry, and Overview.tsx), so for two of three verticals those
+// panels were reading a 6% slice — and because the query sorts
+// publication_date:desc, a systematically biased slice rather than a random
+// one: fast-publishing journals and countries whose work lands sooner were
+// overrepresented. A deeper reach also picks up works OpenAlex indexes late
+// with an older publication_date, which a shallow "most recent N" snapshot
+// can never see at all.
+//
+// Affordable only because abstracts are now capped (see truncateAbstract in
+// sources/util.ts) — they were 69.4% of the payload. Net effect is that all
+// three files get SMALLER than quantum's previous 18MB while carrying full
+// coverage. `fetchOpenAlexPages` stops early on the first empty page, so
+// quantum still costs ~4 requests, not 50.
+//
+// If you change this, change LIVE_WINDOW_CAP in sources/openalex.ts with
+// it — scripts/backfill-trend.ts reconstructs against that constant, and a
+// mismatch is exactly the bug fixed on 2026-09-02.
+const OA_PAGES = 50;
 const NSF_N = 300;
 const EPO_N = 100;
 // Top 250 most-cited works of the last 5 years, ranked flat by citation
@@ -239,10 +266,17 @@ function trendPoint(live: Entry[], allEntries: Entry[], prevPoint?: TrendPoint):
   // counts forward instead of recording a visibly degraded snapshot, the
   // same "carry forward rather than blank on a transient failure"
   // convention already used for company snapshots (see massive.ts).
+  // Only ever compared against a point recorded at the SAME window ceiling —
+  // a prior point from before OA_PAGES was raised counts to a different
+  // limit, so the ratio below would be meaningless across the boundary
+  // (see TrendPoint.windowCap). Transitional in practice, but a
+  // cross-ceiling comparison could either cry degradation on a healthy run
+  // or hide a real one, and neither is worth risking for a one-line guard.
+  const comparable = prevPoint?.windowCap === LIVE_WINDOW_CAP ? prevPoint : undefined;
   const todayTotal = Object.values(rawCounts).reduce((a, b) => a + b, 0);
-  const prevTotal = prevPoint ? Object.values(prevPoint.counts).reduce((a, b) => a + b, 0) : 0;
-  const degraded = !!prevPoint && prevTotal >= 20 && todayTotal < prevTotal * 0.15;
-  const counts = degraded ? prevPoint!.counts : rawCounts;
+  const prevTotal = comparable ? Object.values(comparable.counts).reduce((a, b) => a + b, 0) : 0;
+  const degraded = !!comparable && prevTotal >= 20 && todayTotal < prevTotal * 0.15;
+  const counts = degraded ? comparable!.counts : rawCounts;
   const now = new Date();
   const stageCounts = { innovation: 0, scaling: 0, adoption: 0, investment: 0 } as Record<Entry["stage"], number>;
   for (const s of Object.keys(stageCounts) as Entry["stage"][]) {
@@ -255,6 +289,7 @@ function trendPoint(live: Entry[], allEntries: Entry[], prevPoint?: TrendPoint):
     stageCounts,
     fundingUsd,
     totalEntries: allEntries.length,
+    windowCap: LIVE_WINDOW_CAP,
   };
 }
 
@@ -461,6 +496,22 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     if (e.org) e.orgId = canonicalizeOrg(e.org).id;
     e.relevanceScore = relevanceScoreFor(e.source, e.provenance);
     if (!e.ingestedAt) e.ingestedAt = now; // entries from before this field existed
+    // Both of these are corrections applied to EVERY entry every run, not
+    // just freshly-fetched ones, so accumulated history heals itself
+    // instead of carrying a permanent seam at the date the fix shipped —
+    // same reasoning as orgId/relevanceScore being recomputed above.
+    //
+    // Abstracts: capped at ingest now (see truncateAbstract), but entries
+    // already in the file predate that and were the single largest thing
+    // in this app's payload — 69.4% of quantum's 17.9MB entries[] array.
+    e.abstract = truncateAbstract(e.abstract);
+    // Regional/international patent authorities (WO, EP, ...) were being
+    // stored as if they were countries — see epo.ts for the measured
+    // impact and why null is right.
+    if (e.source === "patent" && e.country && NON_COUNTRY_PATENT_AUTHORITIES.has(e.country)) {
+      e.countryEvidence = `Published by ${e.country}, a regional or international patent authority rather than a country — not attributable to one nation`;
+      e.country = null;
+    }
   }
 
   // Append today's trend point, keeping prior history. One point per date.

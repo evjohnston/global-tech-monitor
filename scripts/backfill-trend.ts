@@ -45,7 +45,10 @@ async function main() {
 
   console.log(`fetching ${FETCH_WINDOW}-day window of OpenAlex works...`);
   const works = await fetchOpenAlexPages({
-    filter: v.openAlexFilter, key: OA_KEY, mailto: OA_MAILTO, sinceDays: FETCH_WINDOW, n: 200, pages: 8,
+    // Matches fetch-data.ts's own OA_PAGES — a reconstruction has to be
+    // able to reach the same ceiling the live query does, or the coverage
+    // guard below correctly refuses every day.
+    filter: v.openAlexFilter, key: OA_KEY, mailto: OA_MAILTO, sinceDays: FETCH_WINDOW, n: 200, pages: 50,
   });
   console.log(`fetched ${works.length} works with real publication dates`);
 
@@ -58,7 +61,20 @@ async function main() {
   if (validExisting.length !== data.trend.length) {
     console.log(`dropped ${data.trend.length - validExisting.length} legacy actor-bucket trend point(s)`);
   }
-  const existingByDate = new Map(validExisting.map((p) => [p.date, p]));
+  // "A real recorded run beats a reconstruction" holds only when the two are
+  // measuring the same thing. A point recorded at a DIFFERENT window ceiling
+  // (see TrendPoint.windowCap) is not comparable to today's, so it doesn't
+  // get to block a faithful reconstruction at the current one — otherwise
+  // raising OA_PAGES would permanently freeze the old, incomparable points
+  // in place and loadHistory() would simply discard them, leaving the
+  // vertical with no history at all. Points at the current ceiling still
+  // win, as before.
+  const existingByDate = new Map(
+    validExisting.filter((p) => p.windowCap === LIVE_WINDOW_CAP).map((p) => [p.date, p])
+  );
+  const supersededDates = new Set(
+    validExisting.filter((p) => p.windowCap !== LIVE_WINDOW_CAP).map((p) => p.date)
+  );
   const backfilled: TrendPoint[] = [];
   let skippedForCoverage = 0;
   const now = Date.now();
@@ -105,7 +121,7 @@ async function main() {
       counts[w.country] = (counts[w.country] ?? 0) + 1;
     }
     if (Object.values(counts).reduce((s, n) => s + n, 0) === 0) continue;
-    backfilled.push({ date, counts });
+    backfilled.push({ date, counts, windowCap: LIVE_WINDOW_CAP });
   }
 
   console.log(`reconstructed ${backfilled.length} historical points (${data.trend.length} already real)`);
@@ -117,7 +133,16 @@ async function main() {
       `accumulate from real scheduled runs instead of being written as a partial sample.`
     );
   }
-  const merged = [...validExisting, ...backfilled].sort((a, b) => (a.date < b.date ? -1 : 1));
+  // Drop a stale-ceiling point only where a reconstruction actually replaced
+  // it. Where none could be built (the coverage guard refused), the old
+  // point is left in the file untouched — loadHistory() won't chart it, but
+  // deleting a real recorded observation to tidy up would be destroying
+  // data to make a number look neater.
+  const rebuilt = new Set(backfilled.map((p) => p.date));
+  const kept = validExisting.filter((p) => !rebuilt.has(p.date));
+  const replaced = [...supersededDates].filter((d) => rebuilt.has(d)).length;
+  if (replaced > 0) console.log(`replaced ${replaced} point(s) recorded at a previous window ceiling`);
+  const merged = [...kept, ...backfilled].sort((a, b) => (a.date < b.date ? -1 : 1));
   data.trend = merged;
 
   writeFileSync(OUT, JSON.stringify(data, null, 2));

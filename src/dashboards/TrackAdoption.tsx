@@ -49,6 +49,17 @@ export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
   const orgRows = useMemo(() => orgLeaderboard(scopedEntries, undefined, 10), [scopedEntries]);
   const verified = scopedEntries.filter((e) => e.provenance === "seeded").length;
   const reported = scopedEntries.filter((e) => e.provenance === "auto").length;
+  // How much of this stage's auto tier can't be placed on a map at all.
+  // Measured 2026-09-02 on the real data: 74% of quantum's auto entries and
+  // 88% of AI's carry no country, because institutionCountry.ts is matching
+  // organization names against news prose. That matters here specifically:
+  // scopedEntries is country-filtered, so every unattributed news item
+  // silently vanishes from a country view, and a reader comparing
+  // "Verified 12 / Reported 3" would conclude the news layer is tiny when
+  // most of it is simply unplaceable. Stated rather than left to be
+  // misread, and computed from the real data instead of hardcoded.
+  const autoAll = entries.filter((e) => e.stage === "adoption" && e.provenance === "auto");
+  const autoNoCountry = autoAll.filter((e) => !e.country).length;
   const statusCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const e of scopedEntries) counts[e.deploymentStatus ?? "unclassified"] = (counts[e.deploymentStatus ?? "unclassified"] ?? 0) + 1;
@@ -74,7 +85,15 @@ export function TrackAdoption({ ctx }: { ctx: DashboardContext }) {
         <div className="kpirow kpirow-6">
           <KpiCard label={`${countryName(country)} adoption records`} value={String(scopedEntries.length)} caption="deployment and procurement records · all time" />
           <KpiCard label="Verified" value={String(verified)} caption="hand-checked against a source URL" />
-          <KpiCard label="Reported" value={String(reported)} caption="RSS auto-classified, weakest tier" />
+          <KpiCard
+            label="Reported"
+            value={String(reported)}
+            caption={
+              autoNoCountry > 0
+                ? `RSS auto-classified, weakest tier · ${autoNoCountry} of ${autoAll.length} news items carry no country and aren't counted here`
+                : "RSS auto-classified, weakest tier"
+            }
+          />
           <KpiCard label="Share / rank" value={countryRank != null ? `#${countryRank}` : "—"} caption={countryShare != null ? `${countryShare.toFixed(0)}% of tracked global output` : "no tracked output yet"} />
           <KpiCard span2 label="Top adopter" value={topAdopter ? topAdopter.org : "Unknown adopter"} caption={topAdopter ? `${topAdopter.count} tracked records in ${countryName(country)}` : "no adopter identifiable yet"} />
         </div>

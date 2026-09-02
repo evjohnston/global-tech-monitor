@@ -3,12 +3,38 @@
 // why it's proxied). Uses global fetch + btoa, both available in Node 20+
 // and Workers, so no runtime-specific APIs (no node:buffer) are needed.
 import type { Entry } from "../types.ts";
-import { asArray } from "./util.ts";
+import { asArray, truncateAbstract } from "./util.ts";
 
 // `cpcQuery` is the CPC classification's OPS CQL fragment identifying the
 // vertical, e.g. "cpc=G06N10" for quantum computing or "cpc=G06N3 OR
 // cpc=G06N20" for AI/ML (neural networks + machine learning, since AI has no
 // single CPC code the way quantum's G06N10 does — see verticals.ts).
+// A DOCDB publication code is a PUBLISHING AUTHORITY, not always a
+// country. Regional and international authorities publish under their own
+// codes, and a PCT application published as WO genuinely has no single
+// filing country — it's an application at the international phase, before
+// any national designation resolves. Left unfiltered these flowed straight
+// into Entry.country and were counted and rendered as if they were
+// countries: measured 2026-09-02 on the real data, 99 such entries in
+// quantum, 61 in AI, 58 in biotech, and countryName("WO") returns the
+// literal string "WO" — so the map and the country leaderboards showed
+// "WO" as a nation, which also breaks this app's own rule that display
+// never shows a raw alpha-2 code (see CLAUDE.md, "Country attribution").
+//
+// These resolve to null, the same convention every other source here uses
+// for "no country-shaped data," rather than being guessed at or dropped:
+// the patent is still real innovation-stage volume, it just can't be
+// attributed to one country.
+export const NON_COUNTRY_PATENT_AUTHORITIES = new Set([
+  "WO", // WIPO — PCT international applications
+  "EP", // European Patent Office — regional
+  "EA", // Eurasian Patent Organization — regional
+  "AP", // ARIPO — African Regional IP Organization
+  "OA", // OAPI — Organisation Africaine de la Propriété Intellectuelle
+  "GC", // Gulf Cooperation Council Patent Office — regional
+  "IB", // WIPO International Bureau
+]);
+
 export async function fetchPatents(key: string, secret: string, n: number, cpcQuery: string): Promise<Entry[]> {
   // An empty cpcQuery means this vertical has no real CPC classification to
   // search (e.g. Talent/human-capital — "employment software" patents
@@ -97,16 +123,19 @@ export async function fetchPatents(key: string, secret: string, n: number, cpcQu
       ? (abstractNode.find((a: any) => a?.["@lang"] === "en") ?? abstractNode[0])?.p?.["$"]
       : abstractNode?.p?.["$"];
 
+    const isRegional = NON_COUNTRY_PATENT_AUTHORITIES.has(country);
     return {
       id: `epo-${num}`, stage: "innovation",
-      country: country || null, provenance: "live", source: "patent",
-      title: String(title).replace(/\s+/g, " ").trim() || "Quantum computing patent",
+      country: !country || isRegional ? null : country, provenance: "live", source: "patent",
+      title: String(title).replace(/\s+/g, " ").trim() || "Patent filing",
       org, date: publicationDate(ex),
       url: `https://worldwide.espacenet.com/patent/search?q=${num}`,
-      countryEvidence: country ? `EPO filing country ${country}` : "EPO record has no filing country",
+      countryEvidence: isRegional
+        ? `Published by ${country}, a regional or international patent authority rather than a country — not attributable to one nation`
+        : country ? `EPO filing country ${country}` : "EPO record has no filing country",
       authors: inventors.length > 0 ? inventors : undefined,
       classification: cpcCodes(ex),
-      abstract: typeof abstractText === "string" ? abstractText.trim() : undefined,
+      abstract: truncateAbstract(typeof abstractText === "string" ? abstractText : undefined),
     };
   });
 }

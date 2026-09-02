@@ -281,5 +281,14 @@ export function concentrationShare(rows: OrgRow[], totalForScope: number): { top
 // should filter on their presence rather than raw trend.length, since a
 // handful of old points won't have them no matter how long trend[] is.
 export function loadHistory(trend: TrendPoint[]): TrendPoint[] {
-  return trend;
+  if (trend.length === 0) return trend;
+  // Keep only the points comparable to the most recent one. `counts` is a
+  // count up to whatever ceiling that run could see (TrendPoint.windowCap),
+  // so mixing ceilings on one line invents growth — when the ceiling went
+  // 600 -> 10,000 on 2026-09-02, every prior point would have appeared to
+  // be a twentieth of its successors. Reading the current ceiling off the
+  // latest point rather than importing a constant means this keeps working
+  // through any future change without the frontend knowing the number.
+  const current = trend[trend.length - 1].windowCap;
+  return trend.filter((p) => p.windowCap === current);
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { DataFile, Entry, Stage, StageNote } from "./lib/types.ts";
 import { VERTICALS } from "./lib/verticals.ts";
 import { countryName } from "./lib/countries.ts";
+import { loadHistory } from "./lib/aggregate.ts";
 import { buildOrgFinancialIndex } from "./lib/orgFinancials.ts";
 import { canonicalizeOrg } from "./lib/entityResolution.ts";
 import type { DrawerTarget } from "./lib/drawerTarget.ts";
@@ -130,7 +131,12 @@ export default function App() {
   }, [vertical.id]);
 
   const entries = data?.entries ?? [];
-  const trend = data?.trend ?? [];
+  // loadHistory drops points recorded against a different OpenAlex window
+  // ceiling than the latest one — see its comment in aggregate.ts. Applied
+  // here, at the single place trend is read, so every downstream chart and
+  // the map's time scrubber get one comparable series without each having
+  // to know the rule.
+  const trend = useMemo(() => loadHistory(data?.trend ?? []), [data]);
   const trend21 = useMemo(() => trend.slice(-21), [trend]);
   const shown = useMemo(
     () =>

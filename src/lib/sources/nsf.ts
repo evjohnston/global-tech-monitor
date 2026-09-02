@@ -2,6 +2,7 @@
 // Worker (not called directly from the browser: research.gov doesn't send
 // CORS headers, confirmed by hand before building the proxy).
 import type { Entry } from "../types.ts";
+import { truncateAbstract } from "./util.ts";
 
 interface NSFAward {
   id?: string; title?: string; awardeeName?: string;
@@ -77,7 +78,7 @@ export async function fetchNSF(
       url: `https://www.nsf.gov/awardsearch/showAward?AWD_ID=${a.id ?? ""}`,
       amountUsd: amt,
       countryEvidence: `NSF awardee country ${country}`,
-      abstract: a.abstractText?.trim() || undefined,
+      abstract: truncateAbstract(a.abstractText),
       authors: a.pdPIName ? [a.pdPIName] : undefined,
       venue: a.program || undefined,
     };

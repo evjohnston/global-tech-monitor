@@ -142,6 +142,19 @@ export interface TrendPoint {
   stageCounts?: Record<Stage, number>;
   fundingUsd?: number;
   totalEntries?: number; // cumulative corpus size as of this date (monotonic by nature — real, not a rate)
+  // How many works the run that produced this point could SEE — OA_N x
+  // OA_PAGES in scripts/fetch-data.ts at the time. Added 2026-09-02, when
+  // that ceiling went from 600 to 10,000 to actually cover the AI and
+  // biotech corpora (they were being sampled at ~6%). Points recorded at
+  // different ceilings are counting to different limits and must never
+  // share a chart line — a 600-cap point next to a 10,000-cap one reads as
+  // 20x growth that didn't happen, the same class of error that made
+  // backfill-trend's reconstructions wrong. Absent on every point recorded
+  // before this field existed, which is itself the signal that it predates
+  // the change. Nothing is deleted for this: loadHistory() in aggregate.ts
+  // filters to one comparable series at read time, so the raw record stays
+  // in the file and a future ceiling change self-heals.
+  windowCap?: number;
 }
 
 // A dated analyst note attached to a pipeline stage — the "so what" layer.
