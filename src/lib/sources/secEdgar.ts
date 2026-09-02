@@ -21,7 +21,38 @@ import type { RdSpendPoint } from "../types.ts";
 
 const SEC_UA = "GlobalTechMonitor research-contact:gtm@example.com";
 const TICKERS_URL = "https://www.sec.gov/files/company_tickers.json";
-const CONCEPT = "ResearchAndDevelopmentExpense";
+// SEC hosts more than one XBRL taxonomy and companies tag R&D under more
+// than one concept, so trying exactly one of each — which this did until
+// 2026-09-02 — silently loses real, free data. Audited every ticker across
+// all three verticals that was coming back empty; of 38, thirty had usable
+// SEC data under a concept this wasn't asking for:
+//   us-gaap:...ExcludingAcquiredInProcessCost  Amgen (51 facts, 2007-2025),
+//     Pfizer, AbbVie, Zoetis, Qiagen, 10x Genomics, Teradyne
+//   us-gaap:...SoftwareExcludingAcquiredInProcessCost  Adobe (51 facts)
+//   ifrs-full:ResearchAndDevelopmentExpense  the 20-F filers — AstraZeneca,
+//     Novartis, Legend Biotech, SOPHiA, Bioceres, BioNTech, Sanofi, GSK,
+//     Novo Nordisk, Takeda, SAP, TSMC, Nokia, SK Telecom
+// Amgen returning 404 on the obvious concept while reporting R&D in every
+// annual report is what gave this away. Ordered most- to least-specific;
+// the first concept with usable facts wins.
+const CONCEPTS: { taxonomy: string; concept: string }[] = [
+  { taxonomy: "us-gaap", concept: "ResearchAndDevelopmentExpense" },
+  { taxonomy: "us-gaap", concept: "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost" },
+  { taxonomy: "us-gaap", concept: "ResearchAndDevelopmentExpenseSoftwareExcludingAcquiredInProcessCost" },
+  { taxonomy: "ifrs-full", concept: "ResearchAndDevelopmentExpense" },
+];
+
+// USD only, deliberately. Several real filers report R&D in their own
+// currency — BioNTech in EUR, GSK in GBP, Novo Nordisk in DKK, Takeda in
+// JPY, TSMC in TWD, SK Telecom in KRW — and RdSpendPoint.totalUsd is a SUM
+// across companies, so folding a EUR figure in unconverted would produce a
+// number that is simply wrong rather than merely imprecise. Converting
+// properly needs historical FX at each fiscal-year end, which is a real
+// source this app doesn't have. So a non-USD-only filer is skipped and
+// logged, the same "omit rather than fabricate" rule used everywhere else
+// here. Note several of these ALSO publish a USD series (Alibaba, Baidu,
+// TSMC, SAP, Nebius) and those are picked up normally.
+const UNIT = "USD";
 
 interface XbrlFact {
   end: string; // YYYY-MM-DD, fiscal period end
@@ -42,26 +73,50 @@ async function fetchTickerToCik(symbols: string[]): Promise<Map<string, string>>
   return out;
 }
 
-async function fetchOneRdHistory(cik: string): Promise<Map<number, number>> {
-  const url = `https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/us-gaap/${CONCEPT}.json`;
-  const res = await fetch(url, { headers: { "User-Agent": SEC_UA } });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = (await res.json()) as { units?: { USD?: XbrlFact[] } };
-  const facts = data.units?.USD ?? [];
-  // Annual figures only (10-K, full fiscal year) — 10-Qs report quarterly/
-  // YTD subtotals under the same concept, which would double-count against
-  // the annual total if included. Dedup by `end` date: the same fiscal
-  // year's figure is repeated verbatim across multiple later filings that
-  // show it as a comparative prior-year number, not a restatement — keeping
-  // one entry per `end` date is correct, not just convenient.
+// Annual figures only — 10-Qs report quarterly/YTD subtotals under the same
+// concept, which would double-count against the annual total. 20-F is
+// accepted alongside 10-K: it's the annual report of a foreign private
+// issuer, exactly the filers the ifrs-full concept above exists to reach.
+// Some 20-F facts carry an empty or non-"FY" `fp`, so the form is the
+// reliable gate and `fp` is only used to exclude explicit quarters.
+function annualFactsByYear(facts: XbrlFact[]): Map<number, number> {
+  // Dedup by `end` date: the same fiscal year's figure is repeated verbatim
+  // across multiple later filings that show it as a comparative prior-year
+  // number, not a restatement — one entry per `end` date is correct, not
+  // just convenient.
   const byEnd = new Map<string, number>();
   for (const f of facts) {
-    if (f.form !== "10-K" || f.fp !== "FY") continue;
+    const form = f.form ?? "";
+    if (!form.startsWith("10-K") && !form.startsWith("20-F")) continue;
+    if (f.fp && f.fp !== "FY") continue;
     byEnd.set(f.end, f.val);
   }
   const byYear = new Map<number, number>();
   for (const [end, val] of byEnd) byYear.set(Number(end.slice(0, 4)), val);
   return byYear;
+}
+
+async function fetchOneRdHistory(cik: string): Promise<Map<number, number>> {
+  let sawNonUsdOnly = false;
+  for (const { taxonomy, concept } of CONCEPTS) {
+    const url = `https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/${taxonomy}/${concept}.json`;
+    const res = await fetch(url, { headers: { "User-Agent": SEC_UA } });
+    if (!res.ok) continue; // this company doesn't tag this concept — try the next
+    const data = (await res.json()) as { units?: Record<string, XbrlFact[]> };
+    const units = data.units ?? {};
+    const usd = Array.isArray(units[UNIT]) ? annualFactsByYear(units[UNIT]) : new Map<number, number>();
+    if (usd.size > 0) return usd;
+    // Real data, wrong currency — remember it so the skip message says which
+    // problem this is, rather than implying the company reports nothing.
+    if (Object.keys(units).some((u) => Array.isArray(units[u]) && annualFactsByYear(units[u]).size > 0)) {
+      sawNonUsdOnly = true;
+    }
+  }
+  throw new Error(
+    sawNonUsdOnly
+      ? `reports R&D only in a non-USD currency — skipped rather than summed into a USD total (see UNIT in secEdgar.ts)`
+      : `no usable R&D concept in any taxonomy`
+  );
 }
 
 export async function fetchRdSpendByYear(symbols: string[]): Promise<RdSpendPoint[]> {

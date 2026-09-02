@@ -567,6 +567,42 @@ deliberately kept as separate signals rather than merged into one number:
   daily accumulation needed, since SEC's API already returns a company's
   whole filing history in one call.
 
+**`fetchRdSpendByYear` was asking SEC for one concept in one taxonomy, and
+losing most of its available data to that** (fixed 2026-09-02). SEC hosts
+both `us-gaap` and `ifrs-full`, and companies tag R&D under several
+different concepts. Amgen returning HTTP 404 on
+`us-gaap:ResearchAndDevelopmentExpense` while reporting R&D in every annual
+report is what gave it away. Audited all 38 tickers across the three
+verticals that were coming back empty: **30 had usable SEC data under a
+concept the fetcher never asked for.**
+- `us-gaap:...ExcludingAcquiredInProcessCost` — Amgen (51 annual facts back
+  to 2007), Pfizer, AbbVie, Zoetis, Qiagen, 10x Genomics, Teradyne
+- `us-gaap:...SoftwareExcludingAcquiredInProcessCost` — Adobe
+- `ifrs-full:ResearchAndDevelopmentExpense` — the 20-F filers, i.e.
+  AstraZeneca, Novartis, Legend Biotech, SOPHiA, Bioceres, BioNTech,
+  Sanofi, GSK, Novo Nordisk, Takeda, SAP, TSMC, Nokia, SK Telecom
+
+Now tries all four in order, accepts 20-F alongside 10-K (a foreign private
+issuer's annual report is exactly what the ifrs concept is for), and takes
+the first concept with usable facts. Verified live: 15 previously-empty
+tickers returned $60.7 billion of real FY2025 R&D — Amgen $7.27B, Pfizer
+$10.44B, AbbVie $9.10B, AstraZeneca $14.23B, Novartis $11.20B, Adobe
+$4.29B.
+
+**USD only, deliberately.** `RdSpendPoint.totalUsd` is a sum across
+companies, so folding an unconverted EUR or JPY figure in would make it
+simply wrong rather than imprecise, and converting properly needs
+historical FX at each fiscal-year end — a source this app doesn't have.
+A filer reporting only in its own currency is skipped with a message
+saying which problem it is, so it doesn't read as "reports nothing". That
+leaves ten real companies (BioNTech in EUR, Sanofi EUR, GSK GBP, Novo
+Nordisk DKK, Takeda JPY, SAP EUR, TSMC TWD, ASML EUR, Nokia EUR, SK
+Telecom KRW) which **a CapIQ export is the right fix for**, since
+`IQ_RD_EXP_FN` comes back already in USD. Eight more (NAUT, CRL, RNA,
+AMZN, INOD, ARQQ, LHX, BAH) have nothing at SEC under any concept — Amazon
+for the documented reason below, the rest apparently not tagging a
+standalone line at all.
+
 Two things `fetchRdSpendByYear` handles that would otherwise silently
 misrepresent the number: (1) a company that doesn't tag a standalone
 `ResearchAndDevelopmentExpense` XBRL concept — Amazon folds R&D into a
