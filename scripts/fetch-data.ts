@@ -64,7 +64,7 @@ import { canonicalizeOrg } from "../src/lib/entityResolution.ts";
 import { relevanceScoreFor } from "../src/lib/relevanceScore.ts";
 import { buildSourceMeta } from "../src/lib/sourceMeta.ts";
 import { periodCounts, periodFunding } from "../src/lib/aggregate.ts";
-import { LIVE_WINDOW_CAP } from "../src/lib/sources/openalex.ts";
+import { LIVE_WINDOW_CAP, LEGACY_WINDOW_CAP } from "../src/lib/sources/openalex.ts";
 import { SEED as QUANTUM_SEED } from "../data/quantum/seed.ts";
 import { NOTES as QUANTUM_NOTES } from "../data/quantum/notes.ts";
 import { SEED as AI_SEED } from "../data/ai/seed.ts";
@@ -251,8 +251,21 @@ function mergeCapiqRdSpend(rdSpend: RdSpendPoint[], tickers: string[]): RdSpendP
 }
 
 function trendPoint(live: Entry[], allEntries: Entry[], prevPoint?: TrendPoint): TrendPoint {
+  // Counted from the LIVE_WINDOW_CAP most recently published works of this
+  // run's fetch, not all of it. OA_PAGES is 50 now, so `live` holds up to
+  // 10,000 works — but every trend point already on the data branch was
+  // measured against a 3-page, 600-work fetch, and the series is only
+  // meaningful if each point was measured the same way. Truncating here
+  // reproduces what a 600-work run would have seen (the live query sorts
+  // publication_date:desc, so the most recent 600 IS what it would have
+  // returned) and keeps 75 recorded quantum points and 51 AI points
+  // comparable instead of orphaning them. See LIVE_WINDOW_CAP in
+  // openalex.ts for the full reasoning.
+  const sampled = [...live]
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+    .slice(0, LIVE_WINDOW_CAP);
   const rawCounts: Record<string, number> = {};
-  for (const e of live) {
+  for (const e of sampled) {
     if (e.stage !== "innovation" || !e.country) continue;
     rawCounts[e.country] = (rawCounts[e.country] ?? 0) + 1;
   }
@@ -272,7 +285,7 @@ function trendPoint(live: Entry[], allEntries: Entry[], prevPoint?: TrendPoint):
   // (see TrendPoint.windowCap). Transitional in practice, but a
   // cross-ceiling comparison could either cry degradation on a healthy run
   // or hide a real one, and neither is worth risking for a one-line guard.
-  const comparable = prevPoint?.windowCap === LIVE_WINDOW_CAP ? prevPoint : undefined;
+  const comparable = prevPoint && (prevPoint.windowCap ?? LEGACY_WINDOW_CAP) === LIVE_WINDOW_CAP ? prevPoint : undefined;
   const todayTotal = Object.values(rawCounts).reduce((a, b) => a + b, 0);
   const prevTotal = comparable ? Object.values(comparable.counts).reduce((a, b) => a + b, 0) : 0;
   const degraded = !!comparable && prevTotal >= 20 && todayTotal < prevTotal * 0.15;

@@ -1,4 +1,5 @@
 import type { Entry, Stage, TrendPoint } from "./types.ts";
+import { LEGACY_WINDOW_CAP } from "./sources/openalex.ts";
 import { canonicalizeOrg } from "./entityResolution.ts";
 
 // Count entries by country within a stage (or all stages). Open-ended —
@@ -289,6 +290,11 @@ export function loadHistory(trend: TrendPoint[]): TrendPoint[] {
   // be a twentieth of its successors. Reading the current ceiling off the
   // latest point rather than importing a constant means this keeps working
   // through any future change without the frontend knowing the number.
-  const current = trend[trend.length - 1].windowCap;
-  return trend.filter((p) => p.windowCap === current);
+  // A missing windowCap means the point predates the field, which means it
+  // was recorded at LEGACY_WINDOW_CAP — not that its ceiling is unknown.
+  // Normalising here is what lets the 75 quantum and 51 AI points already
+  // on the data branch keep charting alongside newly-stamped ones.
+  const capOf = (p: TrendPoint) => p.windowCap ?? LEGACY_WINDOW_CAP;
+  const current = capOf(trend[trend.length - 1]);
+  return trend.filter((p) => capOf(p) === current);
 }

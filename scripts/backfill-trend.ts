@@ -20,7 +20,7 @@ import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { config } from "dotenv";
-import { fetchOpenAlexPages, LIVE_WINDOW_CAP } from "../src/lib/sources/openalex.ts";
+import { fetchOpenAlexPages, LIVE_WINDOW_CAP, LEGACY_WINDOW_CAP } from "../src/lib/sources/openalex.ts";
 import type { DataFile, TrendPoint } from "../src/lib/types.ts";
 import { verticalById } from "../src/lib/verticals.ts";
 
@@ -69,11 +69,17 @@ async function main() {
   // in place and loadHistory() would simply discard them, leaving the
   // vertical with no history at all. Points at the current ceiling still
   // win, as before.
+  // Missing windowCap means the point predates the field, which means it was
+  // recorded at LEGACY_WINDOW_CAP — same normalisation loadHistory() uses.
+  // Without it, every one of the 75 quantum and 51 AI points already on the
+  // data branch would count as stale-ceiling and get overwritten by a
+  // reconstruction, which is the opposite of "a real recorded run wins".
+  const capOf = (p: TrendPoint) => p.windowCap ?? LEGACY_WINDOW_CAP;
   const existingByDate = new Map(
-    validExisting.filter((p) => p.windowCap === LIVE_WINDOW_CAP).map((p) => [p.date, p])
+    validExisting.filter((p) => capOf(p) === LIVE_WINDOW_CAP).map((p) => [p.date, p])
   );
   const supersededDates = new Set(
-    validExisting.filter((p) => p.windowCap !== LIVE_WINDOW_CAP).map((p) => p.date)
+    validExisting.filter((p) => capOf(p) !== LIVE_WINDOW_CAP).map((p) => p.date)
   );
   const backfilled: TrendPoint[] = [];
   let skippedForCoverage = 0;

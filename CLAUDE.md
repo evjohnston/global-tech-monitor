@@ -366,6 +366,32 @@ rather than writing a partial sample as a count. After the fix the three
 series are coherent — biotech reads 559/564/565/566/496/488 against a real
 487, quantum declines gently from 507 to a real 395.
 
+**The trend ceiling and the fetch depth are deliberately different
+numbers** — corrected 2026-09-02, hours after they were briefly conflated.
+`OA_PAGES` went 3 -> 50 so `entries[]` covers the real corpus (see below),
+and `LIVE_WINDOW_CAP` was raised with it, which was wrong. `trend[].counts`
+is a day-over-day COMPARISON: what matters is that every point was measured
+the same way, not that any point is a census. Raising its ceiling would
+have orphaned every historical point and cost the deployed site **75
+recorded quantum points and 51 AI points** off its time-series charts
+(checked against `origin/data`, not assumed — local `public/data` was badly
+stale, at 39 and 11) in exchange for nothing the `entries[]` fix hadn't
+already delivered. So the trend series stays pinned at 600 and
+`trendPoint()` truncates each run's now-much-larger fetch to the 600 most
+recently published works before counting, reproducing exactly what a 3-page
+run would have seen. Verified against the real `origin/data` files: all 75
+and all 51 points still chart, and newly-stamped points chart alongside
+them.
+
+The honest caveat, always true and now written down: for AI and biotech
+that series is a **fixed-size sample** of a much larger corpus, not a
+census. Read its level as an index and its shape as the signal. Only
+quantum's corpus is small enough for it to be a real total. `windowCap`
+absent means 600 (`LEGACY_WINDOW_CAP`), not unknown — all three places that
+compare ceilings normalise it that way (`loadHistory`, `backfill-trend`'s
+supersede rule, and the degraded-run guard), because without that every
+pre-existing production point reads as stale-ceiling and gets discarded.
+
 **Two consequences to know.** First, a high-volume vertical can only be
 backfilled as far as basic paging reaches: quantum reconstructs 30 days
 (its volume is under the cap, so coverage is complete), biotech 6, AI 2,

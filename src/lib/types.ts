@@ -142,18 +142,19 @@ export interface TrendPoint {
   stageCounts?: Record<Stage, number>;
   fundingUsd?: number;
   totalEntries?: number; // cumulative corpus size as of this date (monotonic by nature — real, not a rate)
-  // How many works the run that produced this point could SEE — OA_N x
-  // OA_PAGES in scripts/fetch-data.ts at the time. Added 2026-09-02, when
-  // that ceiling went from 600 to 10,000 to actually cover the AI and
-  // biotech corpora (they were being sampled at ~6%). Points recorded at
-  // different ceilings are counting to different limits and must never
-  // share a chart line — a 600-cap point next to a 10,000-cap one reads as
-  // 20x growth that didn't happen, the same class of error that made
-  // backfill-trend's reconstructions wrong. Absent on every point recorded
-  // before this field existed, which is itself the signal that it predates
-  // the change. Nothing is deleted for this: loadHistory() in aggregate.ts
-  // filters to one comparable series at read time, so the raw record stays
-  // in the file and a future ceiling change self-heals.
+  // How many works this point was counted from — LIVE_WINDOW_CAP in
+  // sources/openalex.ts, currently 600. Points counted against different
+  // ceilings are measuring to different limits and must never share a
+  // chart line, so loadHistory() in aggregate.ts segments them at read
+  // time. Absent means the point predates this field, which means 600
+  // (LEGACY_WINDOW_CAP), not "unknown".
+  //
+  // Note this is the TREND ceiling, not how many works a run fetches —
+  // those came apart deliberately on 2026-09-02 when OA_PAGES went to 50
+  // for entries[] coverage while the trend series stayed pinned at 600 to
+  // preserve its continuity. The field exists so that if the trend ceiling
+  // ever does move, the break is self-describing and the old points are
+  // segmented rather than silently rescaled or deleted.
   windowCap?: number;
 }
 

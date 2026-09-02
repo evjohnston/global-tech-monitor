@@ -23,22 +23,42 @@ import type { Entry } from "../types.ts";
 import { inferInstitutionCountry } from "../institutionCountry.ts";
 import { truncateAbstract } from "./util.ts";
 
-// The nightly build's real per-run ceiling on the rolling-window query:
-// OA_N (200, OpenAlex's per-page max) x OA_PAGES (3) in
-// scripts/fetch-data.ts. Exported here rather than left as two private
-// constants in that script because scripts/backfill-trend.ts has to
-// reconstruct what a same-day fetch would GENUINELY have counted, and that
-// is only comparable to a live point if it applies the identical cap.
-// Getting this wrong is not a rounding error: before it was shared
-// (2026-09-02), the backfill counted an 8-page sample against the live
-// query's 3-page one and produced leading trend points inflated by 48% for
-// quantum and ~165% for AI (1,241 works on a day whose real recorded value
-// was ~470), plus a spurious ramp for biotechnology, whose 30-day volume is
-// so far above the cap that an 8-page sample only reaches back a few days.
-// If fetch-data.ts's OA_N/OA_PAGES change, change this with them. Raised
-// with them from 600 to 10,000 on 2026-09-02 — see OA_PAGES for the
-// coverage measurements that forced it.
-export const LIVE_WINDOW_CAP = 10_000;
+// The TREND SERIES' sampling ceiling — deliberately NOT the same thing as
+// how many works a run fetches, and deliberately NOT raised when OA_PAGES
+// went from 3 to 50 on 2026-09-02.
+//
+// This is the correction to a mistake made earlier that same day. Raising
+// OA_PAGES fixed the thing that needed fixing: entries[] now covers ~93-100%
+// of each vertical's real corpus instead of a biased 6%, and entries[] is
+// what every country chart, the world map and the institution leaderboard
+// read from (aggregate.ts's countByCountry). trend[].counts is a different
+// kind of number — a day-over-day COMPARISON, where what matters is that
+// every point was measured the same way, not that any single point is a
+// complete census. Raising this with OA_PAGES would have made every
+// historical point incomparable and cost the deployed site 75 recorded
+// quantum points and 51 AI points off its time-series charts, in exchange
+// for nothing the coverage fix hadn't already delivered elsewhere.
+//
+// So the trend series stays pinned at the 600 it has always used, and
+// trendPoint() in scripts/fetch-data.ts truncates each run's (now much
+// larger) fetch to the 600 most recently published works before counting —
+// reproducing exactly what a 3-page run would have seen. The honest caveat,
+// which was always true and is now at least written down: for AI and
+// biotech this series is a fixed-size sample of a much larger corpus, not a
+// census, so read its LEVEL as an index and its SHAPE as the signal. Only
+// quantum's corpus is small enough for it to be a real total.
+//
+// scripts/backfill-trend.ts reconstructs against this same constant, which
+// is what keeps a reconstruction comparable to a recorded run. If it ever
+// does change, TrendPoint.windowCap makes the break self-describing and
+// loadHistory() segments the series automatically — that machinery is why
+// changing it is survivable, not a reason to change it.
+export const LIVE_WINDOW_CAP = 600;
+
+// What windowCap-less points were recorded at. Every trend point written
+// before that field existed used this ceiling, so absence means 600 rather
+// than "unknown" — see loadHistory() in aggregate.ts.
+export const LEGACY_WINDOW_CAP = 600;
 
 export interface OpenAlexOpts {
   filter: string; // raw OpenAlex filter fragment, e.g. "topics.id:T10682" or "primary_topic.subfield.id:1702"
