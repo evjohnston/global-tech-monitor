@@ -884,24 +884,34 @@ funding.ts` regardless, since `VcFundingLeaderboard.tsx` only ever renders
 a top-25 table anyway. Don't remove this cap without reconsidering payload
 size — an uncapped AI export alone generated an 8.9MB source file.
 
-**PitchBook has no biotechnology coverage yet, and it's blocked on a
-credential, not on work.** `data/pitchbook/vc-funding.ts` carries quantum
-and AI, so biotechnology is the one vertical with a single VC provider
-where the others have two. Adding it needs a real PitchBook vertical-tag or
-keyword query checked live against WRDS first — their taxonomy has no plain
-"Biotechnology" vertical any more than it has a quantum one, so this is a
-research step, not a config line, and a guessed value must not be
-committed. Attempted 2026-09-02 and stopped: WRDS rejects the stored
-credential with `FATAL: PAM authentication failed for user "ejohnston"`
-(SQLSTATE 28000), confirmed by completing the Postgres startup handshake
-by hand against the live server — TCP and SSL negotiate fine, so it's the
-password, not the network. WRDS rotates passwords and locks idle accounts.
-Reset it at wrds-www.wharton.upenn.edu, update `WRDS_PASSWORD` in
-`.env.local`, then probe `vc_glb_companyverticalrelation` /
-`vc_glb_companyindustryrelation` for the real bio-adjacent values before
-adding a `VERTICAL_QUERIES` entry. `import-pitchbook.ts` now names this
-remedy on any auth-shaped connection failure rather than leaving you to
-debug a phantom network problem.
+**PitchBook has no biotechnology coverage yet, and it is blocked on WRDS
+support — not on the code, and not on the password.**
+`data/pitchbook/vc-funding.ts` carries quantum and AI, so biotechnology is
+the one vertical with a single VC provider where the others have two.
+Adding it needs a real PitchBook vertical-tag or keyword query checked live
+against WRDS first — their taxonomy has no plain "Biotechnology" vertical
+any more than it has a quantum one, so it's a research step, not a config
+line, and a guessed value must not be committed.
+
+Attempted 2026-09-02. The server rejects the connection with `FATAL: PAM
+authentication failed for user "ejohnston"` (SQLSTATE 28000), confirmed by
+completing the Postgres startup handshake by hand — TCP connects in 0.1s
+and SSL negotiates, so it is not the network. **The obvious read is a stale
+password and that read is wrong: the credential is correct.** WRDS
+authenticates Postgres through PAM, PAM consults Duo, and this account's
+Duo enrolment is disabled — the web login returns "Your Duo account is
+disabled and cannot access this application." A disabled MFA account fails
+PAM identically to a bad password, so the two are indistinguishable from
+the client side, and re-entering the credential cannot help.
+
+**Don't spend time on the password.** Clearing it needs a WRDS support
+request (wrds-www.wharton.upenn.edu/contact-support/, quoting the
+institution email on the account). Once access is back, probe
+`vc_glb_companyverticalrelation` / `vc_glb_companyindustryrelation` for the
+real bio-adjacent values before adding a `VERTICAL_QUERIES` entry.
+`import-pitchbook.ts`'s error handler now leads with the disabled-account
+case instead of sending the next person to reset a working password —
+that's a correction to advice this file gave earlier the same day.
 
 **Known gap, not yet resolved**: even the AI/ML data's 5-year span is
 recent-heavy by construction (most VC activity in any dataset skews to

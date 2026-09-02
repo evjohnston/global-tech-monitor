@@ -238,10 +238,17 @@ async function main() {
   // import. Depending on client options the same rejection can instead
   // come back as the generic "Connection terminated unexpectedly" (seen
   // while diagnosing this), which reads like a network or schema fault
-  // and sends you looking in the wrong place. This handler names the
-  // actual remedy either way: WRDS rotates passwords and locks idle
-  // accounts, so a credential that worked last month is the first thing
-  // to suspect, not the query.
+  // and sends you looking in the wrong place.
+  //
+  // Confirmed cause on 2026-09-02, and it is NOT what you'd guess: the
+  // password was correct the whole time. WRDS authenticates Postgres
+  // through PAM, and PAM consults Duo — so a DISABLED DUO ACCOUNT fails
+  // PAM identically to a wrong password, and the password never gets a
+  // chance to matter. Signing in on the web returned "Your Duo account is
+  // disabled and cannot access this application." Only WRDS support can
+  // clear that; there is no local fix and no amount of re-entering the
+  // credential helps. The message below leads with that case rather than
+  // sending someone to reset a password that was never the problem.
   try {
     await client.connect();
   } catch (err) {
@@ -249,9 +256,14 @@ async function main() {
     if (/Connection terminated|password|authentication/i.test(msg)) {
       console.error(
         `WRDS connection failed (${msg}).\n` +
-        `Almost always an expired or rotated WRDS_PASSWORD in .env.local, NOT a network problem — ` +
-        `the server's real reply in this case is 'FATAL: PAM authentication failed'. ` +
-        `Sign in at https://wrds-www.wharton.upenn.edu to reset/confirm the account, update .env.local, and re-run.`
+        `This is an auth rejection, not a network or schema problem — WRDS's real reply is ` +
+        `'FATAL: PAM authentication failed'. Two causes, in likelihood order:\n` +
+        `  1. Your WRDS/Duo ACCOUNT is disabled or expired. PAM consults Duo, so a disabled\n` +
+        `     account fails identically to a wrong password. Check by signing in at\n` +
+        `     https://wrds-www.wharton.upenn.edu — if it says "Your Duo account is disabled",\n` +
+        `     only WRDS support can clear it: https://wrds-www.wharton.upenn.edu/contact-support/\n` +
+        `     (include the institution email tied to the account). No local fix exists.\n` +
+        `  2. A rotated WRDS_PASSWORD in .env.local. Only worth checking if the web login works.`
       );
       process.exit(1);
     }
