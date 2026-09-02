@@ -53,7 +53,7 @@ import { fetchNSF } from "../src/lib/sources/nsf.ts";
 import { fetchUsaSpendingAwards } from "../src/lib/sources/usaSpending.ts";
 import { fetchSamOpportunities } from "../src/lib/sources/samGov.ts";
 import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
-import { fetchRdSpendByYear } from "../src/lib/sources/secEdgar.ts";
+import { fetchRdSpendByYear, trimIncompleteTail } from "../src/lib/sources/secEdgar.ts";
 import { CAPIQ_RD_SPEND } from "../data/capiq/rd-spend.ts";
 import { CAPIQ_VC_FUNDING } from "../data/capiq/vc-funding.ts";
 import { PITCHBOOK_VC_FUNDING } from "../data/pitchbook/vc-funding.ts";
@@ -102,9 +102,18 @@ const NOTES_BY_VERTICAL: Record<string, StageNote[]> = {
 // company. Adding them needs a fresh manual CapIQ Companies-screener
 // export, which is Windows-only and can't be done from here. Listing them
 // here without the underlying data would just merge nothing.
+// Expanded 2026-09-02 from a fresh export. Two kinds of entry now: the
+// original foreign 20-F filers that carry no Massive market cap and so
+// aren't in `tickers` at all, plus companies that ARE in a vertical's
+// `tickers` but that SEC can't give a USD R&D figure for — either they
+// report only in their home currency (ASML in EUR, GSK GBP, Takeda JPY,
+// BioNTech EUR) or they tag no standalone R&D concept at all (L3Harris,
+// Innodata, Nautilus, Atrium). Overlap with SEC coverage is safe: the
+// merge above skips any (symbol, year) SEC already supplied.
 const CAPIQ_TICKERS_BY_VERTICAL: Record<string, string[]> = {
-  "quantum-computing": ["ARRXF", "BAESY", "FJTSY", "NTTYY", "NIPNF", "MIELY", "EADSY", "THLLY", "SSNLF"],
-  "artificial-intelligence": ["TCEHY", "SFTBY", "SSNLF"],
+  "quantum-computing": ["ARRXF", "BAESY", "FJTSY", "NTTYY", "NIPNF", "MIELY", "EADSY", "THLLY", "SSNLF", "ASML", "LHX"],
+  "artificial-intelligence": ["TCEHY", "SFTBY", "SSNLF", "ASML", "BABA", "BIDU", "INOD", "NBIS", "SAP", "TSM"],
+  biotechnology: ["BNTX", "GSK", "NAUT", "RNA", "TAK"],
 };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -240,14 +249,41 @@ const VC_FUNDING_CAP = 200;
 function mergeCapiqRdSpend(rdSpend: RdSpendPoint[], tickers: string[]): RdSpendPoint[] {
   const relevant = new Set(tickers);
   const byYear = new Map(rdSpend.map((p) => [p.fiscalYear, { ...p, companies: [...p.companies] }]));
+  // SEC is the primary source and CapIQ only fills gaps, so a (symbol,
+  // year) SEC already supplied is never added again. Load-bearing as of
+  // 2026-09-02: before secEdgar.ts learned to try multiple XBRL concepts
+  // and taxonomies, the CapIQ list and the SEC-covered list happened not to
+  // overlap, and this merge added unconditionally. They overlap now —
+  // Alibaba, Baidu, Nebius, SAP and TSMC all publish a PARTIAL USD series
+  // at SEC alongside their home-currency one, so those years would have
+  // been counted twice, once from each source, silently inflating the
+  // total. Precedence goes to SEC because it's the free, live,
+  // machine-readable feed; CapIQ is a periodic manual import that can go
+  // stale between exports.
+  const secAlreadyHas = new Set<string>();
+  for (const p of rdSpend) {
+    for (const c of p.companies) {
+      if (c.source === "sec") secAlreadyHas.add(`${c.symbol}@${p.fiscalYear}`);
+    }
+  }
+  let skippedAsDuplicate = 0;
   for (const e of CAPIQ_RD_SPEND) {
     if (!relevant.has(e.symbol)) continue;
+    if (secAlreadyHas.has(`${e.symbol}@${e.fiscalYear}`)) { skippedAsDuplicate++; continue; }
     const point = byYear.get(e.fiscalYear) ?? { fiscalYear: e.fiscalYear, totalUsd: 0, companies: [] };
     point.totalUsd += e.amountUsd;
     point.companies.push({ symbol: e.symbol, amountUsd: e.amountUsd, source: "capiq" });
     byYear.set(e.fiscalYear, point);
   }
-  return [...byYear.values()].sort((a, b) => a.fiscalYear - b.fiscalYear);
+  if (skippedAsDuplicate > 0) {
+    console.log(`CapIQ: skipped ${skippedAsDuplicate} (company, year) figures SEC EDGAR already supplied`);
+  }
+  // Re-trim after merging: CapIQ's export always carries the newest fiscal
+  // year, so it re-creates whatever trailing year SEC's own trim just
+  // dropped — populated by only the few companies CapIQ covers, which
+  // reads as a collapse rather than as incomplete coverage. See
+  // trimIncompleteTail in secEdgar.ts for the measured numbers.
+  return trimIncompleteTail([...byYear.values()].sort((a, b) => a.fiscalYear - b.fiscalYear));
 }
 
 function trendPoint(live: Entry[], allEntries: Entry[], prevPoint?: TrendPoint): TrendPoint {

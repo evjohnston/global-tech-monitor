@@ -141,19 +141,35 @@ export async function fetchRdSpendByYear(symbols: string[]): Promise<RdSpendPoin
       console.error(`sec-edgar: ${symbol} skipped:`, (err as Error).message);
     }
   }
-  const points = [...byYear.values()].sort((a, b) => a.fiscalYear - b.fiscalYear);
-  // Trim only a trailing incomplete tail — a company with a January
-  // fiscal-year-end (Nvidia) files its "FY2026" 10-K while calendar-year-end
-  // peers are still on "FY2025," which would otherwise show as a
-  // cliff-drop total that looks like spending collapsed rather than "one
-  // filer is early." This is NOT the same as older years legitimately
-  // having fewer companies because some of them didn't exist yet as public
-  // filers (IonQ/Rigetti/D-Wave all IPO'd 2021-2022) — that's real history,
-  // kept as-is; only the tail gets trimmed, working backward from the most
-  // recent year until a fully-covered one is reached.
-  const maxCoverage = Math.max(0, ...points.map((p) => p.companies.length));
-  while (points.length > 0 && points[points.length - 1].companies.length < maxCoverage) {
-    points.pop();
+  return trimIncompleteTail([...byYear.values()].sort((a, b) => a.fiscalYear - b.fiscalYear));
+}
+
+// Trim only a trailing incomplete tail — a company with a January
+// fiscal-year-end (Nvidia) files its "FY2026" 10-K while calendar-year-end
+// peers are still on "FY2025," which would otherwise show as a cliff-drop
+// total that looks like spending collapsed rather than "one filer is
+// early." This is NOT the same as older years legitimately having fewer
+// companies because some of them didn't exist yet as public filers
+// (IonQ/Rigetti/D-Wave all IPO'd 2021-2022) — that's real history, kept
+// as-is; only the tail gets trimmed, working backward from the most recent
+// year until a fully-covered one is reached.
+//
+// Exported because scripts/fetch-data.ts has to run it AGAIN after merging
+// the hand-imported CapIQ figures. Applying it only here isn't enough:
+// CapIQ's export is static and always has the newest fiscal year, so it
+// re-creates the very trailing year this just trimmed, populated by only
+// the handful of companies CapIQ covers. Measured 2026-09-02 on real AI
+// data — a fresh SEC pull trimmed to FY2024 at 43 companies, then CapIQ
+// re-added FY2025 with 10 companies and $73.7B against FY2024's much
+// larger total, i.e. an apparent 75% collapse in the latest year that is
+// purely a coverage artefact. CLAUDE.md previously described re-creating
+// that bucket as deliberate; it was defensible when CapIQ contributed 3
+// tickers and rarely won the tail, and it isn't now.
+export function trimIncompleteTail(points: RdSpendPoint[]): RdSpendPoint[] {
+  const out = [...points];
+  const maxCoverage = Math.max(0, ...out.map((p) => p.companies.length));
+  while (out.length > 0 && out[out.length - 1].companies.length < maxCoverage) {
+    out.pop();
   }
-  return points;
+  return out;
 }

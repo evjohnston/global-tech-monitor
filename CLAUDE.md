@@ -662,6 +662,65 @@ auditing — `RdSpendTrend.tsx`'s tooltip surfaces the CapIQ count when
 nonzero rather than presenting a blended figure as if it were one
 uniform, live-fetched number.
 
+**Re-imported and expanded 2026-09-02** from a fresh export, which surfaced
+four things worth keeping:
+
+- **The export is a name search, not a ticker screen.** 5,531 rows, of
+  which only **106** carry a CapIQ exchange code — the rest are
+  subsidiaries and long-acquired entities (Samsung Display, Shire, Baxalta,
+  L3 Technologies, ASML US LLC, even Fun City Popcorn Inc.). The importer
+  only accepts rows whose name ends in a mappable `(EXCHANGE:TICKER)`, and
+  now logs unlisted rows as a single count rather than 5,425 warnings that
+  drown the real signal. **Only warn on listed companies** — an unmapped
+  listed company is a decision someone has to make; an unlisted subsidiary
+  is expected noise.
+- **Ticker-suffix collisions are real and would have been silent.**
+  `ASX:SKM` in this export is *Skylark Minerals Limited*, an Australian
+  minerals company — this app's `SKM` is SK Telecom, in quantum's list for
+  quantum networking. `TSE:7240` is *NOK Corporation*, a Japanese
+  sealing-parts maker — this app's `NOK` is Nokia. Both are recorded in
+  `KNOWN_COLLISIONS_DO_NOT_MAP` so nobody helpfully adds them later. **A
+  matching suffix is not a matching company.**
+- **Three real companies carry no usable figure and are excluded rather
+  than mapped**, also in that list: Booz Allen (0 non-NA years — a
+  consulting firm has no R&D line at SEC or CapIQ, a genuine dead end),
+  Arqit (0 years), and Charles River, whose only data is FY1996/1998/1999
+  at $1.5M/$1.4M/$0.5M — a pre-IPO stub two orders of magnitude below the
+  modern company, which would have dropped three ~$1M rows into
+  late-1990s years where this app has almost nothing else. Amazon is
+  excluded for the reason already documented: CapIQ reports $108.5B for
+  FY2025, the same blended "technology and infrastructure" line SEC
+  exposes.
+- **The merge now dedupes against SEC, and this became load-bearing the
+  same day.** Before `secEdgar.ts` learned to try multiple XBRL concepts
+  and taxonomies, the CapIQ list and the SEC-covered list happened not to
+  overlap and the merge added unconditionally. They overlap now — Alibaba,
+  Baidu, Nebius, SAP and TSMC each publish a *partial* USD series at SEC
+  alongside their home-currency one — and 49 AI figures would have been
+  counted twice, once per source. SEC takes precedence (free, live,
+  machine-readable); CapIQ fills gaps.
+
+**The tail-trim now runs again AFTER the merge**, which reverses an earlier
+deliberate decision. CapIQ's export always carries the newest fiscal year,
+so it re-created whatever trailing year SEC's own trim had just dropped,
+populated by only the handful of companies CapIQ covers. Measured on real
+AI data: SEC trimmed to FY2024 at 43 companies, then CapIQ re-added FY2025
+with 10 companies and $73.7B against FY2024's much larger total — an
+apparent 75% collapse in the latest year that is purely a coverage
+artefact, i.e. exactly what the trim exists to prevent. Re-creating that
+bucket was defensible when CapIQ contributed 3 tickers and rarely won the
+tail; it isn't now. After the fix AI ends at FY2024 with 49 companies and
+$281.8B, biotech at FY2025 with 62 companies and $121.8B.
+
+`CAPIQ_TICKERS_BY_VERTICAL` now holds two kinds of entry: the original
+foreign 20-F filers with no Massive market cap (so not in `tickers` at
+all), plus companies that ARE in a vertical's `tickers` but that SEC can't
+give a USD figure for — either they report only in their home currency
+(ASML EUR, GSK GBP, Takeda JPY, BioNTech EUR) or tag no standalone R&D
+concept (L3Harris, Innodata, Nautilus, Atrium). Still uncovered and worth
+a future export: **Sanofi and Novo Nordisk**, both non-USD at SEC and
+absent from this export.
+
 ## VC funding tracking (S&P Capital IQ Transactions) — a second, much deeper source
 
 Added 2026-07-25. Same access as the R&D-spend import (Stanford's S&P
