@@ -25,6 +25,18 @@ export type RdSector =
   | "pure-play" | "semiconductors" | "software-platforms" | "defense-aerospace" // quantum + AI
   | "biotech-therapeutics" | "biotech-platforms" | "life-science-tools" | "large-pharma" | "agri-animal-biotech" // biotechnology
   | "space-launch" | "space-satellites" | "space-primes" | "space-components" // space
+  // The fallback bucket, and the reason it exists. tickerProfile used to
+  // fall back to `sector: "software-platforms"` with an evidence string
+  // reading "Not yet individually categorized" — so the prose declined to
+  // classify while the sector quietly asserted one. TrackMoney filters the
+  // R&D breakdown on `sector === rdSector`, so in quantum and AI (which
+  // both have a real software-platforms chip) an unregistered ticker's
+  // ENTIRE company R&D budget landed under "Software and platforms". For a
+  // large diversified filer that is billions of dollars in the wrong bar,
+  // arriving silently the moment someone adds a ticker to verticals.ts
+  // without touching this file. A sector that cannot equal a real one
+  // makes that impossible.
+  | "uncategorized"
   | "all";
 export const RD_SECTOR_LABEL: Record<RdSector, string> = {
   "pure-play": "Pure-play companies",
@@ -40,6 +52,7 @@ export const RD_SECTOR_LABEL: Record<RdSector, string> = {
   "space-satellites": "Satellite operators and data",
   "space-primes": "Defense and aerospace primes",
   "space-components": "Components and subsystems",
+  uncategorized: "Not yet categorized",
   all: "All tracked companies",
 };
 
@@ -268,7 +281,7 @@ const BY_VERTICAL: Record<string, Record<string, TickerProfile>> = {
 // added later that hasn't been individually categorized yet — never
 // guesses a category, just says so plainly.
 export function tickerProfile(verticalId: string, symbol: string): TickerProfile {
-  return BY_VERTICAL[verticalId]?.[symbol] ?? { exposure: "diversified", sector: "software-platforms", evidence: "Not yet individually categorized" };
+  return BY_VERTICAL[verticalId]?.[symbol] ?? { exposure: "diversified", sector: "uncategorized", evidence: "Not yet individually categorized" };
 }
 
 // Stable display order for the R&D-breakdown sector chips. Only the values
@@ -282,9 +295,20 @@ const SECTOR_ORDER: Exclude<RdSector, "all">[] = [
   "space-satellites", "semiconductors", "software-platforms",
   "life-science-tools", "space-components", "large-pharma",
   "defense-aerospace", "space-primes", "agri-animal-biotech",
+  // Last on purpose. Its chip only renders when real uncategorized
+  // companies are actually present in the data being shown, so it reads as
+  // a visible gap to go fix rather than a permanent empty category.
+  "uncategorized",
 ];
 
-export function rdSectorsFor(verticalId: string): RdSector[] {
-  const present = new Set(Object.values(BY_VERTICAL[verticalId] ?? {}).map((p) => p.sector));
+// `symbols` is what the caller is actually about to render. Passing it adds
+// the "Not yet categorized" chip when — and only when — one of those
+// companies has no entry in this vertical's map, which surfaces the gap
+// instead of letting the spend vanish into a bucket with no chip. Optional
+// so callers that only want the curated sector list are unaffected.
+export function rdSectorsFor(verticalId: string, symbols?: string[]): RdSector[] {
+  const registered = BY_VERTICAL[verticalId] ?? {};
+  const present = new Set(Object.values(registered).map((p) => p.sector));
+  if (symbols?.some((sym) => !registered[sym])) present.add("uncategorized");
   return ["all", ...SECTOR_ORDER.filter((s) => present.has(s))];
 }

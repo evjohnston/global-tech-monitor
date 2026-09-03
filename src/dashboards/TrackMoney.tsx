@@ -57,6 +57,11 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
   const latestRdSpend = data?.rdSpend?.[data.rdSpend.length - 1];
   const vcTotalUsd = useMemo(() => data?.vcFunding?.reduce((s, c) => s + c.totalRaisedUsd, 0) ?? 0, [data]);
   const marketCapTotalUsd = useMemo(() => data?.companies?.reduce((s, c) => s + (c.marketCapUsd ?? 0), 0) ?? 0, [data]);
+  // The newest fiscal year's companies, hoisted out of the R&D panel's own
+  // IIFE so the sector chips above it can be derived from the same list
+  // they filter. Without that the chip row can't know whether an
+  // uncategorized company is present.
+  const latestRdCompanies = useMemo(() => data?.rdSpend?.[data.rdSpend.length - 1]?.companies ?? [], [data]);
 
   const countryHasNoGrantCoverage = country !== "all" && fundingTop.top.every((c) => c.country !== country) && fundingTop.rest.every((c) => c.country !== country);
   // A country filter genuinely applies to Public grants (NSF entries carry
@@ -190,8 +195,13 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
               </div>
               <div className="panel">
                 <SectionHeader title="Which companies report the most R&D spend?" />
+                {/* The sector list is derived from the companies actually
+                    being rendered, not just from the curated map, so a
+                    ticker nobody has categorized yet shows up under its own
+                    "Not yet categorized" chip rather than having its whole
+                    R&D budget quietly counted inside a real sector. */}
                 <div className="tab-bar" style={{ marginBottom: 8 }}>
-                  {rdSectorsFor(vertical.id).map((s) => (
+                  {rdSectorsFor(vertical.id, latestRdCompanies.map((c) => c.symbol)).map((s) => (
                     <button key={s} className="chip" aria-pressed={rdSector === s} onClick={() => setRdSector(s)}>{RD_SECTOR_LABEL[s]}</button>
                   ))}
                 </div>
