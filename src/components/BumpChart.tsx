@@ -16,10 +16,12 @@ const MEASURES: { key: BumpMeasure; label: string }[] = [
 const MIN_LABEL_GAP = 12;
 // Conservative Inter-at-10px average glyph width — bounds how much of a
 // real country name the end label can print before it would run past the
-// SVG's right edge. i18n-iso-countries' real names range far wider than
-// the "US"/"China" cases this was originally sized for — e.g. "Taiwan,
-// Province of China" (25 chars) — so the name is measured against this,
-// not assumed to always fit.
+// SVG's right edge. Real names range far wider than the "US"/"China" cases
+// this was originally sized for — "Bosnia and Herzegovina" is 22 characters
+// — so the name is measured against this, not assumed to always fit. The
+// example this comment used to cite, "Taiwan, Province of China", no longer
+// renders; COMMON_NAME in countries.ts shortens it to "Taiwan". The
+// measurement still earns its place regardless of which name is longest.
 const LABEL_CHAR_PX = 5.8;
 
 // Real rank-over-time, reconstructed from entry dates (see bumpChart.ts) —

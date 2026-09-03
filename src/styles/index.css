@@ -589,11 +589,15 @@ a { color: inherit; }
 /* ── Overview: research-minus-adoption diverging bar chart ────────── */
 .gap-chart { display: flex; flex-direction: column; gap: 6px; }
 .gap-chart-row { display: grid; grid-template-columns: minmax(90px, 150px) 1fr 56px; gap: var(--sp-2); align-items: center; }
-/* A real country name can run to 30+ characters ("Islamic Republic of
-   Iran," "Democratic People's Republic of Korea") — a fixed 100px column
-   with no wrap forced long names past the row into the bar track next to
-   it. Wraps onto a second line instead; the row still reads fine since
-   each row has real vertical room between it and its neighbors. */
+/* A real country name can run past 20 characters ("Bosnia and Herzegovina",
+   "Republic of the Congo") — a fixed 100px column with no wrap forced long
+   names past the row into the bar track next to it. Wraps onto a second
+   line instead; the row still reads fine since each row has real vertical
+   room between it and its neighbors. The examples this comment used to
+   cite, "Islamic Republic of Iran" and "Democratic People's Republic of
+   Korea", no longer render — COMMON_NAME in countries.ts shortens the
+   first and ISO's own English name for KP was already "North Korea". The
+   wrap still earns its place; measure rather than assume. */
 .gap-chart-label { font-size: 12px; color: var(--ink); text-align: left; overflow-wrap: break-word; line-height: 1.3; }
 .gap-chart-track { position: relative; height: 14px; }
 .gap-chart-zero { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-2); }

@@ -32,6 +32,26 @@ const COMMON_NAME: Record<string, string> = {
   US: "United States", CN: "China", RU: "Russia", LA: "Laos",
   CD: "DR Congo", TZ: "Tanzania", VA: "Vatican City",
   FM: "Micronesia", BN: "Brunei", CI: "Ivory Coast",
+  // Added 2026-09-03 after auditing every code that actually appears in
+  // live data (144 of them across the AI and biotech files) against what it
+  // renders as. These seven were ISO's formal or political constructions
+  // rather than the name a policy reader would use or say.
+  //
+  // TW is the one that mattered beyond tidiness. ISO 3166-1's English name
+  // for it is "Taiwan, Province of China", so this app was asserting a
+  // contested political claim in every badge, tooltip, bar label and map
+  // hover — in an instrument whose entire purpose is comparing national
+  // technology capability, and whose own ticker lists include TSMC. Using
+  // the common short name is the same call already made for CN, which ISO
+  // calls "People's Republic of China". Neither is a position; both are
+  // what people say.
+  TW: "Taiwan", IR: "Iran", SY: "Syria", MD: "Moldova",
+  MK: "North Macedonia", PS: "Palestine", SX: "Sint Maarten",
+  // Deliberately NOT overridden, having been checked: "Czech Republic" and
+  // "Dominican Republic" are what people actually say, and CG's "Republic
+  // of the Congo" is doing real work distinguishing it from CD's "DR
+  // Congo". KP and KR already resolve to "North Korea" and "South Korea"
+  // without help.
 };
 
 export function countryName(code: string | null | undefined): string {
