@@ -1343,40 +1343,78 @@ ports. `VITE_WORKER_URL` was removed from `build-and-deploy.yml`'s Build
 step 2026-07-20 (nothing reads it anymore) — it may still be set in your own
 `.env.local` from before that change, which is harmless, just dead config.
 
-**EPO_KEY / EPO_SECRET are NOT set as GitHub Actions secrets, and patents
-have therefore never once been fetched in CI.** Corrected 2026-09-03 —
-this section previously claimed they were added on 2026-07-19, which is
-false for the Actions side and had gone unnoticed for 45 days because
-every source here fails soft.
+**EPO_KEY / EPO_SECRET went unset as GitHub Actions secrets for 45 days,
+so patents were never once fetched in CI until 2026-09-03.** Fixed that
+day. Recorded here because the shape of the miss is worth remembering, not
+because anything is still broken.
 
-Confirmed by `gh secret list`: the repo has only `MASSIVE_KEY` and
-`SAM_KEY`. `build-and-deploy.yml`'s `env:` block is correct and does pass
-all five through, so the block is not the problem — the secrets simply
-don't exist. Every run logs `patents skipped: EPO key/secret not set`,
-once per vertical, and always has.
+The bug: this section previously claimed the secrets were added
+2026-07-19. They were added to the *Worker* (via wrangler) and never to
+Actions. `build-and-deploy.yml`'s `env:` block was correct the whole time
+and did pass all five keys through — the secrets simply didn't exist, so
+every run logged `patents skipped: EPO key/secret not set`, once per
+vertical, and stayed green. Note this is the mirror image of the failure
+the section below warns about (secrets stored but not passed through),
+which is exactly why that warning didn't catch it. **When a soft-failing
+source stops growing, check whether the credential exists before checking
+whether it's wired.**
 
-What that means for the live data: quantum, AI and biotechnology each hold
-exactly 100 patent entries whose `ingestedAt` is uniformly `2026-07-20`,
-and EPO's `lastSuccessfulPull` in `sourceMeta` is `2026-07-20T18:13:30Z` —
-a LOCAL `npm run fetch-data` (which reads `.env.local` and does have the
-credentials), committed as part of that day's manual data restore. They
-persist only because `entries[]` accumulates and never drops an id. Space,
-being new, has zero patents. `OPENALEX_KEY` is also unset, which is
-degraded rather than broken: OpenAlex serves the polite pool on `mailto`
-alone, which is why the innovation stage works at all.
+State before the fix, measured on `origin/data` at commit `a7ea39e`:
 
-To fix, from a machine that has the values in `.env.local`:
+| vertical | patents | ingestedAt | EPO lastSuccessfulPull |
+|---|---|---|---|
+| quantum-computing | 100 | all `2026-07-20` | `2026-07-20T18:13:30Z` |
+| artificial-intelligence | 100 | all `2026-07-20` | `2026-07-20T18:13:47Z` |
+| biotechnology | **0** | — | `null` |
+| space | **0** | — | `null` |
 
-```
-gh secret set EPO_KEY        # paste at the prompt, never as an argv
-gh secret set EPO_SECRET
-gh secret set OPENALEX_KEY
-```
+Quantum's and AI's 100 each came from a single LOCAL `npm run fetch-data`
+on 2026-07-20 (which reads `.env.local`, where the credentials do live),
+committed as part of that day's manual data restore. They survived only
+because `entries[]` accumulates and never drops an id, which is precisely
+why nothing looked broken for six weeks. Biotechnology and space, both
+created 2026-09-02, postdate that local run and so had no patents at all —
+their innovation stage was papers-only and silently missing a whole
+source.
 
-Paste at the interactive prompt rather than passing the value on the
-command line — same reason as the wrangler note below. Deliberately left
-for a human: these are personal API credentials and setting them is an
-account-level action.
+The fix was three `gh secret set` calls (`EPO_KEY`, `EPO_SECRET`, and
+`OPENALEX_KEY` while there). Verified two ways. First, the credentials
+themselves were tested locally before waiting on CI, since nothing had
+exercised them in 45 days and a lapsed key would look identical from the
+outside — auth returned a token and space's real CPC query returned 27,864
+results (`B64G`'s 25,876 plus `H04B7/185`'s ~2,000, matching what was
+measured when the vertical was built). Then run `33785902526` logged
+`EPO: 100 patents` four times, once per vertical, and all four
+`lastSuccessfulPull` values moved to `2026-09-03`. Quantum and AI went to
+200 patents (the stale 100 plus 100 fresh), biotechnology and space to
+100 from zero. No `WO`/`EP`/`IB` authority leaked into a `country` field
+in any of the four, which is `NON_COUNTRY_PATENT_AUTHORITIES`
+(`epo.ts`) working on real data rather than only in principle.
+
+**Setting `OPENALEX_KEY` created a new risk that had to be guarded.**
+Until then `openalex.ts` sent no `api_key` param at all and ran on the
+keyless polite pool via `mailto`. A key that OpenAlex rejects would throw,
+`fetch-data.ts` would soft-fail the source, and all four verticals' papers
+would stop growing behind a green run — the same silent-degradation shape
+as the EPO miss itself, landing on the one source every vertical's
+innovation stage depends on. So `oaFetch` now drops the key, warns once,
+and retries keyless on a 401/403, with a module-level `keyRejected` flag
+so one rejection converts the rest of the run instead of re-spending a 403
+on each of the ~200 paged calls a four-vertical fetch makes. The key was
+accepted on the first real run, so the fallback has not yet fired.
+
+One caveat on the counts: `EPO: 100 patents` is a per-run ceiling, not a
+corpus measurement. Patents accumulate 100 per vertical per run now that
+this works, so expect that number to climb and don't read it as "there are
+100 space patents."
+
+A note on GitHub Actions concurrency, learned by breaking it here: this
+workflow sets `concurrency: {group: pages, cancel-in-progress: false}`,
+and `cancel-in-progress: false` governs only IN-PROGRESS runs. GitHub
+keeps just **one** pending run per group, so pushing while a run is queued
+cancels the queued one. A `workflow_dispatch` run was lost that way
+mid-session. If you dispatch a run to test something, don't push until it
+starts.
 
 The original note, still accurate for the Worker side and for the shape of
 the mistake to watch for:
