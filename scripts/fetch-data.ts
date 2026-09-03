@@ -71,6 +71,8 @@ import { SEED as AI_SEED } from "../data/ai/seed.ts";
 import { NOTES as AI_NOTES } from "../data/ai/notes.ts";
 import { SEED as BIOTECH_SEED } from "../data/biotech/seed.ts";
 import { NOTES as BIOTECH_NOTES } from "../data/biotech/notes.ts";
+import { SEED as SPACE_SEED } from "../data/space/seed.ts";
+import { NOTES as SPACE_NOTES } from "../data/space/notes.ts";
 
 // Static imports rather than a dynamic-import registry — fine at this scale
 // (a handful of verticals); revisit if this list grows large.
@@ -78,11 +80,13 @@ const SEED_BY_VERTICAL: Record<string, Entry[]> = {
   "quantum-computing": QUANTUM_SEED,
   "artificial-intelligence": AI_SEED,
   biotechnology: BIOTECH_SEED,
+  space: SPACE_SEED,
 };
 const NOTES_BY_VERTICAL: Record<string, StageNote[]> = {
   "quantum-computing": QUANTUM_NOTES,
   "artificial-intelligence": AI_NOTES,
   biotechnology: BIOTECH_NOTES,
+  space: SPACE_NOTES,
 };
 
 // Which of data/capiq/rd-spend.ts's foreign companies (real, named quantum/
@@ -114,6 +118,11 @@ const CAPIQ_TICKERS_BY_VERTICAL: Record<string, string[]> = {
   "quantum-computing": ["ARRXF", "BAESY", "FJTSY", "NTTYY", "NIPNF", "MIELY", "EADSY", "THLLY", "SSNLF", "ASML", "LHX"],
   "artificial-intelligence": ["TCEHY", "SFTBY", "SSNLF", "ASML", "BABA", "BIDU", "INOD", "NBIS", "SAP", "TSM"],
   biotechnology: ["BNTX", "GSK", "NAUT", "RNA", "TAK"],
+  // Airbus, Thales and BAE all resolve on Massive without market cap (so
+  // they're excluded from space's `tickers`) but are real, already-imported
+  // CapIQ companies with major space businesses — BAE's includes the former
+  // Ball Aerospace, acquired 2024.
+  space: ["EADSY", "THLLY", "BAESY"],
 };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

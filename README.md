@@ -1,9 +1,9 @@
 # Global Tech Monitor
 
 A pipeline view of a technology from research through scaling to adoption.
-Multi-vertical: Vertical 01 is **quantum computing**, Vertical 02 is
-**artificial intelligence**, Vertical 03 is **biotechnology**, switchable via
-the tabs in the topbar. Adding a vertical is real research work (verified
+Multi-vertical: **quantum computing**, **artificial intelligence**,
+**biotechnology** and **space technologies**, switchable from the picker in
+the topbar. Adding a vertical is real research work (verified
 data sources, not a flag) — see CLAUDE.md's "Multi-vertical architecture"
 section before adding one.
 

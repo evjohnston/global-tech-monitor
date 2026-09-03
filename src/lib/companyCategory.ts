@@ -24,6 +24,7 @@ export const EXPOSURE_LABEL: Record<ExposureClass, string> = {
 export type RdSector =
   | "pure-play" | "semiconductors" | "software-platforms" | "defense-aerospace" // quantum + AI
   | "biotech-therapeutics" | "biotech-platforms" | "life-science-tools" | "large-pharma" | "agri-animal-biotech" // biotechnology
+  | "space-launch" | "space-satellites" | "space-primes" | "space-components" // space
   | "all";
 export const RD_SECTOR_LABEL: Record<RdSector, string> = {
   "pure-play": "Pure-play companies",
@@ -35,6 +36,10 @@ export const RD_SECTOR_LABEL: Record<RdSector, string> = {
   "life-science-tools": "Tools, bioprocessing and diagnostics",
   "large-pharma": "Large pharma",
   "agri-animal-biotech": "Agricultural and animal biotech",
+  "space-launch": "Launch and in-space services",
+  "space-satellites": "Satellite operators and data",
+  "space-primes": "Defense and aerospace primes",
+  "space-components": "Components and subsystems",
   all: "All tracked companies",
 };
 
@@ -207,10 +212,56 @@ const BIOTECH: Record<string, TickerProfile> = {
   BIOX: { exposure: "pure-play", sector: "agri-animal-biotech", evidence: "Animal-health and agricultural biotech" },
 };
 
+
+// From verticals.ts's space tickers comment groups. The pure-play/prime
+// split matters more here than anywhere else in this app: a launch or
+// satellite-operator pure-play's entire R&D budget really is space, while
+// Lockheed's, Boeing's and RTX's overwhelmingly isn't — those are aircraft,
+// missiles and engines with a space division attached. Filtering the R&D
+// breakdown to the first two groups is how a reader gets the honest number.
+const SPACE: Record<string, TickerProfile> = {
+  RKLB: { exposure: "pure-play", sector: "space-launch", evidence: "Launch and in-space services pure-play" },
+  LUNR: { exposure: "pure-play", sector: "space-launch", evidence: "Launch and in-space services pure-play" },
+  RDW: { exposure: "pure-play", sector: "space-launch", evidence: "Launch and in-space services pure-play" },
+  SPCE: { exposure: "pure-play", sector: "space-launch", evidence: "Launch and in-space services pure-play" },
+  MNTS: { exposure: "pure-play", sector: "space-launch", evidence: "Launch and in-space services pure-play" },
+  VOYG: { exposure: "pure-play", sector: "space-launch", evidence: "Launch and in-space services pure-play" },
+  SIDU: { exposure: "pure-play", sector: "space-launch", evidence: "Launch and in-space services pure-play" },
+  ASTS: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  PL: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  BKSY: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  SPIR: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  VSAT: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  IRDM: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  TSAT: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  GSAT: { exposure: "pure-play", sector: "space-satellites", evidence: "Satellite operator / Earth-observation data" },
+  LMT: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  NOC: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  RTX: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  BA: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  GD: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  LHX: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  LDOS: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  HII: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  KTOS: { exposure: "user-adopter", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  AVAV: { exposure: "user-adopter", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  TXT: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  ESLT: { exposure: "diversified", sector: "space-primes", evidence: "Defense/aerospace prime with a documented space program" },
+  HEI: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+  TDG: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+  ATRO: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+  CW: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+  TDY: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+  BWXT: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+  HWM: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+  TRMB: { exposure: "major-supplier", sector: "space-components", evidence: "Components, subsystems and space nuclear" },
+};
+
 const BY_VERTICAL: Record<string, Record<string, TickerProfile>> = {
   "quantum-computing": QUANTUM,
   "artificial-intelligence": AI,
   biotechnology: BIOTECH,
+  space: SPACE,
 };
 
 // Falls back to "diversified"/no sector-specific evidence for any ticker
@@ -227,9 +278,10 @@ export function tickerProfile(verticalId: string, symbol: string): TickerProfile
 // would have shown three. Derived rather than curated per vertical so a
 // ticker added later shows up without a second edit here.
 const SECTOR_ORDER: Exclude<RdSector, "all">[] = [
-  "pure-play", "biotech-therapeutics", "biotech-platforms", "semiconductors",
-  "software-platforms", "life-science-tools", "large-pharma",
-  "defense-aerospace", "agri-animal-biotech",
+  "pure-play", "biotech-therapeutics", "biotech-platforms", "space-launch",
+  "space-satellites", "semiconductors", "software-platforms",
+  "life-science-tools", "space-components", "large-pharma",
+  "defense-aerospace", "space-primes", "agri-animal-biotech",
 ];
 
 export function rdSectorsFor(verticalId: string): RdSector[] {

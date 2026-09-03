@@ -273,12 +273,28 @@ export default function App() {
     <>
       <div className="topbar">
         <div className="topbar-inner">
+          {/* A select, not one button per vertical — the button row was fine
+              at two and cramped the topbar at four, and it grows without
+              bound as verticals are added. Native <select> deliberately:
+              it's keyboard- and screen-reader-correct for free, needs no
+              new component, and renders as the platform's own picker
+              rather than a custom menu this app would then have to style
+              in two themes. Labelled for assistive tech since the visible
+              text is only the current value. */}
           <span className="verticals">
-            {VERTICALS.map((v) => (
-              <button key={v.id} className="vtab" aria-pressed={v.id === vertical.id} onClick={() => switchTechnology(v.id)}>
-                {v.number} · {v.shortLabel}
-              </button>
-            ))}
+            <label className="vselect-label" htmlFor="vertical-select">Technology</label>
+            <select
+              id="vertical-select"
+              className="vselect"
+              value={vertical.id}
+              onChange={(e) => switchTechnology(e.target.value)}
+            >
+              {VERTICALS.map((v) => (
+                <option key={v.id} value={v.id}>
+                  {v.number} · {v.label}
+                </option>
+              ))}
+            </select>
           </span>
           <img className="wordmark-logo" src={dark ? logoDarkBg : logoLightBg} alt="Tech Futures Lab" />
           <span className="topbar-meta">

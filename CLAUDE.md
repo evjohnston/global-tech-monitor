@@ -9,10 +9,10 @@ README, then `src/lib/types.ts` (the data contract) before making changes.
 Global Tech Monitor — a pipeline view of a technology from research through
 scaling, adoption, and public investment. Multi-vertical as of 2026-07-19:
 Vertical 01 is quantum computing, Vertical 02 is artificial intelligence,
-Vertical 03 is biotechnology (added 2026-09-02 — see "Biotechnology vertical"
-below for the research decisions it forced), and more critical/emerging
-technologies (semiconductors, space) are the intended next additions — see
-"Multi-vertical architecture" below before adding one. It's meant as a
+Vertical 03 is biotechnology and Vertical 04 is space (both added
+2026-09-02 — see "Biotechnology vertical" and "Space vertical" below for
+the research decisions each forced), and semiconductors is the intended
+next addition — see "Multi-vertical architecture" below before adding one. It's meant as a
 research instrument for a policy audience (Hoover/TFL), not a consumer
 dashboard. Reference point for the design and
 framing is ASPI's Critical Technology Tracker: lead with country comparison,
@@ -38,8 +38,10 @@ press + keyword classifier). `src/lib/sources/{openalex,epo,nsf,rss}.ts` are tec
 machinery that take these as parameters — none of them hardcode a technology
 anymore. `scripts/fetch-data.ts` loops over `VERTICALS` and writes one
 `public/data/<id>.json` per vertical; `App.tsx` has a topbar tab per vertical
-(`.vtab` buttons) that switches which data file is loaded — that's the whole
-mechanism now, the frontend has no live-fetch path to configure per
+(a `<select>` in `.verticals`, changed from one `.vtab` button per vertical
+on 2026-09-02 — the button row was fine at two and cramped at four, and
+grew without bound) that switches which data file is loaded. That's the
+whole mechanism; the frontend has no live-fetch path to configure per
 vertical.
 
 **Adding a vertical is real research work, not a config flag.** Each one
@@ -425,6 +427,113 @@ the **capacity physically sits in**, not the parent company's domicile
 (Lonza's Vacaville site is US), and a supranational body gets the country it
 **physically sits in** (the European Commission is BE). Nothing is bucketed
 into a synthetic "EU" code — same rule as everywhere else here.
+
+## Space vertical — added 2026-09-02
+
+Vertical 04. Measured live while building it; re-measure before changing
+any of it.
+
+**The scoping decision is the whole vertical.** This tracks space
+TECHNOLOGY — launch, propulsion, spacecraft, satellites and their
+communications, on-orbit operations, space traffic — plus the policy and
+procurement around it. It does NOT track astronomy or planetary science,
+which are science ABOUT space. OpenAlex's "Astronomy and Astrophysics"
+subfield (3103) alone holds **2.18 million works, four times the entire
+aerospace subfield**; letting it in would drown the vertical and would
+also mislead, because a cosmology result is not a national space
+capability. Same shape of call as excluding clinical medicine from
+biotechnology.
+
+**OpenAlex — five topics, and the rejects are the interesting part.**
+Aerospace taxonomy blends space with aviation, marine and general
+engineering worse than any other field here. Kept: T12042 satellite
+communications (6/6 on-topic on a live sample), T11701 space satellite
+systems and control (6/6), T12449 spacecraft design, T12513 rocket and
+propulsion, T12717 space exploration and regulation — that last one is the
+policy topic and is uniquely useful for this audience (Starlink
+governance, space traffic management, satnav-spoofing liability).
+
+Excluded with reasons, all checked against real recent works:
+- **Named like space, isn't**: T14214 "Space Exploration and Technology" is
+  planetary science (lunar crustal formation, Mercury's exosphere,
+  meteorite spectra) — the same trap as biotechnology's T14293. T10406
+  "Planetary Science and Exploration" likewise.
+- **Aviation, not space**: T12125 (pilot workload, helicopter training),
+  T12719 (airships, flapping-wing robots), T13855 (generic control theory,
+  plus one paper on whether the upwardly mobile are left-wing).
+- **Earth science USING satellites rather than building them**: T10801 and
+  T11038 SAR (landslides, aquifers, tree height), T10655 GNSS (earthquake
+  magnitude, ionospheric scintillation).
+- **Defence/energetics**: T12699 electromagnetic launch (ceramic armour,
+  battery thermal runaway), T12389 infrared targets, T13371 military
+  systems.
+- **Half-noise, so dropped rather than diluting**: T13200 spacecraft/
+  cryogenic (submerged floating tunnels, ship anti-rolling tanks) and
+  T11082 spacecraft dynamics (unmanned SURFACE vehicles, airship sizing).
+  Adding both raised the 30-day count from 546 to 813 but **reduced** the
+  distinct countries in a 50-work sample from 29 to 21 — the tell that the
+  extra volume is concentrated noise, not coverage.
+
+Result: 546 works in 30 days, 46/50 with structured institution-country
+data, 29 countries in that sample. Comparable in size to quantum's 727.
+Space technology genuinely is a smaller literature than AI or biotech.
+
+**EPO.** `cpc=B64G OR cpc=H04B7/185`. B64G's own USPTO definition does the
+aviation/space split for us — it "covers only vehicles, equipment or the
+like specially adapted for cosmonautics" and explicitly excludes anything
+applicable to both cosmonautics and aeronautics. Live: 25,876 results whose
+newest were Viasat satellite stowage, a Blue Origin cryogenic boiler, an
+Argotec microsatellite, an ArianeGroup propulsion system, a Honeybee
+Robotics payload unloader. H04B7/185 adds ~2,000 satellite-comms filings.
+G01S19 (GNSS receivers) was tested and rejected: it takes the total to
+90,704 and the top hits become Nokia non-terrestrial-network positioning
+and Google GNSS, i.e. terrestrial telecom.
+
+**NSF is the wrong instrument here, and the vertical says so out loud.**
+Measured: NSF funds space SCIENCE, not space technology. "satellite"
+returns 300 awards that are almost entirely Earth scientists USING
+satellite data (cloud evolution, wildfire detection, soil moisture);
+"orbital" matches molecular orbitals in chemistry; "space technology"
+matches 7%. `fundingKeyword: "spacecraft"` is the least-bad option and
+still returns broader-impacts boilerplate. The right source is NASA
+(TechPort or NSPIRES) or DoD SBIR — neither built. Consequence: this
+vertical leans on procurement and the CapIQ VC panel for its money story,
+and `data/space/notes.ts` states the gap rather than papering over it.
+
+`procurementKeyword: "satellite"` is where the real public money shows up,
+verified live on USASpending: Northrop's $575.3M Joint Polar Satellite
+System-2 spacecraft, Rocket Lab's NASA VCLS contract, Maxar's Commercial
+Satellite Data Acquisition award. "spacecraft" as a procurement term finds
+JWST for Northrop but nothing for Rocket Lab or Maxar.
+
+**RSS — six feeds and, unusually, a high yield.** SpaceNews, Payload,
+NASASpaceflight, European Spaceflight, Via Satellite, SpacePolicyOnline.
+The classifier converts a fetch into **18 classified items**, against
+biotech's 4, and nearly all are right — Blue Canyon's spacecraft platform
+and York's VLEO bus as scaling; SES awarding OHB €1 billion, LeoLabs
+winning a Space Force award, ESA's Launcher Challenge contracts as
+adoption. Space trade press is genuinely about milestones and contracts in
+a way biotech's isn't. Four candidates were checked and left out:
+space.com is consumer astronomy, arstechnica.com/space is a general-tech
+outlet, teslarati.com is SpaceX fan coverage, spaceflightnow.com is largely
+a launch schedule. `relevant` never matches a bare "space" — "state
+space", "parameter space" and "disk space" would be constant noise in the
+NSF abstracts this same regex gates.
+
+**CapIQ VC.** Imported from `ciq_data/S&P-Space.xlsx` with
+`--industry=Aerospace and Defense`: 602 companies, $25.2B disclosed, led by
+Sierra Space, ICEYE, ABL Space, OneWeb, Satellogic, Terran Orbital,
+Firefly, Impulse Space and Stoke, with a strong Chinese contingent
+(Spacesail, Chang Guang, ExPace, Deep Blue, Interstellar Glory). The
+unfiltered export is a keyword search on "space" and its 5,452 VC rows
+include 948 Application Software and 288 Alternative Carriers. Known
+residual noise the GICS filter can't remove: "Aerospace and Defense" also
+contains supersonic aviation (Boom Technology) and air-defence
+conglomerates (Almaz-Antey), so a handful of the top 25 aren't space.
+
+**Seed data.** 15 entries across 10 countries (US, CN, IN, FR, KR, AE, NZ,
+JP, LU, BE), spanning 2015 to 2026, each verified against its source. A
+floor, not a finished set — quantum is at 263.
 
 ## Seed history: the sets were recency-biased, and partly still are
 

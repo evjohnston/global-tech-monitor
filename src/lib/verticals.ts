@@ -166,6 +166,60 @@ const BIOTECH_RSS_CLASSIFIER: RssClassifierConfig = {
   ),
 };
 
+// Space trade press verified by hand (2026-09-02): all six return valid
+// RSS 2.0 from real, actively-publishing outlets, curl-checked for item
+// count and date format. Only payloadspace.com sends an open
+// Access-Control-Allow-Origin. Four more were checked and left out rather
+// than added for volume: space.com is consumer astronomy (50 items/fetch,
+// mostly sky-watching and science explainers), arstechnica.com/space is
+// good journalism but a general-tech outlet, teslarati.com is SpaceX fan
+// coverage, and spaceflightnow.com is largely a launch schedule. The six
+// kept are the industry papers of record plus one policy outlet, which
+// matters for this app's audience.
+const SPACE_RSS_FEEDS: RssFeedConfig[] = [
+  { url: "https://spacenews.com/feed/", name: "SpaceNews", corsOpen: false },
+  { url: "https://payloadspace.com/feed/", name: "Payload", corsOpen: true },
+  { url: "https://www.nasaspaceflight.com/feed/", name: "NASASpaceflight", corsOpen: false },
+  { url: "https://europeanspaceflight.com/feed/", name: "European Spaceflight", corsOpen: false },
+  { url: "https://www.satellitetoday.com/feed/", name: "Via Satellite", corsOpen: false },
+  { url: "https://spacepolicyonline.com/feed/", name: "SpacePolicyOnline", corsOpen: false },
+];
+
+// Space's equivalent of "qubit count" is a vehicle, platform or payload
+// reaching a real technical milestone; its equivalent of "deploy a quantum
+// computer" is a contract award, a launch under contract, or a national
+// policy actually committing money. Tuned against a real fetch of all six
+// feeds (2026-09-02).
+//
+// `relevant` deliberately never matches a bare "space" — "state space",
+// "parameter space" and "disk space" are all common, and this gate is
+// reused by nsf.ts against grant abstracts where that would be constant
+// noise. Every "space" alternative below is bound to a space-domain word.
+const SPACE_RSS_CLASSIFIER: RssClassifierConfig = {
+  relevant:
+    /\b(spacecraft|space\s*(?:craft|flight|port|borne)|space\s+(?:mission|station|telescope|debris|situational|domain|launch|systems?|agency|exploration|force|policy|economy)|satellite\w*|orbital|orbiter|in[-\s]orbit|on[-\s]orbit|launch\s+(?:vehicle|provider|site|contract)|launcher|rocket\w*|booster|propulsion|thruster|CubeSat|SmallSat|smallsat|constellation|payload|cislunar|lunar|Artemis|deorbit|reentry|ground\s+station|NASA|ESA\b|Space\s+Force|spaceport|Starlink|Starship|Ariane|Falcon\s+9|Earth\s+observation|GNSS|VLEO|\bLEO\b|\bGEO\b)\b/i,
+  scaling:
+    /\b(first\s+(?:flight|launch|light)|maiden\s+flight|static\s+fire|hot\s+fire|engine\s+test|test\s+flight|qualification\s+(?:test|campaign)|critical\s+design\s+review|\bCDR\b|unveils?|introduces?|debuts?|new\s+(?:platform|bus|engine|stage|variant)|mass[-\s]produc\w+|production\s+(?:rate|line|facility)|factory|manufactur\w+\s+(?:facility|site|expansion|scale)|assembly\s+line|reusab\w+|refurbish\w+|in[-\s]orbit\s+(?:manufactur\w+|servicing|assembly)|constellation\s+(?:buildout|expansion)|upgrade[sd]?|cadence)\b/i,
+  adoption:
+    /\b(awards?\s+\S+|awarded|wins?\s+(?:a\s+)?(?:\$|€|£)?\S*\s*(?:contract|award|order)|selects?|selected\s+(?:by|for)|contract\s+(?:award|win|worth)|procure\w+|order[sd]?\s+\d|signs?\s+(?:an?\s+)?(?:agreement|contract|deal|MOU)|operational|enters?\s+service|begins?\s+(?:service|operations)|deploy\w+|licen[cs]e[sd]?|regulator\w*\s+approv\w+|national\s+space\s+(?:strategy|policy|programme|program)|space\s+policy|executive\s+order|budget\s+request|appropriat\w+)\b/i,
+  // Extends DEFAULT_EXCLUDE_WORDS. Each pattern traces to a real dropped
+  // headline from the 2026-09-02 fetch: recurring policy roundups
+  // ("What's Happening in Space Policy August 30-September 5"), trade-body
+  // membership notices ("Commercial Space Federation Welcomes Two New
+  // Associate Members"), honorary appointments ("Tory Bruno Named Honorary
+  // Chair Of World Space Week"), sponsored/opinion columns SpaceNews runs
+  // alongside news ("Propulsion is having a moment", "Speed to Field
+  // Starts Below the Prime"), analyst reports, and office openings.
+  exclude: new RegExp(
+    DEFAULT_EXCLUDE_WORDS.source +
+      "|\\b(what.s\\s+happening|welcomes\\s+\\S+\\s+(?:new\\s+)?(?:member|associate)|associate\\s+members?" +
+      "|honorary|named\\s+\\S+\\s+chair|world\\s+space\\s+week|ribbon\\s+cutting" +
+      "|report\\s+finds|study\\s+finds|analysts?\\s+say|opinion|commentary|sponsored" +
+      "|opens?\\s+\\S+\\s+offices?|is\\s+having\\s+a\\s+moment)\\b",
+    "i"
+  ),
+};
+
 export const VERTICALS: VerticalConfig[] = [
   {
     id: "quantum-computing",
@@ -457,6 +511,139 @@ export const VERTICALS: VerticalConfig[] = [
       "TMO", "DHR", "A", "RVTY", "BIO", "WAT", "BRKR", "RGEN", "CRL", // life-science tools + bioprocessing
       "LLY", "PFE", "MRK", "JNJ", "ABBV", "BMY", "AZN", "NVS", "SNY", "GSK", "NVO", "TAK", // large pharma, documented biologics/vaccine/gene-therapy franchises
       "ZTS", "CTVA", "BIOX", // animal-health and agricultural biotech
+    ],
+  },
+  {
+    id: "space",
+    number: "04",
+    label: "Space Technologies",
+    shortLabel: "Space",
+    tagline: "Space technologies · innovation, scaling, adoption, investment",
+    dataDir: "space",
+    // The scoping decision that defines this vertical: it tracks space
+    // TECHNOLOGY — launch, propulsion, spacecraft, satellites and their
+    // comms, on-orbit operations, space traffic and debris — and NOT
+    // astronomy or planetary science, which are science ABOUT space. That
+    // is the same call biotechnology makes in excluding clinical medicine,
+    // and it is what keeps this corpus at ~550 works a month instead of
+    // being swamped: OpenAlex's "Astronomy and Astrophysics" subfield
+    // (3103) alone holds 2.18 MILLION works, four times the entire
+    // aerospace subfield.
+    //
+    // Only five topics survived a hand-check of their real recent journal
+    // works, and the rejects matter more here than in any other vertical
+    // because OpenAlex's aerospace taxonomy blends space with aviation,
+    // marine and general engineering:
+    //   T12042 Satellite Communication Systems — 6/6 on-topic (free-space
+    //     optical comms, Starlink governance, space traffic management,
+    //     LEO constellations)
+    //   T11701 Space Satellite Systems and Control — 6/6 (Lunar
+    //     Trailblazer recovery, spacecraft guidance, orbital debris)
+    //   T12449 Spacecraft Design and Technology — co-orbital configs,
+    //     small-satellite propulsion, lunar orbit propagators
+    //   T12513 Rocket and propulsion systems — scramjet cooling,
+    //     rocket-based combined cycle, reusable launch trajectories
+    //   T12717 Space exploration and regulation — the policy topic, and
+    //     uniquely valuable for this app's audience (Starlink governance,
+    //     space traffic management, satnav-spoofing liability, "From
+    //     Sputnik to Starship: the experience curve of space launch")
+    //
+    // Deliberately EXCLUDED after reading their real works, each for a
+    // stated reason. Named like space, isn't: T14214 "Space Exploration
+    // and Technology" is planetary science (lunar crustal formation,
+    // Mercury's exosphere, meteorite spectra) — the same trap as
+    // biotechnology's T14293. T10406 "Planetary Science and Exploration"
+    // likewise. Aviation, not space: T12125 (pilot workload, helicopter
+    // training), T12719 (airships, flapping-wing robots), T13855 (generic
+    // control theory, and one paper on whether the upwardly mobile are
+    // left-wing). Earth science using satellites rather than building
+    // them: T10801 and T11038 SAR (landslides, aquifers, tree height),
+    // T10655 GNSS (earthquake magnitude, ionospheric scintillation).
+    // Defence/energetics rather than launch: T12699 electromagnetic
+    // launch (ceramic armour, battery thermal runaway), T12389 infrared
+    // targets, T13371 military systems. Half-noise, so dropped rather
+    // than diluting: T13200 spacecraft/cryogenic (submerged floating
+    // tunnels, ship anti-rolling tanks) and T11082 spacecraft dynamics
+    // (unmanned SURFACE vehicles, airship sizing) — adding both raised
+    // the 30-day count from 546 to 813 but REDUCED the distinct countries
+    // in a 50-work sample from 29 to 21, which is the tell that the extra
+    // volume is concentrated noise.
+    //
+    // Live 30-day journal-only result: 546 works, 46/50 with structured
+    // institution-country data, 29 distinct countries in that sample.
+    // Comparable in size to quantum's 727 — space technology really is a
+    // smaller literature than AI or biotech, not an under-scoped filter.
+    openAlexFilter: "topics.id:T12042|T11701|T12449|T12513|T12717",
+    // astro-ph.IM is arXiv's instrumentation-and-methods astrophysics
+    // archive — the closest thing arXiv has to a space-engineering
+    // section. Break-glass only, same as every other vertical's.
+    arxivCategory: "astro-ph.IM",
+    // B64G is the real space CPC subclass and its own USPTO definition
+    // does the aviation/space split for us: it "covers only vehicles,
+    // equipment or the like specially adapted for cosmonautics" and
+    // explicitly excludes anything applicable to both cosmonautics and
+    // aeronautics. Verified live (2026-09-02): 25,876 results whose
+    // newest were Viasat satellite stowage/deployment, a Blue Origin
+    // cryogenic boiler, an Argotec microsatellite, an ArianeGroup
+    // propulsion system and a Honeybee Robotics payload unloader — 7/7
+    // on-topic. H04B7/185 (space-based and satellite stations) adds ~2,000
+    // real satellite-communications filings. G01S19 (GNSS receivers) was
+    // tested and rejected: it takes the total to 90,704 and the top hits
+    // become Nokia non-terrestrial-network positioning and Google GNSS,
+    // i.e. terrestrial telecom rather than space technology.
+    epoCpcQuery: "cpc=B64G OR cpc=H04B7/185",
+    // NSF is a genuinely poor fit for this vertical and the number should
+    // be read that way. Measured 2026-09-02: NSF funds space SCIENCE, not
+    // space technology — space weather, magnetospheric plasma, solar
+    // energetic particles, and Earth science that consumes satellite data
+    // (cloud evolution, wildfire detection, soil moisture). Querying
+    // "satellite" returns 300 awards that are almost entirely Earth
+    // scientists USING satellite data; "orbital" matches molecular
+    // orbitals in chemistry; "space technology" matches only 7%.
+    // "spacecraft" is the least-bad option and still returns
+    // broader-impacts boilerplate. The right source is NASA (TechPort or
+    // NSPIRES) or DoD SBIR, neither of which this app has a module for —
+    // an honest gap, stated in data/space/notes.ts rather than papered
+    // over, and the Investment stage here leans on procurement and the
+    // CapIQ VC panel instead.
+    fundingKeyword: "spacecraft",
+    // Procurement is where this vertical's public money actually shows up,
+    // and "satellite" is the term that finds it. Verified live against
+    // USASpending: Northrop's $575.3M Joint Polar Satellite System-2
+    // spacecraft, Rocket Lab's NASA VCLS contract, Maxar's Commercial
+    // Satellite Data Acquisition award — all real, all NASA or DoD.
+    // "spacecraft" as a procurement term finds JWST for Northrop but
+    // nothing for Rocket Lab or Maxar.
+    procurementKeyword: "satellite",
+    rssFeeds: SPACE_RSS_FEEDS,
+    rssClassifier: SPACE_RSS_CLASSIFIER,
+    investmentNewsQuery:
+      '(space OR satellite OR "launch vehicle") (grant OR funding OR investment OR contract OR NASA OR "Space Force" OR "national space")',
+    // Grouped to match the sector values in companyCategory.ts. The
+    // exposure split is unusually clean in this vertical: the launch and
+    // satellite-operator names are genuine pure-plays whose entire R&D
+    // really is space, while the primes are the opposite extreme —
+    // Lockheed's and Boeing's total R&D is overwhelmingly not space, and
+    // the R&D chart's sector chips exist so a reader can separate the two.
+    // 35 tickers, each confirmed live against Massive's reference endpoint
+    // (2026-09-02) to actually carry market-cap data. Of 44 candidates:
+    //   - EADSY (Airbus), THLLY (Thales) and RYCEY (Rolls-Royce) resolve
+    //     but carry no market cap on this plan tier, the same foreign-ADR
+    //     gap quantum and AI hit. Airbus and Thales are already in
+    //     data/capiq/rd-spend.ts, so they're picked up for the R&D chart
+    //     via CAPIQ_TICKERS_BY_VERTICAL instead — see fetch-data.ts.
+    //   - SATS (EchoStar), MAXR (Maxar, taken private 2023), AJRD (Aerojet
+    //     Rocketdyne, acquired by L3Harris 2023), ASTR (Astra, delisted)
+    //     and MDALF (MDA, TSX-only) don't resolve at all.
+    // ARQQ resolves and is genuinely space-adjacent but stays in quantum's
+    // list only — it's a quantum-encryption company that happens to sell
+    // to satellite operators, and double-listing it would double-count its
+    // R&D across two verticals.
+    tickers: [
+      "RKLB", "LUNR", "RDW", "SPCE", "MNTS", "VOYG", "SIDU", // launch and in-space services
+      "ASTS", "PL", "BKSY", "SPIR", "VSAT", "IRDM", "GSAT", "TSAT", // satellite operators and Earth-observation data
+      "LMT", "NOC", "RTX", "BA", "GD", "LHX", "LDOS", "HII", "KTOS", "AVAV", "TXT", "ESLT", // defense and aerospace primes with documented space programs
+      "HEI", "TDG", "ATRO", "CW", "TDY", "BWXT", "HWM", "TRMB", // components, subsystems and space nuclear
     ],
   },
 ];

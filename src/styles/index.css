@@ -118,10 +118,27 @@ a { color: inherit; }
   display: flex; align-items: center; justify-content: center; line-height: 1;
 }
 .theme-toggle:hover { border-color: var(--red); color: var(--red); }
-.verticals { display: flex; gap: 4px; }
-.vtab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 9px; border: 1px solid var(--line-2); background: var(--paper); color: var(--mist); cursor: pointer; border-radius: 0; }
-.vtab:hover { border-color: var(--slate); color: var(--ink); }
-.vtab[aria-pressed="true"] { background: var(--surface-selected); border-color: var(--surface-selected); color: var(--on-selected); }
+.verticals { display: flex; gap: 6px; align-items: center; }
+/* The vertical picker. Same type ramp as the .vtab buttons it replaced
+   (mono, 10px, uppercase) so the topbar reads unchanged — a select is a
+   different control, not a different design language. Zero radius and a
+   1px border like every other surface here; appearance:none strips the
+   platform chrome so the caret can be drawn as a plain inline SVG in
+   currentColor and follow the theme, which a native caret doesn't. */
+.vselect-label { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); }
+.vselect {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 4px 22px 4px 9px; border: 1px solid var(--line-2); background: var(--paper); color: var(--ink);
+  cursor: pointer; border-radius: 0; appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 7px center;
+}
+.vselect:hover { border-color: var(--slate); }
+.vselect:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; }
+/* The option list is drawn by the OS, so it can't inherit the app's tokens
+   — set an explicit background/color or dark mode renders dark-on-dark in
+   some browsers. */
+.vselect option { background: var(--paper); color: var(--ink); text-transform: none; font-family: var(--sans); font-size: 12px; }
 
 /* ── breaking-news tracker — real news-shaped entries only, continuously
    scrolling by default (the motion is deliberate — this reads as a live
