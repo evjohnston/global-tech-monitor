@@ -398,13 +398,31 @@ pre-existing production point reads as stale-ceiling and gets discarded.
 backfilled as far as basic paging reaches: quantum reconstructs 30 days
 (its volume is under the cap, so coverage is complete), biotech 6, AI 2,
 and the script now says so on stdout instead of inventing the rest.
-Second, **the deployed data still has the bad points.** `public/data/` is
-gitignored on `main` and CI seeds from `origin/data`, so correcting it
-locally fixes nothing live, and `backfill-trend` is not part of CI. Fixing
-the shipped history means running the corrected backfill against the
-`data` branch's files and pushing — a deliberate history edit that drops
-real (if wrong) recorded dates, so it's a decision to make on purpose
-rather than a cleanup to slip into another commit.
+Second, the deployed data had the bad points until **2026-09-03, when they
+were corrected on the `data` branch** — and the way that was done is worth
+copying if this ever happens again. The corrected `backfill-trend` cannot
+rebuild them: those dates are 46-75 days back and the script only
+reconstructs the last 30 days, so a re-run would simply skip them and leave
+the bad points in place. Deleting them was the obvious alternative and the
+wrong one — they are real recorded observations, just counted against a
+ceiling nothing else uses.
+
+So instead they were **stamped with their real ceiling**,
+`windowCap: 1600` (the buggy run fetched 8 pages x 200), which is exactly
+what that field exists for: `loadHistory()` then excludes them from the
+charted series automatically while every point stays in the file,
+auditable. Identifying them needs no guesswork — a genuinely recorded run
+always stamps `stageCounts`, so "backfilled AND unstamped" isolates the
+buggy set precisely: 30 quantum points (2026-06-20 to 07-19) and 6 AI
+points (2026-07-14 to 07-19). Measured effect: AI's charted series went
+from 52 points ranging 2-1241 to 46 ranging 2-534, quantum's from 76
+ranging 2-793 to 46 ranging 2-422. Both now start at 2026-07-20, the first
+genuinely recorded run. Biotechnology had no legacy points and was
+untouched.
+
+(The remaining `2` at the low end of both ranges is the real 2026-07-21
+OpenAlex-outage day, a genuine recorded observation that predates the
+degraded-run guard described above. It's left alone because it's real.)
 
 **The VC panel was wrong on day one, and that's the lesson worth keeping.**
 `data/capiq/vc-funding.ts` already held a 3,916-company `biotechnology`
