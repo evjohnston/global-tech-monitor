@@ -63,7 +63,7 @@ export const LEGACY_WINDOW_CAP = 600;
 export interface OpenAlexOpts {
   filter: string; // raw OpenAlex filter fragment, e.g. "topics.id:T10682" or "primary_topic.subfield.id:1702"
   key?: string; // OPENALEX_KEY — optional, raises the rate limit
-  mailto?: string; // polite pool — identifies the caller to OpenAlex
+  mailto?: string; // dead since OpenAlex dropped it 2026-02-13; ignored, still sent
   sinceDays?: number;
   n?: number; // per page — OpenAlex caps this at 200
   page?: number; // 1-indexed; use to page past the per-page cap
@@ -124,11 +124,23 @@ function orgFromRawAffiliation(raw: string): string {
 // stage down with it. Every source in this app fails soft, so a bad key
 // wouldn't raise an alarm — it would just stop all four verticals' papers
 // from growing, quietly, in exactly the way an unset EPO_KEY hid for 45 days
-// (see CLAUDE.md's "EPO_KEY / EPO_SECRET are NOT set" note). OpenAlex is the
-// one source every vertical's innovation stage depends on, and it works
-// perfectly well keyless on the polite pool via `mailto` — that's what this
-// app ran on for its first seven weeks. So an auth-class rejection drops the
-// key and carries on rather than failing the fetch.
+// (see CLAUDE.md's EPO note). OpenAlex is the one source every vertical's
+// innovation stage depends on, so an auth-class rejection drops the key and
+// carries on rather than failing the fetch outright.
+//
+// Be clear about what the fallback actually buys, because an earlier version
+// of this comment was wrong about it. OpenAlex ended the polite pool on
+// 2026-02-13 and removed the `mailto` parameter with it — their own
+// announcement is blunt, "No more polite pool! No more email parameter in
+// your calls—it was never secure and couldn't scale. Keys only from here on
+// out." Keyless now means "100 free credits for testing, then 409 errors."
+// So this fallback is a trickle that salvages the first pages of a run, NOT
+// a working steady state. It exists so a rotated or mistyped key costs some
+// coverage instead of the whole stage, and the warning says so out loud
+// rather than reading as an all-clear.
+//
+// `mailto` is still sent because it is now simply ignored, and dropping it
+// would touch every call site for no gain. It grants nothing.
 //
 // The flag is module-level on purpose: one rejection converts the rest of the
 // run, instead of re-spending a 403 on each of the ~200 paged calls a full
@@ -145,8 +157,10 @@ async function oaFetch(baseUrl: string, mailto: string, key: string): Promise<Re
   if (useKey && (res.status === 401 || res.status === 403)) {
     keyRejected = true;
     console.warn(
-      `OpenAlex rejected OPENALEX_KEY (HTTP ${res.status}) - falling back to the ` +
-        `keyless polite pool for the rest of this run`,
+      `OpenAlex rejected OPENALEX_KEY (HTTP ${res.status}) - continuing KEYLESS for the ` +
+        `rest of this run. This is degraded, not fine: OpenAlex ended the polite pool on ` +
+        `2026-02-13, so keyless is ~100 credits then HTTP 409. Expect partial coverage ` +
+        `until the key is fixed.`,
     );
     const retry = await fetch(baseUrl, { headers });
     if (retry.ok) return retry;

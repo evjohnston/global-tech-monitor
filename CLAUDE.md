@@ -1414,16 +1414,50 @@ in any of the four, which is `NON_COUNTRY_PATENT_AUTHORITIES`
 (`epo.ts`) working on real data rather than only in principle.
 
 **Setting `OPENALEX_KEY` created a new risk that had to be guarded.**
-Until then `openalex.ts` sent no `api_key` param at all and ran on the
-keyless polite pool via `mailto`. A key that OpenAlex rejects would throw,
-`fetch-data.ts` would soft-fail the source, and all four verticals' papers
-would stop growing behind a green run — the same silent-degradation shape
-as the EPO miss itself, landing on the one source every vertical's
-innovation stage depends on. So `oaFetch` now drops the key, warns once,
-and retries keyless on a 401/403, with a module-level `keyRejected` flag
-so one rejection converts the rest of the run instead of re-spending a 403
-on each of the ~200 paged calls a four-vertical fetch makes. The key was
-accepted on the first real run, so the fallback has not yet fired.
+Until then `openalex.ts` sent no `api_key` param at all. A key that
+OpenAlex rejects would throw, `fetch-data.ts` would soft-fail the source,
+and all four verticals' papers would stop growing behind a green run — the
+same silent-degradation shape as the EPO miss itself, landing on the one
+source every vertical's innovation stage depends on. So `oaFetch` now
+drops the key, warns once, and retries keyless on a 401/403, with a
+module-level `keyRejected` flag so one rejection converts the rest of the
+run instead of re-spending a 403 on each of the ~200 paged calls a
+four-vertical fetch makes. The key was accepted on the first real run and
+verified independently against the live API, so the fallback has not fired.
+
+**Correction, same day: the "polite pool" this file kept invoking no
+longer exists, and had not for nearly seven months.** Earlier revisions of
+this section and of `oaFetch`'s own comment claimed OpenAlex "serves the
+polite pool on `mailto` alone, which is why the innovation stage works at
+all." That was wrong. OpenAlex ended it on **2026-02-13**, in an
+announcement worth quoting because it leaves no ambiguity — "API calls
+will require a key starting one month from today (Feb 13). If you don't
+include one after that, you'll get 100 free credits for testing, then 409
+errors," and "No more polite pool! No more email parameter in your
+calls—it was never secure and couldn't scale. Keys only from here on out."
+
+Three consequences:
+- **The keyless fallback is a trickle, not a working mode.** It salvages
+  the first pages of a run so a rotated key costs coverage rather than the
+  whole stage. Its warning now says that explicitly instead of reading as
+  an all-clear. Don't rely on it.
+- **Running keyless from 2026-02-13 to 2026-09-03 was luckier than it
+  looked.** Runs kept returning real data (AI and biotech both hit the
+  10,000-work paging ceiling), so enforcement was evidently softer than the
+  announcement, but the app sat one policy tightening away from losing its
+  primary source. A free key gives 10x the keyless budget.
+- **`OPENALEX_MAILTO` is dead config.** It was never set anywhere — not in
+  `.env.local`, not in the workflow `env:` block — so every request this
+  app has ever made identified itself as the placeholder
+  `gtm@example.com`. Harmless, because the parameter is now ignored, but
+  don't add a real address expecting it to do anything. `mailto` is still
+  sent only because removing it would touch every call site for no gain.
+
+The lesson generalises past OpenAlex. **A soft-failing source's provider
+can change its access rules without this app noticing**, because nothing
+here distinguishes "returned less data" from "is now on a deprecation
+path." The source-disclosure panel makes the first visible; the second
+still needs a human reading provider announcements.
 
 One caveat on the counts: `EPO: 100 patents` is a per-run ceiling, not a
 corpus measurement. Patents accumulate 100 per vertical per run now that
