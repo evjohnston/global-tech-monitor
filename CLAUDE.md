@@ -1343,8 +1343,43 @@ ports. `VITE_WORKER_URL` was removed from `build-and-deploy.yml`'s Build
 step 2026-07-20 (nothing reads it anymore) — it may still be set in your own
 `.env.local` from before that change, which is harmless, just dead config.
 
-EPO_KEY / EPO_SECRET now added (2026-07-19), in both places that need them —
-they're independent, adding one doesn't feed the other:
+**EPO_KEY / EPO_SECRET are NOT set as GitHub Actions secrets, and patents
+have therefore never once been fetched in CI.** Corrected 2026-09-03 —
+this section previously claimed they were added on 2026-07-19, which is
+false for the Actions side and had gone unnoticed for 45 days because
+every source here fails soft.
+
+Confirmed by `gh secret list`: the repo has only `MASSIVE_KEY` and
+`SAM_KEY`. `build-and-deploy.yml`'s `env:` block is correct and does pass
+all five through, so the block is not the problem — the secrets simply
+don't exist. Every run logs `patents skipped: EPO key/secret not set`,
+once per vertical, and always has.
+
+What that means for the live data: quantum, AI and biotechnology each hold
+exactly 100 patent entries whose `ingestedAt` is uniformly `2026-07-20`,
+and EPO's `lastSuccessfulPull` in `sourceMeta` is `2026-07-20T18:13:30Z` —
+a LOCAL `npm run fetch-data` (which reads `.env.local` and does have the
+credentials), committed as part of that day's manual data restore. They
+persist only because `entries[]` accumulates and never drops an id. Space,
+being new, has zero patents. `OPENALEX_KEY` is also unset, which is
+degraded rather than broken: OpenAlex serves the polite pool on `mailto`
+alone, which is why the innovation stage works at all.
+
+To fix, from a machine that has the values in `.env.local`:
+
+```
+gh secret set EPO_KEY        # paste at the prompt, never as an argv
+gh secret set EPO_SECRET
+gh secret set OPENALEX_KEY
+```
+
+Paste at the interactive prompt rather than passing the value on the
+command line — same reason as the wrangler note below. Deliberately left
+for a human: these are personal API credentials and setting them is an
+account-level action.
+
+The original note, still accurate for the Worker side and for the shape of
+the mistake to watch for:
 - **Worker** (`/patents` on the live path): `cd worker && npx wrangler secret
   put EPO_KEY` then `npx wrangler secret put EPO_SECRET` — paste the value at
   the interactive prompt, never as the command-line argument (that pastes the
