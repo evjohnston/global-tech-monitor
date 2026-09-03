@@ -21,11 +21,27 @@ import type { Entry } from "../../src/lib/types.ts";
 // is. Same call the OpenAlex filter in verticals.ts makes, and the same
 // kind of call biotechnology makes in excluding clinical medicine.
 //
-// `country` conventions, matching data/biotech/seed.ts:
-//   - A launch or facility gets the country it physically happens in —
-//     Ariane 6 flies from Kourou, which is France.
+// `country` conventions. The rule is: attribute to whatever the milestone
+// is ABOUT, and say so in countryEvidence when the answer isn't obvious.
+// Space breaks a simple "where did it physically happen" rule more than
+// biotech did, because launch sites are routinely in a different country
+// from whoever built the vehicle:
+//   - A milestone about a VEHICLE goes to whoever built it. Isar
+//     Aerospace's Spectrum is DE even though it flew from Andøya in
+//     Norway — Norway did not build Spectrum, and "which countries can
+//     build and fly a rocket" is the question a policy reader is asking.
+//   - A milestone about a SITE goes to the site. Rocket Lab's first
+//     orbital flight is logged to NZ because the milestone is the private
+//     spaceport, and SaxaVord's licence is GB for the same reason.
+//   - Where both coincide, no ambiguity: Ariane 6 is French-built and
+//     flies from Kourou, which is France.
 //   - A supranational body gets the country it physically sits in. The
 //     European Commission is BE. Nothing is bucketed into an "EU" code.
+//
+// Failed attempts belong here. Two of the launch entries below are
+// failures, stated as such — a seed set containing only successes would
+// misrepresent how hard orbital launch actually is, and the first attempt
+// is the real national milestone either way.
 
 export const SEED: Entry[] = [
   // ── Stage 02: production / scaling ──────────────────────────────
@@ -59,6 +75,28 @@ export const SEED: Entry[] = [
     title: "Ariane 6 flies for the first time from Kourou on mission VA262, restoring Europe's independent access to space a year after Ariane 5's retirement left it unable to launch large satellites on a homegrown rocket",
     org: "European Space Agency / ArianeGroup", date: "2024-07-09",
     url: "https://www.esa.int/Enabling_Support/Space_Transportation/Ariane/Europe_s_new_Ariane_6_rocket_powers_into_space",
+  },
+  {
+    id: "seed-starship-booster-catch-2024",
+    stage: "scaling", country: "US", provenance: "seeded", source: "milestone",
+    title: "SpaceX catches a returning Super Heavy booster in the launch tower's arms on Starship's fifth flight, the first time a booster of that size has been recovered without landing legs or a pad, while the upper stage reached 212 km and splashed down on target in the Indian Ocean",
+    org: "SpaceX", date: "2024-10-13",
+    url: "https://www.space.com/spacex-starship-flight-5-launch-super-heavy-booster-catch-success-video",
+  },
+  {
+    id: "seed-isar-spectrum-first-flight-2025",
+    stage: "scaling", country: "DE", provenance: "seeded", source: "milestone",
+    title: "Isar Aerospace flies Spectrum from Andøya, the first orbital launch attempt by a European commercial company from continental Europe — terminated about 30 seconds in after a vent valve opened unintentionally and the vehicle lost attitude control during its roll manoeuvre",
+    org: "Isar Aerospace", date: "2025-03-30",
+    url: "https://isaraerospace.com/press/isar-aerospace-lifts-off-successfully-during-first-test-flight-of-orbital-launch-vehicle",
+    countryEvidence: "Logged to Germany, where Isar Aerospace built the vehicle, rather than Norway, where Andøya Spaceport sits — the milestone is a European company's launch capability, not the pad",
+  },
+  {
+    id: "seed-gilmour-eris-2025",
+    stage: "scaling", country: "AU", provenance: "seeded", source: "milestone",
+    title: "Gilmour Space flies Eris from its own Bowen Orbital Spaceport in Queensland, the first orbital launch attempt by an Australian-built rocket and the first use of Australia's first commercial orbital launch site — the hybrid-propulsion vehicle lost thrust and crashed 14 seconds in",
+    org: "Gilmour Space Technologies", date: "2025-07-29",
+    url: "https://www.abc.net.au/news/2025-07-30/gilmour-space-technologies-launch-orbital-rocket-bowen/105470024",
   },
   // Destination capability — landing, orbiting, operating somewhere other
   // than low Earth orbit. This is where the set of capable countries is
@@ -114,6 +152,18 @@ export const SEED: Entry[] = [
     org: "United States Space Force", date: "2019-12-20",
     url: "https://www.af.mil/News/Article-Display/Article/2046061/with-the-stroke-of-a-pen-us-space-force-becomes-a-reality/",
     deploymentStatus: "operating",
+  },
+  {
+    id: "seed-saxavord-licence-2023",
+    stage: "adoption", country: "GB", provenance: "seeded", source: "deployment",
+    title: "The UK Civil Aviation Authority licenses SaxaVord on Unst in Shetland for up to 30 launches a year, making it the UK's first licensed vertical-launch spaceport and the first fully licensed one in Western Europe, with a range licence for the sea and airspace to its north following in April 2024",
+    org: "UK Civil Aviation Authority", date: "2023-12-17",
+    url: "https://www.caa.co.uk/newsroom/news/saxavord-granted-spaceport-licence-by-uk-civil-aviation-authority/",
+    // No deploymentStatus: none of the five real values honestly describes
+    // "a regulator licensed a facility that hasn't launched yet".
+    // "announced" understates a granted licence and "operating" overstates
+    // it, since no orbital launch has flown from SaxaVord. Entry.
+    // deploymentStatus's own rule is to omit rather than guess.
   },
   {
     id: "seed-luxembourg-space-resources-2017",

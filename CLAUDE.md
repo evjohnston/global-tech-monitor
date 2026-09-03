@@ -549,9 +549,20 @@ residual noise the GICS filter can't remove: "Aerospace and Defense" also
 contains supersonic aviation (Boom Technology) and air-defence
 conglomerates (Almaz-Antey), so a handful of the top 25 aren't space.
 
-**Seed data.** 15 entries across 10 countries (US, CN, IN, FR, KR, AE, NZ,
-JP, LU, BE), spanning 2015 to 2026, each verified against its source. A
-floor, not a finished set — quantum is at 263.
+**Seed data.** 19 entries across 13 countries, spanning 2015 to 2026, each
+verified against its source. A floor, not a finished set — quantum is at
+263.
+
+Two conventions this vertical forced, both in the seed header. First,
+attribution goes to **whatever the milestone is about**, because launch
+sites are routinely in a different country from whoever built the vehicle:
+Isar Aerospace's Spectrum is DE even though it flew from Andøya in Norway
+(the milestone is a German company's launch capability), while Rocket
+Lab's first orbital flight is NZ and SaxaVord's licence is GB because in
+those two the milestone IS the site. Second, **failed attempts belong in
+the set** — two of the launch entries are failures, stated as such, because
+a seed set of only successes would misrepresent how hard orbital launch is
+and a country's first attempt is the real milestone either way.
 
 ## Seed history: the sets were recency-biased, and partly still are
 
