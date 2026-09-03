@@ -110,7 +110,16 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
 // attempted, e.g. EPO with no key set). A failure carries the PREVIOUS
 // `lastSuccessfulPull` forward rather than clearing it — "last successful,"
 // not "last attempted," same soft-fail ethos as everywhere else in this app.
-export function buildSourceMeta(prev: SourceMeta[] | undefined, succeeded: Record<string, boolean>, now: string): SourceMeta[] {
+export function buildSourceMeta(
+  prev: SourceMeta[] | undefined,
+  // Three-valued on purpose, and the `undefined` case is load-bearing:
+  // true = fetched, false = attempted and errored, ABSENT = not attempted
+  // at all. Callers must pass undefined rather than false for a source that
+  // was never tried, because "EPO has no credentials" and "EPO is broken"
+  // are different facts and the disclosure panel reports them differently.
+  succeeded: Record<string, boolean | undefined>,
+  now: string,
+): SourceMeta[] {
   const prevByName = new Map((prev ?? []).map((m) => [m.sourceName, m]));
   return SOURCE_TEMPLATE.map((t) => {
     const prior = prevByName.get(t.sourceName);

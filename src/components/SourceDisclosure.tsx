@@ -116,7 +116,15 @@ export function SourceDisclosure({ sourceMeta, generated }: { sourceMeta: Source
 
   // Stated as a count rather than a reassurance — "everything is fine" is not
   // this panel's job, and the number is the thing a reader can check.
-  const problems = rows.filter((r) => r.health.quality !== "verified" && !isUnscheduled(r.meta));
+  //
+  // An unscheduled source sitting idle is working as designed and is not a
+  // problem. One that was actually ATTEMPTED and errored is, even if it is
+  // unscheduled — if OpenAlex is down and the arXiv fallback then fails too,
+  // the innovation stage has nothing, and that must not be filtered out of
+  // the count for being a fallback.
+  const problems = rows.filter(
+    (r) => r.health.quality !== "verified" && (!isUnscheduled(r.meta) || r.meta.lastRunOutcome === "failed"),
+  );
   const takeaway = rows.length === 0
     ? "No source metadata in this data file."
     : problems.length === 0

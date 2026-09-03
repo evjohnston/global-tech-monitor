@@ -78,3 +78,47 @@ describe("buildSourceMeta — the three-valued run outcome survives into the fil
     expect(epo.lastRunOutcome).toBe("failed");
   });
 });
+
+// The bug these exist to prevent, found 2026-09-03 after the panel shipped.
+// fetch-data.ts set EVERY key in its succeeded map to an explicit boolean,
+// so lastRunOutcome could only ever be "ok" or "failed" — "not-attempted"
+// was unreachable, and two sources were being actively misreported:
+// unconfigured EPO read as "Failing / errored on the latest run" when it had
+// never been called, and the arXiv fallback read as "Failing" every time
+// OpenAlex succeeded and it simply wasn't needed. The root cause is that
+// fetchPatents throws "EPO key/secret not set" rather than signalling a
+// skip, so trackedFetch reports ok:false for both cases.
+describe("the not-attempted state is reachable and distinct from failure", () => {
+  it("calls an unconfigured scheduled source Not configured, never Failing", () => {
+    const epo = buildSourceMeta(undefined, { epo: undefined }, iso(0)).find((m) => m.key === "epo")!;
+    expect(epo.lastRunOutcome).toBe("not-attempted");
+    expect(health(epo, BUILD).label).toBe("Not configured");
+  });
+
+  it("does not accuse the arXiv fallback of failing when OpenAlex succeeded", () => {
+    // What fetch-data now passes: openalex true, so arxiv-fallback undefined.
+    const built = buildSourceMeta(undefined, { openalex: true, "arxiv-fallback": undefined }, iso(0));
+    const arxiv = built.find((m) => m.key === "arxiv-fallback")!;
+    expect(arxiv.lastRunOutcome).toBe("not-attempted");
+    expect(health(arxiv, BUILD).label).toBe("Never");
+    expect(health(arxiv, BUILD).quality).toBe("missing"); // reported, not accused
+  });
+
+  it("still reports a fallback that was genuinely reached and failed", () => {
+    // OpenAlex down AND arXiv down — the innovation stage has nothing, and
+    // being a fallback must not exempt it from saying so.
+    const built = buildSourceMeta(undefined, { openalex: false, "arxiv-fallback": false }, iso(0));
+    const arxiv = built.find((m) => m.key === "arxiv-fallback")!;
+    expect(arxiv.lastRunOutcome).toBe("failed");
+    expect(health(arxiv, BUILD).label).toBe("Failing");
+  });
+
+  it("treats a static import with no rows as absent data rather than a failed fetch", () => {
+    // Biotechnology's missing PitchBook coverage is the live case — a real
+    // known gap, and not something that errored.
+    const pb = buildSourceMeta(undefined, { "pitchbook-transactions": undefined }, iso(0))
+      .find((m) => m.key === "pitchbook-transactions")!;
+    expect(pb.lastRunOutcome).toBe("not-attempted");
+    expect(health(pb, BUILD).label).toBe("Never");
+  });
+});

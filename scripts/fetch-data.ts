@@ -628,21 +628,45 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     console.log(`VC funding (CapIQ + PitchBook): capped ${vcFundingAll.length} companies to top ${VC_FUNDING_CAP} for the public data file`);
   }
 
+  // `undefined` means NOT ATTEMPTED and is different from `false`, which
+  // means attempted and errored. The distinction is real and the disclosure
+  // panel renders it differently — "Not configured" versus "Failing" —
+  // because telling a reader that EPO errored when it was never called is
+  // its own small lie. Every source here fails soft, so this map is the only
+  // place the difference survives into the shipped file.
+  //
+  // The trap worth knowing: trackedFetch reports ok:false for BOTH cases,
+  // since fetchPatents throws "EPO key/secret not set" rather than
+  // signalling a skip. So the credential check has to happen here, not be
+  // inferred from the fetch result.
+  const staticOrUnused = <T>(hasRows: boolean, _t?: T) => (hasRows ? true : undefined);
   const sourceMeta = buildSourceMeta(prev?.sourceMeta, {
-    openalex: openalexOk,
-    "arxiv-fallback": arxivOk,
-    epo: epoOk,
+    // An empty openAlexFilter means this vertical has no paper corpus, so
+    // the query is never issued (see the sourceUsed branch above).
+    openalex: v.openAlexFilter ? openalexOk : undefined,
+    // Only reached when OpenAlex itself is unreachable. Not being needed is
+    // this source working as designed, never a failure.
+    "arxiv-fallback": openalexOk || !v.openAlexFilter ? undefined : arxivOk,
+    // Credentials absent is a configuration state, not an error.
+    epo: EPO_KEY && EPO_SECRET ? epoOk : undefined,
     nsf: nsfOk,
     usaspending: usaSpendingOk,
-    "sam-gov": samGovOk,
-    massive: massiveOk,
+    // A real attempt that really does error most runs — SAM.gov's non-federal
+    // key has a daily quota, so `false` here is accurate rather than a stand-in
+    // for "skipped". See the long comment at the top of samGov.ts.
+    "sam-gov": SAM_KEY ? samGovOk : undefined,
+    massive: MASSIVE_KEY ? massiveOk : undefined,
     "sec-edgar": secEdgarOk,
-    capiq: capiqTickers.length > 0, // a static hand-imported file, not a live fetch — see data/capiq/rd-spend.ts
-    "capiq-transactions": CAPIQ_VC_FUNDING.some((c) => c.vertical === v.id), // see data/capiq/vc-funding.ts
-    "pitchbook-transactions": PITCHBOOK_VC_FUNDING.some((c) => c.vertical === v.id), // see data/pitchbook/vc-funding.ts + scripts/import-pitchbook.ts
+    // The four below are static committed imports rather than fetches, so
+    // "no rows for this vertical" is an absence of imported data, not a
+    // failed pull. Biotechnology's missing PitchBook coverage is the live
+    // example — a real known gap, and not something that errored.
+    capiq: staticOrUnused(capiqTickers.length > 0), // data/capiq/rd-spend.ts
+    "capiq-transactions": staticOrUnused(CAPIQ_VC_FUNDING.some((c) => c.vertical === v.id)), // data/capiq/vc-funding.ts
+    "pitchbook-transactions": staticOrUnused(PITCHBOOK_VC_FUNDING.some((c) => c.vertical === v.id)), // data/pitchbook/vc-funding.ts
     "rss-news": rssNewsOk,
     "rss-investment": rssInvestmentOk,
-    seed: seed.length > 0, // a static import, not a fetch — always "succeeds" when configured
+    seed: staticOrUnused(seed.length > 0),
   }, now);
 
   const out: DataFile = {
