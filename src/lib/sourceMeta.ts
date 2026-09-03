@@ -121,6 +121,13 @@ export function buildSourceMeta(prev: SourceMeta[] | undefined, succeeded: Recor
       pollCadence: t.pollCadence,
       structuralLag: t.structuralLag,
       coverageGaps: t.coverageGaps,
-    };
+      key: t.key,
+      // `succeeded[key]` is deliberately three-valued — true, false, or
+      // absent — and this is the only place that distinction survives into
+      // the shipped file. Collapsing false and absent together is what made
+      // "EPO has no credentials" indistinguishable from "EPO is fine" for 45
+      // days.
+      lastRunOutcome: ok === true ? "ok" : ok === false ? "failed" : "not-attempted",
+    } satisfies SourceMeta;
   });
 }

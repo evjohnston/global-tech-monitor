@@ -680,6 +680,16 @@ a { color: inherit; }
 .quality-missing { color: var(--mist); border-style: dashed; }
 .quality-missing::before { background: var(--status-missing); }
 
+/* ── SourceDisclosure — the per-source freshness/lag/gaps table. Five
+   prose-heavy columns, so rows are top-aligned and the prose cells are
+   narrowed and set at the secondary ink; the source name stays the only
+   thing scanning down the left edge. Reuses .lb, no new table styling. ── */
+.source-disclosure tbody td { vertical-align: top; padding: 8px 12px 8px 0; }
+.source-disclosure tbody td:last-child { padding-right: 0; }
+.source-disclosure thead th { padding-right: 12px; }
+.source-disclosure-prose { color: var(--ink-2); font-size: 11px; line-height: 1.45; min-width: 140px; }
+.source-disclosure-detail { color: var(--mist); font-size: 10.5px; line-height: 1.4; margin-top: 4px; }
+
 /* ── ExpandableMethods — collapses the long Sources & Method prose ── */
 .expandable-methods { margin-top: var(--sp-3); }
 .expandable-methods-toggle {

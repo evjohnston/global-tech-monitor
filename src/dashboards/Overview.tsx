@@ -12,6 +12,7 @@ import { LeaderCard } from "../components/LeaderCard.tsx";
 import { LeadershipStackChart } from "../components/LeadershipStackChart.tsx";
 import { ResearchAdoptionGapChart } from "../components/ResearchAdoptionGapChart.tsx";
 import { ChangeLog } from "../components/ChangeLog.tsx";
+import { SourceDisclosure } from "../components/SourceDisclosure.tsx";
 import { CompareRibbon } from "../components/CompareRibbon.tsx";
 import { FindingsPanel } from "../components/FindingsPanel.tsx";
 import { SectionHeader, ChartFrame } from "../components/ChartFrame.tsx";
@@ -32,7 +33,7 @@ const MAP_METRICS: { key: "research" | "scaling" | "adoption" | "money" | "combi
 // from the 4 Track dashboards, just the cross-cutting comparison those
 // dashboards can't show on their own.
 export function Overview({ ctx }: { ctx: DashboardContext }) {
-  const { entries, trend21, country, compareCountries, dark, generated, updatedAgo, navigate, openCountryProfile, openTarget, toggleCompareCountry, activateChangeLogItem, mapMetric, setMapMetric } = ctx;
+  const { data, entries, trend21, country, compareCountries, dark, generated, updatedAgo, navigate, openCountryProfile, openTarget, toggleCompareCountry, activateChangeLogItem, mapMetric, setMapMetric } = ctx;
   const [profileCountry, setProfileCountry] = useState<string | null>(null);
 
   const headline = useMemo(() => overviewHeadline(entries), [entries]);
@@ -172,6 +173,12 @@ export function Overview({ ctx }: { ctx: DashboardContext }) {
       <div id="overview-changelog">
         <ChangeLog entries={entries} onSelectItem={activateChangeLogItem} />
       </div>
+
+      {data && (
+        <div className="panel" id="overview-sources">
+          <SourceDisclosure sourceMeta={data.sourceMeta} generated={data.generatedAt} />
+        </div>
+      )}
     </div>
   );
 }

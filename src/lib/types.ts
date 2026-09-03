@@ -124,6 +124,30 @@ export interface SourceMeta {
   pollCadence: string;
   structuralLag: string;
   coverageGaps: string; // "" if none material
+
+  // Both added 2026-09-03 and both OPTIONAL, because every data file
+  // committed before that date lacks them — normalise absence at the read
+  // site rather than assuming a fresh file, same discipline as
+  // TrendPoint.windowCap.
+  //
+  // `key` is the stable source id (matching sourceMeta.ts's SOURCE_TEMPLATE)
+  // so the UI can classify a source by kind without regex-parsing its
+  // human-readable cadence prose.
+  key?: string;
+
+  // This run's actual outcome, which `lastSuccessfulPull` alone cannot
+  // express. A source that fails carries its previous successful timestamp
+  // forward — correct, but it makes a soft-failing source look merely old
+  // rather than broken, and it renders a source that was never configured
+  // identically to one that is erroring. That ambiguity is precisely what
+  // hid the missing EPO credentials for 45 days: the run stayed green and
+  // the timestamp just sat still. Distinguishing the three states is the
+  // whole reason the disclosure panel is worth rendering.
+  //   "ok"            — fetched successfully this run
+  //   "failed"        — attempted this run and errored
+  //   "not-attempted" — not tried (no key set, or a fallback the primary
+  //                     never needed, or a deliberately manual import)
+  lastRunOutcome?: "ok" | "failed" | "not-attempted";
 }
 
 // One dated observation of country share, appended each nightly run. This is
