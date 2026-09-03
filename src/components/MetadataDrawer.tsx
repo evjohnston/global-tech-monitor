@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import type { DataFile, Entry, TrendPoint } from "../lib/types.ts";
-import { STAGES } from "../lib/types.ts";
+import { STAGES, DETAIL_RETENTION_DAYS } from "../lib/types.ts";
 import type { DrawerTarget } from "../lib/drawerTarget.ts";
 import { serializeDrawerTarget } from "../lib/drawerTarget.ts";
 import { countByCountry, countryShares, orgLeaderboard, rankOf, orgRankOf } from "../lib/aggregate.ts";
@@ -17,6 +17,20 @@ import { downloadCsv } from "../lib/csvExport.ts";
 import { isNewsEntry, newsCategory, newsFreshnessLabel } from "../lib/news.ts";
 
 const RANK_CHANGE_WINDOW_DAYS = 42;
+// fetch-data.ts strips abstract/authors/venue past DETAIL_RETENTION_DAYS to
+// bound payload growth (entries themselves are never dropped). Only the
+// machine-fetched sources reliably have an abstract upstream, so only those
+// get the explanation — a seeded milestone legitimately may never have had
+// one, and claiming otherwise would be worse than saying nothing.
+const ABSTRACT_BEARING_SOURCES = new Set(["paper", "arxiv", "patent", "grant"]);
+
+function detailAgedOut(entry: Entry): boolean {
+  if (!ABSTRACT_BEARING_SOURCES.has(entry.source) || !entry.date) return false;
+  const t = Date.parse(entry.date.slice(0, 10));
+  if (!Number.isFinite(t)) return false;
+  return (Date.now() - t) / 864e5 > DETAIL_RETENTION_DAYS;
+}
+
 
 export interface MetadataDrawerProps {
   target: DrawerTarget;
@@ -382,7 +396,17 @@ function EntryBody({ id, entries, orgFinancialIndex, onOpenTarget, copyLink }: {
       <Field label={AUTHOR_LABEL[entry.source] ?? "Authors"} value={entry.authors?.join(", ")} />
       <div className="drawer-label">Why this stage</div>
       <p className="drawer-note">{STAGE_REASON[entry.stage]}</p>
-      {entry.abstract && (<><div className="drawer-label">Abstract</div><p className="drawer-note">{entry.abstract}</p></>)}
+      {entry.abstract
+        ? (<><div className="drawer-label">Abstract</div><p className="drawer-note">{entry.abstract}</p></>)
+        : detailAgedOut(entry) && (
+            <>
+              <div className="drawer-label">Abstract</div>
+              <p className="drawer-note">
+                Not carried for records older than {DETAIL_RETENTION_DAYS} days — the full text is at the source
+                link above. Said explicitly so an aged record doesn't read as though its source had no abstract.
+              </p>
+            </>
+          )}
       {financials && (
         <>
           <div className="drawer-label">Organization's financial profile</div>

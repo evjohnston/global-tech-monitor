@@ -47,6 +47,7 @@ import { XMLParser } from "fast-xml-parser";
 config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env.local") });
 import { inferInstitutionCountry } from "../src/lib/institutionCountry.ts";
 import type { DataFile, Entry, StageNote, TrendPoint, RdSpendPoint } from "../src/lib/types.ts";
+import { DETAIL_RETENTION_DAYS } from "../src/lib/types.ts";
 import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents, NON_COUNTRY_PATENT_AUTHORITIES } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
@@ -154,6 +155,18 @@ const OA_N = 200;
 // with an older publication_date, which a shallow "most recent N" snapshot
 // can never see at all.
 //
+
+// Entry.date is a real publication/award/announcement date, but it comes from
+// several sources and a malformed one must not silently age an entry out of
+// its own detail. An unparseable date returns 0 — treated as brand new, so
+// the entry keeps everything.
+function ageInDays(date: string | undefined, nowIso: string): number {
+  if (!date) return 0;
+  const t = Date.parse(date.slice(0, 10));
+  if (!Number.isFinite(t)) return 0;
+  return (Date.parse(nowIso) - t) / 864e5;
+}
+
 // Affordable only because abstracts are now capped (see truncateAbstract in
 // sources/util.ts) — they were 69.4% of the payload. Net effect is that all
 // three files get SMALLER than quantum's previous 18MB while carrying full
@@ -563,6 +576,22 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     // already in the file predate that and were the single largest thing
     // in this app's payload — 69.4% of quantum's 17.9MB entries[] array.
     e.abstract = truncateAbstract(e.abstract);
+    // Past this age an entry keeps everything an aggregate, a filter or an
+    // audit reads, and loses only the three fields that exist to fill one
+    // record's drawer. That bounds the growth rate rather than the corpus:
+    // entries[] still accumulates forever and never drops an id, so
+    // "output by country" stays a real all-time count.
+    //
+    // Measured per entry, gzipped: 203 bytes fresh, 99 aged. At the current
+    // ~350 entries/day that is 12.6 MB of growth a year instead of 36.7 MB.
+    // Deliberately NOT stripped: countryEvidence (every attribution has to
+    // stay auditable — see CLAUDE.md's provenance tiers), orgId, citations
+    // and collaboratingCountries, all of which real aggregates read.
+    if (ageInDays(e.date, now) > DETAIL_RETENTION_DAYS) {
+      delete e.abstract;
+      delete e.authors;
+      delete e.venue;
+    }
     // Regional/international patent authorities (WO, EP, ...) were being
     // stored as if they were countries — see epo.ts for the measured
     // impact and why null is right.

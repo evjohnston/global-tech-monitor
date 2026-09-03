@@ -118,6 +118,14 @@ export interface Entry {
 // updated only when that source's fetch actually succeeds this run — a
 // transient failure carries the previous value forward rather than erasing
 // when this source last really worked (see fetch-data.ts).
+// How long an entry keeps its display-only detail (abstract/authors/venue)
+// before scripts/fetch-data.ts strips it. Part of the data contract rather
+// than a fetch detail, because the UI has to be able to explain the absence
+// instead of letting an aged record read as though its source had no
+// abstract. Entries themselves are never dropped, at any age — see the
+// comment at the strip site for the measured reason.
+export const DETAIL_RETENTION_DAYS = 90;
+
 export interface SourceMeta {
   sourceName: string;
   lastSuccessfulPull: string | null; // ISO timestamp, null if never succeeded

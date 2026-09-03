@@ -27,7 +27,20 @@ export function sleep(ms: number): Promise<void> {
 // Cuts on a word boundary and marks the cut with an ellipsis, so a reader
 // can see the text is abridged rather than wondering why an abstract stops
 // mid-sentence — the source URL is right there in the same drawer.
-const ABSTRACT_MAX = 600;
+// Lowered 600 -> 240 on 2026-09-03. Measured on the real shipped AI file:
+// `abstract` was 8.00 MB of a 21.75 MB payload, 36.8% of everything, and the
+// single largest field by a wide margin. Capping at 240 takes the whole file
+// from 5.80 MB gzipped to 4.10 MB, a 29% cut, without dropping a single
+// entry — which matters because dropping entries would change whether
+// "output by country" means all-time or a rolling window, and that is a
+// claim about what this instrument measures, not a storage decision.
+//
+// 240 costs the hand-curated entries nothing, checked before choosing it:
+// deployment abstracts average 255 characters, milestones 344, news 101, so
+// the cap barely touches them. The 4.20 MB it does remove is almost entirely
+// machine-fetched paper/grant/patent abstracts, where the field is a
+// convenience preview beside a source link rather than the content itself.
+const ABSTRACT_MAX = 240;
 
 export function truncateAbstract(raw: string | undefined, max = ABSTRACT_MAX): string | undefined {
   const text = raw?.trim();
