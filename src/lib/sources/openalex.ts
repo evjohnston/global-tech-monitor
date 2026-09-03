@@ -120,6 +120,42 @@ function orgFromRawAffiliation(raw: string): string {
   return raw.split(",")[0].replace(/\.$/, "").trim();
 }
 
+// A supplied OPENALEX_KEY that OpenAlex rejects must not take the innovation
+// stage down with it. Every source in this app fails soft, so a bad key
+// wouldn't raise an alarm — it would just stop all four verticals' papers
+// from growing, quietly, in exactly the way an unset EPO_KEY hid for 45 days
+// (see CLAUDE.md's "EPO_KEY / EPO_SECRET are NOT set" note). OpenAlex is the
+// one source every vertical's innovation stage depends on, and it works
+// perfectly well keyless on the polite pool via `mailto` — that's what this
+// app ran on for its first seven weeks. So an auth-class rejection drops the
+// key and carries on rather than failing the fetch.
+//
+// The flag is module-level on purpose: one rejection converts the rest of the
+// run, instead of re-spending a 403 on each of the ~200 paged calls a full
+// four-vertical fetch makes.
+let keyRejected = false;
+
+async function oaFetch(baseUrl: string, mailto: string, key: string): Promise<Response> {
+  const useKey = Boolean(key) && !keyRejected;
+  const headers = { "User-Agent": `GlobalTechMonitor/0.2 (mailto:${mailto})` };
+
+  const res = await fetch(baseUrl + (useKey ? `&api_key=${key}` : ""), { headers });
+  if (res.ok) return res;
+
+  if (useKey && (res.status === 401 || res.status === 403)) {
+    keyRejected = true;
+    console.warn(
+      `OpenAlex rejected OPENALEX_KEY (HTTP ${res.status}) - falling back to the ` +
+        `keyless polite pool for the rest of this run`,
+    );
+    const retry = await fetch(baseUrl, { headers });
+    if (retry.ok) return retry;
+    throw new Error(`OpenAlex HTTP ${retry.status}`);
+  }
+
+  throw new Error(`OpenAlex HTTP ${res.status}`);
+}
+
 // Shared by every OpenAlex fetch path (recent-window, top-cited-by-year) —
 // one implementation of "raw OAWork -> real Entry" so institution/country
 // resolution and abstract reconstruction can't drift between them.
@@ -205,11 +241,9 @@ export async function fetchOpenAlex(opts: OpenAlexOpts): Promise<Entry[]> {
     "&sort=publication_date:desc" +
     `&per-page=${n}` +
     `&page=${page}` +
-    `&mailto=${encodeURIComponent(mailto)}` +
-    (key ? `&api_key=${key}` : "");
+    `&mailto=${encodeURIComponent(mailto)}`;
 
-  const res = await fetch(url, { headers: { "User-Agent": `GlobalTechMonitor/0.2 (mailto:${mailto})` } });
-  if (!res.ok) throw new Error(`OpenAlex HTTP ${res.status}`);
+  const res = await oaFetch(url, mailto, key);
   const json = (await res.json()) as { results?: OAWork[] };
   const works = json.results ?? [];
   if (works.length === 0) throw new Error("OpenAlex returned no results");
@@ -250,11 +284,9 @@ export async function fetchTopCited(opts: {
     "&sort=cited_by_count:desc" +
     `&per-page=${n}` +
     `&page=${page}` +
-    `&mailto=${encodeURIComponent(mailto)}` +
-    (key ? `&api_key=${key}` : "");
+    `&mailto=${encodeURIComponent(mailto)}`;
 
-  const res = await fetch(url, { headers: { "User-Agent": `GlobalTechMonitor/0.2 (mailto:${mailto})` } });
-  if (!res.ok) throw new Error(`OpenAlex HTTP ${res.status}`);
+  const res = await oaFetch(url, mailto, key);
   const json = (await res.json()) as { results?: OAWork[] };
   const works = json.results ?? [];
   return works.map(mapWork);
