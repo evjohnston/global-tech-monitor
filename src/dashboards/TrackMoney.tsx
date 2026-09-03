@@ -21,6 +21,8 @@ import { SectionHeader } from "../components/ChartFrame.tsx";
 import { FindingsPanel } from "../components/FindingsPanel.tsx";
 import { computeDashboardFindings } from "../lib/findingsEngine.ts";
 import { tickerProfile, rdSectorsFor, RD_SECTOR_LABEL, type RdSector } from "../lib/companyCategory.ts";
+import { applyExposureMode, pureplayShare, exposureBreakdown, type RdExposureMode } from "../lib/rdExposure.ts";
+import { EXPOSURE_LABEL } from "../lib/companyCategory.ts";
 import type { MoneyFlowView } from "../lib/urlState.ts";
 
 type Route = "grants" | "private" | "rd" | "public";
@@ -50,6 +52,7 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
   const { data, entries, shown, trend21, country, compareCountries, vertical, openOrgDrawer, openOrgDrawerBySymbol, openTarget, moneyFlowView: flowView, setMoneyFlowView: setFlowView } = ctx;
   const [route, setRoute] = useState<Route>("grants");
   const [rdSector, setRdSector] = useState<RdSector>("all");
+  const [rdExposure, setRdExposure] = useState<RdExposureMode>("all");
 
   const fundingByCountryMap = useMemo(() => fundingByCountry(entries), [entries]);
   const fundingTop = useMemo(() => topCountries(fundingByCountryMap, 8), [fundingByCountryMap]);
@@ -62,6 +65,23 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
   // they filter. Without that the chip row can't know whether an
   // uncategorized company is present.
   const latestRdCompanies = useMemo(() => data?.rdSpend?.[data.rdSpend.length - 1]?.companies ?? [], [data]);
+  const latestRdPoint = useMemo(() => data?.rdSpend?.[data.rdSpend.length - 1], [data]);
+  // The measured overstatement. null means this vertical has no pure-play
+  // public filer at all — a different statement from "their share is small",
+  // and AI's real situation, so it gets its own sentence below rather than a
+  // 0% that reads as a rounding artefact.
+  const rdPureplay = useMemo(
+    () => (latestRdPoint ? pureplayShare(vertical.id, latestRdPoint) : null),
+    [latestRdPoint, vertical.id],
+  );
+  const rdExposureMix = useMemo(
+    () => (latestRdPoint ? exposureBreakdown(vertical.id, latestRdPoint) : []),
+    [latestRdPoint, vertical.id],
+  );
+  const rdPoints = useMemo(
+    () => applyExposureMode(vertical.id, data?.rdSpend ?? [], rdExposure),
+    [data, vertical.id, rdExposure],
+  );
 
   const countryHasNoGrantCoverage = country !== "all" && fundingTop.top.every((c) => c.country !== country) && fundingTop.rest.every((c) => c.country !== country);
   // A country filter genuinely applies to Public grants (NSF entries carry
@@ -184,14 +204,79 @@ export function TrackMoney({ ctx }: { ctx: DashboardContext }) {
 
       {route === "rd" && (
         <div>
+          {/* The caveat here used to be prose only. It is now the measured
+              number, because prose lets a reader keep the headline figure in
+              mind while the number replaces it. On the shipped data quantum's
+              pure-play share is 0.23% of a $198.9B total — an overstatement of
+              more than two orders of magnitude that no amount of hedging
+              language conveys. */}
           <div className="drawer-note">
-            <strong>Total company R&D among firms with tracked activity in this field.</strong> These are company-wide R&D totals, not estimated {vertical.shortLabel}-specific spending — a diversified company's real total R&D budget covers far more than this one field. Narrow it with the categories below: the pure-play groups are the ones where a company's whole R&D budget really is this field.
+            <strong>Total company R&D among firms with tracked activity in this field.</strong> These are
+            company-wide R&D totals, not {vertical.shortLabel}-specific spending, because no filer breaks
+            R&D out by technology. A diversified company's budget covers far more than this one field.
+            {rdPureplay ? (
+              <>
+                {" "}For the latest year, the {rdPureplay.companies} pure-play{rdPureplay.companies === 1 ? "" : "s"} tracked
+                here account for {fmtUsd(rdPureplay.pureplayUsd)} of {fmtUsd(rdPureplay.totalUsd)} —{" "}
+                <strong>{rdPureplay.sharePct < 1 ? rdPureplay.sharePct.toFixed(2) : rdPureplay.sharePct.toFixed(0)}%</strong>.
+                That share is the honest measure of how much of this total is really about {vertical.shortLabel}.
+              </>
+            ) : (
+              <>
+                {" "}No public company tracked here is a pure-play in {vertical.shortLabel} — every one of them is
+                diversified. There is no field-specific figure to compare against, so read this total as an
+                upper bound on the sector's R&D rather than as its spending on {vertical.shortLabel}.
+              </>
+            )}
           </div>
           {data?.rdSpend && data.rdSpend.length > 0 ? (
             <>
               <div className="panel">
                 <h3>Total company R&D over time <span className="drop">SEC + CapIQ filings</span></h3>
-                <RdSpendTrend points={data.rdSpend} />
+                {/* Only offered when a pure-play actually exists. For AI it
+                    does not, and a chip that always renders an empty chart
+                    would be worse than no chip. */}
+                {rdPureplay && (
+                  <div className="tab-bar" style={{ marginBottom: 8 }}>
+                    {([["all", "All tracked companies"], ["pure-play", "Pure-play only"]] as const).map(([m, label]) => (
+                      <button key={m} className="chip" aria-pressed={rdExposure === m} onClick={() => setRdExposure(m)}>{label}</button>
+                    ))}
+                  </div>
+                )}
+                {rdPoints.length >= 2 ? (
+                  <RdSpendTrend points={rdPoints} />
+                ) : (
+                  <div className="trend-empty">
+                    Too few fiscal years with a pure-play filer to plot a trend. Years with no pure-play
+                    company are left out rather than shown as zero, since none of them had filed yet.
+                  </div>
+                )}
+                {rdExposure === "pure-play" && rdPoints.length >= 2 && (
+                  <div className="drawer-note">
+                    {rdPoints.length} fiscal year{rdPoints.length === 1 ? "" : "s"} shown, starting FY{rdPoints[0].fiscalYear}.
+                    Earlier years are absent because no pure-play company had filed yet, not because spending was zero.
+                  </div>
+                )}
+              </div>
+              <div className="panel">
+                <SectionHeader
+                  title="How much of that total is really this field?"
+                  takeaway={
+                    rdPureplay
+                      ? `Pure-plays are ${rdPureplay.sharePct < 1 ? rdPureplay.sharePct.toFixed(2) : rdPureplay.sharePct.toFixed(0)}% of the latest year's tracked R&D. The rest is real spending by companies whose budgets cover far more than ${vertical.shortLabel}.`
+                      : `Every tracked company is diversified, so none of this total is specific to ${vertical.shortLabel}.`
+                  }
+                />
+                {rdExposureMix.map((slice) => (
+                  <BarRow
+                    key={slice.exposure}
+                    label={EXPOSURE_LABEL[slice.exposure]}
+                    pct={slice.sharePct}
+                    color={slice.exposure === "pure-play" ? "var(--red)" : "var(--line-2)"}
+                    valueLabel={`${slice.sharePct.toFixed(slice.sharePct < 1 ? 2 : 0)}%`}
+                    detail={`${EXPOSURE_LABEL[slice.exposure]} · ${slice.companies} compan${slice.companies === 1 ? "y" : "ies"} · ${fmtUsd(slice.totalUsd)} total R&D`}
+                  />
+                ))}
               </div>
               <div className="panel">
                 <SectionHeader title="Which companies report the most R&D spend?" />

@@ -663,18 +663,54 @@ than shown as empty rows. `CompanyMarketPanel.tsx` renders this as a
 scrollable table (reusing the `.lb` leaderboard table styling), not cards
 — a 20-50 row list needs a dense, scannable shape, not a wrapped card grid.
 
-**Known tension, not yet resolved**: past the handful of pure-plays
-(IonQ/Rigetti/D-Wave/Quantum Computing Inc./Arqit/SEALSQ for quantum),
-most of these tickers are large diversified companies (Lockheed Martin,
-IBM, Adobe, chip-fab-equipment makers) whose total SEC-EDGAR R&D spend
-(`secEdgar.ts`, feeding `RdSpendTrend.tsx`) is NOT specifically quantum or
-AI R&D — it's their whole company's R&D budget, of which the vertical in
-question is one line among many. Broadening the ticker list from 6 to
-26/47 made this tension worse, not better: the "Private investment over
-time" chart now reads more like "total R&D of companies with some
-exposure to this vertical" than "R&D spent on this vertical" specifically.
-Flagged here rather than silently worked around — a real fix would need a
-per-company weighting or a pure-play-only mode, not yet built.
+**The R&D-attribution tension — resolved 2026-09-03, and the resolution is
+a number.** Past the handful of pure-plays (IonQ/Rigetti/D-Wave/Quantum
+Computing Inc./Arqit/SEALSQ for quantum), most of these tickers are large
+diversified companies (Lockheed Martin, IBM, Adobe, chip-fab-equipment
+makers) whose total SEC-EDGAR R&D spend is NOT specifically quantum or AI
+R&D — it's their whole company's R&D budget, of which the vertical in
+question is one line among many. No filer breaks R&D out by technology, so
+that is the only figure SEC publishes. Broadening the ticker lists from 6
+to 26/47 made the problem worse, and this file carried it as an open
+caveat for six weeks.
+
+`src/lib/rdExposure.ts` fixes it by measuring the overstatement instead of
+hedging about it. Every ticker already carries a hand-assigned `exposure`
+class in `companyCategory.ts`, so partitioning the latest year's total by
+that class introduces no new estimate. Measured on the shipped data:
+
+| vertical | pure-play share of the headline | headline | real pure-play R&D |
+|---|---|---|---|
+| quantum | **0.23%** | $198.9B | $451M |
+| AI | **none exist** | $281.8B | — |
+| biotechnology | 20.92% | $121.8B | $25.5B |
+| space | 4.00% | $20.2B | $809M |
+
+Quantum is the case that justifies the work. A reader shown "$198.9B" is
+being misled by more than two orders of magnitude about how much public
+R&D is actually aimed at quantum computing, and no amount of prose caveat
+fixes that — prose lets the headline stay in mind, a number replaces it.
+Track Money's R&D route now states the share in its own note, offers an
+"All tracked companies"/"Pure-play only" toggle on the trend, and carries
+a "How much of that total is really this field?" panel breaking the latest
+year down by exposure class with the pure-play bar in the accent colour.
+
+**Weighting was the alternative and was deliberately rejected.** Assigning
+Microsoft a notional "12% of R&D is AI" would manufacture a figure no
+filing supports, which is exactly what this project doesn't do.
+
+Two behaviours worth preserving if this code is touched:
+- **AI has no pure-play public company at all**, so `pureplayShare`
+  returns null rather than 0 and the toggle is not rendered. "There is no
+  pure-play AI company" is a finding, and a different statement from "their
+  share rounds to zero" — the note says the former and calls the total an
+  upper bound. A chip that always produced an empty chart would be worse
+  than no chip.
+- **A fiscal year with no pure-play filer is dropped, never plotted as
+  zero.** IonQ, Rigetti and D-Wave weren't public filers before 2021-2022,
+  so a $0 point would read as "they spent nothing" rather than "nobody was
+  measurable yet." Same discipline as `trimIncompleteTail`. The pure-play
+  series states its own start year for that reason.
 
 `scripts/fetch-data.ts` fetches each
 ticker's market cap and today's price move via the Massive REST API
