@@ -37,14 +37,121 @@ import type { Entry } from "../../src/lib/types.ts";
 //     flies from Kourou, which is France.
 //   - A supranational body gets the country it physically sits in. The
 //     European Commission is BE. Nothing is bucketed into an "EU" code.
+//   - A state that no longer exists goes to its successor. Sputnik and
+//     Vostok 1 are RU. This is forced as much as chosen — ISO 3166-1
+//     retired SU, so countryName() hands back the bare string "SU", and
+//     this app renders full country names rather than dead codes. The
+//     pad being in Kazakhstan is noted in countryEvidence, not encoded.
+//   - A MULTILATERAL instrument gets null, not a member state. The Outer
+//     Space Treaty has three depositary governments and 100-plus parties;
+//     naming one would misrepresent it. Note this is the opposite call
+//     from the European Commission case above, and the distinction is
+//     real — the Commission ACTS as a procurer with a seat, while a
+//     treaty is an agreement AMONG states with no single author. null
+//     here means "correctly not one country's," not "unknown."
 //
 // Failed attempts belong here. Two of the launch entries below are
 // failures, stated as such — a seed set containing only successes would
 // misrepresent how hard orbital launch actually is, and the first attempt
 // is the real national milestone either way.
+//
+// A contested case, flagged rather than resolved quietly. ISS Zarya is
+// logged to RU because Khrunichev built it in Moscow and a Russian Proton
+// flew it, though the United States paid for it and owns it. Both readings
+// are defensible; the vehicle-over-funder rule above is what decides it,
+// and countryEvidence says so on the entry so a reader can disagree.
 
 export const SEED: Entry[] = [
   // ── Stage 02: production / scaling ──────────────────────────────
+  // ── Historical anchors ─────────────────────────────────────────
+  // Added 2026-09-03. The set opened at 2015 and could not show a decade
+  // of anything, let alone the six that matter here — see CLAUDE.md's
+  // "Seed history" note on recency bias, which is the easiest gap to miss
+  // because researching what is happening now feels like thoroughness.
+  // These are the events every later entry is implicitly measured against.
+  {
+    id: "seed-sputnik1-1957",
+    stage: "scaling", country: "RU", provenance: "seeded", source: "milestone",
+    title: "The Soviet Union puts Sputnik 1 into orbit on an R-7, the first artificial satellite — 184 pounds carrying nothing but a radio transmitter, launched from the site now known as Baikonur Cosmodrome in Soviet Kazakhstan",
+    org: "OKB-1", date: "1957-10-04",
+    url: "https://www.nasa.gov/history/65-years-ago-sputnik-ushers-in-the-space-age/",
+    countryEvidence: "Logged to Russia as the successor state to the Soviet Union, which built and flew the vehicle. ISO 3166-1 retired SU and this app renders full country names rather than dead codes, so RU is the only value that reads correctly; note the pad itself is in Kazakhstan",
+  },
+  {
+    id: "seed-vostok1-1961",
+    stage: "scaling", country: "RU", provenance: "seeded", source: "milestone",
+    title: "Yuri Gagarin reaches orbit aboard Vostok 1, launched from Baikonur Site No. 1 at 06:07 UTC — the first human spaceflight, three and a half years after the first satellite",
+    org: "OKB-1", date: "1961-04-12",
+    url: "https://www.esa.int/About_Us/50_years_of_ESA/50_years_of_humans_in_space/The_flight_of_Vostok_1",
+    countryEvidence: "Same successor-state reasoning as the Sputnik entry — Soviet-built vehicle, Soviet programme, logged to RU because SU no longer resolves to a country name",
+  },
+  {
+    id: "seed-asterix-1965",
+    stage: "scaling", country: "FR", provenance: "seeded", source: "milestone",
+    title: "France orbits Astérix on a Diamant-A from Hammaguir, becoming in CNES's own words \"la 3e puissance spatiale, derrière l'URSS et les États-Unis\" — the first country other than those two to reach orbit on a rocket it built itself",
+    org: "CNES", date: "1965-11-26",
+    url: "https://cnes.fr/actualites/y-60-ans-lavenement-de-france-spatiale-diamant-asterix",
+    countryEvidence: "Logged to France, which built Diamant-A and ran the programme, rather than Algeria, where the Hammaguir range sits — the same vehicle-over-pad rule Isar Aerospace's Spectrum gets below",
+  },
+  {
+    id: "seed-apollo11-1969",
+    stage: "scaling", country: "US", provenance: "seeded", source: "milestone",
+    title: "Apollo 11 lands the Eagle on the Moon with Neil Armstrong and Buzz Aldrin aboard, four days after launching on 16 July, while Michael Collins stays in lunar orbit — the first crewed landing on another body, and still the reference point every lunar programme since is compared against",
+    org: "NASA", date: "1969-07-20",
+    url: "https://www.nasa.gov/mission/apollo-11/",
+  },
+  {
+    id: "seed-ohsumi-1970",
+    stage: "scaling", country: "JP", provenance: "seeded", source: "milestone",
+    title: "Japan's first satellite reaches orbit as ISAS launches Ohsumi on an L-4S-5 from Kagoshima, 24 kg once the fourth motor had burned out — a university institute, not a national agency, putting a country into space",
+    org: "Institute of Space and Aeronautical Science, University of Tokyo", date: "1970-02-11",
+    url: "https://www.isas.jaxa.jp/en/missions/spacecraft/past/ohsumi.html",
+  },
+  {
+    id: "seed-dongfanghong1-1970",
+    stage: "scaling", country: "CN", provenance: "seeded", source: "milestone",
+    title: "China orbits the 173 kg Dong Fang Hong 1 on a Long March 1, becoming the fifth nation to launch a satellite on its own rocket — ten weeks after Japan became the fourth",
+    org: "China Academy of Space Technology", date: "1970-04-24",
+    url: "https://www.satellitetoday.com/uncategorized/2010/03/11/sspi-timeline-1970-dong-fang-hong-1/",
+  },
+  {
+    id: "seed-ariane1-l01-1979",
+    stage: "scaling", country: "FR", provenance: "seeded", source: "milestone",
+    title: "Ariane flight L01 lifts off from Kourou at 14:14 local time and, as ESA puts it, \"Europe's independent adventure in space had begun\" — the start of the launcher line that still carries European payloads today",
+    org: "European Space Agency", date: "1979-12-24",
+    url: "https://www.esa.int/About_Us/50_years_of_ESA/History_Ariane_L01_1979",
+    countryEvidence: "Logged to France, the same attribution the Ariane 6 entry below gets — Kourou is French Guiana and ESA is seated in Paris, so both readings land on FR",
+  },
+  {
+    id: "seed-rohini-rs1-1980",
+    stage: "scaling", country: "IN", provenance: "seeded", source: "milestone",
+    title: "ISRO places the 35 kg Rohini RS-1 in orbit on SLV-3 from Sriharikota, India's first satellite carried by an Indian vehicle and the capability every later ISRO programme is built on, Chandrayaan included",
+    org: "ISRO", date: "1980-07-18",
+    url: "https://www.isro.gov.in/RohiniSatellite_RS_1.html",
+  },
+  {
+    id: "seed-sts1-1981",
+    stage: "scaling", country: "US", provenance: "seeded", source: "milestone",
+    title: "Columbia flies STS-1 with John Young and Robert Crippen aboard, completing 37 revolutions before landing on 14 April — the first orbital flight of the Space Shuttle programme, and the beginning of a thirty-year argument about whether reusability actually lowers cost",
+    org: "NASA", date: "1981-04-12",
+    url: "https://www.nasa.gov/mission/sts-1/",
+  },
+  {
+    id: "seed-ofeq1-1988",
+    stage: "scaling", country: "IL", provenance: "seeded", source: "milestone",
+    title: "Israel launches Ofek 1 on a Shavit from Palmachim Air Base at 11:32, becoming the eighth country to put an object in orbit — footage of it stayed classified for thirty years",
+    org: "Israel Aerospace Industries", date: "1988-09-19",
+    url: "https://www.timesofisrael.com/30-years-later-israel-declassifies-footage-of-its-first-satellite-launch/",
+  },
+  {
+    id: "seed-iss-zarya-1998",
+    stage: "scaling", country: "RU", provenance: "seeded", source: "milestone",
+    title: "Zarya launches on a Russian Proton from Baikonur as the first element of the International Space Station, supplying the battery power, fuel storage and docking capability the early assembly flights ran on",
+    org: "Khrunichev State Research and Production Space Center", date: "1998-11-20",
+    url: "https://issnationallab.org/iss360/celebrating-the-20th-anniversary-of-the-first-international-space-station-module/",
+    countryEvidence: "A genuinely contested case, logged to Russia because Khrunichev built the module in Moscow and a Russian Proton flew it, even though the United States financed and owns it. Stated rather than smoothed over — this is the file's vehicle-over-funder rule doing real work rather than an obvious call",
+  },
+
   // Launch and vehicle capability. The closest thing this field has to
   // quantum's qubit count is a vehicle doing something for the first time,
   // and — increasingly — doing it repeatedly and cheaply.
@@ -140,7 +247,31 @@ export const SEED: Entry[] = [
     url: "https://spacenews.com/china-kicks-off-guowang-megaconstellation-with-long-march-5b-launch/",
   },
 
+  {
+    id: "seed-iceye-production-2026",
+    stage: "scaling", country: "FI", provenance: "seeded", source: "milestone",
+    title: "ICEYE doubles radar-satellite production from 50 a year toward a target of 100 annually by 2028, with a matching launch cadence — a rate that used to describe a national programme rather than one company in Espoo",
+    org: "ICEYE", date: "2026-06",
+    url: "https://www.iceye.com/newsroom/press-releases/iceye-leads-a-new-era-of-sovereign-intelligence-from-space-with-1b-funding-round",
+  },
+
   // ── Stage 03: adoption ──────────────────────────────────────────
+  {
+    id: "seed-outer-space-treaty-1967",
+    stage: "adoption", country: null, provenance: "seeded", source: "milestone",
+    title: "The Outer Space Treaty opens for signature simultaneously at Moscow, London and Washington, establishing that outer space \"is not subject to national appropriation by claim of sovereignty, by means of use or occupation, or by any other means\" and barring nuclear weapons and other weapons of mass destruction from orbit — the frame every national space law since has been written inside",
+    org: "United Nations", date: "1967-01-27",
+    url: "https://www.nasa.gov/history/SP-4225/documentation/cooperation/treaty.htm",
+    countryEvidence: "Deliberately left unattributed. This is an agreement among states rather than an act by one, with three depositary governments in the United Kingdom, the Soviet Union and the United States, so naming any single country would misrepresent it. Different from the IRIS² entry below, where the European Commission is itself the actor",
+  },
+  {
+    id: "seed-fcc-five-year-deorbit-2022",
+    stage: "adoption", country: "US", provenance: "seeded", source: "milestone",
+    title: "The FCC cuts the decades-old 25-year deorbit guideline to five years for satellites ending their mission in or passing through low Earth orbit below 2,000 km, calling it \"the first concrete rule on this topic, replacing a long-standing guideline\" — a recommended practice becoming a licence condition, with a two-year transition for operators",
+    org: "Federal Communications Commission", date: "2022-09-29",
+    url: "https://docs.fcc.gov/public/attachments/DOC-387720A1.pdf",
+  },
+
   // For space, adoption is a government committing money, standing up an
   // institution, or writing a rule that lets somebody build. Contract
   // awards live here too, and the live USASpending feed supplies those —
@@ -205,5 +336,38 @@ export const SEED: Entry[] = [
     org: "NASA / U.S. Department of State", date: "2026-08-31",
     url: "https://www.nasa.gov/artemis-accords/",
     deploymentStatus: "operating",
+  },
+
+  // ── Stage 04: investment (private capital) ─────────────────────
+  // Real disclosed private rounds, individually verified against the
+  // announcement, same standard as data/quantum/seed.ts's. Excludes any
+  // company in this vertical's `tickers` list — a public company's capital
+  // story is the markets panel and the R&D chart, not a seeded entry. Added
+  // 2026-09-03; the stage had no seeded entries at all before that, which
+  // left the NSF grant data carrying it alone in a field where NSF is the
+  // wrong instrument (see data/space/notes.ts's investment note).
+  {
+    id: "seed-sierraspace-seriesa-2021",
+    stage: "investment", country: "US", provenance: "seeded", source: "funding-round",
+    title: "Sierra Space raises a $1.4 billion Series A led by General Atlantic, Coatue and Moore Strategic Ventures at a $4.5 billion valuation, which the company calls the \"largest aerospace and defense capital raise globally in 2021\"",
+    org: "Sierra Space", date: "2021-11-19",
+    url: "https://www.sierraspace.com/press-releases/sierra-space-secures-record-1-4-billion-series-a-growth-investment-and-achieves-4-5-billion-valuation/",
+    amountUsd: 1400000000,
+  },
+  {
+    id: "seed-skyroot-seriesc-2026",
+    stage: "investment", country: "IN", provenance: "seeded", source: "funding-round",
+    title: "Skyroot Aerospace raises $60 million led by GIC and Sherpalo Ventures at a $1.1 billion valuation, India's first space-technology unicorn, taking it to $160 million raised since 2018 — with its Vikram-1 vehicle still unflown at the time of the round",
+    org: "Skyroot Aerospace", date: "2026-05-07",
+    url: "https://www.satellitetoday.com/finance/2026/05/07/skyroot-secures-60m-in-funding-becoming-indias-first-space-unicorn/",
+    amountUsd: 60000000,
+  },
+  {
+    id: "seed-iceye-seriesf-2026",
+    stage: "investment", country: "FI", provenance: "seeded", source: "funding-round",
+    title: "ICEYE raises a €450 million ($520 million) primary Series F led by General Atlantic at a valuation above €10 billion, past €1 billion once a secondary placement is counted, with Nokia, the Qatar Investment Authority, TCV, Solidium, Tesi, Varma, Ilmarinen and Lifeline Ventures participating — seven European governments had bought sovereign satellite systems from the company by then",
+    org: "ICEYE", date: "2026-06-09",
+    url: "https://www.iceye.com/newsroom/press-releases/iceye-leads-a-new-era-of-sovereign-intelligence-from-space-with-1b-funding-round",
+    amountUsd: 520000000,
   },
 ];

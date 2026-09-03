@@ -549,9 +549,24 @@ residual noise the GICS filter can't remove: "Aerospace and Defense" also
 contains supersonic aviation (Boom Technology) and air-defence
 conglomerates (Almaz-Antey), so a handful of the top 25 aren't space.
 
-**Seed data.** 19 entries across 13 countries, spanning 2015 to 2026, each
-verified against its source. A floor, not a finished set — quantum is at
-263.
+**Seed data.** 36 entries across 16 countries plus one deliberately
+unattributed, spanning 1957 to 2026, each verified against its source.
+Expanded from 19 on 2026-09-03, which is also when the vertical got its
+first `investment`-stage entries — it had none, leaving NSF grant data to
+carry a stage in the one field where NSF is measurably the wrong
+instrument. Now 24 scaling, 9 adoption, 3 funding rounds (Sierra Space's
+$1.4B Series A, Skyroot at a $1.1B valuation as India's first
+space-technology unicorn, ICEYE's €450M primary Series F above a €10B
+valuation).
+
+Eleven of the additions are historical anchors, because the set opened at
+2015 and so could not show a decade of anything in a field with six of
+them — Sputnik 1, Vostok 1, Astérix, Apollo 11, Ohsumi, Dong Fang Hong 1,
+Ariane L01, Rohini RS-1, STS-1, Ofek 1 and ISS Zarya. That sequence is
+also the cleanest available answer to "which countries can reach orbit on
+their own rocket, and when could they first do it," which is the question
+this vertical exists to support. Still a floor, not a finished set —
+quantum is at 263.
 
 Two conventions this vertical forced, both in the seed header. First,
 attribution goes to **whatever the milestone is about**, because launch
@@ -585,11 +600,18 @@ entry — the events every later entry is implicitly measured against:
 - **biotech** back to 1982: Humulin's approval, the first marketed product
   of any kind from recombinant DNA, and Kymriah in 2017, the first CAR-T
   and the first gene therapy cleared in the US.
+- **space** back to 1957 (added 2026-09-03, a month after the vertical
+  itself): the eleven anchors listed under "Space vertical" above. This
+  vertical had the worst version of the problem — it opened at 2015, and a
+  space tracker that starts at 2015 silently asserts that the first
+  fifty-eight years of spaceflight don't bear on who leads now. Russia was
+  absent from the set entirely before this, which for this field is not a
+  gap but an error.
 
 **The skew is reduced, not gone.** The middle years are still thin —
 quantum has single-digit entries per year before 2019, AI nothing between
-2017 and 2019 — and the fix for that is the same slow, additive,
-verify-every-claim work, not a bulk import. When adding entries, check the
+2017 and 2019, space nothing between 1998 and 2015 — and the fix for that
+is the same slow, additive, verify-every-claim work, not a bulk import. When adding entries, check the
 year distribution rather than only the country list; it's the easier gap to
 miss because recency bias in a research pass feels like thoroughness.
 
