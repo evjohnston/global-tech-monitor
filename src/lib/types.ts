@@ -156,6 +156,24 @@ export interface SourceMeta {
   //   "not-attempted" — not tried (no key set, or a fallback the primary
   //                     never needed, or a deliberately manual import)
   lastRunOutcome?: "ok" | "failed" | "not-attempted";
+
+  // Rolling record of days this source did NOT return data. Optional and
+  // absent on every file written before 2026-09-04.
+  //
+  // Added because `lastRunOutcome` describes one run, and every real problem
+  // this project has hit was a source failing QUIETLY OVER TIME while each
+  // individual run looked unremarkable. Three, all found by hand rather than
+  // by the app: EPO had no credentials for 45 days, OpenAlex failed on seven
+  // days in six weeks (silently falling back to arXiv, which inflated
+  // quantum's innovation count by 27%), and SAM.gov burns its daily quota
+  // most runs. A snapshot cannot show any of those. A short history can.
+  //
+  // Deduped to one entry per UTC day, because the build runs 8 times a day
+  // and 8 identical misses is one fact, not eight. Newest last. Bounded by
+  // MAX_RECENT_MISSES so the payload can't grow without limit — this file is
+  // fetched by every visitor, and an unbounded log is how sourceMeta would
+  // become the thing it exists to warn about.
+  recentMisses?: { date: string; outcome: "failed" | "not-attempted" }[];
 }
 
 // One dated observation of country share, appended each nightly run. This is

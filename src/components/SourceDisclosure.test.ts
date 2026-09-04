@@ -122,3 +122,98 @@ describe("the not-attempted state is reachable and distinct from failure", () =>
     expect(health(pb, BUILD).label).toBe("Never");
   });
 });
+
+// The systemic gap behind every real incident this project has had: each
+// individual run looked unremarkable while a source was quietly broken for
+// weeks. lastRunOutcome is a snapshot and cannot express that. recentMisses
+// accumulates one entry per missed UTC DAY (not per run — the build runs 8
+// times a day, and 8 identical misses is one fact).
+describe("recentMisses accumulates a real failure history", () => {
+  const run = (prev: SourceMeta[] | undefined, ok: Record<string, boolean | undefined>, day: string) =>
+    buildSourceMeta(prev, ok, `${day}T12:00:00.000Z`);
+  const epoOf = (sm: SourceMeta[]) => sm.find((m) => m.key === "epo")!;
+
+  it("records nothing while a source is healthy", () => {
+    const sm = run(undefined, { epo: true }, "2026-09-01");
+    expect(epoOf(sm).recentMisses).toBeUndefined();
+  });
+
+  it("records one entry per missed day, not per run", () => {
+    let sm = run(undefined, { epo: undefined }, "2026-09-01");
+    for (let i = 0; i < 8; i++) sm = run(sm, { epo: undefined }, "2026-09-01"); // 8 builds, same day
+    expect(epoOf(sm).recentMisses).toHaveLength(1);
+    sm = run(sm, { epo: undefined }, "2026-09-02");
+    expect(epoOf(sm).recentMisses).toHaveLength(2);
+  });
+
+  it("distinguishes an unconfigured source from a failing one across days", () => {
+    let sm = run(undefined, { epo: undefined }, "2026-09-01");
+    sm = run(sm, { epo: false }, "2026-09-02");
+    expect(epoOf(sm).recentMisses!.map((m) => m.outcome)).toEqual(["not-attempted", "failed"]);
+  });
+
+  it("upgrades a day to its worse outcome rather than double-counting it", () => {
+    let sm = run(undefined, { epo: undefined }, "2026-09-01");
+    sm = run(sm, { epo: false }, "2026-09-01"); // same day, now a real error
+    const misses = epoOf(sm).recentMisses!;
+    expect(misses).toHaveLength(1);
+    expect(misses[0].outcome).toBe("failed");
+  });
+
+  it("keeps history after a source recovers, so a past incident stays visible", () => {
+    let sm = run(undefined, { epo: undefined }, "2026-09-01");
+    sm = run(sm, { epo: true }, "2026-09-02");
+    expect(epoOf(sm).recentMisses).toHaveLength(1);
+    expect(epoOf(sm).lastRunOutcome).toBe("ok");
+  });
+
+  // An unbounded log in a file every visitor downloads would make sourceMeta
+  // the payload problem it exists to warn about.
+  it("bounds the history so the payload cannot grow without limit", () => {
+    let sm: SourceMeta[] | undefined;
+    for (let d = 1; d <= 80; d++)
+      sm = run(sm, { epo: undefined }, `2026-06-${String(d).padStart(2, "0")}`.replace(/-(\d\d)$/, (_, n) => `-${String(Math.min(28, +n)).padStart(2, "0")}`));
+    expect(epoOf(sm!).recentMisses!.length).toBeLessThanOrEqual(45);
+  });
+
+  // The EPO incident, replayed: 45 days unconfigured while every run stayed
+  // green. The history is what makes that legible.
+  it("makes a 45-day silent gap visible", () => {
+    let sm: SourceMeta[] | undefined;
+    for (let d = 1; d <= 28; d++) sm = run(sm, { epo: undefined, openalex: true }, `2026-07-${String(d).padStart(2, "0")}`);
+    const epo = epoOf(sm!);
+    expect(epo.recentMisses!.length).toBe(28);
+    expect(epo.recentMisses!.every((m) => m.outcome === "not-attempted")).toBe(true);
+    // ...while a healthy source alongside it records nothing.
+    expect(sm!.find((m) => m.key === "openalex")!.recentMisses).toBeUndefined();
+  });
+});
+
+// An alarm that fires on every build is an alarm nobody reads. SAM.gov's
+// non-federal key has a documented daily quota, so it misses most days by
+// design — surfacing that in the headline forever would train a reader to
+// ignore the headline, and the headline is the whole point on the day EPO
+// goes quiet.
+describe("a chronic-by-design source does not cry wolf", () => {
+  const replay = (days: number, map: Record<string, boolean | undefined>) => {
+    let sm: SourceMeta[] | undefined;
+    for (let d = 1; d <= days; d++) sm = buildSourceMeta(sm, map, `2026-07-${String(d).padStart(2, "0")}T12:00:00.000Z`);
+    return sm!;
+  };
+
+  it("still records SAM.gov's misses on its own row", () => {
+    const sm = replay(20, { "sam-gov": false, openalex: true });
+    expect(sm.find((m) => m.key === "sam-gov")!.recentMisses).toHaveLength(20);
+  });
+
+  it("keeps a genuinely broken source distinguishable from the expected one", () => {
+    const sm = replay(20, { "sam-gov": false, epo: undefined, openalex: true });
+    const epo = sm.find((m) => m.key === "epo")!;
+    const sam = sm.find((m) => m.key === "sam-gov")!;
+    // Both chronic in the data; the panel's headline filter is what separates
+    // them, and it keys off the source id rather than the miss count.
+    expect(epo.recentMisses!.length).toBe(20);
+    expect(sam.recentMisses!.length).toBe(20);
+    expect(epo.key).not.toBe(sam.key);
+  });
+});

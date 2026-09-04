@@ -1626,6 +1626,39 @@ Three consequences:
   don't add a real address expecting it to do anything. `mailto` is still
   sent only because removing it would touch every call site for no gain.
 
+**The panel now keeps a failure HISTORY, not just a snapshot — added
+2026-09-04, and it is the systemic answer to the three incidents above.**
+Every real problem this project has had was a source failing quietly over
+time while each individual run looked unremarkable: EPO unconfigured for 45
+days, OpenAlex failing on seven days in six weeks (silently falling back to
+arXiv, inflating quantum's innovation count 27%), SAM.gov burning its quota
+most runs. All three were found by hand. `lastRunOutcome` describes one run
+and structurally cannot show any of them.
+
+`SourceMeta.recentMisses` records one entry per missed UTC **day** — deduped
+because the build runs 8 times a day and 8 identical misses is one fact, not
+eight — with the worse outcome winning when a day sees both. Bounded to 45
+entries, chosen a little longer than the worst real incident so a gap that
+size stays fully visible, and short enough that 15 sources stay a few KB in
+a file every visitor downloads. History survives recovery, so a past
+incident stays legible after the source comes back.
+
+Above the table, a source that has missed 7+ recent days is called out
+separately from the latest-build count, because "fine today" and "broken for
+a month" are different facts. Replayed against both real incidents: EPO
+going quiet now reads "One source has missed 7+ recent days — EPO Patents",
+and a flaky OpenAlex reads the same for OpenAlex.
+
+**SAM.gov is deliberately exempt from that headline** (`CHRONIC_BY_DESIGN`
+in `SourceDisclosure.tsx`), and the reason is worth keeping. Its
+non-federal key has a documented daily quota, so it misses most days by
+design. A warning that fires on every single build teaches a reader to
+ignore the warning, which would destroy the one thing this panel is for —
+being believed on the day EPO goes quiet. Its row still shows the miss
+count, so the behaviour stays visible to anyone reading the table. If
+another source ever becomes chronic-but-expected, add it there rather than
+raising the threshold, which would blunt the alarm for everything.
+
 The lesson generalises past OpenAlex. **A soft-failing source's provider
 can change its access rules without this app noticing**, because nothing
 here distinguishes "returned less data" from "is now on a deprecation

@@ -117,6 +117,28 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
 // attempted, e.g. EPO with no key set). A failure carries the PREVIOUS
 // `lastSuccessfulPull` forward rather than clearing it — "last successful,"
 // not "last attempted," same soft-fail ethos as everywhere else in this app.
+// One entry per missed DAY, not per missed run. 45 days is deliberately a
+// little longer than the worst real incident (EPO's 45-day gap) so a problem
+// of that size is still fully visible rather than half-truncated, and small
+// enough that 15 sources x 45 dates stays a few KB in a file every visitor
+// downloads.
+const MAX_RECENT_MISSES = 45;
+
+function recordMiss(
+  prior: { date: string; outcome: "failed" | "not-attempted" }[] | undefined,
+  outcome: "ok" | "failed" | "not-attempted",
+  now: string,
+): { date: string; outcome: "failed" | "not-attempted" }[] | undefined {
+  const history = prior ?? [];
+  if (outcome === "ok") return history.length > 0 ? history : undefined;
+  const day = now.slice(0, 10);
+  // Same day already recorded — overwrite rather than append, so a day that
+  // starts not-attempted and later genuinely fails ends up described by its
+  // worse outcome instead of counted twice.
+  const withoutToday = history.filter((m) => m.date !== day);
+  return [...withoutToday, { date: day, outcome }].slice(-MAX_RECENT_MISSES);
+}
+
 export function buildSourceMeta(
   prev: SourceMeta[] | undefined,
   // Three-valued on purpose, and the `undefined` case is load-bearing:
@@ -131,6 +153,7 @@ export function buildSourceMeta(
   return SOURCE_TEMPLATE.map((t) => {
     const prior = prevByName.get(t.sourceName);
     const ok = succeeded[t.key];
+    const outcome = ok === true ? "ok" : ok === false ? "failed" : ("not-attempted" as const);
     return {
       sourceName: t.sourceName,
       lastSuccessfulPull: ok ? now : prior?.lastSuccessfulPull ?? null,
@@ -143,7 +166,8 @@ export function buildSourceMeta(
       // the shipped file. Collapsing false and absent together is what made
       // "EPO has no credentials" indistinguishable from "EPO is fine" for 45
       // days.
-      lastRunOutcome: ok === true ? "ok" : ok === false ? "failed" : "not-attempted",
+      lastRunOutcome: outcome,
+      recentMisses: recordMiss(prior?.recentMisses, outcome, now),
     } satisfies SourceMeta;
   });
 }

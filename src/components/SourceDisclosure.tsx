@@ -46,6 +46,41 @@ function isUnscheduled(m: SourceMeta): boolean {
 
 type Health = { quality: DataQuality; label: string; detail: string };
 
+// A source that missed once is noise. A source that has missed many of the
+// last N days is the thing this panel exists to catch, and until now it read
+// identically to the first. Phrased as a count of DAYS because that is what
+// recentMisses records — the build runs 8 times a day, so counting runs would
+// multiply every incident by 8 and make a bad week look like a catastrophe.
+function missSummary(m: SourceMeta): string | null {
+  const misses = m.recentMisses ?? [];
+  if (misses.length === 0) return null;
+  const failed = misses.filter((x) => x.outcome === "failed").length;
+  const skipped = misses.length - failed;
+  const parts = [
+    failed > 0 ? `errored on ${failed} day${failed === 1 ? "" : "s"}` : null,
+    skipped > 0 ? `not attempted on ${skipped}` : null,
+  ].filter(Boolean);
+  return `${parts.join(", ")} of the last ${misses.length} recorded`;
+}
+
+// Sources whose chronic missing is a KNOWN, documented property rather than
+// a problem to raise. SAM.gov is the only one: a non-federal SAM_KEY has a
+// real daily quota, so most runs in a UTC day find it spent and soft-fail —
+// CLAUDE.md records that as "expected, not a regression."
+//
+// Exempting it is not cosmetic. A headline warning that fires on every
+// single build teaches a reader to ignore the headline, which would destroy
+// the one thing this panel is for — being believed the day EPO goes quiet.
+// The row still shows its miss count, so the behaviour stays visible to
+// anyone reading the table; it just doesn't cry wolf above it.
+const CHRONIC_BY_DESIGN = new Set(["sam-gov"]);
+
+// Persistent trouble, as opposed to a bad day.
+const PERSISTENT_MISS_DAYS = 7;
+function isPersistentlyMissing(m: SourceMeta): boolean {
+  return (m.recentMisses ?? []).length >= PERSISTENT_MISS_DAYS;
+}
+
 function relativeAge(fromIso: string, toMs: number): string {
   const ms = toMs - new Date(fromIso).getTime();
   if (!Number.isFinite(ms)) return "unknown";
@@ -132,10 +167,28 @@ export function SourceDisclosure({ sourceMeta, generated }: { sourceMeta: Source
       : `${problems.length} of ${rows.length} sources did not return fresh data on the latest build` +
         ` — ${problems.map((p) => p.meta.sourceName).join(", ")}.`;
 
+  // Called out separately from the latest-build count, because the two say
+  // different things. A source can be fine today and still have been broken
+  // for a month, which is exactly how the missing EPO credentials stayed
+  // invisible for 45 days while every individual run looked green.
+  const chronic = rows.filter(
+    (r) => isPersistentlyMissing(r.meta) && !isUnscheduled(r.meta) && !CHRONIC_BY_DESIGN.has(r.meta.key ?? ""),
+  );
+
   return (
     <ChartFrame
       title="How current is each source, and what can't it tell us?"
-      takeaway={takeaway}
+      takeaway={
+        chronic.length === 0 ? takeaway : (
+          <>
+            {takeaway}{" "}
+            <strong>
+              {chronic.length === 1 ? "One source has" : `${chronic.length} sources have`} missed{" "}
+              {PERSISTENT_MISS_DAYS}+ recent days — {chronic.map((c) => c.meta.sourceName).join(", ")}.
+            </strong>
+          </>
+        )
+      }
       empty={rows.length === 0 ? <EmptyState>This data file carries no source metadata.</EmptyState> : undefined}
       legend={
         <span>
@@ -162,6 +215,11 @@ export function SourceDisclosure({ sourceMeta, generated }: { sourceMeta: Source
               <td>
                 <DataQualityBadge status={h.quality} label={h.label} />
                 <div className="source-disclosure-detail">{h.detail}</div>
+                {missSummary(meta) && (
+                  <div className="source-disclosure-detail">
+                    {isPersistentlyMissing(meta) ? <strong>{missSummary(meta)}</strong> : missSummary(meta)}
+                  </div>
+                )}
               </td>
               <td className="source-disclosure-prose">{meta.pollCadence}</td>
               <td className="source-disclosure-prose">{meta.structuralLag}</td>
