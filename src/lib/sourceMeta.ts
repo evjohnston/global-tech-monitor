@@ -41,6 +41,13 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
     coverageGaps: "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed",
   },
   {
+    key: "agency-grants",
+    sourceName: "Federal research grants by program (USASpending)",
+    pollCadence: "every 3 hours (GitHub Actions) — free, no key; only configured for verticals where NSF's keyword search is measurably the wrong instrument",
+    structuralLag: "USASpending typically posts within days to weeks of award execution",
+    coverageGaps: "US federal assistance awards only, so the same US weighting NSF carries. Filtered by the funder's own CFDA program number rather than by keyword, which is why it is on-topic where NSF is not — but it is a top-100-by-award-size sample rather than a census, since the real result set is larger than one page. Only space is configured (NASA 43.012 Space Technology); NIH for biotechnology is the obvious next addition and is unbuilt.",
+  },
+  {
     key: "sam-gov",
     sourceName: "SAM.gov Opportunities (federal solicitations)",
     pollCadence: "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",

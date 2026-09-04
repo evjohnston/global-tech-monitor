@@ -507,16 +507,64 @@ G01S19 (GNSS receivers) was tested and rejected: it takes the total to
 90,704 and the top hits become Nokia non-terrestrial-network positioning
 and Google GNSS, i.e. terrestrial telecom.
 
-**NSF is the wrong instrument here, and the vertical says so out loud.**
-Measured: NSF funds space SCIENCE, not space technology. "satellite"
-returns 300 awards that are almost entirely Earth scientists USING
-satellite data (cloud evolution, wildfire detection, soil moisture);
-"orbital" matches molecular orbitals in chemistry; "space technology"
-matches 7%. `fundingKeyword: "spacecraft"` is the least-bad option and
-still returns broader-impacts boilerplate. The right source is NASA
-(TechPort or NSPIRES) or DoD SBIR — neither built. Consequence: this
-vertical leans on procurement and the CapIQ VC panel for its money story,
-and `data/space/notes.ts` states the gap rather than papering over it.
+**NSF is the wrong instrument here — fixed 2026-09-04 by adding NASA's own
+grant program alongside it.** Measured: NSF funds space SCIENCE, not space
+technology. "satellite" returns 300 awards that are almost entirely Earth
+scientists USING satellite data (cloud evolution, wildfire detection, soil
+moisture); "orbital" matches molecular orbitals in chemistry; "space
+technology" matches 7%. `fundingKeyword: "spacecraft"` is the least-bad
+option and still returns broader-impacts boilerplate.
+
+The fix is **filtering federal grants by CFDA program number rather than by
+keyword**, through USASpending's assistance-award endpoint
+(`fetchFederalGrants` in `sources/usaSpending.ts`, driven by
+`grantAgency`/`grantProgramNumbers` in `verticals.ts`). A program number is
+the funder's own classification of what an award is for, which beats
+guessing at abstract vocabulary — the same reason the CapIQ importer
+prefers `--industry` over a topic tag.
+
+Live on NASA **43.012 "Space Technology"**: 100 awards worth **$222M**,
+of which roughly 34 of the top 40 are real technology development —
+ultra-strong composites, deep-space PNT instruments, in-space
+tank-to-tank propellant transfer, regolith beneficiation, cold-tolerant
+lunar electronics, CubeSat laser crosslinks, autonomous site preparation.
+Call it **~85% on-topic against NSF's 7%**. The residual noise is namable
+rather than diffuse (astrobiology, planetary-atmosphere remote sensing, one
+neutrino detector, one EPSCoR capacity grant), which is what a disclosable
+caveat looks like. For contrast, 43.001 "Science" is $805M in five rows —
+that is the thing being excluded.
+
+**Two better-sounding sources were tested first and both failed outright.
+Recorded so nobody spends the afternoon again:**
+- **NASA TechPort carries no funding at all.** This file previously
+  recommended it, written without checking. Checked exhaustively rather
+  than sampled: **0 of 21,028 projects** have `detailedFunding` set, and no
+  project object has any dollar field. TechPort is a technology PORTFOLIO
+  catalogue — TRL, taxonomy, organizations — not a funding database. It
+  would still be a genuinely good source for a TRL-progression view, which
+  is a different feature and arguably a natural fit for this app's pipeline
+  metaphor.
+- **SBIR.gov's award API returns HTTP 403 for every agency**, matching
+  their own docs saying the APIs are under maintenance.
+
+NSF is **not** removed. It returns some real awards and dropping
+accumulated history would be worse than carrying a disclosed mix; both
+sources land as `source: "grant"` and both feed `fundingByCountry`.
+Consequence for the numbers: space's public-funding figure goes from $203M
+of mostly-off-topic NSF data to that plus $222M of mostly-on-topic NASA
+data.
+
+**This generalises, and biotechnology is the obvious next user.**
+USASpending carries every federal assistance award, so pointing this at NIH
+— which CLAUDE.md has wanted for biotech for months — is a config line plus
+the same read-the-real-awards check, not a new module. Deliberately left
+unset until someone does that reading; a guessed program number must not be
+committed.
+
+The `grantAgency`/`grantProgramNumbers` pair must be set together or not at
+all. `fetch-data` only calls the fetcher when both are present, so half a
+config is a source that silently never runs — the same failure shape as the
+missing EPO credentials. `src/lib/verticals.test.ts` asserts it.
 
 `procurementKeyword: "satellite"` is where the real public money shows up,
 verified live on USASpending: Northrop's $575.3M Joint Polar Satellite

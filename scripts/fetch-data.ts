@@ -51,7 +51,7 @@ import { DETAIL_RETENTION_DAYS } from "../src/lib/types.ts";
 import { fetchOpenAlexPages, fetchTopCitedPages } from "../src/lib/sources/openalex.ts";
 import { fetchPatents, NON_COUNTRY_PATENT_AUTHORITIES } from "../src/lib/sources/epo.ts";
 import { fetchNSF } from "../src/lib/sources/nsf.ts";
-import { fetchUsaSpendingAwards } from "../src/lib/sources/usaSpending.ts";
+import { fetchUsaSpendingAwards, fetchFederalGrants } from "../src/lib/sources/usaSpending.ts";
 import { fetchSamOpportunities } from "../src/lib/sources/samGov.ts";
 import { fetchCompanySnapshots } from "../src/lib/sources/massive.ts";
 import { fetchRdSpendByYear, trimIncompleteTail } from "../src/lib/sources/secEdgar.ts";
@@ -444,6 +444,24 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   if (epoOk) console.log(`EPO: ${patents.length} patents`);
   const { value: funding, ok: nsfOk } = await trackedFetch("funding", () => fetchNSF(NSF_N, v.fundingKeyword, v.rssClassifier.relevant), [] as Entry[]);
   if (nsfOk) console.log(`NSF: ${funding.length} grants`);
+
+  // A second, program-number-filtered public-funding source, run only for
+  // verticals where NSF's keyword search has been MEASURED to be the wrong
+  // instrument (space, so far — see grantProgramNumbers in verticals.ts).
+  // Additive rather than a replacement: NSF still returns some real awards,
+  // and dropping accumulated history would be worse than carrying a
+  // disclosed mix of two sources that both land as source:"grant".
+  const { value: agencyGrants, ok: agencyGrantsOk } = v.grantAgency && v.grantProgramNumbers?.length
+    ? await trackedFetch(
+        "agency grants",
+        () => fetchFederalGrants(v.grantAgency!, v.grantProgramNumbers!),
+        [] as Entry[],
+      )
+    : { value: [] as Entry[], ok: undefined };
+  if (agencyGrantsOk) {
+    const sum = agencyGrants.reduce((t, e) => t + (e.amountUsd ?? 0), 0);
+    console.log(`${v.grantAgency} grants (CFDA ${v.grantProgramNumbers?.join(", ")}): ${agencyGrants.length} awards, $${(sum / 1e6).toFixed(0)}M`);
+  }
   // Not part of entries[]/the byId merge below — a market snapshot isn't a
   // discrete dated event, it's a standing fact about a company. On a
   // transient failure, carry the previous run's snapshot forward rather
@@ -550,7 +568,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const now = new Date().toISOString();
   const byId = new Map<string, Entry>();
   for (const e of prev?.entries ?? []) byId.set(e.id, e);
-  for (const e of [...seed, ...live, ...patents, ...funding, ...news, ...investmentNews, ...topCited, ...usaSpendingAwards, ...samOpportunities]) {
+  for (const e of [...seed, ...live, ...patents, ...funding, ...agencyGrants, ...news, ...investmentNews, ...topCited, ...usaSpendingAwards, ...samOpportunities]) {
     // ingestedAt is stamped once, at first sight, and preserved on every
     // later re-fetch of the same id — it must never reset to "now" just
     // because a source returned the same entry again.
@@ -651,6 +669,9 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
     epo: EPO_KEY && EPO_SECRET ? epoOk : undefined,
     nsf: nsfOk,
     usaspending: usaSpendingOk,
+    // undefined for the three verticals that don't configure it — not
+    // attempted, not failed.
+    "agency-grants": agencyGrantsOk,
     // A real attempt that really does error most runs — SAM.gov's non-federal
     // key has a daily quota, so `false` here is accurate rather than a stand-in
     // for "skipped". See the long comment at the top of samGov.ts.

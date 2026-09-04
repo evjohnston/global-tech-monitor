@@ -126,3 +126,104 @@ export async function fetchUsaSpendingAwards(companyNames: string[], keyword: st
   for (const e of out) byId.set(e.id, e);
   return [...byId.values()];
 }
+
+// ── Federal ASSISTANCE awards (grants), a public-funding source ─────────
+//
+// Same API and the same free, keyless endpoint as the contract path above,
+// but a different question and therefore a different stage. Contracts are a
+// government BUYING something, which this app files under adoption. Grants
+// are a government FUNDING research, which is what STAGES defines the
+// investment stage as — "public research funding, where governments are
+// placing money."
+//
+// Built 2026-09-04 for the space vertical, because NSF is measurably the
+// wrong instrument there. This repo's own measurement: NSF funds space
+// SCIENCE, not space technology, and a "space technology" keyword matches
+// 7% of what it returns. Two better-sounding options were tested first and
+// both failed outright, recorded here so nobody spends the afternoon again:
+//
+//   - NASA TechPort was CLAUDE.md's own suggested fix and does not carry
+//     funding at all. Checked exhaustively rather than sampled: 0 of 21,028
+//     projects have detailedFunding set, and no project object has any
+//     dollar field. TechPort is a technology PORTFOLIO catalogue (TRL,
+//     taxonomy, organizations), not a funding database. It would still be a
+//     genuinely interesting source for a TRL-progression view, which is a
+//     different feature.
+//   - SBIR.gov's award API returns HTTP 403 Forbidden for every agency,
+//     matching their own docs saying the APIs are under maintenance.
+//
+// What works is filtering federal grants by CFDA PROGRAM NUMBER rather than
+// by keyword. A program number is the funder's own classification of what
+// the award is for, so it beats guessing at abstract vocabulary — the same
+// reason the CapIQ importer prefers --industry over a topic tag. Measured
+// live on NASA 43.012 "Space Technology": roughly 34 of the top 40 awards
+// are real space technology (ultra-strong composites, deep-space PNT
+// instruments, in-space propellant transfer, regolith beneficiation,
+// cold-tolerant lunar electronics, CubeSat laser crosslinks), against NSF's
+// 7%. The residual noise is visible and namable rather than diffuse —
+// astrobiology, planetary-atmosphere remote sensing, one neutrino detector,
+// one EPSCoR capacity grant.
+//
+// Deliberately generic in agency and program number. USASpending carries
+// EVERY federal assistance award, so pointing this at NIH for biotechnology
+// (which CLAUDE.md has wanted for months) is a config line rather than a new
+// module. Don't hardcode NASA in here.
+const GRANT_TYPE_CODES = ["02", "03", "04", "05"];
+
+export async function fetchFederalGrants(
+  agencyName: string,
+  programNumbers: string[],
+  sinceDays = 1095,
+): Promise<Entry[]> {
+  if (programNumbers.length === 0) return [];
+  const end = new Date();
+  const start = new Date(end.getTime() - sinceDays * 864e5);
+  const earliest = new Date("2007-10-01");
+  const startDate = (start < earliest ? earliest : start).toISOString().slice(0, 10);
+
+  const res = await fetch(BASE, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "User-Agent": "GlobalTechMonitor/0.3 (research dashboard)" },
+    body: JSON.stringify({
+      filters: {
+        agencies: [{ type: "awarding", tier: "toptier", name: agencyName }],
+        award_type_codes: GRANT_TYPE_CODES,
+        program_numbers: programNumbers,
+        time_period: [{ start_date: startDate, end_date: end.toISOString().slice(0, 10) }],
+      },
+      fields: ["Award ID", "Recipient Name", "Award Amount", "Awarding Agency", "Start Date", "Description", "generated_internal_id"],
+      page: 1,
+      limit: MAX_LIMIT,
+      // Largest first. The result set exceeds one page (hasNext was true on
+      // the live NASA test), so this is a real top-N by award size rather
+      // than a census — the same honest-sample posture as the OpenAlex
+      // window. Sorting by amount means the cap costs the smallest awards,
+      // not a random slice.
+      sort: "Award Amount",
+      order: "desc",
+    }),
+  });
+  if (!res.ok) throw new Error(`USASpending grants HTTP ${res.status}`);
+  const json = (await res.json()) as { results?: UsaSpendingResult[] };
+
+  return (json.results ?? [])
+    .filter((r) => r["Award ID"] && r["Recipient Name"])
+    .map((r): Entry => ({
+      // Namespaced away from the contract path's `usaspending-` ids so a
+      // grant and a contract sharing an Award ID can't collide.
+      id: `usaspending-grant-${r["Award ID"]}`,
+      stage: "investment",
+      country: "US", // real US federal award data only — same US-weighting caveat NSF carries
+      provenance: "live",
+      source: "grant", // feeds fundingByCountry/periodFunding, which are grant-only by design
+      title: r.Description || `Federal research grant to ${r["Recipient Name"]}`,
+      org: r["Recipient Name"] ?? "",
+      date: r["Start Date"] ?? "",
+      url: r.generated_internal_id
+        ? `https://www.usaspending.gov/award/${r.generated_internal_id}`
+        : "https://www.usaspending.gov",
+      amountUsd: r["Award Amount"],
+      venue: r["Awarding Agency"],
+      countryEvidence: "US federal grant recipient (USASpending.gov)",
+    }));
+}

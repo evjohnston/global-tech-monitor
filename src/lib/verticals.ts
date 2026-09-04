@@ -36,6 +36,27 @@ export interface VerticalConfig {
   // was the honest fix; picking one term would have silently zeroed out
   // either the Investment stage or the federal-contract half of Adoption.
   procurementKeyword?: string;
+  // Optional second public-funding source, filtered by the FUNDER'S OWN
+  // classification of the award rather than by keyword — a CFDA program
+  // number, via USASpending's assistance-award endpoint (see
+  // fetchFederalGrants in sources/usaSpending.ts). Set this when NSF's
+  // free-text keyword search is measurably the wrong instrument for a
+  // field, which is a thing to establish by reading real returned awards,
+  // not to assume.
+  //
+  // Space is the case that forced it. NSF funds space SCIENCE, so a "space
+  // technology" keyword matches 7% of what it returns; NASA's own 43.012
+  // "Space Technology" program is ~85% on-topic on a live 40-award read.
+  // Both sources run when this is set — NSF is not replaced, because it
+  // does return some real awards and dropping recorded history would be
+  // worse than carrying a disclosed mix.
+  //
+  // Biotechnology is the obvious next user (NIH suits it far better than
+  // NSF, per CLAUDE.md) and needs only the agency name plus real NIH
+  // program numbers checked the same way. Left unset until someone does
+  // that reading.
+  grantAgency?: string; // USASpending toptier awarding-agency name, exactly as spelled there
+  grantProgramNumbers?: string[]; // CFDA program numbers, e.g. ["43.012"]
   rssFeeds: RssFeedConfig[];
   rssClassifier: RssClassifierConfig;
   investmentNewsQuery: string; // Google News RSS search query for investment-stage funding news
@@ -615,6 +636,14 @@ export const VERTICALS: VerticalConfig[] = [
     // "spacecraft" as a procurement term finds JWST for Northrop but
     // nothing for Rocket Lab or Maxar.
     procurementKeyword: "satellite",
+    // NASA's Space Technology Mission Directorate grant program. Verified
+    // live 2026-09-04: 100 awards worth $222M whose top 40 are real
+    // technology development — ultra-strong composites, deep-space PNT,
+    // in-space propellant transfer, regolith beneficiation, cold-tolerant
+    // lunar electronics, CubeSat laser crosslinks. Compare 43.001 Science
+    // at $805M in five rows, which is the thing being excluded.
+    grantAgency: "National Aeronautics and Space Administration",
+    grantProgramNumbers: ["43.012"],
     rssFeeds: SPACE_RSS_FEEDS,
     rssClassifier: SPACE_RSS_CLASSIFIER,
     investmentNewsQuery:
