@@ -1,7 +1,7 @@
 import type { Entry, Stage } from "./types.ts";
 import type { Dashboard } from "./urlState.ts";
 import type { DrawerTarget } from "./drawerTarget.ts";
-import { countByCountry, countryShares, orgLeaderboard, concentrationShare, rankOf } from "./aggregate.ts";
+import { countByCountry, countryShares, orgLeaderboard, concentrationShare, rankOf, innovationForCounting } from "./aggregate.ts";
 import { entriesAsOf, daysAgo } from "./history.ts";
 import { countryName } from "./countries.ts";
 import { THRESHOLDS } from "./thresholds.ts";
@@ -141,7 +141,7 @@ function computeCountryFindings(entries: Entry[], country: string): Finding[] {
 
   // 2. Top-institution concentration within this country (innovation stage
   // — the one with the richest real institution data).
-  const countryInnovation = entries.filter((e) => e.stage === "innovation" && e.country === country);
+  const countryInnovation = innovationForCounting(entries).filter((e) => e.country === country);
   if (countryInnovation.length >= 5) {
     const rows = orgLeaderboard(countryInnovation, "innovation", 10);
     const top3 = rows.slice(0, 3);

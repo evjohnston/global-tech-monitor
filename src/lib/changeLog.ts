@@ -1,5 +1,5 @@
 import type { Entry } from "./types.ts";
-import { countByCountry, orgLeaderboard, concentrationShare, rankOf } from "./aggregate.ts";
+import { countByCountry, orgLeaderboard, concentrationShare, rankOf, innovationForCounting } from "./aggregate.ts";
 import { entriesAsOf, daysAgo } from "./history.ts";
 import { countryName } from "./countries.ts";
 import { canonicalizeOrg } from "./entityResolution.ts";
@@ -102,8 +102,8 @@ export function computeChangeLog(entries: Entry[], now = new Date()): ChangeLogI
     });
 
   // Concentration change, innovation stage
-  const pastTotal = past.filter((e) => e.stage === "innovation").length;
-  const currentTotal = entries.filter((e) => e.stage === "innovation").length;
+  const pastTotal = innovationForCounting(past).length;
+  const currentTotal = innovationForCounting(entries).length;
   if (pastTotal > 0 && currentTotal > 0) {
     const pastTop1 = concentrationShare(orgLeaderboard(past, "innovation", 10), pastTotal).top1Pct;
     const currentTop1 = concentrationShare(orgLeaderboard(entries, "innovation", 10), currentTotal).top1Pct;

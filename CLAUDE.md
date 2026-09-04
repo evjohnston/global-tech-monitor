@@ -163,6 +163,44 @@ needs, checked by hand before it goes in `VERTICALS`:
   something like "Anonymous" get aggregated in the institution leaderboard
   as if it were one prolific org with dozens of works. When there's truly
   no institution-shaped data, `org` is `""` (nothing shown), not a name.
+  **arXiv fallback entries are excluded from volume and ranking counts,
+  and kept in the file.** Added 2026-09-04. `fetchArxiv` only runs when
+  OpenAlex itself is unreachable, so these entries enter the corpus on
+  outage days and no others — which means counting them reports OpenAlex's
+  downtime as research activity. Measured on the shipped data: the fallback
+  had fired on **seven separate days across six weeks** (2026-07-21, 07-24,
+  08-07, 08-18, 08-19, 08-22, 08-24), leaving 1,038 entries in quantum —
+  **27% of its whole innovation stage** — and 1,307 in AI. Of those, **6 and
+  4 respectively carry a country**, because arXiv doesn't collect structured
+  affiliations.
+  So they inflated volume by however much OpenAlex happened to be down that
+  month and made quantum incomparable both to its own history and to biotech
+  and space, which have zero. `isCountableForVolume`/`innovationForCounting`
+  in `aggregate.ts` exclude them from every count, share and rank; they stay
+  in `entries[]`, browsable, auditable and counted in the provenance mix,
+  which is exactly where the "auto" tier is meant to be visible. Same trade
+  `loadHistory` makes for trend points counted against a different ceiling.
+  Measured effect: quantum's innovation count 3,834 -> 2,796, AI's 19,618 ->
+  18,311, biotech and space unchanged — and **countries represented did not
+  move in any vertical** (quantum 85, AI 129), which is the proof that
+  nothing was lost. Use `innovationForCounting` rather than a bare
+  `stage === "innovation"` filter anywhere a count is derived; the rule
+  lives in one place because it was previously spread over six.
+  The exclusion is deliberately on `source`, NOT on `provenance` — "auto"
+  also covers the RSS layer, which carries real country calls and belongs
+  in these counts.
+
+  **A separate, unresolved operational finding from the same measurement:
+  seven OpenAlex failures in six weeks is a lot**, and nothing surfaced it
+  because the fallback works silently. A plausible cause is now on record —
+  OpenAlex ended keyless access on 2026-02-13 ("100 free credits for
+  testing, then 409 errors", see the polite-pool correction below) and this
+  app ran keyless until 2026-09-03, making 8 runs a day. `OPENALEX_KEY` is
+  set now, so the prediction is that fallback days stop; the last one was
+  08-24, which is consistent but not yet proof. If arXiv entries keep
+  appearing after early September, the cause is something else and worth
+  chasing rather than absorbing.
+
   `fetchOpenAlexPages` pages past OpenAlex's 200-per-page cap (3 pages by
   default) — one implementation, shared by the nightly build and the
   one-time `backfill-trend`/`backfill-entries` scripts (the browser doesn't

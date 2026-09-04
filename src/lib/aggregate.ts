@@ -298,3 +298,40 @@ export function loadHistory(trend: TrendPoint[]): TrendPoint[] {
   const current = capOf(trend[trend.length - 1]);
   return trend.filter((p) => capOf(p) === current);
 }
+
+// arXiv fallback entries are real papers and stay in `entries[]` — browsable,
+// auditable, counted in the provenance mix, which is exactly where the "auto"
+// tier is supposed to be visible. They are excluded from VOLUME and RANKING
+// aggregates, and the reason is measured rather than stylistic.
+//
+// `fetchArxiv` only ever runs when OpenAlex itself is unreachable (see the
+// sourceUsed branch in fetch-data.ts), so these entries enter the corpus on
+// outage days and no others. Checked against the shipped data on 2026-09-04:
+// the fallback had fired on SEVEN separate days across six weeks (2026-07-21,
+// 07-24, 08-07, 08-18, 08-19, 08-22, 08-24), contributing 1,038 entries to
+// quantum — 27% of its whole innovation stage — and 1,307 to AI. Of those,
+// 6 and 4 respectively carry a country, because arXiv does not collect
+// structured affiliations and OpenAlex essentially never backfills them for
+// preprints.
+//
+// So counting them does two bad things at once. It inflates innovation volume
+// by however much OpenAlex happened to be down that month, which is not a
+// fact about research activity, and it makes a vertical incomparable both to
+// its own history and to biotech and space (which have zero arXiv entries).
+// Excluding them from counts while keeping them in the file is the same trade
+// `loadHistory` makes for trend points counted against a different ceiling —
+// keep the real observation, leave it out of the series that has to be
+// comparable.
+//
+// Deliberately NOT a provenance check. "auto" also covers the RSS layer,
+// which carries real country calls and belongs in these counts.
+export function isCountableForVolume(e: Entry): boolean {
+  return e.source !== "arxiv";
+}
+
+// The innovation stage as a volume/ranking measure. Use this rather than a
+// bare `stage === "innovation"` filter anywhere a COUNT, SHARE or RANK is
+// derived, so the arXiv rule lives in one place instead of six.
+export function innovationForCounting(entries: Entry[]): Entry[] {
+  return entries.filter((e) => e.stage === "innovation" && isCountableForVolume(e));
+}

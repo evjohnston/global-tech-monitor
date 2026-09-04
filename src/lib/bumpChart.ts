@@ -1,5 +1,5 @@
 import type { Entry } from "./types.ts";
-import { countByCountry, rankOf } from "./aggregate.ts";
+import { countByCountry, rankOf, isCountableForVolume } from "./aggregate.ts";
 import { entriesAsOf, daysAgo } from "./history.ts";
 
 export type BumpMeasure = "publications" | "patents" | "scaling" | "adoption" | "investment";
@@ -28,7 +28,7 @@ const BUMP_TOP_N = 8;
 // misrepresent both.
 function matchesMeasure(measure: BumpMeasure, e: Entry): boolean {
   switch (measure) {
-    case "publications": return e.stage === "innovation" && e.source !== "patent";
+    case "publications": return e.stage === "innovation" && e.source !== "patent" && isCountableForVolume(e);
     case "patents": return e.stage === "innovation" && e.source === "patent";
     case "scaling": return e.stage === "scaling";
     case "adoption": return e.stage === "adoption";

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { Entry } from "../lib/types.ts";
-import { countByCountry, countryShares, orgLeaderboard, concentrationShare, topCountries } from "../lib/aggregate.ts";
+import { countByCountry, countryShares, orgLeaderboard, concentrationShare, topCountries, innovationForCounting } from "../lib/aggregate.ts";
 import { entriesAsOf, daysAgo } from "../lib/history.ts";
 import { countryName } from "../lib/countries.ts";
 
@@ -18,7 +18,7 @@ export function MomentumTable({ entries }: { entries: Entry[] }) {
     const past = entriesAsOf(entries, daysAgo(GROWTH_WINDOW_DAYS));
     const pastShares = countryShares(countByCountry(past, "innovation"));
     return topCountries(counts, TOP_N).top.map((c) => {
-      const countryEntries = entries.filter((e) => e.country === c.country && e.stage === "innovation");
+      const countryEntries = innovationForCounting(entries).filter((e) => e.country === c.country);
       const orgs = orgLeaderboard(countryEntries, undefined, 10);
       const { top1Pct } = concentrationShare(orgs, countryEntries.length);
       return {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { Entry, TrendPoint } from "./types.ts";
-import { fundingByCountry, periodFunding, loadHistory } from "./aggregate.ts";
+import { fundingByCountry, periodFunding, loadHistory, innovationForCounting, isCountableForVolume } from "./aggregate.ts";
 
 function entry(overrides: Partial<Entry>): Entry {
   return {
@@ -86,5 +86,44 @@ describe("loadHistory keeps only points comparable with the newest one", () => {
 
   it("handles an empty series without throwing", () => {
     expect(loadHistory([])).toEqual([]);
+  });
+});
+
+// arXiv fallback entries enter the corpus only on days OpenAlex was
+// unreachable, and 99.5% carry no country. Measured on the shipped data
+// 2026-09-04: seven fallback days across six weeks, 1,038 entries in quantum
+// (27% of its innovation stage) and 1,307 in AI, with 6 and 4 countries
+// between them. Counting them reports OpenAlex's downtime as research volume.
+describe("arXiv fallback entries stay in the file but out of volume counts", () => {
+  const paper = (id: string, over: Partial<Entry> = {}) =>
+    entry({ id, stage: "innovation", source: "paper", country: "US", ...over });
+  const arxiv = (id: string) =>
+    entry({ id, stage: "innovation", source: "arxiv", country: null, provenance: "auto" });
+
+  it("excludes arXiv from the innovation count", () => {
+    const es = [paper("p1"), paper("p2"), arxiv("a1"), arxiv("a2"), arxiv("a3")];
+    expect(innovationForCounting(es).length).toBe(2);
+  });
+
+  it("keeps every other innovation source, including patents", () => {
+    const es = [paper("p1"), paper("p2", { source: "patent" }), arxiv("a1")];
+    expect(innovationForCounting(es).map((e) => e.source).sort()).toEqual(["paper", "patent"]);
+  });
+
+  it("does not exclude on provenance, since the RSS layer is also auto but carries real countries", () => {
+    const rss = entry({ id: "r1", stage: "scaling", source: "milestone", provenance: "auto", country: "DE" });
+    expect(isCountableForVolume(rss)).toBe(true);
+    expect(isCountableForVolume(arxiv("a1"))).toBe(false);
+  });
+
+  it("leaves other stages alone", () => {
+    const es = [paper("p1"), entry({ id: "g1", stage: "investment", source: "grant" })];
+    expect(innovationForCounting(es).map((e) => e.id)).toEqual(["p1"]);
+  });
+
+  it("returns a new array rather than mutating the corpus", () => {
+    const es = [paper("p1"), arxiv("a1")];
+    expect(innovationForCounting(es)).not.toBe(es);
+    expect(es.length).toBe(2);
   });
 });

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { DashboardContext } from "./types.ts";
-import { countByCountry, orgLeaderboard, rankOf, topCountries } from "../lib/aggregate.ts";
+import { countByCountry, orgLeaderboard, rankOf, topCountries, innovationForCounting } from "../lib/aggregate.ts";
 import { entriesAsOf, daysAgo } from "../lib/history.ts";
 import { countryColor, countryName } from "../lib/countries.ts";
 import { innovationByCountryClaim } from "../lib/claims.ts";
@@ -37,7 +37,7 @@ export function TrackResearch({ ctx }: { ctx: DashboardContext }) {
   const innovationClaimTitle = useMemo(() => innovationByCountryClaim(entries), [entries]);
   const forecastCountries = useMemo(() => topCountries(innovationCounts, 5).top.map((c) => c.country), [innovationCounts]);
 
-  const innovationEntries = useMemo(() => entries.filter((e) => e.stage === "innovation"), [entries]);
+  const innovationEntries = useMemo(() => innovationForCounting(entries), [entries]);
   const publications = innovationEntries.filter((e) => e.source !== "patent").length;
   const patents = innovationEntries.filter((e) => e.source === "patent").length;
   const topCountry = innovationTop.top[0];
@@ -66,7 +66,7 @@ export function TrackResearch({ ctx }: { ctx: DashboardContext }) {
   // component ever sees it), so the institution card needs no new logic —
   // only the three record-count cards and the share/rank card do.
   const isFiltered = country !== "all";
-  const countryInnovationEntries = useMemo(() => shown.filter((e) => e.stage === "innovation"), [shown]);
+  const countryInnovationEntries = useMemo(() => innovationForCounting(shown), [shown]);
   const countryPublications = countryInnovationEntries.filter((e) => e.source !== "patent").length;
   const countryPatents = countryInnovationEntries.filter((e) => e.source === "patent").length;
   const countryRank = isFiltered ? rankOf(innovationCounts, country) : null;
