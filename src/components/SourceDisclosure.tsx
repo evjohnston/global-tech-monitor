@@ -51,16 +51,23 @@ type Health = { quality: DataQuality; label: string; detail: string };
 // identically to the first. Phrased as a count of DAYS because that is what
 // recentMisses records — the build runs 8 times a day, so counting runs would
 // multiply every incident by 8 and make a bad week look like a catastrophe.
-function missSummary(m: SourceMeta): string | null {
+export function missSummary(m: SourceMeta): string | null {
   const misses = m.recentMisses ?? [];
   if (misses.length === 0) return null;
   const failed = misses.filter((x) => x.outcome === "failed").length;
   const skipped = misses.length - failed;
   const parts = [
     failed > 0 ? `errored on ${failed} day${failed === 1 ? "" : "s"}` : null,
-    skipped > 0 ? `not attempted on ${skipped}` : null,
+    skipped > 0 ? `not attempted on ${skipped} day${skipped === 1 ? "" : "s"}` : null,
   ].filter(Boolean);
-  return `${parts.join(", ")} of the last ${misses.length} recorded`;
+  // No denominator, deliberately. An earlier version ended "of the last N
+  // recorded" where N was the MISS count, so it always read "3 of the last 3"
+  // — which a reader parses as "the last three runs all failed," a far
+  // stronger claim than the data supports. recentMisses records only misses,
+  // so there is no honest denominator available here. The window start is
+  // given instead, which is both true and the thing that tells a reader
+  // whether this is happening now or is old news.
+  return `${parts.join(", ")} since ${misses[0].date}`;
 }
 
 // Sources whose chronic missing is a KNOWN, documented property rather than

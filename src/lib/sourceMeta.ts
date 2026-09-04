@@ -124,19 +124,33 @@ const SOURCE_TEMPLATE: { key: string; sourceName: string; pollCadence: string; s
 // downloads.
 const MAX_RECENT_MISSES = 45;
 
+// The field is called recentMisses and has to mean it. Bounding only by
+// COUNT was a bug: a source that failed three days in January and has been
+// perfect since would still surface those three as "recent" eight months
+// later, sitting next to a "last successful pull 12h ago" line. Age is the
+// bound that matches the word; the count bound stays as a payload guard.
+//
+// 90 days is chosen to be comfortably longer than the worst real incident
+// (EPO's 45-day gap) so such a gap is never half-truncated while it is still
+// the live problem, and short enough that "recent" is defensible.
+const MAX_MISS_AGE_DAYS = 90;
+
 function recordMiss(
   prior: { date: string; outcome: "failed" | "not-attempted" }[] | undefined,
   outcome: "ok" | "failed" | "not-attempted",
   now: string,
 ): { date: string; outcome: "failed" | "not-attempted" }[] | undefined {
-  const history = prior ?? [];
-  if (outcome === "ok") return history.length > 0 ? history : undefined;
   const day = now.slice(0, 10);
-  // Same day already recorded — overwrite rather than append, so a day that
-  // starts not-attempted and later genuinely fails ends up described by its
-  // worse outcome instead of counted twice.
-  const withoutToday = history.filter((m) => m.date !== day);
-  return [...withoutToday, { date: day, outcome }].slice(-MAX_RECENT_MISSES);
+  const cutoff = new Date(Date.parse(day) - MAX_MISS_AGE_DAYS * 864e5).toISOString().slice(0, 10);
+  // Prune on every run, including healthy ones — otherwise a source that
+  // recovers keeps stale misses forever, since pruning would only happen the
+  // next time it broke.
+  const history = (prior ?? []).filter((m) => m.date >= cutoff && m.date !== day);
+  if (outcome === "ok") return history.length > 0 ? history : undefined;
+  // Today is re-added rather than kept from `prior`, so a day that starts
+  // not-attempted and later genuinely fails ends up described by its worse
+  // outcome instead of counted twice.
+  return [...history, { date: day, outcome }].slice(-MAX_RECENT_MISSES);
 }
 
 export function buildSourceMeta(

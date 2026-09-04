@@ -89,7 +89,17 @@ export function rankNewsForTrack(groups: NewsGroup[], opts: { dashboard: Dashboa
 
   function score(g: NewsGroup): number {
     const e = g.primary;
-    const ageDays = Math.max(0, (nowMs - new Date(e.date).getTime()) / 864e5);
+    // An unparseable date must not poison the score. Without the isFinite
+    // guard, ageDays is NaN, so the whole score is NaN, and a NaN comparator
+    // result makes Array.sort treat the pair as equal — one bad date
+    // scrambles the entire ranking rather than misplacing one story.
+    // Currently no live entry is dateless, but three ingestion paths can
+    // emit `date: ""` (both USASpending fetchers default it, and the CapIQ
+    // importer stores it for an empty cell), so this is one line against a
+    // real failure mode. A dateless entry scores as maximally old, which is
+    // the honest default for "we don't know when this happened".
+    const parsed = new Date(e.date).getTime();
+    const ageDays = Number.isFinite(parsed) ? Math.max(0, (nowMs - parsed) / 864e5) : Infinity;
     let s = Math.exp(-ageDays / 4); // ~4-day half-life-ish decay
     if (activeStage && e.stage === activeStage) s += 1.5;
     if (opts.dashboard === "money" && e.stage === "investment") s += 1.5;

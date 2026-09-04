@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { SourceMeta } from "../lib/types.ts";
 import { buildSourceMeta } from "../lib/sourceMeta.ts";
-import { health } from "./SourceDisclosure.tsx";
+import { health, missSummary } from "./SourceDisclosure.tsx";
 
 const BUILD = Date.parse("2026-09-03T18:40:00Z");
 const iso = (msAgo: number) => new Date(BUILD - msAgo).toISOString();
@@ -215,5 +215,57 @@ describe("a chronic-by-design source does not cry wolf", () => {
     expect(epo.recentMisses!.length).toBe(20);
     expect(sam.recentMisses!.length).toBe(20);
     expect(epo.key).not.toBe(sam.key);
+  });
+});
+
+// Two bugs found by auditing this file an hour after writing it.
+describe("miss history does not overstate itself", () => {
+  const run = (prev: SourceMeta[] | undefined, ok: Record<string, boolean | undefined>, day: string) =>
+    buildSourceMeta(prev, ok, `${day}T12:00:00.000Z`);
+  const epoOf = (sm: SourceMeta[]) => sm.find((m) => m.key === "epo")!;
+
+  // Bug 1: bounded only by count, so misses from January still read as
+  // "recent" in September, sitting beside a "last successful pull 12h ago".
+  it("prunes misses older than the recency window", () => {
+    let sm = run(undefined, { epo: false }, "2026-01-05");
+    expect(epoOf(sm).recentMisses).toHaveLength(1);
+    sm = run(sm, { epo: true }, "2026-09-04"); // eight months later, healthy
+    expect(epoOf(sm).recentMisses).toBeUndefined();
+  });
+
+  it("prunes on healthy runs too, not only when something breaks", () => {
+    // Otherwise stale entries survive indefinitely for a recovered source,
+    // because pruning would only ever happen on a subsequent failure.
+    let sm = run(undefined, { epo: false }, "2026-01-05");
+    for (const d of ["2026-05-01", "2026-07-01", "2026-09-04"]) sm = run(sm, { epo: true }, d);
+    expect(epoOf(sm).recentMisses).toBeUndefined();
+  });
+
+  it("keeps misses that are genuinely inside the window", () => {
+    let sm = run(undefined, { epo: false }, "2026-08-20");
+    sm = run(sm, { epo: true }, "2026-09-04");
+    expect(epoOf(sm).recentMisses).toHaveLength(1);
+  });
+
+  // Bug 2: the summary ended "of the last N recorded" where N was the miss
+  // count itself, so it always read "N of N" — which a reader parses as "the
+  // last N runs all failed". recentMisses holds only misses, so no honest
+  // denominator exists; the window start is reported instead.
+  it("reports a window start rather than a denominator it cannot honestly supply", () => {
+    const meta: SourceMeta = {
+      sourceName: "EPO Patents", key: "epo", lastSuccessfulPull: "2026-09-04T00:00:00Z",
+      pollCadence: "every 3 hours", structuralLag: "~18 months", coverageGaps: "",
+      lastRunOutcome: "ok",
+      recentMisses: [
+        { date: "2026-08-01", outcome: "failed" },
+        { date: "2026-08-02", outcome: "failed" },
+        { date: "2026-08-03", outcome: "not-attempted" },
+      ],
+    };
+    const summary = missSummary(meta)!;
+    expect(summary).toContain("errored on 2 days");
+    expect(summary).toContain("not attempted on 1 day");
+    expect(summary).toContain("since 2026-08-01");
+    expect(summary).not.toMatch(/of the last/);
   });
 });
