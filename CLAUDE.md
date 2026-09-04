@@ -67,9 +67,11 @@ needs, checked by hand before it goes in `VERTICALS`:
   "biotechnology" vs. 300/300 for "biomanufacturing"). Check whether the
   same term also works for `usaSpending.ts`/`samGov.ts`; if it doesn't, set
   `procurementKeyword` separately rather than compromising on one.
-  (A different funding API entirely is still the right answer for some
-  fields — NIH grants would suit biotechnology better than NSF does, and
-  that remains unbuilt.)
+  (A different funding API entirely is sometimes the right answer — see
+  `grantAgency`/`grantProgramNumbers` in `verticals.ts`, which adds a
+  program-number-filtered federal grant source alongside NSF. Biotechnology
+  uses BARDA for this; NIH was tested first and rejected, for reasons worth
+  reading before trying it again.)
 - Real, hand-verified RSS feeds from actively-publishing trade press (valid
   RSS 2.0, checked by curl) — see `QUANTUM_RSS_FEEDS`/`AI_RSS_FEEDS`/
   `BIOTECH_RSS_FEEDS` in `verticals.ts` for the bar. Check each feed's
@@ -266,6 +268,48 @@ out a whole source. The disclosed cost of the NSF side is that this covers
 the bioengineering/biomanufacturing *slice* of NSF's biotech portfolio
 rather than all of it, which `data/biotech/notes.ts`'s investment note says
 out loud.
+
+**BARDA is the second public-funding source, and NIH was tested first and
+rejected.** Added 2026-09-04 via the same `grantAgency`/
+`grantProgramNumbers` mechanism space uses (see the space section for how
+program-number filtering works and why it beats a keyword).
+
+NIH is the obvious guess and is a poor fit for THIS vertical's scope rather
+than a bad source. Measured live: it is not a toptier agency at all (0 rows
+as toptier, real awards as an HHS subtier), its largest assistance awards
+are clinical-trial networks — a $1.07B global HIV vaccine clinical
+leadership group, the $973M AIDS Clinical Trials Group — and its
+state-capacity programs dominate everything else. Its bioengineering
+program **93.286 (NIBIB)** returns point-of-care diagnostics centres and
+biomedical OCT, which is *medical devices*, the identical trap that made
+the first CapIQ biotech import a table about surgical robots. **93.859
+(NIGMS)** is almost entirely IDeA/INBRE capacity networks. None of that is
+engineering biology or biomanufacturing.
+
+**BARDA's CFDA 93.360** funds precisely what this vertical says it tracks.
+Verified live: 43 awards, $1.38B over five years, complete in one page —
+BSL-1 and BSL-2 industrial base expansion (Jubilant HollisterStier $115.3M,
+Curia New Mexico $105.8M, Grand River Aseptic $82.2M), Croda's lipid
+capacity for mRNA, TriLink's ribonucleotide triphosphates, Gerresheimer and
+Schott vial fill-finish, Corning's critical production sustainment, ARMI
+regenerative manufacturing, NC State's biomanufacturing training centre,
+CARB-X, and a $25.4M influenza-vaccine production award to the WHO.
+Roughly 18-20 of the top 25 are squarely biomanufacturing capacity or
+biosecurity; the residual is a couple of clinical trials. Addressed as a
+subtier of "Office of Assistant Secretary for Preparedness and Response".
+
+**Additive, not corrective** — unlike space, biotech's NSF query is already
+good (300/300 on-topic on "biomanufacturing"), so BARDA widens a
+narrow-but-accurate picture rather than replacing a wrong one. The default
+three-year window returns 28 awards worth $1.31B, which is 95% of the
+five-year disclosed value and the same top awards, so it was left alone
+rather than made configurable for the remaining 5%.
+
+One convention this source forced. `country` on a federal grant is the
+**funder's** country, not the recipient's, because STAGES defines this stage
+as "public research funding, where governments are placing money." BARDA's
+award to the WHO in Geneva is what makes the distinction visible, and
+`countryEvidence` now says so on every row.
 
 Adding a third vertical also makes SAM.gov's daily-quota problem worse by
 50% — see the long comment at the top of `samGov.ts`. Expected, not a
@@ -560,6 +604,13 @@ USASpending carries every federal assistance award, so pointing this at NIH
 the same read-the-real-awards check, not a new module. Deliberately left
 unset until someone does that reading; a guessed program number must not be
 committed.
+
+**`grantAgencyTier` matters and defaults wrong for most funders.** Many of
+the most topically-useful funders are SUBTIER agencies of a parent
+department and return zero rows as toptier, silently — NIH, BARDA and
+DARPA all are, while NASA is a toptier in its own right. Look the exact
+string up through USASpending's `/api/v2/autocomplete/awarding_agency/`
+rather than guessing it; three of this session's four guesses were wrong.
 
 The `grantAgency`/`grantProgramNumbers` pair must be set together or not at
 all. `fetch-data` only calls the fetcher when both are present, so half a

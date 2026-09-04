@@ -173,6 +173,13 @@ const GRANT_TYPE_CODES = ["02", "03", "04", "05"];
 export async function fetchFederalGrants(
   agencyName: string,
   programNumbers: string[],
+  // Which agency tier `agencyName` names. Not cosmetic — many of the most
+  // topically-useful funders are SUBTIER agencies and return zero rows as
+  // toptier, silently. NIH, BARDA and DARPA are all subtiers of a parent
+  // department; NASA is a toptier in its own right. Confirmed live:
+  // "National Institutes of Health" as toptier returns 0 results, as
+  // subtier it returns real awards.
+  tier: "toptier" | "subtier" = "toptier",
   sinceDays = 1095,
 ): Promise<Entry[]> {
   if (programNumbers.length === 0) return [];
@@ -186,7 +193,7 @@ export async function fetchFederalGrants(
     headers: { "Content-Type": "application/json", "User-Agent": "GlobalTechMonitor/0.3 (research dashboard)" },
     body: JSON.stringify({
       filters: {
-        agencies: [{ type: "awarding", tier: "toptier", name: agencyName }],
+        agencies: [{ type: "awarding", tier, name: agencyName }],
         award_type_codes: GRANT_TYPE_CODES,
         program_numbers: programNumbers,
         time_period: [{ start_date: startDate, end_date: end.toISOString().slice(0, 10) }],
@@ -224,6 +231,6 @@ export async function fetchFederalGrants(
         : "https://www.usaspending.gov",
       amountUsd: r["Award Amount"],
       venue: r["Awarding Agency"],
-      countryEvidence: "US federal grant recipient (USASpending.gov)",
+      countryEvidence: "US federal grant, attributed to the funding government rather than the recipient (USASpending.gov)",
     }));
 }

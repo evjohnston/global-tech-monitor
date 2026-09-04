@@ -454,7 +454,7 @@ async function fetchVertical(v: VerticalConfig): Promise<void> {
   const { value: agencyGrants, ok: agencyGrantsOk } = v.grantAgency && v.grantProgramNumbers?.length
     ? await trackedFetch(
         "agency grants",
-        () => fetchFederalGrants(v.grantAgency!, v.grantProgramNumbers!),
+        () => fetchFederalGrants(v.grantAgency!, v.grantProgramNumbers!, v.grantAgencyTier ?? "toptier"),
         [] as Entry[],
       )
     : { value: [] as Entry[], ok: undefined };

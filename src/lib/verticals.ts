@@ -55,7 +55,13 @@ export interface VerticalConfig {
   // NSF, per CLAUDE.md) and needs only the agency name plus real NIH
   // program numbers checked the same way. Left unset until someone does
   // that reading.
-  grantAgency?: string; // USASpending toptier awarding-agency name, exactly as spelled there
+  grantAgency?: string; // USASpending awarding-agency name, exactly as spelled there
+  // Which tier `grantAgency` names. Many of the most useful funders are
+  // SUBTIER agencies of a parent department and return zero rows as toptier,
+  // silently — NIH, BARDA and DARPA all are; NASA is a toptier itself.
+  // Look the exact string up via USASpending's
+  // /api/v2/autocomplete/awarding_agency/ rather than guessing it.
+  grantAgencyTier?: "toptier" | "subtier";
   grantProgramNumbers?: string[]; // CFDA program numbers, e.g. ["43.012"]
   rssFeeds: RssFeedConfig[];
   rssClassifier: RssClassifierConfig;
@@ -478,6 +484,31 @@ export const VERTICALS: VerticalConfig[] = [
     // SAM.gov, while "biotechnology" returns real contracts from both. See
     // the field's own comment above for the measured numbers.
     procurementKeyword: "biotechnology",
+    // BARDA, via its parent office's subtier name. Added 2026-09-04 after
+    // testing NIH first and rejecting it. NIH is a poor fit for THIS
+    // vertical's scope rather than a bad source: its largest assistance
+    // awards are clinical-trial networks (HIV vaccine, AIDS Clinical
+    // Trials Group) and state capacity-building consortia (IDeA/INBRE),
+    // and its bioengineering program 93.286 is point-of-care medical
+    // devices — the identical trap that made the first CapIQ biotech
+    // import a table about surgical robots.
+    //
+    // BARDA's 93.360 instead funds exactly what this vertical says it
+    // tracks. Verified live: 43 awards, $1.38B, complete in one page, led
+    // by BSL-1 and BSL-2 industrial base expansion (Jubilant HollisterStier,
+    // Curia, Grand River Aseptic), Croda's lipid capacity, TriLink's
+    // ribonucleotide triphosphates for mRNA, Gerresheimer vial fill-finish,
+    // ARMI regenerative manufacturing, NC State's biomanufacturing training
+    // centre, CARB-X, and a $25.4M influenza-vaccine production award to the
+    // WHO. Roughly 18-20 of the top 25 are squarely biomanufacturing
+    // capacity or biosecurity; the residual is a couple of clinical trials.
+    //
+    // Additive, not corrective. Unlike space, biotech's NSF query is
+    // already good (300/300 on-topic on "biomanufacturing"), so this widens
+    // a narrow-but-accurate picture rather than replacing a wrong one.
+    grantAgency: "Office of Assistant Secretary for Preparedness and Response",
+    grantAgencyTier: "subtier",
+    grantProgramNumbers: ["93.360"],
     rssFeeds: BIOTECH_RSS_FEEDS,
     rssClassifier: BIOTECH_RSS_CLASSIFIER,
     // ARPA-H and BARDA are in here because they're the two US agencies that
