@@ -1,6 +1,6 @@
 {
   "technology": "quantum-computing",
-  "generatedAt": "2026-09-20T08:12:57.468Z",
+  "generatedAt": "2026-09-20T13:27:54.849Z",
   "entries": [
     {
       "id": "seed-ibm-roadmap-2025",
@@ -95212,7 +95212,7 @@
       "source": "news",
       "title": "Xanadu And Mitsubishi Chemical Win Funding For Quantum Chip Research",
       "org": "",
-      "date": "2026-08-26",
+      "date": "2026-08-25",
       "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPYUJ4Wm50X095dkswZnVRTm9jVlJmdUhWQnhxUzduUzZ1aTVwX2w0MVlfdVMxYlZiR2hJME9OdGhYWW1SVkNyNnJNRWl3VXprUVdfcnBFU1d2V2kzaGVyZHpDV0w4b180ME9zdERCR011eE5lUTZZQTIxMkhuandHT3d3?oc=5",
       "publisher": "Quantum Zeitgeist",
       "countryEvidence": "matched \"Xanadu\" (auto-classified from Google News RSS, unverified)",
@@ -98103,7 +98103,7 @@
       "deploymentStatus": "announced",
       "title": "EdUSA AI & Quantum Technologies Initiative in Australia",
       "org": "",
-      "date": "2026-08-27",
+      "date": "2026-08-28",
       "url": "https://sam.gov/workspace/contract/opp/4863f6824dbc4040889e1d84101f0c96/view",
       "venue": "STATE, DEPARTMENT OF.STATE, DEPARTMENT OF.US EMBASSY CANBERRA",
       "countryEvidence": "US federal solicitation (SAM.gov)",
@@ -98257,15 +98257,16 @@
     {
       "id": "oa-W7204437378",
       "stage": "innovation",
-      "country": null,
+      "country": "US",
       "provenance": "live",
       "source": "paper",
       "title": "Engineering a cubic quantum nondemolition gate with mesoscopic optical parametric interactions",
-      "org": "",
+      "org": "Stanford University",
       "date": "2026-08-27",
       "url": "https://doi.org/10.1364/opticaq.607228",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [US, US, US, US, US, US, US, US, US] → US",
       "citations": 0,
+      "abstract": "We propose a scheme to realize a cubic quantum nondemolition (QND) Hamiltonian with optical parametric interactions. We show that strongly squeezed fundamental and second-harmonic fields propagating in a χ (2) nonlinear medium effectively…",
       "authors": [
         "Ryotatsu Yanagimoto",
         "Rajveer Nehra",
@@ -98275,6 +98276,7 @@
       ],
       "venue": "Optica Quantum",
       "ingestedAt": "2026-08-28T23:53:31.550Z",
+      "orgId": "stanford university",
       "relevanceScore": 0.6
     },
     {
@@ -103064,6 +103066,7 @@
       "url": "https://doi.org/10.1103/7jcn-yq29",
       "countryEvidence": "institution country codes [CN, CN, CN, CN, CN, CN, CN, CN] → CN",
       "citations": 0,
+      "abstract": "Quantum imaginarity is a distinct resource in quantum information theory, yet its nonlocal properties have not been fully explored. Here, we report an experimental study of the nonlocal advantage of quantum imaginarity (NAQI), in which…",
       "authors": [
         "Anonymous",
         "Kai-Yu Yuan",
@@ -122758,14 +122761,14 @@
     {
       "id": "oa-W4404449995",
       "stage": "innovation",
-      "country": null,
+      "country": "DE",
       "provenance": "live",
       "source": "paper",
       "title": "Real-time measurement error mitigation for one-way quantum computation",
-      "org": "",
+      "org": "Friedrich-Alexander-Universität Erlangen-Nürnberg",
       "date": "2026-09-19",
       "url": "https://doi.org/10.1038/s41598-026-70209-x",
-      "countryEvidence": "no institution country on record",
+      "countryEvidence": "institution country codes [US, GB, DE, DE, CY, DE] → DE",
       "citations": 0,
       "abstract": "Abstract We propose a quantum error mitigation scheme for single-qubit measurement errors, particularly suited for one-way quantum computation. Contrary to well established error mitigation methods for circuit-based quantum computation…",
       "authors": [
@@ -122775,7 +122778,14 @@
         "Karl Jansen"
       ],
       "venue": "Scientific Reports",
+      "collaboratingCountries": [
+        "CY",
+        "DE",
+        "GB",
+        "US"
+      ],
       "ingestedAt": "2026-09-19T12:54:10.239Z",
+      "orgId": "friedrich alexander universität erlangen nürnberg",
       "relevanceScore": 0.6
     },
     {
@@ -123028,6 +123038,215 @@
       "venue": "HEALTH AND HUMAN SERVICES, DEPARTMENT OF.CENTERS FOR DISEASE CONTROL AND PREVENTION.CDC OFFICE OF ACQUISITION SERVICES",
       "countryEvidence": "US federal solicitation (SAM.gov)",
       "ingestedAt": "2026-09-20T02:38:26.313Z",
+      "relevanceScore": 0.75
+    },
+    {
+      "id": "oa-W7154155034",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Computing with reaction networks at input-independent speed: exponential and logarithmic functions",
+      "org": "University of Wisconsin–Madison",
+      "date": "2026-09-19",
+      "url": "https://doi.org/10.1007/s11047-026-10090-9",
+      "countryEvidence": "institution country codes [US, US, US] → US",
+      "citations": 0,
+      "authors": [
+        "David F. Anderson",
+        "Badal Joshi",
+        "Tung D. Nguyen"
+      ],
+      "venue": "Natural Computing",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "orgId": "university of wisconsin madison",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7170143309",
+      "stage": "innovation",
+      "country": "CN",
+      "provenance": "live",
+      "source": "paper",
+      "title": "A reduction scheme for general-order Ising-like Hamiltonians in quantum heuristic solvers",
+      "org": "Huawei Technologies (China)",
+      "date": "2026-09-19",
+      "url": "https://doi.org/10.1007/s11128-026-05339-2",
+      "countryEvidence": "institution country codes [CN, CN, CN, CN] → CN",
+      "citations": 0,
+      "authors": [
+        "Chengsi Mao",
+        "P. A. Mosharev",
+        "Yao Wang",
+        "Man-Hong Yung"
+      ],
+      "venue": "Quantum Information Processing",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "orgId": "huawei technologies china",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7213621519",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Phase transitions in time complexity of Brownian circuits",
+      "org": "",
+      "date": "2026-09-19",
+      "url": "https://doi.org/10.1103/zhgy-wgv4",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review Research",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7213623452",
+      "stage": "innovation",
+      "country": "DE",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Structure and Flow Observables in Complementarity Dynamics of Open Two-Qubit Systems",
+      "org": "TH Köln - University of Applied Sciences",
+      "date": "2026-09-19",
+      "url": "https://doi.org/10.1007/s10773-026-06486-z",
+      "countryEvidence": "institution country codes [DE, US] → DE",
+      "citations": 0,
+      "authors": [
+        "Matthias Jakob"
+      ],
+      "venue": "International Journal of Theoretical Physics",
+      "collaboratingCountries": [
+        "DE",
+        "US"
+      ],
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "orgId": "th köln university of applied sciences",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7213652635",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Inferring channel memory, phase, and noise symmetry from the output of noisy quantum teleportation",
+      "org": "",
+      "date": "2026-09-19",
+      "url": "https://doi.org/10.1038/s41598-026-71688-8",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "abstract": "Abstract We consider quantum teleportation channels in which a phase $$\\varphi$$ is imprinted onto the initial shared resource channel. The resource qudits interact with either two independent local environments or a common environment; we…",
+      "authors": [
+        "babak farajollahi",
+        "Rosario Lo Franco",
+        "Hossein Rangani Jahromi"
+      ],
+      "venue": "Scientific Reports",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7213662778",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Observable scaling hierarchies in multiphoton dissipative quantum sensing",
+      "org": "",
+      "date": "2026-09-19",
+      "url": "https://doi.org/10.1103/p5d3-l7mt",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "Anonymous"
+      ],
+      "venue": "Physical Review Research",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7213618887",
+      "stage": "innovation",
+      "country": "US",
+      "provenance": "live",
+      "source": "paper",
+      "title": "Entanglement, Space–Time Coordinates, and Bell's Inequalities in Photon–Polarization Experiments",
+      "org": "University of Illinois Urbana-Champaign",
+      "date": "2026-09-01",
+      "url": "https://doi.org/10.1002/andp.70299",
+      "countryEvidence": "institution country codes [US, US, DE] → US",
+      "citations": 0,
+      "abstract": "ABSTRACT This work presents a revised analysis and corresponding perspective of Bell‐type inequalities and their connection to entanglement in polarization experiments with single‐photon resolution. It is argued that standard derivations…",
+      "authors": [
+        "K. Hess",
+        "Jürgen Jakumeit"
+      ],
+      "venue": "Annalen der Physik",
+      "collaboratingCountries": [
+        "DE",
+        "US"
+      ],
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "orgId": "university of illinois urbana champaign",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "oa-W7213675352",
+      "stage": "innovation",
+      "country": null,
+      "provenance": "live",
+      "source": "paper",
+      "title": "Quantum toxic burden index: a quantum-mechanical framework for modeling environmental exposure mixtures",
+      "org": "",
+      "date": "2026-09-01",
+      "url": "https://doi.org/10.1016/j.comtox.2026.100452",
+      "countryEvidence": "no institution country on record",
+      "citations": 0,
+      "authors": [
+        "January G. Msemakweli",
+        "Hussein Mohamed",
+        "Laurel Kivuyo",
+        "Victor Okpanachi"
+      ],
+      "venue": "Computational Toxicology",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "relevanceScore": 0.6
+    },
+    {
+      "id": "gnews-1mN1hIVzhLaEZHMW9iZGJXaTdrM1hXME1GWHp6MXZUTndoOHpmUDU3R3lOVVVybWc-oc-5",
+      "stage": "investment",
+      "country": "US",
+      "provenance": "auto",
+      "source": "news",
+      "title": "IBM's quantum chip foundry locks in $1 billion in U.S. government funding",
+      "org": "",
+      "date": "2026-09-17",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE5wTS1mc0E3QW02X3JsMEVYM2g0Z01pS28zckl4VTFGNHNMZ3NWeFItRTJqWHQ1VFpqdFBENFJQNWVMWDAyby1mN1hIVzhLaEZHMW9iZGJXaTdrM1hXME1GWHp6MXZUTndoOHpmUDU3R3lOVVVybWc?oc=5",
+      "publisher": "qz.com",
+      "countryEvidence": "matched \"IBM\" (auto-classified from Google News RSS, unverified)",
+      "abstract": "IBM's quantum chip foundry locks in $1 billion in U.S. government funding qz.com",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
+      "relevanceScore": 0.7
+    },
+    {
+      "id": "sam-c56695394f70424ea4ffa343c22210ce",
+      "stage": "adoption",
+      "country": "US",
+      "provenance": "live",
+      "source": "deployment",
+      "deploymentStatus": "announced",
+      "title": "Quantum Cascade Laser and Detector",
+      "org": "",
+      "date": "2026-09-20",
+      "url": "https://sam.gov/workspace/contract/opp/c56695394f70424ea4ffa343c22210ce/view",
+      "venue": "HEALTH AND HUMAN SERVICES, DEPARTMENT OF.CENTERS FOR DISEASE CONTROL AND PREVENTION.CDC OFFICE OF ACQUISITION SERVICES",
+      "countryEvidence": "US federal solicitation (SAM.gov)",
+      "ingestedAt": "2026-09-20T13:27:54.849Z",
       "relevanceScore": 0.75
     }
   ],
@@ -129552,20 +129771,20 @@
     {
       "date": "2026-09-20",
       "counts": {
+        "DE": 23,
+        "US": 58,
+        "CN": 108,
         "GB": 20,
         "KR": 16,
         "IT": 10,
-        "DE": 21,
         "TW": 8,
-        "CN": 109,
         "SA": 4,
         "FI": 5,
         "FR": 8,
         "PK": 3,
         "IN": 40,
-        "US": 56,
-        "JP": 15,
-        "CA": 9,
+        "JP": 14,
+        "CA": 8,
         "PL": 5,
         "RS": 1,
         "VN": 3,
@@ -129606,17 +129825,16 @@
         "CO": 1,
         "AE": 1,
         "HU": 1,
-        "CL": 1,
-        "GH": 1
+        "CL": 1
       },
       "stageCounts": {
-        "innovation": 587,
+        "innovation": 595,
         "scaling": 184,
-        "adoption": 114,
-        "investment": 80
+        "adoption": 115,
+        "investment": 81
       },
       "fundingUsd": 32390082,
-      "totalEntries": 6362,
+      "totalEntries": 6372,
       "windowCap": 600
     }
   ],
@@ -129653,7 +129871,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (GitHub Actions cron) — the browser never fetches this source itself, it only reads the committed data file",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does",
@@ -129741,7 +129959,7 @@
     },
     {
       "sourceName": "EPO Patents",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (the same GitHub Actions run as every other automated source)",
       "structuralLag": "~18 months typical (patent office filing-to-publication lag)",
       "coverageGaps": "needs EPO_KEY/EPO_SECRET — skipped entirely (soft-fail) if unset",
@@ -129750,7 +129968,7 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call",
@@ -129759,7 +129977,7 @@
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed",
@@ -129847,7 +130065,7 @@
     },
     {
       "sourceName": "SAM.gov Opportunities (federal solicitations)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "attempted every 3-hour build run, but a non-federal SAM_KEY has a real DAILY quota (confirmed by hand 2026-07-26 via a live 429 response) — most runs in a given UTC day will find the quota already spent and skip, so the real effective cadence is closer to once/day",
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example",
@@ -129918,7 +130136,7 @@
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry",
@@ -129927,7 +130145,7 @@
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only",
@@ -129942,7 +130160,7 @@
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space",
@@ -129951,7 +130169,7 @@
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "every 3 hours (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit",
@@ -129960,7 +130178,7 @@
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed",
@@ -129969,7 +130187,7 @@
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history",
@@ -129978,7 +130196,7 @@
     },
     {
       "sourceName": "PitchBook via WRDS (VC + PE funding)",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "manual — re-run `npm run import-pitchbook -- <vertical-id>` locally against WRDS whenever fresh data is wanted; deliberately never automated (see scripts/import-pitchbook.ts's header comment on why this stays a personal-credential, manual pull, not a CI-scheduled one)",
       "structuralLag": "however current the last manual import was — WRDS itself 'does not maintain historical snapshots,' so a real deal that ages out of PitchBook's current-state view isn't detected, just never updated further",
       "coverageGaps": "entity-consolidated by the same heuristic as CapIQ (entityResolution.ts) — a company may appear as a separate row from its CapIQ counterpart rather than one merged entity; quantum coverage is a keyword search against company text (no dedicated PitchBook tag exists), a weaker precision tier than AI's real vertical-tag match",
@@ -129987,7 +130205,7 @@
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-09-20T08:12:57.468Z",
+      "lastSuccessfulPull": "2026-09-20T13:27:54.849Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer",
@@ -130000,182 +130218,182 @@
       "symbol": "IONQ",
       "name": "IonQ, Inc.",
       "marketCapUsd": 15852958219.28,
-      "asOf": "2026-09-20T08:06:14.790Z",
+      "asOf": "2026-09-20T13:21:10.231Z",
       "url": "https://www.ionq.com"
     },
     {
       "symbol": "RGTI",
       "name": "Rigetti Computing, Inc. Common Stock",
       "marketCapUsd": 5260195452.72,
-      "asOf": "2026-09-20T08:06:29.901Z",
+      "asOf": "2026-09-20T13:21:25.445Z",
       "url": "https://www.rigetti.com"
     },
     {
       "symbol": "QBTS",
       "name": "D-Wave Quantum Inc. Common Stock",
       "marketCapUsd": 6495411605.08,
-      "asOf": "2026-09-20T08:06:44.967Z",
+      "asOf": "2026-09-20T13:21:40.670Z",
       "url": "https://www.dwavequantum.com"
     },
     {
       "symbol": "QUBT",
       "name": "Quantum Computing Inc. Common",
       "marketCapUsd": 1969217690.6999998,
-      "asOf": "2026-09-20T08:07:00.121Z",
+      "asOf": "2026-09-20T13:21:55.932Z",
       "url": "https://www.quantumcomputinginc.com"
     },
     {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc. Ordinary Shares",
       "marketCapUsd": 350310533.43,
-      "asOf": "2026-09-20T08:07:15.249Z",
+      "asOf": "2026-09-20T13:22:11.163Z",
       "url": "https://www.arqit.uk"
     },
     {
       "symbol": "LAES",
       "name": "SEALSQ Corp Ordinary Shares",
       "marketCapUsd": 503844463.3600001,
-      "asOf": "2026-09-20T08:07:30.291Z",
+      "asOf": "2026-09-20T13:22:26.369Z",
       "url": "https://www.sealsq.com"
     },
     {
       "symbol": "IBM",
       "name": "International Business Machines Corporation",
       "marketCapUsd": 216266949224.5,
-      "asOf": "2026-09-20T08:07:45.402Z",
+      "asOf": "2026-09-20T13:22:41.553Z",
       "url": "https://www.ibm.com"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc. Class A Common Stock",
       "marketCapUsd": 4274851420827.74,
-      "asOf": "2026-09-20T08:08:00.471Z",
+      "asOf": "2026-09-20T13:22:56.788Z",
       "url": "https://www.abc.xyz"
     },
     {
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "marketCapUsd": 3666585852545.98,
-      "asOf": "2026-09-20T08:08:15.510Z",
+      "asOf": "2026-09-20T13:23:11.995Z",
       "url": "https://www.microsoft.com"
     },
     {
       "symbol": "AMZN",
       "name": "Amazon.Com Inc",
       "marketCapUsd": 2736595616352.12,
-      "asOf": "2026-09-20T08:08:30.716Z",
+      "asOf": "2026-09-20T13:23:27.336Z",
       "url": "https://www.amazon.com"
     },
     {
       "symbol": "HON",
       "name": "Honeywell International, Inc.",
       "marketCapUsd": 65435434464.600006,
-      "asOf": "2026-09-20T08:08:45.780Z",
+      "asOf": "2026-09-20T13:23:42.543Z",
       "url": "https://www.honeywell.com"
     },
     {
       "symbol": "INTC",
       "name": "Intel Corp",
       "marketCapUsd": 574071031453.2,
-      "asOf": "2026-09-20T08:09:00.888Z",
+      "asOf": "2026-09-20T13:23:57.728Z",
       "url": "https://www.intel.com"
     },
     {
       "symbol": "NVDA",
       "name": "Nvidia Corp",
       "marketCapUsd": 5367153690000,
-      "asOf": "2026-09-20T08:09:16.035Z",
+      "asOf": "2026-09-20T13:24:12.927Z",
       "url": "https://www.nvidia.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 123099171835.14,
-      "asOf": "2026-09-20T08:09:31.080Z",
+      "asOf": "2026-09-20T13:24:28.181Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 74922619282.14,
-      "asOf": "2026-09-20T08:09:46.199Z",
+      "asOf": "2026-09-20T13:24:43.356Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 261465079936,
-      "asOf": "2026-09-20T08:10:01.303Z",
+      "asOf": "2026-09-20T13:24:58.537Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 95520217694.75,
-      "asOf": "2026-09-20T08:10:16.419Z",
+      "asOf": "2026-09-20T13:25:13.741Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 46049012390.64,
-      "asOf": "2026-09-20T08:10:31.497Z",
+      "asOf": "2026-09-20T13:25:28.940Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 16024100167.21,
-      "asOf": "2026-09-20T08:10:46.558Z",
+      "asOf": "2026-09-20T13:25:44.135Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "BAH",
       "name": "Booz Allen Hamilton Holding Corporation",
       "marketCapUsd": 9270362869.109999,
-      "asOf": "2026-09-20T08:11:01.746Z",
+      "asOf": "2026-09-20T13:25:59.315Z",
       "url": "https://www.boozallen.com"
     },
     {
       "symbol": "AMAT",
       "name": "Applied Materials Inc",
       "marketCapUsd": 352809615234.51,
-      "asOf": "2026-09-20T08:11:16.817Z",
+      "asOf": "2026-09-20T13:26:14.526Z",
       "url": "https://www.appliedmaterials.com"
     },
     {
       "symbol": "ASML",
       "name": "ASML Holding NV",
       "marketCapUsd": 645257272000,
-      "asOf": "2026-09-20T08:11:31.867Z",
+      "asOf": "2026-09-20T13:26:29.710Z",
       "url": "https://www.asml.com"
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "marketCapUsd": 80656759972.04,
-      "asOf": "2026-09-20T08:11:46.912Z",
+      "asOf": "2026-09-20T13:26:44.893Z",
       "url": "https://www.hpe.com"
     },
     {
       "symbol": "CSCO",
       "name": "Cisco Systems, Inc. Common Stock (DE)",
       "marketCapUsd": 431752688462.23004,
-      "asOf": "2026-09-20T08:12:01.959Z",
+      "asOf": "2026-09-20T13:27:00.142Z",
       "url": "https://www.cisco.com"
     },
     {
       "symbol": "NOK",
       "name": "Nokia Corporation",
       "marketCapUsd": 59793524306.64,
-      "asOf": "2026-09-20T08:12:17.086Z",
+      "asOf": "2026-09-20T13:27:15.371Z",
       "url": "https://www.nokia.com"
     },
     {
       "symbol": "SKM",
       "name": "SK Telecom Co., Ltd.  American Depositary Shares (Each representing 5/9th of a Ordinary Share of SK Telecom Co., LTD.)",
       "marketCapUsd": 13781652436,
-      "asOf": "2026-09-20T08:12:32.151Z",
+      "asOf": "2026-09-20T13:27:30.545Z",
       "url": "https://www.sktelecom.com"
     }
   ],
