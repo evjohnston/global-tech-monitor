@@ -1,6 +1,6 @@
 {
   "technology": "space",
-  "generatedAt": "2026-09-30T12:26:02.228Z",
+  "generatedAt": "2026-09-30T18:08:48.902Z",
   "entries": [
     {
       "id": "seed-falcon9-first-landing-2015",
@@ -58697,7 +58697,7 @@
   "sourceMeta": [
     {
       "sourceName": "OpenAlex (papers)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions cron) — the browser never fetches this source itself, it only reads the committed data file",
       "structuralLag": "journal-publication lag behind an arXiv preprint — weeks to months (a deliberate trade-off for real institution data; see arXiv fallback below)",
       "coverageGaps": "no institution country on works with no structured affiliation match — falls back to raw-affiliation-text inference, tagged provenance \"auto\" when it does",
@@ -58825,7 +58825,7 @@
     },
     {
       "sourceName": "EPO Patents",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (the same GitHub Actions run as every other automated source)",
       "structuralLag": "~18 months typical (patent office filing-to-publication lag)",
       "coverageGaps": "needs EPO_KEY/EPO_SECRET — skipped entirely (soft-fail) if unset",
@@ -58834,7 +58834,7 @@
     },
     {
       "sourceName": "NSF Awards",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "NSF typically posts an award within days to a few weeks of the funding decision",
       "coverageGaps": "US-only — no public machine-readable feed exists for China's NSFC; investment stage is US/EU-weighted by construction, not a judgment call",
@@ -58843,7 +58843,7 @@
     },
     {
       "sourceName": "USASpending.gov (federal awards)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions) — free, no key",
       "structuralLag": "USASpending typically posts within days to weeks of contract execution",
       "coverageGaps": "US federal contracts only — no state, no non-US, no private-sector procurement; only covers this vertical's hand-picked ticker list, one recipient+keyword query per company, so a company under a slightly different legal name on a given award may be missed",
@@ -58852,7 +58852,7 @@
     },
     {
       "sourceName": "Federal research grants by program (USASpending)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions) — free, no key; only configured for verticals where NSF's keyword search is measurably the wrong instrument",
       "structuralLag": "USASpending typically posts within days to weeks of award execution",
       "coverageGaps": "US federal assistance awards only, so the same US weighting NSF carries. Filtered by the funder's own CFDA program number rather than by keyword, which is why it is on-topic where NSF is not — but it is a top-100-by-award-size sample rather than a census, since the real result set is larger than one page. Only space is configured (NASA 43.012 Space Technology); NIH for biotechnology is the obvious next addition and is unbuilt.",
@@ -58866,7 +58866,7 @@
       "structuralLag": "near-real-time when a run does succeed — solicitations post as agencies publish them",
       "coverageGaps": "needs SAM_KEY — skipped entirely (soft-fail) if unset or if the day's quota is already spent; US federal solicitations only, and a solicitation's real awardee (once one exists) is read defensively from a field shape not yet confirmed against a live awarded example",
       "key": "sam-gov",
-      "lastRunOutcome": "ok",
+      "lastRunOutcome": "failed",
       "recentMisses": [
         {
           "date": "2026-09-04",
@@ -58963,12 +58963,16 @@
         {
           "date": "2026-09-29",
           "outcome": "failed"
+        },
+        {
+          "date": "2026-09-30",
+          "outcome": "failed"
         }
       ]
     },
     {
       "sourceName": "Trade-press RSS (scaling/adoption)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "near-real-time — as fast as the trade press publishes",
       "coverageGaps": "keyword-classified, provenance \"auto\" — weakest attribution tier; stage/country calls are a guess, disclosed on every such entry",
@@ -58977,7 +58981,7 @@
     },
     {
       "sourceName": "Google News (investment)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "near-real-time",
       "coverageGaps": "keyword-classified, provenance \"auto\"; personal/non-commercial use license only",
@@ -58992,7 +58996,7 @@
     },
     {
       "sourceName": "Massive (public markets)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions)",
       "structuralLag": "near-real-time exchange data, snapshot at fetch time — not live-updating between runs",
       "coverageGaps": "needs MASSIVE_KEY — skipped entirely (soft-fail) if unset; covers only the hand-picked ticker list per vertical, not every company in the space",
@@ -59001,7 +59005,7 @@
     },
     {
       "sourceName": "SEC EDGAR (corporate R&D spend)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "every 3 hours (GitHub Actions) — free, no key",
       "structuralLag": "10-K filings post annually, weeks after fiscal year end",
       "coverageGaps": "only covers this vertical's hand-picked ticker list, and only companies that tag a standalone R&D expense concept — Amazon, for one, folds R&D into a broader 'technology and infrastructure' line with no clean tag and is skipped rather than force-fit",
@@ -59010,7 +59014,7 @@
     },
     {
       "sourceName": "S&P Capital IQ (foreign R&D spend)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "manual — re-run scripts/import-capiq-rd-export.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "only the specific foreign 20-F filers hand-added to CAPIQ_TICKERS_BY_VERTICAL (fetch-data.ts) — not a general foreign-company feed",
@@ -59019,7 +59023,7 @@
     },
     {
       "sourceName": "S&P Capital IQ (VC funding)",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "manual — re-run scripts/import-capiq-transactions.ts after a fresh export, not on any automated schedule",
       "structuralLag": "however current the last manual export was — this can go stale between imports, unlike every live source here",
       "coverageGaps": "entity-consolidated by a heuristic (entityResolution.ts), not a real entity-ID join — the export has no ID column; covers whatever date range and industry tag the export was built with, not necessarily full history",
@@ -59147,7 +59151,7 @@
     },
     {
       "sourceName": "Hand-verified seed",
-      "lastSuccessfulPull": "2026-09-30T12:26:02.228Z",
+      "lastSuccessfulPull": "2026-09-30T18:08:48.902Z",
       "pollCadence": "manual — added by a human when a milestone is checked against its source, not on any fetch schedule",
       "structuralLag": "none — verified at the time it's added, dated to the real event",
       "coverageGaps": "only as complete as the hand-curation effort behind it; supplements, does not replace, the live RSS layer",
@@ -59160,245 +59164,245 @@
       "symbol": "RKLB",
       "name": "Rocket Lab Corporation Common Stock",
       "marketCapUsd": 44566945933.3,
-      "asOf": "2026-09-30T12:16:44.809Z",
+      "asOf": "2026-09-30T17:58:48.012Z",
       "url": "https://www.rocketlabusa.com"
     },
     {
       "symbol": "LUNR",
       "name": "Intuitive Machines, Inc. Class A Common Stock",
       "marketCapUsd": 2334581095.9500003,
-      "asOf": "2026-09-30T12:16:59.957Z",
+      "asOf": "2026-09-30T17:59:03.083Z",
       "url": "https://www.intuitivemachines.com"
     },
     {
       "symbol": "RDW",
       "name": "Redwire Corporation",
       "marketCapUsd": 2682420694.57,
-      "asOf": "2026-09-30T12:17:15.100Z",
+      "asOf": "2026-09-30T17:59:18.154Z",
       "url": "https://www.rdw.com"
     },
     {
       "symbol": "SPCE",
       "name": "Virgin Galactic Holdings, Inc.",
       "marketCapUsd": 460851545.12,
-      "asOf": "2026-09-30T12:17:30.247Z",
+      "asOf": "2026-09-30T17:59:33.224Z",
       "url": "https://www.virgingalactic.com"
     },
     {
       "symbol": "MNTS",
       "name": "Momentus Inc. Class A Common Stock",
       "marketCapUsd": 81264583.7,
-      "asOf": "2026-09-30T12:17:45.412Z",
+      "asOf": "2026-09-30T17:59:48.346Z",
       "url": "https://www.momentus.space"
     },
     {
       "symbol": "VOYG",
       "name": "Voyager Technologies, Inc.",
       "marketCapUsd": 1876033304.3999999,
-      "asOf": "2026-09-30T12:18:00.557Z",
+      "asOf": "2026-09-30T18:00:03.476Z",
       "url": "https://www.voyagertechnologies.com"
     },
     {
       "symbol": "SIDU",
       "name": "Sidus Space, Inc. Class A Common Stock",
       "marketCapUsd": 185242346.58,
-      "asOf": "2026-09-30T12:18:15.731Z",
+      "asOf": "2026-09-30T18:00:18.542Z",
       "url": "https://www.sidusspace.com"
     },
     {
       "symbol": "ASTS",
       "name": "AST SpaceMobile, Inc. Class A Common Stock",
       "marketCapUsd": 17807484717,
-      "asOf": "2026-09-30T12:18:30.863Z",
+      "asOf": "2026-09-30T18:00:33.601Z",
       "url": "https://www.ast-science.com"
     },
     {
       "symbol": "PL",
       "name": "Planet Labs PBC",
       "marketCapUsd": 5959830059.82,
-      "asOf": "2026-09-30T12:18:46.054Z",
+      "asOf": "2026-09-30T18:00:48.730Z",
       "url": "https://www.planet.com"
     },
     {
       "symbol": "BKSY",
       "name": "BlackSky Technology Inc.",
       "marketCapUsd": 895844878.94,
-      "asOf": "2026-09-30T12:19:01.200Z",
+      "asOf": "2026-09-30T18:01:03.939Z",
       "url": "https://www.blacksky.com"
     },
     {
       "symbol": "SPIR",
       "name": "Spire Global, Inc.",
       "marketCapUsd": 436132762.90000004,
-      "asOf": "2026-09-30T12:19:16.358Z",
+      "asOf": "2026-09-30T18:01:19.016Z",
       "url": "https://www.spire.com"
     },
     {
       "symbol": "VSAT",
       "name": "Viasat Inc",
       "marketCapUsd": 9517548912.9,
-      "asOf": "2026-09-30T12:19:31.535Z",
+      "asOf": "2026-09-30T18:01:34.156Z",
       "url": "https://www.viasat.com"
     },
     {
       "symbol": "IRDM",
       "name": "Iridium Communications Inc.",
       "marketCapUsd": 5080755602.88,
-      "asOf": "2026-09-30T12:19:46.691Z",
+      "asOf": "2026-09-30T18:01:49.259Z",
       "url": "https://www.iridium.com"
     },
     {
       "symbol": "GSAT",
       "name": "Globalstar, Inc. Common Stock",
       "marketCapUsd": 10700640380.1,
-      "asOf": "2026-09-30T12:20:01.868Z",
+      "asOf": "2026-09-30T18:02:04.410Z",
       "url": "https://www.globalstar.com"
     },
     {
       "symbol": "TSAT",
       "name": "Telesat Corporation Class A Common Shares and Class B Variable Voting Shares",
       "marketCapUsd": 697198789.98,
-      "asOf": "2026-09-30T12:20:17.010Z",
+      "asOf": "2026-09-30T18:02:19.535Z",
       "url": "https://www.telesat.com"
     },
     {
       "symbol": "LMT",
       "name": "Lockheed Martin Corp.",
       "marketCapUsd": 118213331594.13,
-      "asOf": "2026-09-30T12:20:32.163Z",
+      "asOf": "2026-09-30T18:02:34.693Z",
       "url": "https://www.lockheedmartin.com"
     },
     {
       "symbol": "NOC",
       "name": "Northrop Grumman Corp.",
       "marketCapUsd": 71686423549.86,
-      "asOf": "2026-09-30T12:20:47.360Z",
+      "asOf": "2026-09-30T18:02:49.816Z",
       "url": "https://www.northropgrumman.com"
     },
     {
       "symbol": "RTX",
       "name": "RTX Corporation",
       "marketCapUsd": 251949907439.36,
-      "asOf": "2026-09-30T12:21:02.542Z",
+      "asOf": "2026-09-30T18:03:04.927Z",
       "url": "https://www.rtx.com"
     },
     {
       "symbol": "BA",
       "name": "Boeing Company",
       "marketCapUsd": 148336645353.6,
-      "asOf": "2026-09-30T12:21:17.677Z",
+      "asOf": "2026-09-30T18:03:20.009Z",
       "url": "https://www.boeing.com"
     },
     {
       "symbol": "GD",
       "name": "General Dynamics Corporation",
       "marketCapUsd": 89916978186.29999,
-      "asOf": "2026-09-30T12:21:32.852Z",
+      "asOf": "2026-09-30T18:03:35.082Z",
       "url": "https://www.gd.com"
     },
     {
       "symbol": "LHX",
       "name": "L3Harris Technologies, Inc.",
       "marketCapUsd": 44034170245.52,
-      "asOf": "2026-09-30T12:21:48.021Z",
+      "asOf": "2026-09-30T18:03:50.202Z",
       "url": "https://www.l3harris.com"
     },
     {
       "symbol": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "marketCapUsd": 15448090927.9,
-      "asOf": "2026-09-30T12:22:03.205Z",
+      "asOf": "2026-09-30T18:04:05.281Z",
       "url": "https://www.leidos.com"
     },
     {
       "symbol": "HII",
       "name": "Huntington Ingalls Industries, Inc.",
       "marketCapUsd": 10231009824.72,
-      "asOf": "2026-09-30T12:22:18.383Z",
+      "asOf": "2026-09-30T18:04:20.338Z",
       "url": "https://www.huntingtoningalls.com"
     },
     {
       "symbol": "KTOS",
       "name": "Kratos Defense & Security Solutions, Inc.",
       "marketCapUsd": 8081403127.349999,
-      "asOf": "2026-09-30T12:22:33.526Z",
+      "asOf": "2026-09-30T18:04:35.395Z",
       "url": "https://www.kratosdefense.com"
     },
     {
       "symbol": "AVAV",
       "name": "AeroVironment, Inc.",
       "marketCapUsd": 7279557354.4800005,
-      "asOf": "2026-09-30T12:22:48.755Z",
+      "asOf": "2026-09-30T18:04:50.463Z",
       "url": "https://www.avinc.com"
     },
     {
       "symbol": "TXT",
       "name": "Textron, Inc.",
       "marketCapUsd": 13351344366.71,
-      "asOf": "2026-09-30T12:23:03.897Z",
+      "asOf": "2026-09-30T18:05:05.607Z",
       "url": "https://www.textron.com"
     },
     {
       "symbol": "ESLT",
       "name": "Elbit Systems Ltd",
       "marketCapUsd": 32961741335.04,
-      "asOf": "2026-09-30T12:23:19.032Z",
+      "asOf": "2026-09-30T18:05:20.702Z",
       "url": "https://www.elbitsystems.com"
     },
     {
       "symbol": "HEI",
       "name": "HEICO Corporation",
       "marketCapUsd": 42920896649.55,
-      "asOf": "2026-09-30T12:23:34.133Z",
+      "asOf": "2026-09-30T18:05:35.764Z",
       "url": "https://www.heico.com"
     },
     {
       "symbol": "TDG",
       "name": "TransDigm Group Incorporated",
       "marketCapUsd": 60792569429.75,
-      "asOf": "2026-09-30T12:23:49.297Z",
+      "asOf": "2026-09-30T18:05:50.828Z",
       "url": "https://www.transdigm.com"
     },
     {
       "symbol": "ATRO",
       "name": "Astronics Corp",
       "marketCapUsd": 2901391457.4399996,
-      "asOf": "2026-09-30T12:24:04.413Z",
+      "asOf": "2026-09-30T18:06:06.004Z",
       "url": "https://www.astronics.com"
     },
     {
       "symbol": "CW",
       "name": "Curtiss-Wright Corp.",
       "marketCapUsd": 19717452929.4,
-      "asOf": "2026-09-30T12:24:19.516Z",
+      "asOf": "2026-09-30T18:06:21.065Z",
       "url": "https://www.curtisswright.com"
     },
     {
       "symbol": "TDY",
       "name": "Teledyne Technologies Incorporated",
       "marketCapUsd": 28072532012.07,
-      "asOf": "2026-09-30T12:24:34.626Z",
+      "asOf": "2026-09-30T18:06:36.281Z",
       "url": "https://www.teledyne.com"
     },
     {
       "symbol": "BWXT",
       "name": "BWX Technologies, Inc.",
       "marketCapUsd": 12644749459.8,
-      "asOf": "2026-09-30T12:24:49.849Z",
+      "asOf": "2026-09-30T18:06:51.346Z",
       "url": "https://www.bwxt.com"
     },
     {
       "symbol": "HWM",
       "name": "Howmet Aerospace Inc.",
       "marketCapUsd": 92099195085.06,
-      "asOf": "2026-09-30T12:25:04.972Z",
+      "asOf": "2026-09-30T18:07:06.458Z",
       "url": "https://www.howmet.com"
     },
     {
       "symbol": "TRMB",
       "name": "Trimble Inc. Common Stock",
       "marketCapUsd": 13370532484.320002,
-      "asOf": "2026-09-30T12:25:20.081Z",
+      "asOf": "2026-09-30T18:07:21.551Z",
       "url": "https://www.trimble.com"
     }
   ],
